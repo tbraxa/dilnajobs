@@ -1,5 +1,6 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
 import { cookies, headers } from "next/headers";
 import { and, eq, gt, isNull } from "drizzle-orm";
 import { db } from "@/db/client";
@@ -96,21 +97,20 @@ export async function requestMagicLink(input: {
       return { ok: false, error: "Toto IČO už je registrované. Přihlaste se jako uživatel firmy." };
     }
 
-    const [employer] = await db
-      .insert(employers)
-      .values({
-        ico,
-        companyName: parsed.data.companyName,
-        legalName: parsed.data.companyName,
-        city: parsed.data.city,
-        verificationStatus: "pending",
-        planCode: "trial",
-        planRenewsAt: new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10),
-      })
-      .returning();
+    const employerId = randomUUID();
+    await db.insert(employers).values({
+      id: employerId,
+      ico,
+      companyName: parsed.data.companyName,
+      legalName: parsed.data.companyName,
+      city: parsed.data.city,
+      verificationStatus: "pending",
+      planCode: "trial",
+      planRenewsAt: new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10),
+    });
 
     await db.insert(employerUsers).values({
-      employerId: employer.id,
+      employerId,
       email,
       name: parsed.data.name,
       role: "owner",
@@ -118,7 +118,7 @@ export async function requestMagicLink(input: {
 
     await audit({
       actorType: "employer_user",
-      employerId: employer.id,
+      employerId,
       action: "employer.registered",
       metadata: { ico, aresStub: true },
       ipHash: hashIp(ip),

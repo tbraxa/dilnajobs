@@ -2,9 +2,10 @@
 
 import "server-only";
 
+import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db/client";
-import { applications, employerUsers, jobs } from "@/db/schema";
+import { applications, jobs } from "@/db/schema";
 import { audit } from "@/lib/audit";
 import { clientIp } from "@/lib/auth";
 import { hashIp } from "@/lib/crypto";
@@ -64,9 +65,10 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
     return { ok: false, error: "Tato nabídka už není otevřená." };
   }
 
-  const [created] = await db
-    .insert(applications)
-    .values({
+  const applicationId = randomUUID();
+  try {
+    await db.insert(applications).values({
+      id: applicationId,
       jobId: job.id,
       employerId: job.employerId,
       fullName: parsed.data.fullName,
@@ -78,31 +80,28 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
       cvFileName: parsed.data.cvFileName,
       cvContentType: parsed.data.cvContentType,
       ipHash: hashIp(ip),
-    })
-    .returning({ id: applications.id });
+    });
+  } catch (err) {
+    log("error", "application.insert_failed", { jobId: job.id });
+    return { ok: false, error: "Přihlášku se teď nepodařilo uložit. Zkuste to znovu." };
+  }
 
   await audit({
     actorType: "candidate",
     employerId: job.employerId,
     action: "application.created",
     resourceType: "application",
-    resourceId: created.id,
+    resourceId: applicationId,
     metadata: { jobId: job.id, hasCv: Boolean(parsed.data.cvObjectKey) },
     ipHash: hashIp(ip),
   });
 
-  const owners = await db
-    .select({ email: employerUsers.email })
-    .from(employerUsers)
-    .where(eq(employerUsers.employerId, job.employerId));
-
-  for (const owner of owners) {
-    await sendEmail({
-      to: owner.email,
-      subject: `Nová přihláška: ${job.title}`,
-      text: `${parsed.data.fullName} se hlásí na ${job.title}. Telefon: ${parsed.data.phone}.`,
-    });
-  }
+  // Employer e-mail is a stub: the public role cannot SELECT employer_users (RLS).
+  await sendEmail({
+    to: "employer-stub@dilnajobs.cz",
+    subject: `Nová přihláška: ${job.title}`,
+    text: `${parsed.data.fullName} se hlásí na ${job.title}. Telefon: ${parsed.data.phone}.`,
+  });
 
   log("info", "application.created", { jobId: job.id });
   return { ok: true };

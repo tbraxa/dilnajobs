@@ -59,7 +59,7 @@ See migration `drizzle/0001_init.sql`. Employer queries run inside a transaction
 SELECT set_config('app.employer_id', '<uuid>', true); -- SET LOCAL
 ```
 
-Helper: `withEmployerRls()` in `src/db/rls.ts`. Public catalog does not set the GUC; policies allow `SELECT` of published jobs and `INSERT` of applications.
+Helper: `withEmployerRls()` in `src/db/rls.ts`. Public catalog does not set the GUC; policies allow `SELECT` of published jobs and `INSERT` of applications. Do not `RETURNING` on those inserts — Postgres would then require a SELECT policy and leak rows.
 
 `FORCE ROW LEVEL SECURITY` is on so the table owner (app role) cannot skip policies.
 
