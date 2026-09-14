@@ -1,0 +1,65 @@
+   </div>
+          <div class="job-card-meta">Plzeňský · Plzeň · 2 směny</div>
+          <div class="tags" style="margin-bottom:0.5rem">
+            <span class="chip">HPP</span>
+                <span class="chip">TIG 141</span>
+          </div>
+          <span class="job-card-go">Otevřít nabídku →</span>
+        </a>
+        <a class="job-card" href="nabidka.html">
+          <div class="job-card-top">
+            <div class="job-card-title">Seřizovač CNC</div>
+            <div class="job-card-pay">45–60&nbsp;000&nbsp;Kč</div>
+          </div>
+          <div class="job-card-meta">Moravskoslezský · Ostrava · 3 směny</div>
+          <div class="tags" style="margin-bottom:0.5rem">
+            <span class="chip">HPP</span>
+                <span class="chip">Fanuc</span>
+          </div>
+          <span class="job-card-go">Otevřít nabídku →</span>
+        </a>
+        <a class="job-card" href="nabidka.html">
+          <div class="job-card-top">
+            <div class="job-card-title">Zámečník / zámečnice</div>
+            <div class="job-card-pay">36–44&nbsp;000&nbsp;Kč</div>
+          </div>
+          <div class="job-card-meta">Olomoucký · Olomouc · 1 směna</div>
+          <div class="tags" style="margin-bottom:0.5rem">
+            <span class="chip">HPP</span>
+          </div>
+          <span class="job-card-go">Otevřít nabídku →</span>
+        </a>
+        <a class="job-card" href="nabidka.html">
+          <div class="job-card-top">
+            <div class="job-card-title">Obráběč kovů</div>
+            <div class="job-card-pay">40–52&nbsp;000&nbsp;Kč</div>
+          </div>
+          <div class="job-card-meta">Středočeský · Mladá Boleslav · 2 směny</div>
+          <div class="tags" style="margin-bottom:0.5rem">
+            <span class="chip">HPP</span>
+                <span class="chip">Soustruh</span>
+          </div>
+          <span class="job-card-go">Otevřít nabídku →</span>
+        </a>
+        <a class="job-card" href="nabidka.html">
+          <div class="job-card-top">
+            <div class="job-card-title">Lakýrník</div>
+            <div class="job-card-pay">35–42&nbsp;000&nbsp;Kč</div>
+          </div>
+          <div class="job-card-meta">Ústecký · Ústí nad Labem · 2 směny</div>
+          <div class="tags" style="margin-bottom:0.5rem">
+            <span class="chip">HPP</span>
+          </div>
+          <span class="job-card-go">Otevřít nabídku →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="employer-strip" aria-labelledby="firmy-title">
+      <div class="es-copy">
+        <p class="eyebrow">Pro firmy</p>
+        <h2 id="firmy-title">Hledáte lidi do výroby?</h2>
+        <p>Inzerujte tam, kde uchazeči filtrují podle profese, směn a mzdy — ne podle „jakékoli brigády“. Odpovědi jdou rovnou k vám.</p>
+        <div class="hero-ctas">
+          <a href="pro-firmy.html#cenik" class="btn btn-accent btn-lg btn-square">Zobrazit ceník →</a>
+          <a href="pro-firmy.html" class="btn btn-secondary btn-lg btn-square" style="b
