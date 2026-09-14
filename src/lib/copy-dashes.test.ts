@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { withoutTypographicDashes } from "./copy";
 import { formatSalary } from "./pricing";
 
 const PUBLIC_FILES = [
@@ -38,5 +39,12 @@ describe("public copy", () => {
       const src = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8");
       expect(src, file).not.toMatch(/[—–]/);
     }
+  });
+});
+
+describe("withoutTypographicDashes", () => {
+  it("turns em dash into a comma and en dash into až", () => {
+    expect(withoutTypographicDashes("CNC operátor — 5osá frézka")).toBe("CNC operátor, 5osá frézka");
+    expect(withoutTypographicDashes("25–150")).toBe("25 až 150");
   });
 });

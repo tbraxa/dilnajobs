@@ -4,6 +4,7 @@ import { ApplyForm } from "@/components/apply-form";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
+import { withoutTypographicDashes } from "@/lib/copy";
 import { EMPLOYMENT_TYPES, professionByDb } from "@/lib/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -20,14 +21,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  return { title: `${row.job.title} · ${row.job.city}` };
+  return { title: `${withoutTypographicDashes(row.job.title)} · ${row.job.city}` };
 }
 
 function toList(text: string | null | undefined) {
   if (!text) return [];
   return text
     .split(/\n+/)
-    .map((line) => line.replace(/^\s*[-•]\s*/, "").trim())
+    .map((line) => withoutTypographicDashes(line.replace(/^\s*[-•]\s*/, "").trim()))
     .filter(Boolean);
 }
 
@@ -58,7 +59,7 @@ export default async function JobPage({ params }: Props) {
             <span className="label-box">{empLabel(job.employmentType)}</span>{" "}
             <span className="label-box">{job.city}</span>
           </p>
-          <h1>{job.title}</h1>
+          <h1>{withoutTypographicDashes(job.title)}</h1>
           <p className="spec-company">
             {companyName}
             {companyCity ? ` · ${companyCity}` : job.region ? ` · ${job.region}` : ""}

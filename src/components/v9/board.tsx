@@ -3,6 +3,7 @@ import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { CITIES, PROFESSIONS } from "@/lib/catalog";
 import { toNabidkyHref, type SearchQuery } from "@/lib/search-params";
 import { formatSalary } from "@/lib/pricing";
+import { withoutTypographicDashes } from "@/lib/copy";
 import type { searchJobs } from "@/lib/jobs/search";
 
 type Job = Awaited<ReturnType<typeof searchJobs>>[number];
@@ -120,7 +121,7 @@ export function JobList({
             <li key={job.id}>
               <Link className="job" href={`/nabidka/${job.slug}`}>
                 <div>
-                  <h2>{job.title}</h2>
+                  <h2>{withoutTypographicDashes(job.title)}</h2>
                   <p>
                     {job.companyName} · {job.city}
                     {job.shiftNote ? ` · ${job.shiftNote}` : ""}
