@@ -4,11 +4,11 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 type Variant = "primary" | "ink" | "accent" | "ghost" | "danger";
 
 const variants: Record<Variant, string> = {
-  primary: "btn btn-primary btn-square",
-  ink: "btn btn-primary btn-square",
-  accent: "btn btn-accent btn-square",
-  ghost: "btn btn-secondary btn-square",
-  danger: "btn btn-primary btn-square",
+  primary: "btn btn-primary",
+  ink: "btn btn-primary",
+  accent: "btn btn-primary",
+  ghost: "btn btn-ghost",
+  danger: "btn btn-primary",
 };
 
 export function Button({
@@ -54,7 +54,7 @@ export function Field({
   hint?: string;
 }) {
   return (
-    <div className="form-field">
+    <div className="form-group">
       <label htmlFor={name}>
         {label}
         {hint ? <span className="opt"> ({hint})</span> : null}

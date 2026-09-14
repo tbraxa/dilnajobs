@@ -1,91 +1,229 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
-import { CITIES, PROFESSIONS } from "@/lib/catalog";
-import { toNabidkyHref, type SearchQuery } from "@/lib/search-params";
-import { formatSalary } from "@/lib/pricing";
+import { FilterToggle } from "@/components/v9/chrome";
+import { CITIES } from "@/lib/catalog";
 import { withoutTypographicDashes } from "@/lib/copy";
+import { formatSalary } from "@/lib/pricing";
+import { toNabidkyHref, type SearchQuery } from "@/lib/search-params";
 import type { searchJobs } from "@/lib/jobs/search";
 
 type Job = Awaited<ReturnType<typeof searchJobs>>[number];
+
+const CHIPS = [
+  { label: "CNC", href: toNabidkyHref(undefined, { profession: "cnc" }), profession: "cnc" },
+  { label: "Svářeči", href: toNabidkyHref(undefined, { profession: "welder" }), profession: "welder" },
+  { label: "Operátoři", href: toNabidkyHref(undefined, { profession: "operator" }), profession: "operator" },
+  { label: "Údržba", href: toNabidkyHref(undefined, { profession: "maintenance" }), profession: "maintenance" },
+  { label: "Ranní směna", href: toNabidkyHref(undefined, { q: "ranní" }), q: "ranní" },
+  { label: "Ostrava", href: toNabidkyHref(undefined, { city: "Ostrava" }), city: "Ostrava" },
+  { label: "Brno", href: toNabidkyHref(undefined, { city: "Brno" }), city: "Brno" },
+] as const;
+
+const HOME_OBOR = [
+  { label: "CNC", profession: "cnc" as const },
+  { label: "Sváření", profession: "welder" as const },
+  { label: "Operátor", profession: "operator" as const },
+  { label: "Údržba", profession: "maintenance" as const },
+];
+
+const LIST_OBOR = [...HOME_OBOR, { label: "Seřizovač", profession: "setter" as const }];
+
+const SHIFTS_HOME = ["Ranní", "Odpolední", "Noční", "Kontinuální"];
+const SHIFTS_LIST = ["Ranní", "Dvousměnný", "3směnný", "Kontinuální"];
 
 function payLabel(job: Job) {
   return formatSalary(job.salaryMin, job.salaryMax, job.salaryNote).replace(" / měsíc", "");
 }
 
-function professionChip(label: string) {
-  if (label === "Průmyslový elektrikář") return "Elektrikář";
-  return label;
+function empShort(code: string) {
+  if (code === "full_time") return "HPP";
+  if (code === "part_time") return "zkrácený";
+  if (code === "shift") return "směnný";
+  return code;
 }
 
-export function FilterRail({
+function regionCity(region: string) {
+  return CITIES.find((c) => c.region === region);
+}
+
+function FilterCheck({
+  href,
+  on,
+  children,
+}: {
+  href: string;
+  on: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <Link href={href} className={on ? "is-on" : undefined}>
+            <input type="checkbox" checked={on} readOnly tabIndex={-1} onChange={() => undefined} />
+      {children}
+    </Link>
+  );
+}
+
+export function SearchBar({ query }: { query?: SearchQuery }) {
+  return (
+    <form className="search-bar" action="/nabidky" method="get" role="search" id="hledat">
+      <div className="search-field">
+        <label htmlFor="q-pozice">Pozice</label>
+        <input
+          id="q-pozice"
+          name="q"
+          type="search"
+          defaultValue={query?.q ?? ""}
+          placeholder="např. CNC operátor, svářeč"
+          autoComplete="off"
+        />
+      </div>
+      <div className="search-field">
+        <label htmlFor="q-mesto">Město</label>
+        <input
+          id="q-mesto"
+          name="city"
+          type="search"
+          defaultValue={query?.city ?? ""}
+          placeholder="např. Ostrava, Brno"
+          autoComplete="off"
+        />
+      </div>
+      <button className="btn btn-primary" type="submit">
+        Hledat
+      </button>
+    </form>
+  );
+}
+
+export function QuickChips({ query }: { query?: SearchQuery }) {
+  return (
+    <div className="chips" aria-label="Rychlé filtry">
+      {CHIPS.map((chip) => {
+        const on =
+          ("profession" in chip && query?.profession === chip.profession) ||
+          ("city" in chip && query?.city === chip.city) ||
+          ("q" in chip && (query?.q ?? "").toLocaleLowerCase("cs") === chip.q);
+        return (
+          <Link key={chip.label} className={`chip${on ? " is-active" : ""}`} href={chip.href}>
+            {chip.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+function OborFilters({ query, items }: { query?: SearchQuery; items: typeof HOME_OBOR | typeof LIST_OBOR }) {
+  const current = query?.profession ?? "";
+  return (
+    <div className="filter-group">
+      <h4>Obor</h4>
+      {items.map((item) => (
+        <FilterCheck
+          key={item.profession}
+          href={toNabidkyHref(query, { profession: current === item.profession ? null : item.profession })}
+          on={current === item.profession}
+        >
+          {item.label}
+        </FilterCheck>
+      ))}
+    </div>
+  );
+}
+
+function KrajFilters({ query, extra }: { query?: SearchQuery; extra?: boolean }) {
+  const regions = extra
+    ? ["Moravskoslezský", "Jihomoravský", "Středočeský", "Plzeňský", "Liberecký", "Zlínský"]
+    : ["Moravskoslezský", "Jihomoravský", "Středočeský", "Plzeňský"];
+  const current = query?.city ?? "";
+  return (
+    <div className="filter-group">
+      <h4>Kraj</h4>
+      {regions.map((region) => {
+        const city = regionCity(region);
+        if (!city) return null;
+        const on = current.toLocaleLowerCase("cs") === city.label.toLocaleLowerCase("cs");
+        return (
+          <FilterCheck
+            key={region}
+            href={toNabidkyHref(query, { city: on ? null : city.label })}
+            on={on}
+          >
+            {region}
+          </FilterCheck>
+        );
+      })}
+    </div>
+  );
+}
+
+function SmenaFilters({ query, items }: { query?: SearchQuery; items: string[] }) {
+  const current = (query?.q ?? "").toLocaleLowerCase("cs");
+  return (
+    <div className="filter-group">
+      <h4>Směna</h4>
+      {items.map((label) => {
+        const needle = label.toLocaleLowerCase("cs");
+        const on = current === needle;
+        return (
+          <FilterCheck key={label} href={toNabidkyHref(query, { q: on ? null : needle })} on={on}>
+            {label}
+          </FilterCheck>
+        );
+      })}
+    </div>
+  );
+}
+
+export function FilterAside({
   query,
-  claim = "Práce ve výrobě. Přímo od firem.",
+  variant,
 }: {
   query?: SearchQuery;
-  claim?: string;
+  variant: "thin" | "full";
 }) {
-  const profession = query?.profession ?? "";
   return (
-    <aside className="rail" id="filtry">
-      <p className="claim">{claim}</p>
-      <form action="/nabidky" method="get">
-        {profession ? <input type="hidden" name="profession" value={profession} /> : null}
-        <div className="search-row">
-          <label className="field">
-            <span>Pozice</span>
-            <input
-              id="hledat"
-              name="q"
-              type="search"
-              defaultValue={query?.q ?? ""}
-              placeholder="CNC, svářeč, Fanuc…"
-              autoComplete="off"
-            />
-          </label>
-          <button className="btn btn-accent" type="submit">
-            Hledat
-          </button>
-        </div>
-        <a className="btn btn-outline sheet-open" href="#filtry-sheet">
-          Filtry
-        </a>
-        <div className="facets" id="filtry-sheet">
-          <div className="sheet-head">
-            <strong>Filtry</strong>
-            <a href="#filtry" className="btn-ghost">
-              Hotovo
-            </a>
+    <aside className={`filters${variant === "thin" ? " filters-thin" : ""}`} aria-label="Filtry" id="filtry">
+      <p className="filters-title">Filtry</p>
+      <OborFilters query={query} items={variant === "thin" ? HOME_OBOR : LIST_OBOR} />
+      <KrajFilters query={query} extra={variant === "full"} />
+      <SmenaFilters query={query} items={variant === "thin" ? SHIFTS_HOME : SHIFTS_LIST} />
+      {variant === "full" ? (
+        <>
+          <div className="filter-group">
+            <h4>Typ úvazku</h4>
+            <FilterCheck href={toNabidkyHref(query, { q: null })} on={!query?.q}>
+              HPP
+            </FilterCheck>
+            <FilterCheck href={toNabidkyHref(query, { q: query?.q === "DPP" ? null : "DPP" })} on={query?.q === "DPP"}>
+              DPP / DPČ
+            </FilterCheck>
+            <FilterCheck
+              href={toNabidkyHref(query, { q: query?.q === "živnost" ? null : "živnost" })}
+              on={(query?.q ?? "").toLocaleLowerCase("cs") === "živnost"}
+            >
+              Živnost
+            </FilterCheck>
           </div>
-          <label className="field field-city">
-            <span>Město</span>
-            <select name="city" defaultValue={query?.city ?? ""}>
-              <option value="">Celá ČR</option>
-              {CITIES.map((city) => (
-                <option key={city.slug} value={city.label}>
-                  {city.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="facet">
-            <h2>Profese</h2>
-            <div className="facet-list">
-              <Link href={toNabidkyHref(query, { profession: null })} className={!profession ? "is-on" : undefined}>
-                Všechny
-              </Link>
-              {PROFESSIONS.map((p) => (
-                <Link
-                  key={p.db}
-                  href={toNabidkyHref(query, { profession: profession === p.db ? null : p.db })}
-                  className={profession === p.db ? "is-on" : undefined}
+          <div className="filter-group">
+            <h4>Plat od</h4>
+            {[35000, 40000, 45000, 50000].map((amount) => {
+              const label = `${new Intl.NumberFormat("cs-CZ").format(amount)} Kč`;
+              const on = query?.q === String(amount);
+              return (
+                <FilterCheck
+                  key={amount}
+                  href={toNabidkyHref(query, { q: on ? null : String(amount) })}
+                  on={on}
                 >
-                  {professionChip(p.label)}
-                </Link>
-              ))}
-            </div>
+                  {label}
+                </FilterCheck>
+              );
+            })}
           </div>
-        </div>
-      </form>
+        </>
+      ) : null}
     </aside>
   );
 }
@@ -94,45 +232,106 @@ export function JobList({
   jobs,
   filtered,
   unavailable,
+  title,
+  showFilterToggle,
 }: {
   jobs: Job[];
   filtered?: boolean;
   unavailable?: boolean;
+  title: string;
+  showFilterToggle?: boolean;
 }) {
   const count = jobs.length;
-  const countLabel = count === 1 ? "nabídka" : count < 5 ? "nabídky" : "nabídek";
+  const countLabel = count === 1 ? "nabídka" : count < 5 && count > 0 ? "nabídky" : "nabídek";
   return (
-    <section className="results" aria-label="Nabídky">
-      <div className="results-bar">
-        <span>{unavailable ? "Nabídky" : `${count} ${countLabel}`}</span>
-        {filtered ? <Link href="/nabidky">Zrušit filtry</Link> : <span>Přímo od firem</span>}
+    <section aria-label="Nabídky práce">
+      {showFilterToggle ? <FilterToggle /> : null}
+      <div className="list-meta">
+        <h2>{title}</h2>
+        <span className="count-label">
+          {unavailable ? "teď nedostupné" : filtered ? (
+            <>
+              {count} {countLabel} · <Link href="/nabidky">zrušit filtry</Link>
+            </>
+          ) : (
+            `${count} ${countLabel}`
+          )}
+        </span>
       </div>
       {unavailable ? (
         <CatalogUnavailable />
       ) : jobs.length === 0 ? (
         <p className="empty">
-          Na tento filtr teď nic nemáme. Zkuste jinou pozici, nebo <Link href="/nabidky">zrušte filtry</Link>. Hlídání
-          nabídek ještě nemáme. Napište na{" "}
-          <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">ahoj@dilnajobs.cz</a>.
+          Na tento filtr teď nic nemáme. Zkuste jinou pozici, nebo <Link href="/nabidky">zrušte filtry</Link>. Napište
+          na <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">ahoj@dilnajobs.cz</a>.
         </p>
       ) : (
-        <ol className="jobs">
-          {jobs.map((job) => (
-            <li key={job.id}>
-              <Link className="job" href={`/nabidka/${job.slug}`}>
-                <div>
-                  <h2>{withoutTypographicDashes(job.title)}</h2>
-                  <p>
-                    {job.companyName} · {job.city}
-                    {job.shiftNote ? ` · ${job.shiftNote}` : ""}
-                  </p>
+        <div className="job-list">
+          {jobs.map((job) => {
+            const extras = [empShort(job.employmentType), job.shiftNote].filter(Boolean).join(" · ");
+            return (
+              <Link className="job-row" href={`/nabidka/${job.slug}`} key={job.id}>
+                <div className="job-main">
+                  <h3 className="job-title">
+                    {withoutTypographicDashes(job.title)}
+                    {job.isTop ? <span className="badge-new">Nové</span> : null}
+                  </h3>
+                  <div className="job-meta">
+                    <span className="company">{job.companyName}</span>
+                    <span>{job.city}</span>
+                    {extras ? <span>{extras}</span> : null}
+                  </div>
                 </div>
-                <div className="job-pay">{payLabel(job)}</div>
+                <div className="job-side">
+                  <span className="salary">{payLabel(job)}</span>
+                  {job.shiftNote ? <span className="shift-tag">{job.shiftNote}</span> : null}
+                </div>
               </Link>
-            </li>
-          ))}
-        </ol>
+            );
+          })}
+        </div>
       )}
     </section>
+  );
+}
+
+export function BoardPage({
+  claim,
+  helper,
+  query,
+  jobs,
+  listTitle,
+  filterVariant,
+  filtered,
+  unavailable,
+}: {
+  claim: string;
+  helper: string;
+  query?: SearchQuery;
+  jobs: Job[];
+  listTitle: string;
+  filterVariant: "thin" | "full";
+  filtered?: boolean;
+  unavailable?: boolean;
+}) {
+  return (
+    <main>
+      <div className="wrap board-top">
+        <p className="claim">{claim}</p>
+        <p className="claim-helper">{helper}</p>
+        <SearchBar query={query} />
+        <QuickChips query={query} />
+      </div>
+      <div className="wrap board-layout">
+        <FilterAside query={query} variant={filterVariant} />
+        <JobList
+          jobs={jobs}
+          filtered={filtered}
+          unavailable={unavailable}
+          title={listTitle}
+          showFilterToggle={filterVariant === "full"}
+        />
+      </div>
+    </main>
   );
 }

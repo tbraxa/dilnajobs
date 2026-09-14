@@ -20,6 +20,7 @@ const PUBLIC_FILES = [
   "src/components/v9/chrome.tsx",
   "src/components/v9/board.tsx",
   "src/components/auth-shell.tsx",
+  "src/components/auth-forms.tsx",
   "src/components/catalog-unavailable.tsx",
   "src/components/ui.tsx",
   "src/lib/pricing.ts",

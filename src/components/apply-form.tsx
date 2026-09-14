@@ -101,7 +101,7 @@ export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?:
           <input name="website" tabIndex={-1} autoComplete="off" />
         </div>
         {state && !state.ok ? <p className="form-hint">{state.error}</p> : null}
-        <button type="submit" className="btn btn-accent btn-lg btn-block btn-square" disabled={pending}>
+        <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={pending}>
           {pending ? "Odesílám…" : "Odeslat firmě"}
         </button>
         <p className="form-hint">

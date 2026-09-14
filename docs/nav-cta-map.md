@@ -1,54 +1,72 @@
 # Nav / CTA map
 
-Source of truth for public labels. If a label changes, the URL must still match the action. Code: `src/lib/nav-cta.ts`.
-
-Live chrome is v9 (`design/preview-v9-groundup/`, `src/components/v9/chrome.tsx`). Same header and footer on every public route. No mega menu.
+Source of truth for public labels: [`docs/copy/COPY-PACK.md`](copy/COPY-PACK.md) (v1.1). Live HTML: [`design/preview-v9-groundup/`](../design/preview-v9-groundup/). Code: `src/lib/nav-cta.ts`, `src/components/v9/chrome.tsx`.
 
 **Inzerovat** always means create a listing: anonymous → `/firma/registrace`, signed-in employer → `/firma/nabidky/nova`. Never `/pro-firmy`.
 
-## Header
+Header height is 56px and `.wrap` padding is identical on every public route. Actions change by page, matching the HTML.
 
-Same height, logo mark, and wrap on `/`, `/nabidky`, `/pro-firmy`, auth, and legal pages.
+## Header (seeker: `/`, `/nabidky`, job detail)
+
+| Label | URL | Treatment |
+| --- | --- | --- |
+| Logo DílnaJobs | `/` | mark + wordmark |
+| Nabídky | `/nabidky` | main nav, active on seeker board |
+| Pro firmy | `/pro-firmy` | `.link-quiet` |
+| Inzerovat | `/firma/registrace` or create-job | `.btn.btn-outline.btn-sm` |
+
+## Header (employer: `/pro-firmy`)
+
+| Label | URL | Treatment |
+| --- | --- | --- |
+| Nabídky | `/nabidky` | main nav |
+| Pro firmy | `/pro-firmy` | main nav, active |
+| Přihlásit se | `/firma/prihlaseni` | `.btn.btn-ghost.btn-sm` |
+| Založit účet firmy | `/firma/registrace` | `.btn.btn-primary.btn-sm` |
+
+## Header (auth)
+
+| Page | Action |
+| --- | --- |
+| `/firma/prihlaseni` | Nabídky + Pro firmy, ghost **Registrace firmy** |
+| `/firma/registrace` | Nabídky + Pro firmy, ghost **Přihlášení firem** |
+
+## Mobile menu (seeker)
 
 | Label | URL |
 | --- | --- |
-| Logo DílnaJobs | `/` |
 | Nabídky | `/nabidky` |
 | Pro firmy | `/pro-firmy` |
-| Inzerovat | `/firma/registrace` or `/firma/nabidky/nova` (quiet text, not a filled brick) |
-
-## Mobile menu
-
-| Label | URL |
-| --- | --- |
-| Nabídky | `/nabidky` |
-| Pro firmy | `/pro-firmy` |
-| Inzerovat | `/firma/registrace` or `/firma/nabidky/nova` |
-| Přihlášení firmy | `/firma/prihlaseni` |
+| Přihlášení firem | `/firma/prihlaseni` |
+| Inzerovat nabídku | `/firma/registrace` or create-job |
 
 ## Homepage
 
-The homepage is the board. Search, filters, and listings share the first viewport.
+Claim: **Práce ve výrobě. Přímo od firem.** Search bar (Pozice + Město + Hledat), chips, thin filters, job rows.
 
 | Label | URL |
 | --- | --- |
 | Hledat | `GET /nabidky?q=&city=` |
-| Profese | `/nabidky?profession=` |
+| Chips / Obor | `/nabidky?profession=` |
 | Inzerovat (header) | `/firma/registrace` or create-job |
 
 ## `/pro-firmy`
 
+Ceník: Jednorázový 2 490 Kč, Firemní 6 990 Kč / měsíc, Provoz na míru.
+
 | Label | URL |
 | --- | --- |
-| Package CTAs | `/firma/registrace` |
+| Založit účet firmy / Vybrat / Domluvit se / Vystavit nabídku | `/firma/registrace` |
 | Ceník | `/pro-firmy#cenik` |
 
 ## Footer
 
+HTML footer plus legal links.
+
 | Label | URL |
 | --- | --- |
-| Přihlášení firmy | `/firma/prihlaseni` |
-| Inzerovat | `/firma/registrace` or create-job |
+| Nabídky | `/nabidky` |
+| Pro firmy | `/pro-firmy` |
+| Přihlášení | `/firma/prihlaseni` |
 | Osobní údaje | `/gdpr` |
 | Podmínky | `/obchodni-podminky` |
-| ahoj@dilnajobs.cz | `mailto:ahoj@dilnajobs.cz` |

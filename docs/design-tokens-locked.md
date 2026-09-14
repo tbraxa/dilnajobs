@@ -8,20 +8,23 @@ Refresh the live port from v9 `styles.css` into `src/styles/v9.css`, keeping the
 
 ## Live v9 `:root`
 
+Source: [`design/preview-v9-groundup/styles.css`](../design/preview-v9-groundup/styles.css) after Copy pack v1.1.
+
 | Token | Value | Use |
 | --- | --- | --- |
-| `--paper` | `#ffffff` | Page ground |
-| `--paper-2` | `#f5f4f0` | Recessed fills |
-| `--ink` | `#111111` | Type, logo mark |
-| `--muted` | `#5a5a5a` | Secondary type |
-| `--line` | `#e4e2dc` | Hairlines |
-| `--accent` | `#003DFF` | Primary actions only |
+| `--bg` / `--paper` | `#ffffff` | Page ground |
+| `--bg-soft` / `--paper-2` | `#f8f9fb` | Recessed fills, auth, ceník band |
+| `--ink` | `#111827` | Type |
+| `--ink-2` | `#374151` | Secondary type |
+| `--muted` | `#6b7280` | Helpers, footer |
+| `--line` | `#e5e7eb` | Hairlines |
+| `--blue` / `--accent` | `#003DFF` | Primary actions, logo cells 1+4 |
 | `--font` / `--display` | Inter | Body and headlines |
-| `--header-h` | `56px` | `.site-header` |
-| `--max` | `1120px` | `.wrap`, `.board`, `.page` |
-| `--rail` | `260px` | Filter rail |
+| `--header-h` | `56px` | `.header-inner` |
+| `--max` | `1120px` | `.wrap` |
+| `--radius` | `8px` | Cards, controls |
 
-`html { scrollbar-gutter: stable; }`. Never `body { max-width: 100vw }`. Same `.wrap` padding on every public route.
+`html { scrollbar-gutter: stable; }`. Never `body { max-width: 100vw }`. Same `.wrap` padding (`min(1120px, calc(100% - 32px))`) on every public route.
 
 ## Fonts (live)
 
@@ -75,13 +78,13 @@ Portal leftover aliases (`--paper`, `--line`, `--accent`) map to the live v9 whi
 
 **Body** is white `--paper`. No dotted wallpaper, no LIVE strip, no mega menu.
 
-**Header** is 56px, white, hairline. Logo mark is a 20px ink square with a 2×2 of small squares (cells 1+4 blue, 2+3 paper). Nav is plain links: Nabídky · Pro firmy. Inzerovat is quiet text.
+**Header** is 56px, white, hairline. Logo mark is a 15px 2×2 of spans (cells 1+4 blue, 2+3 ink). Seeker actions: Pro firmy quiet + Inzerovat outline. Employer: Přihlásit se ghost + Založit účet firmy primary.
 
-**Board** is `.board`: sticky `.rail` + `.results` job list. Same wrap as `.page` and header `.wrap`.
+**Board** is claim + helper + `.search-bar` + chips, then `.board-layout` (thin/full `.filters` + `.job-row` list). Same wrap as header.
 
-**Auth** is `.auth` (narrow). Inputs 44px. Same header/footer wrap as the board.
+**Auth** is `.auth-page` / `.auth-card`. Inputs 44px. Magic link only. No preview_note in production.
 
-**Pricing** (`/pro-firmy`) is `.prices` / `.price` cards, not the archived modular cream grid.
+**Pricing** (`/pro-firmy`) is hero + 3 benefits + 3 `.price-card` plans (Jednorázový / Firemní / Provoz).
 
 ## Controls
 

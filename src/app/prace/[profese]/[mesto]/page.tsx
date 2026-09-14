@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FilterRail, JobList } from "@/components/v9/board";
+import { BoardPage } from "@/components/v9/board";
 import { cityBySlug, professionBySlug } from "@/lib/catalog";
 import { loadSearchJobs } from "@/lib/jobs/search";
 
@@ -25,12 +25,15 @@ export default async function SeoLanding({ params }: Props) {
   const jobs = catalog.ok ? catalog.rows : [];
 
   return (
-    <main className="board">
-      <FilterRail
-        query={{ profession: p.db, city: c.label, sort: "newest" }}
-        claim={`${p.label} · ${c.label}`}
-      />
-      <JobList jobs={jobs} filtered unavailable={!catalog.ok} />
-    </main>
+    <BoardPage
+      claim={`${p.label} · ${c.label}`}
+      helper="Obor, kraj, směna a mzda. Upravte filtry podle toho, co hledáte."
+      query={{ profession: p.db, city: c.label, sort: "newest" }}
+      jobs={jobs}
+      listTitle="Výsledky"
+      filterVariant="full"
+      filtered
+      unavailable={!catalog.ok}
+    />
   );
 }

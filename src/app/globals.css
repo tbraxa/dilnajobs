@@ -11,30 +11,30 @@ html {
 :root {
   --cream: #ffffff;
   --cream-alt: #ffffff;
-  --cream-deep: #f5f4f0;
-  --ink: #111111;
-  --ink-soft: #111111;
-  --muted: #5a5a5a;
-  --muted-2: #5a5a5a;
-  --border: #e4e2dc;
-  --border-strong: #111111;
+  --cream-deep: #f8f9fb;
+  --ink: #111827;
+  --ink-soft: #111827;
+  --muted: #6b7280;
+  --muted-2: #6b7280;
+  --border: #e5e7eb;
+  --border-strong: #111827;
   --blue: #003dff;
-  --blue-dim: #002fcc;
-  --blue-soft: #e8edff;
-  --steel: #5a5a5a;
+  --blue-dim: #0030cc;
+  --blue-soft: #e8eeff;
+  --steel: #374151;
   --white: #ffffff;
   --paper: #ffffff;
   --paper-0: #ffffff;
-  --paper-2: #f5f4f0;
-  --steel-2: #5a5a5a;
-  --line: #e4e2dc;
-  --tile: #e8edff;
+  --paper-2: #f8f9fb;
+  --steel-2: #374151;
+  --line: #e5e7eb;
+  --tile: #e8eeff;
   --accent: #003dff;
-  --accent-hover: #002fcc;
+  --accent-hover: #0030cc;
   --danger: #8b1e1e;
   --ok: #1f4d2c;
   --background: #ffffff;
-  --foreground: #111111;
+  --foreground: #111827;
 }
 
 @theme inline {

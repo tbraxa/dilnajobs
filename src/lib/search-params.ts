@@ -13,11 +13,21 @@ function one(input: string | string[] | undefined): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
+const OBOR_TO_PROFESSION: Record<string, string> = {
+  cnc: "cnc",
+  svarovani: "welder",
+  svarac: "welder",
+  operator: "operator",
+  udrzba: "maintenance",
+  serizovac: "setter",
+};
+
 export function parseSearch(input: Record<string, string | string[] | undefined>): SearchQuery {
+  const obor = one(input.obor)?.toLocaleLowerCase("cs");
   const raw = {
-    q: one(input.q),
-    profession: one(input.profession),
-    city: one(input.city),
+    q: one(input.q) ?? one(input.smena),
+    profession: one(input.profession) ?? (obor ? OBOR_TO_PROFESSION[obor] : undefined),
+    city: one(input.city) ?? one(input.mesto),
     sort: one(input.sort),
   };
   const parsed = searchSchema.safeParse(raw);

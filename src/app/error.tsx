@@ -21,7 +21,7 @@ export default function ErrorPage({
         Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, ozvěte se na ahoj@dilnajobs.cz.
       </p>
       <div className="hero-ctas">
-        <button type="button" className="btn btn-accent" onClick={() => reset()}>
+        <button type="button" className="btn btn-primary" onClick={() => reset()}>
           Zkusit znovu
         </button>
         <Link href="/" className="btn btn-outline">

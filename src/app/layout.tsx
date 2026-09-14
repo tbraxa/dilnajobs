@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { SiteFooter, SiteHeader } from "@/components/v9/chrome";
 import { resolveAppUrl } from "@/lib/app-url";
 import { getSession } from "@/lib/auth";
-import { postListingHref } from "@/lib/nav-cta";
+import { isPublicAuthPath, postListingHref } from "@/lib/nav-cta";
 import "./globals.css";
 import "@/styles/v9.css";
 
@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 const FIRST_PAINT =
-  "html,body{background-color:#ffffff;color:#111111}html{scrollbar-gutter:stable;overflow-x:hidden}body{width:100%;max-width:none;overflow-x:hidden;font-family:Inter,system-ui,sans-serif}";
+  "html,body{background-color:#ffffff;color:#111827}html{scrollbar-gutter:stable;overflow-x:hidden}body{width:100%;max-width:none;overflow-x:hidden;font-family:Inter,system-ui,sans-serif}";
 
 async function employerPostHref(): Promise<string> {
   try {
@@ -41,7 +41,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const isAdmin = pathname.startsWith("/admin");
   const postHref = isAdmin ? postListingHref(false) : await employerPostHref();
   return (
-    <html lang="cs" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
+    <html lang="cs" style={{ backgroundColor: "#ffffff", color: "#111827" }}>
       <head>
         <style dangerouslySetInnerHTML={{ __html: FIRST_PAINT }} />
         <link rel="preload" href="/fonts/Inter-400-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <link rel="preload" href="/fonts/Inter-700-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Inter-700-ext.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
-      <body data-nonce={nonce} style={{ backgroundColor: "#ffffff", color: "#111111" }}>
+        <body data-nonce={nonce} style={{ backgroundColor: "#ffffff", color: "#111827" }}>
         {isAdmin ? (
           <div id="obsah">{children}</div>
         ) : (
@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             <div id="obsah" className="site-body">
               {children}
             </div>
-            <SiteFooter postHref={postHref} />
+            {isPublicAuthPath(pathname) ? null : <SiteFooter />}
           </>
         )}
       </body>

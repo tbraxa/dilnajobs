@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FilterRail, JobList } from "@/components/v9/board";
+import { BoardPage } from "@/components/v9/board";
 import { parseSearch, loadSearchJobs } from "@/lib/jobs/search";
 import { hasActiveFilters } from "@/lib/search-params";
 
@@ -20,9 +20,15 @@ export default async function NabidkyPage({
   const jobs = catalog.ok ? catalog.rows : [];
 
   return (
-    <main className="board">
-      <FilterRail query={query} claim="Všechny výrobní nabídky" />
-      <JobList jobs={jobs} filtered={hasActiveFilters(query)} unavailable={!catalog.ok} />
-    </main>
+    <BoardPage
+      claim="Všechny výrobní nabídky"
+      helper="Obor, kraj, směna a mzda. Upravte filtry podle toho, co hledáte."
+      query={query}
+      jobs={jobs}
+      listTitle="Výsledky"
+      filterVariant="full"
+      filtered={hasActiveFilters(query)}
+      unavailable={!catalog.ok}
+    />
   );
 }

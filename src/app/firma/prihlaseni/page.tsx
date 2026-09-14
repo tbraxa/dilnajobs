@@ -12,13 +12,16 @@ export default function LoginPage() {
   return (
     <>
       <RedirectHashRegistrace />
-      <AuthShell title="Přihlášení firmy" note="Na e-mail pošleme odkaz pro přihlášení. Heslo nepoužíváme.">
+      <AuthShell
+        title="Přihlášení firmy"
+        note="Na e-mail pošleme odkaz pro přihlášení."
+        footer={
+          <p className="auth-footer">
+            Nemáte účet? <a href="/firma/registrace">Zaregistrujte firmu</a>
+          </p>
+        }
+      >
         <LoginForm />
-        <p className="note">Odkaz platí 15 minut. Heslo nepoužíváme.</p>
-        <p className="auth-links">
-          <a href="/firma/registrace">Zaregistrujte firmu</a>
-          <a href="/pro-firmy#cenik">Ceník</a>
-        </p>
       </AuthShell>
     </>
   );

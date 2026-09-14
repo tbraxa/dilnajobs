@@ -16,15 +16,17 @@ export function LoginForm() {
           type="email"
           required
           className={inputClass}
-          autoComplete="email"
+          autoComplete="username"
           inputMode="email"
+          placeholder="jmeno@firma.cz"
         />
       </Field>
       {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
       {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
-      <Button type="submit" variant="accent" disabled={pending}>
+      <Button type="submit" variant="accent" className="btn-block" disabled={pending}>
         {pending ? "Posílám odkaz…" : "Poslat přihlašovací odkaz"}
       </Button>
+      <p className="auth-helper">Odkaz platí 15 minut. Heslo nepoužíváme.</p>
     </form>
   );
 }
@@ -86,23 +88,24 @@ export function RegisterForm() {
 
       <fieldset className="auth-section">
         <legend>Firma</legend>
-        <div className="form-field">
-          <label htmlFor="ico">IČO *</label>
-          <div className="auth-ico-stack">
+        <div className="form-group">
+          <label htmlFor="ico">IČO</label>
+          <div className="input-with-action">
             <input
               id="ico"
               name="ico"
               required
               inputMode="numeric"
               autoComplete="off"
-              maxLength={10}
+              maxLength={8}
+              placeholder="12345678"
               className={`${inputClass} auth-ico-input`.trim()}
               value={ico}
               onChange={(e) => setIco(e.target.value)}
             />
             <button
               type="button"
-              className={`btn btn-square ${revealed ? "btn-secondary" : "btn-accent"}`}
+              className="btn btn-ghost btn-sm"
               onClick={() => void loadFromAres()}
               disabled={aresBusy}
             >
@@ -119,21 +122,24 @@ export function RegisterForm() {
 
         {revealed ? (
           <>
-            <Field label="Obchodní název *" name="companyName">
+            <Field label="Obchodní název" name="companyName">
               <input
                 id="companyName"
                 name="companyName"
                 required
                 className={inputClass}
                 autoComplete="organization"
+                placeholder="např. Moravia Precision s.r.o."
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
               />
             </Field>
-            <div className="form-field">
-              <span id="dph-label">DPH</span>
-              <div className="auth-choice" role="radiogroup" aria-labelledby="dph-label">
-                <label className={vatPayer === "nonpayer" ? "is-on" : undefined}>
+            <div className="form-group">
+              <label id="dph-label" htmlFor="dph-platce">
+                DPH
+              </label>
+              <div className="segmented" role="radiogroup" aria-labelledby="dph-label">
+                <label className="segmented-option">
                   <input
                     type="radio"
                     name="vatPayer"
@@ -141,17 +147,18 @@ export function RegisterForm() {
                     checked={vatPayer === "nonpayer"}
                     onChange={() => setVatPayer("nonpayer")}
                   />
-                  Neplátce
+                  <span>Neplátce</span>
                 </label>
-                <label className={vatPayer === "payer" ? "is-on" : undefined}>
+                <label className="segmented-option">
                   <input
                     type="radio"
                     name="vatPayer"
                     value="payer"
+                    id="dph-platce"
                     checked={vatPayer === "payer"}
                     onChange={() => setVatPayer("payer")}
                   />
-                  Plátce
+                  <span>Plátce</span>
                 </label>
               </div>
             </div>
@@ -162,17 +169,19 @@ export function RegisterForm() {
                   name="dic"
                   className={inputClass}
                   autoComplete="off"
+                  placeholder="CZ12345678"
                   value={dic}
                   onChange={(e) => setDic(e.target.value)}
                 />
               </Field>
             ) : null}
-            <Field label="Sídlo / adresa" name="city">
+            <Field label="Sídlo" name="city">
               <input
                 id="city"
                 name="city"
                 className={inputClass}
                 autoComplete="street-address"
+                placeholder="ulice, PSČ, město"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
               />
@@ -185,15 +194,15 @@ export function RegisterForm() {
         <>
           <fieldset className="auth-section">
             <legend>Kontaktní osoba</legend>
-            <div className="auth-row-2">
-              <Field label="Jméno *" name="firstName">
+            <div className="form-row">
+              <Field label="Jméno" name="firstName">
                 <input id="firstName" name="firstName" required className={inputClass} autoComplete="given-name" />
               </Field>
-              <Field label="Příjmení *" name="lastName">
+              <Field label="Příjmení" name="lastName">
                 <input id="lastName" name="lastName" required className={inputClass} autoComplete="family-name" />
               </Field>
             </div>
-            <Field label="Telefon *" name="phone">
+            <Field label="Telefon" name="phone">
               <input
                 id="phone"
                 name="phone"
@@ -202,10 +211,10 @@ export function RegisterForm() {
                 className={inputClass}
                 autoComplete="tel"
                 inputMode="tel"
-                placeholder="+420 "
+                placeholder="+420 …"
               />
             </Field>
-            <Field label="Pracovní e-mail *" name="reg-email">
+            <Field label="Pracovní e-mail" name="reg-email">
               <input
                 id="reg-email"
                 name="email"
@@ -214,25 +223,27 @@ export function RegisterForm() {
                 className={inputClass}
                 autoComplete="email"
                 inputMode="email"
+                placeholder="personalista@firma.cz"
               />
             </Field>
           </fieldset>
 
-          <label className="auth-legal">
-            <input type="checkbox" name="consentTerms" value="on" required />
-            <span>
-              Zakládám účet jako přímý zaměstnavatel a souhlasím s{" "}
-              <a href="/obchodni-podminky">obchodními podmínkami</a> a se{" "}
-              <a href="/gdpr">zpracováním osobních údajů</a>.
-            </span>
-          </label>
+          <div className="form-group form-check">
+            <label>
+              <input type="checkbox" name="consentTerms" value="on" required />
+              <span>
+                Souhlasím s <a href="/obchodni-podminky">obchodními podmínkami</a> a{" "}
+                <a href="/gdpr">zpracováním osobních údajů</a>.
+              </span>
+            </label>
+          </div>
 
           {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
           {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
-          <Button type="submit" variant="accent" disabled={pending}>
+          <Button type="submit" variant="accent" className="btn-block" disabled={pending}>
             {pending ? "Zakládám účet…" : "Založit účet a poslat odkaz"}
           </Button>
-          <p className="auth-helper">Na e-mail pošleme přihlašovací odkaz. Heslo nepoužíváme.</p>
+          <p className="auth-helper">Po odeslání vám pošleme přihlašovací odkaz na e-mail. Heslo nepoužíváme.</p>
         </>
       ) : null}
     </form>

@@ -9,11 +9,17 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <AuthShell title="Registrace firmy" note="Nejdřív IČO. Údaje doplníme z ARES, zkontrolujte je.">
+    <AuthShell
+      title="Registrace firmy"
+      note="Založte účet. Přihlašovací odkaz přijde na e-mail."
+      wide
+      footer={
+        <p className="auth-footer">
+          Už máte účet? <a href="/firma/prihlaseni">Přihlaste se</a>
+        </p>
+      }
+    >
       <RegisterForm />
-      <p className="auth-links">
-        <a href="/firma/prihlaseni">Už účet máte? Přihlášení</a>
-      </p>
     </AuthShell>
   );
 }
