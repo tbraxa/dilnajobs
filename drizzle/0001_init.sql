@@ -291,18 +291,29 @@ VALUES
   ('top', 'Top 7 dní', 1350, 'days', 7, NULL, 'Zvýraznění existujícího inzerátu na 7 dní.', 5);
 
 -- App role is not a superuser so FORCE RLS actually applies. Migrate/seed use the admin URL.
+-- Hosted Postgres (Neon / Vercel) often cannot CREATE ROLE; skip grants if dilna_app is absent
+-- (the connecting owner can still use the tables).
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
-    CREATE ROLE dilna_app LOGIN PASSWORD 'dilna' NOSUPERUSER NOCREATEDB NOCREATEROLE;
+    BEGIN
+      CREATE ROLE dilna_app LOGIN PASSWORD 'dilna' NOSUPERUSER NOCREATEDB NOCREATEROLE;
+    EXCEPTION WHEN OTHERS THEN
+      RAISE NOTICE 'skip CREATE ROLE dilna_app: %', SQLERRM;
+    END;
   END IF;
-  EXECUTE format('GRANT CONNECT ON DATABASE %I TO dilna_app', current_database());
+  IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
+    BEGIN
+      EXECUTE format('GRANT CONNECT ON DATABASE %I TO dilna_app', current_database());
+    EXCEPTION WHEN OTHERS THEN
+      RAISE NOTICE 'skip GRANT CONNECT: %', SQLERRM;
+    END;
+    GRANT USAGE ON SCHEMA public TO dilna_app;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO dilna_app;
+    GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO dilna_app;
+    GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO dilna_app;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO dilna_app;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO dilna_app;
+  END IF;
 END
 $$;
-
-GRANT USAGE ON SCHEMA public TO dilna_app;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO dilna_app;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO dilna_app;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO dilna_app;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO dilna_app;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO dilna_app;

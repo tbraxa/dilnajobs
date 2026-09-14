@@ -16,7 +16,11 @@ AS $$
 $$;
 
 REVOKE ALL ON FUNCTION employer_owner_email(uuid) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION employer_owner_email(uuid) TO dilna_app;
+DO $$ BEGIN
+  IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
+    GRANT EXECUTE ON FUNCTION employer_owner_email(uuid) TO dilna_app;
+  END IF;
+END $$;
 
 CREATE OR REPLACE FUNCTION fulfill_paid_order(p_order_id uuid, p_provider_ref text)
 RETURNS boolean
@@ -83,7 +87,11 @@ END;
 $$;
 
 REVOKE ALL ON FUNCTION fulfill_paid_order(uuid, text) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION fulfill_paid_order(uuid, text) TO dilna_app;
+DO $$ BEGIN
+  IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
+    GRANT EXECUTE ON FUNCTION fulfill_paid_order(uuid, text) TO dilna_app;
+  END IF;
+END $$;
 
 CREATE OR REPLACE FUNCTION expire_published_jobs()
 RETURNS integer
@@ -111,4 +119,8 @@ END;
 $$;
 
 REVOKE ALL ON FUNCTION expire_published_jobs() FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION expire_published_jobs() TO dilna_app;
+DO $$ BEGIN
+  IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
+    GRANT EXECUTE ON FUNCTION expire_published_jobs() TO dilna_app;
+  END IF;
+END $$;

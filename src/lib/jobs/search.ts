@@ -3,6 +3,8 @@ import "server-only";
 import { and, desc, eq, gte, ilike, or, sql as dsql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { employers, jobs } from "@/db/schema";
+import { isMissingRelationError, type CatalogResult } from "@/lib/catalog-error";
+import { log } from "@/lib/logging";
 import { parseSearch, type SearchQuery } from "@/lib/search-params";
 
 export type { SearchQuery };
@@ -81,4 +83,29 @@ export async function getPublishedJobBySlug(slug: string) {
 
 export async function featuredJobs(limit = 6) {
   return searchJobs({ sort: "newest" }).then((rows) => rows.slice(0, limit));
+}
+
+async function wrapCatalog<T>(fn: () => Promise<T>): Promise<CatalogResult<T>> {
+  try {
+    return { ok: true, rows: await fn() };
+  } catch (err) {
+    const reason = isMissingRelationError(err) ? "missing_schema" : "query_failed";
+    log("error", "catalog.query_failed", {
+      reason,
+      message: err instanceof Error ? err.message : String(err),
+    });
+    return { ok: false, reason };
+  }
+}
+
+export function loadSearchJobs(query: SearchQuery) {
+  return wrapCatalog(() => searchJobs(query));
+}
+
+export function loadFeaturedJobs(limit = 6) {
+  return wrapCatalog(() => featuredJobs(limit));
+}
+
+export function loadPublishedJobBySlug(slug: string) {
+  return wrapCatalog(() => getPublishedJobBySlug(slug));
 }
