@@ -1,33 +1,95 @@
 import "server-only";
 
 import { eq } from "drizzle-orm";
+import { sql } from "@/db/client";
 import { withEmployerRls } from "@/db/rls";
 import { orders, packages } from "@/db/schema";
-import { paymentsEnabled } from "@/lib/env";
+import { env, paymentsEnabled } from "@/lib/env";
 import { log } from "@/lib/logging";
 import { audit } from "@/lib/audit";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
 
-export async function createOrderStub(employerId: string, packageCode: string) {
+export type CheckoutResult =
+  | { kind: "redirect"; url: string }
+  | { kind: "stub"; orderId: string }
+  | { kind: "activated"; orderId: string };
+
+async function fulfillOrder(orderId: string, providerRef: string | null) {
+  await sql`select fulfill_paid_order(${orderId}::uuid, ${providerRef})`;
+}
+
+export async function applyPaidOrder(orderId: string, providerRef: string | null): Promise<boolean> {
+  const rows = await sql<{ fulfill_paid_order: boolean | string }[]>`
+    select fulfill_paid_order(${orderId}::uuid, ${providerRef})
+  `;
+  const v = rows[0]?.fulfill_paid_order;
+  return v === true || v === "t";
+}
+
+async function createStripeCheckout(input: {
+  orderId: string;
+  packageName: string;
+  amountCzkExVat: number;
+  email: string;
+}) {
+  const params = new URLSearchParams();
+  params.set("mode", "payment");
+  params.set("success_url", `${env.APP_URL}/firma?objednavka=ok`);
+  params.set("cancel_url", `${env.APP_URL}/firma?objednavka=zruseno`);
+  params.set("client_reference_id", input.orderId);
+  params.set("customer_email", input.email);
+  params.set("metadata[orderId]", input.orderId);
+  params.set("line_items[0][quantity]", "1");
+  params.set("line_items[0][price_data][currency]", "czk");
+  params.set("line_items[0][price_data][unit_amount]", String(input.amountCzkExVat * 100));
+  params.set("line_items[0][price_data][product_data][name]", `DílnaJobs — ${input.packageName}`);
+
+  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: params,
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`stripe_checkout_${res.status}:${body.slice(0, 160)}`);
+  }
+  const session = (await res.json()) as { id: string; url?: string };
+  if (!session.url) throw new Error("stripe_checkout_missing_url");
+  return { id: session.id, url: session.url };
+}
+
+export async function startCheckout(input: {
+  employerId: string;
+  email: string;
+  packageCode: string;
+}): Promise<CheckoutResult> {
   const requestId = await getRequestId();
   try {
-    const pkg = await withEmployerRls(employerId, async (tx) => {
-      const found = await tx.select().from(packages).where(eq(packages.code, packageCode)).limit(1);
+    const pkg = await withEmployerRls(input.employerId, async (tx) => {
+      const found = await tx.select().from(packages).where(eq(packages.code, input.packageCode)).limit(1);
       return found[0];
     });
     if (!pkg) throw new Error("Neznámý balíček.");
 
-    const enabled = paymentsEnabled();
-    const order = await withEmployerRls(employerId, async (tx) => {
+    const stripeOn = paymentsEnabled();
+    const free = pkg.priceCzkExVat === 0;
+    const status = free ? "pending" : stripeOn ? "pending" : "stub";
+    const provider = free || stripeOn ? "stripe" : "stub";
+
+    const order = await withEmployerRls(input.employerId, async (tx) => {
       const [row] = await tx
         .insert(orders)
         .values({
-          employerId,
+          employerId: input.employerId,
           packageCode: pkg.code,
-          status: enabled ? "pending" : "stub",
-          provider: enabled ? "stripe" : "stub",
+          status,
+          provider,
           amountCzkExVat: pkg.priceCzkExVat,
+          paidAt: null,
         })
         .returning();
       return row;
@@ -35,22 +97,49 @@ export async function createOrderStub(employerId: string, packageCode: string) {
 
     await audit({
       actorType: "employer_user",
-      employerId,
+      employerId: input.employerId,
       action: "order.created",
       resourceType: "order",
       resourceId: order.id,
-      metadata: { packageCode, stub: !enabled, requestId },
+      metadata: { packageCode: pkg.code, stub: !stripeOn && !free, free, requestId },
     });
 
-    log("info", "payments.checkout", { stub: !enabled, packageCode, requestId });
-    return { order, stub: !enabled };
+    if (free) {
+      await fulfillOrder(order.id, "free");
+      log("info", "payments.activated_free", { packageCode: pkg.code, requestId });
+      return { kind: "activated", orderId: order.id };
+    }
+
+    if (!stripeOn) {
+      log("info", "payments.checkout", { stub: true, packageCode: pkg.code, requestId });
+      return { kind: "stub", orderId: order.id };
+    }
+
+    const session = await createStripeCheckout({
+      orderId: order.id,
+      packageName: pkg.name,
+      amountCzkExVat: pkg.priceCzkExVat,
+      email: input.email,
+    });
+
+    await withEmployerRls(input.employerId, async (tx) => {
+      await tx.update(orders).set({ providerRef: session.id }).where(eq(orders.id, order.id));
+    });
+
+    log("info", "payments.checkout", { stub: false, packageCode: pkg.code, requestId });
+    return { kind: "redirect", url: session.url };
   } catch (err) {
-    captureException(err, { event: "payments.checkout.failed", employerId, packageCode, requestId });
+    captureException(err, {
+      event: "payments.checkout.failed",
+      employerId: input.employerId,
+      packageCode: input.packageCode,
+      requestId,
+    });
     await audit({
       actorType: "system",
-      employerId,
+      employerId: input.employerId,
       action: "payments.checkout.failed",
-      metadata: { packageCode, requestId },
+      metadata: { packageCode: input.packageCode, requestId },
     });
     throw err;
   }

@@ -9,23 +9,11 @@ async function main() {
   const url = process.env.DATABASE_ADMIN_URL ?? process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_ADMIN_URL or DATABASE_URL required");
   const sql = postgres(url, { max: 1, prepare: false });
-  log("info", "worker.start", { mode: "inline-stub" });
+  log("info", "worker.start", { mode: "expire_published_jobs" });
   try {
-    const result = await sql`
-      update jobs
-      set status = 'expired'
-      where status = 'published' and expires_at is not null and expires_at < now()
-      returning id
-    `;
-    log("info", "jobs.expired", { count: result.length });
-    await sql`
-      insert into system_heartbeats (name, status, detail, checked_at)
-      values ('job_expiry', 'ok', ${`${result.length} inzerátů expirováno`}, now())
-      on conflict (name) do update
-        set status = excluded.status,
-            detail = excluded.detail,
-            checked_at = excluded.checked_at
-    `;
+    const rows = await sql<{ expire_published_jobs: number }[]>`select expire_published_jobs()`;
+    const count = Number(rows[0]?.expire_published_jobs ?? 0);
+    log("info", "jobs.expired", { count });
     log("info", "worker.done");
   } catch (err) {
     const message = err instanceof Error ? err.message : "worker_failed";

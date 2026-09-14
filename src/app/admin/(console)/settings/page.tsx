@@ -30,9 +30,29 @@ export default function AdminSettingsPage() {
         Jen čtení z prostředí. Tajemství (DSN, klíče, connection string) se sem nevypisují.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        <Flag on={flags.smtp} label="SMTP / pošta" hint="Bez SMTP_URL se odkazy a oznámení vypíší do konzole." />
+        <Flag
+          on={flags.mailer}
+          label="Pošta"
+          hint={
+            flags.resend
+              ? "Resend API klíč je nastavený."
+              : flags.smtp
+                ? "SMTP_URL je nastavené (záloha za Resend)."
+                : "Bez RESEND_API_KEY / SMTP_URL se odkazy vypíší do konzole."
+          }
+        />
         <Flag on={flags.s3} label="S3 úložiště CV" hint="Bez klíčů se soubory ukládají do storage/cvs/." />
-        <Flag on={flags.paymentsLive} label="Platby" hint={flags.stripe ? "Stripe klíče přítomné." : flags.gopay ? "GoPay klíče přítomné." : "Checkout zakládá objednávku ve stavu stub."} />
+        <Flag
+          on={flags.paymentsLive && flags.stripeWebhook}
+          label="Platby (Stripe)"
+          hint={
+            flags.stripe && flags.stripeWebhook
+              ? "Checkout i webhook secret jsou nastavené."
+              : flags.stripe
+                ? "STRIPE_SECRET_KEY je, chybí STRIPE_WEBHOOK_SECRET."
+                : "Checkout zakládá objednávku ve stavu stub."
+          }
+        />
         <Flag on={flags.sentry} label="Sentry" hint="Bez SENTRY_DSN jdou výjimky jen do strukturovaných logů." />
         <Flag
           on={!flags.autoPublish}

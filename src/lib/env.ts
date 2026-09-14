@@ -27,9 +27,11 @@ const schema = z.object({
     .transform((v) => v === "true"),
   CV_MAX_BYTES: z.coerce.number().int().positive().default(5_242_880),
   STRIPE_SECRET_KEY: z.string().optional().transform((v) => v || undefined),
-  GOPAY_CLIENT_SECRET: z.string().optional().transform((v) => v || undefined),
+  STRIPE_WEBHOOK_SECRET: z.string().optional().transform((v) => v || undefined),
   EMAIL_FROM: z.string().default("DílnaJobs <noreply@dilnajobs.cz>"),
+  RESEND_API_KEY: z.string().optional().transform((v) => v || undefined),
   SMTP_URL: optionalUrl,
+  CRON_SECRET: z.string().optional().transform((v) => v || undefined),
   FEATURE_AUTO_PUBLISH_FIRST_JOB: z
     .string()
     .optional()
@@ -62,7 +64,11 @@ function loadEnv(): Env {
 export const env = loadEnv();
 
 export function paymentsEnabled(): boolean {
-  return Boolean(env.STRIPE_SECRET_KEY || env.GOPAY_CLIENT_SECRET);
+  return Boolean(env.STRIPE_SECRET_KEY);
+}
+
+export function stripeWebhookConfigured(): boolean {
+  return Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
 }
 
 export function s3Enabled(): boolean {

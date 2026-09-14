@@ -20,7 +20,7 @@ PostgreSQL 16
   tables + FORCE ROW LEVEL SECURITY on employer data
         │
         ├─ local disk or S3-compatible (CVs)
-        └─ pg-boss (expiry, email stub)
+        └─ Resend / SMTP / Stripe / S3
 ```
 
 ## Route map
@@ -49,6 +49,8 @@ PostgreSQL 16
 | `GET /api/health` | public | liveness |
 | `GET /api/ready` | public | Postgres readiness |
 | `GET /api/admin/health` | admin | deep health JSON |
+| `POST /api/stripe/webhook` | Stripe signature | mark order paid, grant plan credits |
+| `GET/POST /api/cron/job-expiry` | `CRON_SECRET` | expire ads + heartbeat |
 
 ## Data
 
@@ -93,7 +95,7 @@ CVs are private. Object keys are `cv/<uuid>/<hex>.<ext>` — not guessable. Down
 
 pg-boss (or `npm run worker`) expires published jobs past `expires_at` and sends email stubs.
 
-Stripe Checkout or GoPay is behind env keys. Missing keys → documented stub order.
+Stripe Checkout is behind `STRIPE_SECRET_KEY`. Missing key → documented stub order. Webhook `POST /api/stripe/webhook` verifies `Stripe-Signature` and calls `fulfill_paid_order`. GoPay is not used.
 
 ## Logging
 

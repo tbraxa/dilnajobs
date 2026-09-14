@@ -106,7 +106,13 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
 export async function startCheckoutAction(packageCode: string) {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
-  const { createOrderStub } = await import("@/lib/payments");
-  await createOrderStub(session.employerId, packageCode);
+  const { startCheckout } = await import("@/lib/payments");
+  const result = await startCheckout({
+    employerId: session.employerId,
+    email: session.email,
+    packageCode,
+  });
+  if (result.kind === "redirect") redirect(result.url);
+  if (result.kind === "activated") redirect("/firma?objednavka=aktivovano");
   redirect("/firma?objednavka=stub");
 }

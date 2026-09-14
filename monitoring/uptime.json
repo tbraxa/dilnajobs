@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "dilnajobs",
+  "note": "Import into Better Stack, Checkly, or any HTTP uptime tool. Replace https://dilnajobs.cz after DNS is live. Do not monitor /api/admin/health.",
+  "checks": [
+    {
+      "name": "liveness",
+      "url": "https://dilnajobs.cz/api/health",
+      "method": "GET",
+      "interval_seconds": 60,
+      "expect": {
+        "status": 200,
+        "json": { "status": "ok" }
+      }
+    },
+    {
+      "name": "readiness-postgres",
+      "url": "https://dilnajobs.cz/api/ready",
+      "method": "GET",
+      "interval_seconds": 60,
+      "timeout_seconds": 5,
+      "expect": {
+        "status": 200,
+        "json_path": { "status": "ok", "postgres.ok": true }
+      }
+    },
+    {
+      "name": "public-catalog",
+      "url": "https://dilnajobs.cz/nabidky",
+      "method": "GET",
+      "interval_seconds": 300,
+      "expect": {
+        "status": 200,
+        "body_contains": "DílnaJobs"
+      }
+    }
+  ]
+}

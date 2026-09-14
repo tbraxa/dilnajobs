@@ -1,5 +1,5 @@
 import { sql } from "@/db/client";
-import { env, paymentsEnabled, s3Enabled } from "@/lib/env";
+import { env, paymentsEnabled, s3Enabled, stripeWebhookConfigured } from "@/lib/env";
 import { getMailerStatus } from "@/lib/email";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -16,6 +16,7 @@ const EXPECTED_MIGRATIONS = [
   "0002_employers_public_read.sql",
   "0003_employer_user_lookup.sql",
   "0004_admin_ops.sql",
+  "0005_payments_email.sql",
 ];
 
 async function timed<T>(fn: () => Promise<T>, ms = 1500): Promise<{ ok: true; value: T; latencyMs: number } | { ok: false; error: string; latencyMs: number }> {
@@ -123,25 +124,33 @@ export async function runDeepHealth(): Promise<HealthReport> {
   }
 
   const mail = getMailerStatus();
+  const mailDetail = mail.lastError
+    ? `Poslední chyba: ${mail.lastError}`
+    : mail.provider === "resend"
+      ? "Resend API"
+      : mail.provider === "smtp"
+        ? "SMTP_URL"
+        : "Stub: výpis do konzole. Nastavte RESEND_API_KEY (nebo SMTP_URL).";
   checks.push({
     name: "mailer",
     status: mail.lastError ? "degraded" : mail.configured ? "ok" : "unconfigured",
-    detail: mail.lastError
-      ? `Poslední chyba: ${mail.lastError}`
-      : mail.configured
-        ? "SMTP_URL je nastavené (odesílání ještě může být stub)"
-        : "Stub: výpis do konzole. Nastavte SMTP_URL.",
+    detail: mailDetail,
     checkedAt,
   });
 
+  let paymentsStatus: CheckStatus = "unconfigured";
+  let paymentsDetail = "Stub checkout. Nastavte STRIPE_SECRET_KEY a STRIPE_WEBHOOK_SECRET.";
+  if (paymentsEnabled() && stripeWebhookConfigured()) {
+    paymentsStatus = "ok";
+    paymentsDetail = "Stripe Checkout + webhook secret";
+  } else if (paymentsEnabled()) {
+    paymentsStatus = "degraded";
+    paymentsDetail = "STRIPE_SECRET_KEY je nastavené, chybí STRIPE_WEBHOOK_SECRET";
+  }
   checks.push({
     name: "payments",
-    status: paymentsEnabled() ? "ok" : "unconfigured",
-    detail: paymentsEnabled()
-      ? env.STRIPE_SECRET_KEY
-        ? "Stripe klíče přítomné"
-        : "GoPay klíče přítomné"
-      : "Stub checkout. Nastavte STRIPE_SECRET_KEY nebo GOPAY_CLIENT_SECRET.",
+    status: paymentsStatus,
+    detail: paymentsDetail,
     checkedAt,
   });
 
