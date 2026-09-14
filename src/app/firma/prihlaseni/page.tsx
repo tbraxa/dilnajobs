@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Přihlášení firmy" };
 
 export default function LoginPage() {
   return (
-    <main className="shell grid gap-8 py-10 lg:grid-cols-2">
+    <main className="wrap" style={{ padding: "2.5rem 0 3rem", display: "grid", gap: "2rem" }}>
       <section>
         <p className="label">Firmy</p>
         <h1 className="display mt-2 text-3xl font-semibold">Přihlášení e-mailem</h1>

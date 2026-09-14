@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DílnaJobs — práce ve výrobě, napřímo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="dot-grid">
+    <a class="skip" href="#obsah">Přeskočit na obsah</a>
+    <div class="top-strip">
+      <span class="top-strip__dot" aria-hidden="true"></span>
+      LIVE · nabídky z výrobních firem · bez agentur
+    </div>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="logo" href="index.html">
+          <span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          DílnaJobs
+        </a>
+        <nav class="nav-desktop" aria-label="Hlavní">
+          <div class="nav-item">
+            <button class="nav-trigger" type="button">Nabídky</button>
+            <div class="mega-panel">
+              <div class="mega-grid">
+                <a class="mega-item" href="nabidky.html?profession=cnc"><span class="mega-icon"><svg><use href="icons.svg#icon-cnc"></use></svg></span>CNC</a>
+                <a class="mega-item" href="nabidky.html?profession=welder"><span class="mega-icon"><svg><use href="icons.svg#icon-weld"></use></svg></span>Svářeč</a>
+                <a class="mega-item" href="nabidky.html?profession=setter"><span class="mega-icon"><svg><use href="icons.svg#icon-setter"></use></svg></span>Seřizovač</a>
+                <a class="mega-item" href="nabidky.html?profession=electrician"><span class="mega-icon"><svg><use href="icons.svg#icon-electric"></use></svg></span>Elektrikář</a>
+                <a class="mega-item" href="nabidky.html?profession=maintenance"><span class="mega-icon"><svg><use href="icons.svg#icon-maintain"></use></svg></span>Údržba</a>
+                <a class="mega-item" href="nabidky.html?profession=locksmith"><span class="mega-icon"><svg><use href="icons.svg#icon-factory"></use></svg></span>Zámečník</a>
+              </div>
+              <p class="mega-note">Živý katalog. Agentury neregistrujeme.</p>
+            </div>
+          </div>
+          <div class="nav-item">
+            <button class="nav-trigger" type="button">Pro firmy</button>
+            <div class="mega-panel">
+              <div class="mega-grid">
+                <a class="mega-item" href="pro-firmy.html"><span class="mega-icon"><svg><use href="icons.svg#icon-factory"></use></svg></span>Ceník</a>
+                <a class="mega-item" href="pro-firmy.html"><span class="mega-icon"><svg><use href="icons.svg#icon-post"></use></svg></span>Jak inzerovat</a>
+              </div>
+              <p class="mega-note">Jen přímí zaměstnavatelé s IČO.</p>
+            </div>
+          </div>
+          <div class="nav-item">
+            <a class="nav-trigger" href="#jak">Jak to funguje</a>
+          </div>
+        </nav>
+        <a class="btn btn-square btn-accent header-cta" href="pro-firmy.html">Přidat nabídku</a>
+        <button class="burger" type="button" aria-expanded="false" aria-controls="drawer"><span></span><span class="sr-only">Menu</span></button>
+      </div>
+    </header>
+    <div class="site-drawer" id="drawer">
+      <button class="drawer-mask" type="button" data-close-drawer aria-label="Zavřít"></button>
+      <div class="drawer-panel">
+        <div class="drawer-head">Menu <button class="close" type="button" data-close-drawer>×</button></div>
+        <nav class="drawer-nav">
+          <a href="nabidky.html"><span class="mega-icon"><svg><use href="icons.svg#icon-search"></use></svg></span>Nabídky</a>
+          <a href="pro-firmy.html"><span class="mega-icon"><svg><use href="icons.svg#icon-factory"></use></svg></span>Pro firmy</a>
+          <a href="#jak"><span class="mega-icon"><svg><use href="icons.svg#icon-post"></use></svg></span>Jak to funguje</a>
+          <p class="micro" style="margin:1.25rem 0 0.5rem">Profese</p>
+          <a href="nabidky.html?profession=cnc"><span class="mega-icon"><svg><use href="icons.svg#icon-cnc"></use></svg></span>CNC</a>
+          <a href="nabidky.html?profession=welder"><span class="mega-icon"><svg><use href="icons.svg#icon-weld"></use></svg></span>Svářeč</a>
+          <a href="nabidky.html?profession=setter"><span class="mega-icon"><svg><use href="icons.svg#icon-setter"></use></svg></span>Seřizovač</a>
+          <a href="nabidky.html?profession=electrician"><span class="mega-icon"><svg><use href="icons.svg#icon-electric"></use></svg></span>Elektrikář</a>
+          <a href="nabidky.html?profession=maintenance"><span class="mega-icon"><svg><use href="icons.svg#icon-maintain"></use></svg></span>Údržba</a>
+          <a href="nabidky.html?profession=locksmith"><span class="mega-icon"><svg><use href="icons.svg#icon-factory"></use></svg></span>Zámečník</a>
+        </nav>
+        <div class="drawer-cta"><a class="btn btn-square btn-accent" href="pro-firmy.html" style="width:100%">Přidat nabídku</a></div>
+      </div>
+    </div>
+
+    <main id="obsah">
+      <section class="hero wrap">
+        <div class="hero-copy">
+          <p class="micro">Výroba · ČR · bez agentur</p>
+          <h1 class="display">Práce ve výrobě.<br />Napřímo z dílny.</h1>
+          <p class="lead">CNC, svářeči, seřizovači, průmysloví elektrikáři, údržba. Inzerují výrobní firmy. Uchazeč se hlásí jménem a telefonem — účet zakládat nemusíte.</p>
+          <div class="hero-actions">
+            <a class="btn btn-square btn-primary" href="nabidky.html">Hledat nabídky</a>
+            <a class="btn btn-square btn-ghost" href="pro-firmy.html">Jste firma?</a>
+          </div>
+        </div>
+        <div class="hero-aside">
+          <p class="micro">Profese</p>
+          <div class="profession-tiles">
+            <a class="profession-tile" href="nabidky.html?profession=cnc"><span class="mega-icon"><svg><use href="icons.svg#icon-cnc"></use></svg></span>CNC</a>
+            <a class="profession-tile" href="nabidky.html?profession=welder"><span class="mega-icon"><svg><use href="icons.svg#icon-weld"></use></svg></span>Svářeč</a>
+            <a class="profession-tile" href="nabidky.html?profession=setter"><span class="mega-icon"><svg><use href="icons.svg#icon-setter"></use></svg></span>Seřizovač</a>
+            <a class="profession-tile" href="nabidky.html?profession=electrician"><span class="mega-icon"><svg><use href="icons.svg#icon-electric"></use></svg></span>Elektrikář</a>
+            <a class="profession-tile" href="nabidky.html?profession=maintenance"><span class="mega-icon"><svg><use href="icons.svg#icon-maintain"></use></svg></span>Údržba</a>
+            <a class="profession-tile" href="nabidky.html?profession=locksmith"><span class="mega-icon"><svg><use href="icons.svg#icon-factory"></use></svg></span>Zámečník</a>
+          </div>
+          <p>Hledání jde proti živé databázi, ne proti statickému seznamu.</p>
+        </div>
+      </section>
+
+      <section class="section wrap">
+        <div class="section-head">
+          <div>
+            <p class="micro">Nástěnka</p>
+            <h2 class="display">Aktuální nabídky</h2>
+          </div>
+          <a href="nabidky.html">Všechny</a>
+        </div>
+        <div class="filter-bar">
+          <a class="filter-chip is-on" href="nabidky.html">Vše</a>
+          <a class="filter-chip" href="nabidky.html?profession=cnc">CNC</a>
+          <a class="filter-chip" href="nabidky.html?profession=welder">Svářeč</a>
+          <a class="filter-chip" href="nabidky.html?profession=setter">Seřizovač</a>
+          <a class="filter-chip" href="nabidky.html?profession=electrician">Elektrikář</a>
+          <a class="filter-chip" href="nabidky.html?profession=maintenance">Údržba</a>
+        </div>
+        <div class="jobs-live">
+          <article class="job-row">
+            <span class="mega-icon"><svg><use href="icons.svg#icon-cnc"></use></svg></span>
+            <div class="job-row__body">
+              <div class="job-row__company">Kovovýroba Novák <span class="badge-top">TOP</span></div>
+              <h3 class="job-title"><a href="nabidka.html">CNC operátor — 5osá frézka</a></h3>
+              <p class="job-pay">42 000–52 000 Kč / měsíc</p>
+              <p class="job-meta">Brno · CNC</p>
+            </div>
+          </article>
+          <article class="job-row">
+            <span class="mega-icon"><svg><use href="icons.svg#icon-weld"></use></svg></span>
+            <div class="job-row__body">
+              <div class="job-row__company">Morava Weld</div>
+              <h3 class="job-title"><a href="nabidka.html">Svářeč MIG/MAG — ocelové konstrukce</a></h3>
+              <p class="job-pay">40 000–55 000 Kč / měsíc</p>
+              <p class="job-meta">Ostrava · Svářeč</p>
+            </div>
+          </article>
+          <article class="job-row">
+            <span class="mega-icon"><svg><use href="icons.svg#icon-setter"></use></svg></span>
+            <div class="job-row__body">
+              <div class="job-row__company">Plast MB</div>
+              <h3 class="job-title"><a href="nabidka.html">Seřizovač vstřikolisů</a></h3>
+              <p class="job-pay">45 000–60 000 Kč / měsíc</p>
+              <p class="job-meta">Mladá Boleslav · Seřizovač</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="employer-band">
+        <div class="wrap employer-band-inner">
+          <div>
+            <p class="micro">Zaměstnavatelé</p>
+            <h2 class="display">Nabíráte do výroby?</h2>
+            <p>Inzerují jen firmy s IČO. Agentury neregistrujeme. Ceny bez DPH. Přihlášení odkazem na e-mail — heslo nechceme.</p>
+          </div>
+          <div class="employer-band-actions">
+            <a class="btn btn-square btn-on-accent" href="pro-firmy.html">Přihlásit firmu</a>
+            <a class="btn btn-square btn-ghost-on-accent" href="pro-firmy.html">Ceník</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section wrap" id="jak">
+        <div class="section-head">
+          <div>
+            <p class="micro">Jak to funguje</p>
+            <h2 class="display">Tři kroky. Žádný účet navíc.</h2>
+          </div>
+        </div>
+        <div class="how">
+          <div class="how-step">
+            <p class="micro">01</p>
+            <h3>Vyberete nabídku</h3>
+            <p>Filtr podle profese a města. Mzda je na inzerátu, ne „dle dohody“ jako výmluva.</p>
+          </div>
+          <div class="how-step">
+            <p class="micro">02</p>
+            <h3>Napíšete jméno a telefon</h3>
+            <p>Životopis je volitelný. Účet zakládat nemusíte.</p>
+          </div>
+          <div class="how-step">
+            <p class="micro">03</p>
+            <h3>Ozve se firma</h3>
+            <p>Přihláška jde napřímo zaměstnavateli. Agenturu sem nepouštíme.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section wrap">
+        <div class="section-head">
+          <div>
+            <p class="micro">Ceník</p>
+            <h2 class="display">Tři vstupy. Žádný balíček navíc.</h2>
+          </div>
+          <a href="pro-firmy.html">Celý ceník</a>
+        </div>
+        <div class="pricing-tease">
+          <article class="price-card">
+            <p class="micro">Zkušební</p>
+            <p class="price">0 Kč</p>
+            <p class="vat">bez DPH</p>
+            <p class="blurb">10 inzerátů za rok. Ověříte, že sem chodí lidé z dílny — ne z agentury.</p>
+          </article>
+          <article class="price-card">
+            <p class="micro">Jednorázový</p>
+            <p class="price">2 990 Kč</p>
+            <p class="vat">bez DPH</p>
+            <p class="blurb">Jeden inzerát, 30 dní. Když potřebujete jednoho člověka, ne balíček.</p>
+          </article>
+          <article class="price-card">
+            <p class="micro">Basic</p>
+            <p class="price">8 900 Kč</p>
+            <p class="vat">bez DPH</p>
+            <p class="blurb">40 inzerátů za rok. Pro závod, který nabírá průběžně.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div>
+          <a class="logo" href="index.html"><span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>DílnaJobs</a>
+          <p>Práce ve výrobě, napřímo od firem. Agentury neregistrujeme. Cílová doména dilnajobs.cz.</p>
+        </div>
+        <div>
+          <p class="micro">Uchazeči</p>
+          <ul>
+            <li><a href="nabidky.html">Nabídky práce</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="micro">Firmy</p>
+          <ul>
+            <li><a href="pro-firmy.html">Ceník</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="legal">© 2026 DílnaJobs. Provozovatel bude doplněn před spuštěním.</p>
+    </footer>
+    <script src="mega-menu.js"></script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { applyToJob, type ActionState } from "@/lib/actions/apply";
 import { presignCvAction } from "@/lib/actions/cv";
-import { Button, Field, inputClass } from "./ui";
+import { Field, inputClass } from "./ui";
 
 const initial: ActionState | null = null;
 
@@ -43,20 +43,20 @@ export function ApplyForm({ jobId }: { jobId: string }) {
 
   if (state?.ok) {
     return (
-      <p className="border border-line bg-paper p-5 text-sm">
-        Přihláška je u firmy. Ozvou se vám na telefon.
-      </p>
+      <p className="empty">Přihláška je u firmy. Ozvou se vám na telefon.</p>
     );
   }
 
   return (
-    <form action={action} className="space-y-4 border border-line bg-paper p-5">
+    <form action={action} className="apply-panel">
       <input type="hidden" name="jobId" value={jobId} />
       <input type="hidden" name="cvObjectKey" />
       <input type="hidden" name="cvFileName" />
       <input type="hidden" name="cvContentType" />
-      <p className="label">Přihláška</p>
-      <p className="text-sm text-steel">Účet nepotřebujete. Stačí jméno a telefon.</p>
+      <p className="micro">Přihláška</p>
+      <p style={{ margin: "0.4rem 0 0", fontSize: "0.9rem", color: "var(--steel)" }}>
+        Účet nepotřebujete. Stačí jméno a telefon.
+      </p>
       <Field label="Jméno a příjmení" name="fullName">
         <input id="fullName" name="fullName" required className={inputClass} autoComplete="name" />
       </Field>
@@ -95,9 +95,9 @@ export function ApplyForm({ jobId }: { jobId: string }) {
         <input name="website" tabIndex={-1} autoComplete="off" />
       </div>
       {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
-      <Button type="submit" variant="accent" disabled={pending}>
+      <button className="btn btn-square btn-accent" type="submit" disabled={pending}>
         {pending ? "Odesílám…" : "Odeslat přihlášku"}
-      </Button>
+      </button>
     </form>
   );
 }

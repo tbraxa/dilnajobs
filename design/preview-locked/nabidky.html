@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nabídky práce · DílnaJobs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="dot-grid">
+    <div class="top-strip"><span class="top-strip__dot"></span> LIVE · nabídky z výrobních firem · bez agentur</div>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="logo" href="index.html"><span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>DílnaJobs</a>
+        <nav class="nav-desktop">
+          <div class="nav-item is-current"><a class="nav-trigger" href="nabidky.html">Nabídky</a></div>
+          <div class="nav-item"><a class="nav-trigger" href="pro-firmy.html">Pro firmy</a></div>
+          <div class="nav-item"><a class="nav-trigger" href="index.html#jak">Jak to funguje</a></div>
+        </nav>
+        <a class="btn btn-square btn-accent header-cta" href="pro-firmy.html">Přidat nabídku</a>
+        <button class="burger" type="button" aria-expanded="false"><span></span><span class="sr-only">Menu</span></button>
+      </div>
+    </header>
+    <main class="wrap" id="obsah">
+      <header class="page-title">
+        <p class="micro">Katalog</p>
+        <h1 class="display">Nabídky práce</h1>
+        <p>Řazení a filtry berou data z databáze. Agenturní inzeráty tady nejsou — a nebudou.</p>
+      </header>
+      <div class="filter-bar">
+        <a class="filter-chip is-on" href="nabidky.html">Vše</a>
+        <a class="filter-chip" href="nabidky.html?profession=cnc">CNC</a>
+        <a class="filter-chip" href="nabidky.html?profession=welder">Svářeč</a>
+        <a class="filter-chip" href="nabidky.html?profession=setter">Seřizovač</a>
+        <a class="filter-chip" href="nabidky.html?profession=electrician">Elektrikář</a>
+        <a class="filter-chip" href="nabidky.html?profession=maintenance">Údržba</a>
+        <a class="filter-chip" href="nabidky.html?profession=locksmith">Zámečník</a>
+      </div>
+      <form class="filters" action="nabidky.html" method="get">
+        <label class="field"><span class="micro">Hledat</span><input name="q" placeholder="Pozice, nástroj, technologie" /></label>
+        <label class="field"><span class="micro">Profese</span><select name="profession"><option value="">Všechny</option><option value="cnc">CNC</option></select></label>
+        <label class="field"><span class="micro">Město</span><select name="city"><option value="">Celá ČR</option><option>Brno</option></select></label>
+        <label class="field"><span class="micro">Řazení</span><select name="sort"><option value="newest">Nejnovější</option><option value="salary">Mzda</option></select></label>
+        <button class="btn btn-square btn-primary" type="submit">Filtrovat</button>
+      </form>
+      <p class="micro count">3 nabídky</p>
+      <div class="job-list">
+        <article class="job-row">
+          <span class="mega-icon"><svg><use href="icons.svg#icon-cnc"></use></svg></span>
+          <div class="job-row__body">
+            <div class="job-row__company">Kovovýroba Novák <span class="badge-top">TOP</span></div>
+            <h2 class="job-title"><a href="nabidka.html">CNC operátor — 5osá frézka</a></h2>
+            <p class="job-pay">42 000–52 000 Kč / měsíc</p>
+            <p class="job-meta">Brno · CNC</p>
+          </div>
+        </article>
+      </div>
+    </main>
+    <footer class="site-footer"><p class="legal">© 2026 DílnaJobs</p></footer>
+    <script src="mega-menu.js"></script>
+  </body>
+</html>

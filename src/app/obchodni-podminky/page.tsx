@@ -4,7 +4,7 @@ export const metadata: Metadata = { title: "Obchodní podmínky" };
 
 export default function TosPage() {
   return (
-    <main className="shell-narrow py-8 text-[15px] leading-relaxed sm:py-10">
+    <main className="wrap" style={{ padding: "2rem 0 3rem" }}>
       <h1 className="display text-3xl font-semibold">Obchodní podmínky</h1>
       <p className="mt-4 text-steel">Návrh v1. Finální verzi schválí právník před ostrým provozem.</p>
       <h2 className="display mt-8 text-xl font-semibold">Koho bereme</h2>

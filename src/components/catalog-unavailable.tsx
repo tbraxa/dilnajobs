@@ -6,10 +6,12 @@ export function CatalogUnavailable({
   detail?: string;
 }) {
   return (
-    <div className="border border-line bg-paper p-5 text-sm">
-      <p className="label">Katalog</p>
-      <p className="display mt-2 text-xl text-ink">{title}</p>
-      <p className="mt-2 text-steel">{detail}</p>
+    <div className="empty">
+      <p className="micro">Katalog</p>
+      <p className="display" style={{ marginTop: "0.5rem", fontSize: "1.25rem" }}>
+        {title}
+      </p>
+      <p style={{ marginTop: "0.5rem" }}>{detail}</p>
     </div>
   );
 }
