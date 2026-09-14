@@ -13,7 +13,7 @@ Source of truth for public labels. If a label changes, the URL must still match 
 | Pro firmy (mega) | see mega below |
 | Jak to funguje | `/#jak` (plain link, no mega) |
 | Hledat | `/#hledat` on homepage, `/nabidky` elsewhere |
-| Inzerovat → | `/firma/registrace` or `/firma/nabidky/nova` |
+| Inzerovat → | `/firma/registrace` or `/firma/nabidky/nova` (outline / secondary) |
 
 ## Mobile drawer
 

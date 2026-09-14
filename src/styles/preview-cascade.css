@@ -32,6 +32,8 @@ html body .header-inner,
 html body .auth-shell,
 html body .hero-board,
 html body .page-hero,
+html body .seek-board,
+html body .seek-split,
 html body .seek-hero,
 html body .seek-head,
 html body .search-hq,
@@ -510,6 +512,8 @@ html body a.drawer-acc-btn {
 }
 
 /* ---------- Candidate-first search (HP + /nabidky) ---------- */
+html body .seek-board,
+html body .seek-split,
 html body .seek-hero,
 html body .seek-head,
 html body .search-hq {
@@ -521,17 +525,35 @@ html body .search-hq {
   background: var(--cream-alt);
 }
 
+.seek-board,
+.seek-split {
+  border-bottom: 1px solid var(--border);
+}
+
+.seek-board .seek-hero,
+.seek-board .results-meta,
+.seek-split .search-hq {
+  max-width: none;
+  margin: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+.seek-board .results-meta {
+  border-bottom: 1px solid var(--border);
+}
+
 .seek-hero {
-  padding: 1.25rem 2.5rem 1.1rem;
+  padding: 0.85rem 2.5rem 0.85rem;
   border-bottom: 1px solid var(--border);
 }
 
 html body .seek-hero h1 {
-  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
   letter-spacing: -0.035em;
-  margin: 0.1rem 0 0.4rem;
-  max-width: 16em;
-  line-height: 1.12;
+  margin: 0 0 0.65rem;
+  max-width: 18em;
+  line-height: 1.15;
 }
 
 .seek-hero .lead {
@@ -634,7 +656,7 @@ html body .seek-head .eyebrow {
   flex-wrap: wrap;
   gap: 0.4rem;
   align-items: center;
-  margin-top: 0.9rem;
+  margin-top: 0.65rem;
 }
 
 .chip-rule {
@@ -651,6 +673,105 @@ html body .seek-head .eyebrow {
   padding: 0.7rem 2.5rem 0.65rem;
   border-bottom: 1px solid var(--border);
   background: var(--cream-alt);
+}
+
+.seek-split {
+  display: grid;
+  grid-template-columns: 272px minmax(0, 1fr);
+  align-items: start;
+}
+
+.seek-split .search-hq {
+  position: sticky;
+  top: var(--header-h);
+  align-self: start;
+  min-height: calc(100vh - var(--header-h));
+  padding: 1.15rem 1.15rem 1.5rem;
+  border-bottom: 0;
+  border-right: 1px solid var(--border);
+}
+
+.hq-rail-label {
+  margin-bottom: 0.85rem;
+}
+
+.seek-split .search-panel.is-hq {
+  flex-direction: column;
+  align-items: stretch;
+  border: 0;
+  background: transparent;
+  min-height: 0;
+  gap: 0.5rem;
+}
+
+.seek-split .search-panel.is-hq .sp-field {
+  border: 1px solid var(--ink);
+  border-right: 1px solid var(--ink);
+  background: var(--white);
+}
+
+.seek-split .search-panel.is-hq .hq-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: none;
+  min-width: 0;
+}
+
+.seek-split .search-panel.is-hq .sp-submit {
+  width: 100%;
+  min-height: 48px;
+  align-self: stretch;
+}
+
+.seek-split .hq-chips {
+  margin-top: 0.85rem;
+}
+
+.seek-split .hq-chips .chip-row {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+.seek-main-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.65rem 1.25rem;
+  padding: 1.1rem 1.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+html body .seek-main-head h1 {
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  margin: 0;
+}
+
+.seek-main-head .seek-count {
+  margin: 0;
+}
+
+.seek-main-head a,
+.seek-count a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.seek-main .jobs-table thead th:first-child,
+.seek-main .jobs-table tbody td.col-role {
+  padding-left: 1.5rem;
+}
+
+.seek-main .jobs-table thead th:last-child,
+.seek-main .jobs-table tbody td.col-go {
+  padding-right: 1.5rem;
+}
+
+.seek-main .job-card,
+.seek-main .empty-seek {
+  padding-inline: 1.5rem;
 }
 
 .search-panel.is-hq .hq-fields {
@@ -778,9 +899,6 @@ body:has(.site-header.is-hidden) .search-hq {
   .search-hq {
     padding-inline: 1.5rem;
   }
-  html body .seek-hero {
-    padding-top: 1.5rem;
-  }
   html body .section-head,
   html body .results-meta,
   html body .hero-how-intro,
@@ -801,6 +919,39 @@ body:has(.site-header.is-hidden) .search-hq {
 }
 
 @media (max-width: 900px) {
+  .seek-split {
+    display: block;
+  }
+  .hq-rail-label {
+    display: none;
+  }
+  .seek-split .search-hq {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0.7rem 1rem 0.65rem;
+  }
+  .seek-split .search-panel.is-hq {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border: 1px solid var(--ink);
+    background: var(--white);
+    gap: 0;
+    min-height: 56px;
+  }
+  .seek-split .search-panel.is-hq .sp-field {
+    border: 0;
+    border-right: 1px solid var(--border);
+    background: transparent;
+  }
+  .seek-split .search-panel.is-hq .sp-submit {
+    width: auto;
+    min-height: 56px;
+  }
+  .seek-main-head {
+    padding: 0.9rem 1rem;
+  }
+
   .search-panel {
     flex-wrap: wrap;
   }
@@ -839,10 +990,12 @@ body:has(.site-header.is-hidden) .search-hq {
     min-height: 56px;
     padding: 0 1rem;
   }
-  .search-panel.is-hq .hq-fields {
+  .search-panel.is-hq .hq-fields,
+  .seek-split .search-panel.is-hq .hq-fields {
     display: none;
   }
-  .search-panel.is-hq .hq-fields:target {
+  .search-panel.is-hq .hq-fields:target,
+  .seek-split .search-panel.is-hq .hq-fields:target {
     display: flex;
     flex-direction: column;
     position: fixed;

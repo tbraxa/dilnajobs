@@ -1,31 +1,29 @@
 # Candidate-first IA
 
-Product priority: **uchazeč looking for manufacturing work** first, employer posting second. Visual identity stays DílnaJobs (cream / ink / `#003DFF`, Satoshi, square logo and CTAs). Information architecture follows a job-board search HQ (StartupJobs-like), not a marketing landing page.
+Product priority: **uchazeč looking for manufacturing work** first, employer posting second. Visual identity stays DílnaJobs (cream / ink / `#003DFF`, Satoshi, square logo and CTAs). Information architecture follows a job-board search HQ (StartupJobs-like), not a marketing landing page. We copy IA and craft, not their orange/blue chrome.
 
 ## Homepage `/`
 
-Above the fold is search, not a two-column hero board.
+`/` is search, then results — close to `/nabidky`, not a hero board.
 
-1. Short headline — výroba, přímo od firem, bez agentur.
-2. Dominant search panel (`#hledat`): pozice + město + **Hledat nabídky** → `GET /nabidky?q=&city=`.
-3. Quick chips under the panel: professions + top cities → filtered `/nabidky`.
-4. Results strip immediately below (featured table / cards). Empty catalog still shows search + chips; copy stays human (no migration talk).
-5. Jak to funguje (`/#jak`) and the employer / ceník strip sit **below** the fold.
+1. One-line headline under the nav: výroba, přímo od firem.
+2. Search **row** immediately under it (`#hledat`): pozice + město + **Hledat nabídky** → `GET /nabidky?q=&city=`.
+3. Quick chips, then the job list in the **same first viewport**. No second “Aktuální nabídky” heading, no live-panel marketing column.
+4. Jak to funguje (`/#jak`) and employer / ceník sit **below** the fold.
 
-Header **Hledat** on this page focuses `#hledat`. **Inzerovat** stays secondary (`/firma/registrace` or create-job).
+Header **Hledat** focuses `#hledat`. **Inzerovat** is outline / secondary.
 
 ## `/nabidky`
 
-One sticky control surface (`#filtry`), not three stacked bars.
+Same job as the homepage: filters and results share the first viewport.
 
-- Desktop: keyword + město + profese + řazení + Hledat stay visible while results scroll (sticky top bar on the `--max` board). A left filter rail would fight the single workshop column, so we do not split the page SJ-style.
-- Chips live in the same HQ. Active filters show a status line and **Zrušit filtry**.
-- Result count sits under the HQ.
-- Mobile: keyword first; město / profese / řazení open in a sheet (`#filtry-sheet`).
-- Empty results stay human. We do not fake an alert product — “upozornit mě” is a mailto until it exists.
+- Desktop: **left filter rail** + right job list inside the `--max` cream board (SJ split, workshop materials). Rail is sticky. Fields: pozice, město, profese, řazení, chips, **Zrušit filtry**.
+- A full-width sticky search *bar* would stack on top of the list and push results down; the rail keeps jobs at the top of the column.
+- Mobile: keyword + Hledat first; město / profese / řazení in `#filtry-sheet`.
+- Result count in the list header. Empty copy stays human; **Upozornit mě** is a mailto until alerts exist.
 
 ## What we do not copy
 
-Orange/blue StartupJobs chrome, their type, or their logo. Craft (spacing, density, hover, empty states) should feel as deliberate as theirs; the brand stays workshop cream and ink.
+Orange/blue StartupJobs chrome, their type, or their logo. No fake “saved jobs” product.
 
 See also `docs/nav-cta-map.md` and `docs/design-tokens-locked.md`.

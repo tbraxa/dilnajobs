@@ -23,45 +23,40 @@ export default async function NabidkyPage({
 
   return (
     <main>
-      <section className="seek-head">
-        <div>
-          <p className="eyebrow">Nabídky / CZ</p>
-          <h1>Nabídky</h1>
-        </div>
-        <a href="/pro-firmy" className="btn btn-ghost btn-square">
-          Jste firma?
-        </a>
-      </section>
+      <section className="seek-split" aria-label="Nabídky a filtry">
+        <FilterHq defaults={query} />
 
-      <FilterHq defaults={query} />
-
-      <div className="results-meta">
-        <span>
-          {catalog.ok
-            ? `${count} ${countLabel}${filtered ? "" : " · řazeno od nejnovějších"}`
-            : "Nabídky teď nejsou k dispozici."}
-        </span>
-        {filtered ? (
-          <a href="/nabidky">Zrušit filtry</a>
-        ) : (
-          <span>Přímo od firem</span>
-        )}
-      </div>
-
-      <section className="section-band" aria-label="Výsledky">
-        {!catalog.ok ? (
-          <CatalogUnavailable />
-        ) : jobs.length === 0 ? (
-          <div className="empty-seek">
-            <p className="lead">
-              Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici, nebo{" "}
-              <a href="/nabidky">zrušte filtry</a>. Hlídání nabídek ještě nemáme — když chcete vědět, až se něco objeví, napište na{" "}
-              <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">ahoj@dilnajobs.cz</a>.
+        <div className="seek-main">
+          <div className="seek-main-head">
+            <h1>Nabídky</h1>
+            <p className="seek-count">
+              {catalog.ok
+                ? `${count} ${countLabel}${filtered ? "" : " · od nejnovějších"}`
+                : "Teď nejsou k dispozici"}
+              {filtered ? (
+                <>
+                  {" · "}
+                  <a href="/nabidky">Zrušit filtry</a>
+                </>
+              ) : null}
             </p>
           </div>
-        ) : (
-          <JobsTable jobs={jobs} goLabel="Otevřít →" />
-        )}
+
+          {!catalog.ok ? (
+            <CatalogUnavailable />
+          ) : jobs.length === 0 ? (
+            <div className="empty-seek">
+              <p className="lead">
+                Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici, nebo{" "}
+                <a href="/nabidky">zrušte filtry</a>.{" "}
+                <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">Upozornit mě</a>
+                {" "}— hlídání nabídek ještě nemáme, ozveme se e-mailem.
+              </p>
+            </div>
+          ) : (
+            <JobsTable jobs={jobs} goLabel="Otevřít →" />
+          )}
+        </div>
       </section>
 
       <section className="cta-panel">

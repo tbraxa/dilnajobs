@@ -6,43 +6,38 @@ import { loadFeaturedJobs } from "@/lib/jobs/search";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const catalog = await loadFeaturedJobs(6);
+  const catalog = await loadFeaturedJobs(8);
   const jobs = catalog.ok ? catalog.rows : [];
   const count = jobs.length;
   const countLabel = count === 1 ? "nabídka" : count < 5 ? "nabídky" : "nabídek";
 
   return (
     <main>
-      <section className="seek-hero" aria-label="Hledat práci">
-        <p className="eyebrow">Výroba / CZ</p>
-        <h1>Práce ve výrobě. Přímo od firem.</h1>
-        <p className="lead">CNC, svářeči, seřizovači. Bez agentur, bez povinného účtu.</p>
-        <SearchPanel />
-        <QuickChips />
-      </section>
-
-      <section className="section-band" aria-labelledby="openings-title">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Otevřené pozice</p>
-            <h2 id="openings-title">Aktuální nabídky</h2>
-            {catalog.ok && jobs.length > 0 ? (
-              <p className="seek-count">
-                {count} {countLabel} teď online
-              </p>
-            ) : null}
-          </div>
-          <a href="/nabidky" className="btn btn-secondary btn-square">
-            Všechny nabídky →
-          </a>
+      <section className="seek-board" aria-label="Hledat práci">
+        <div className="seek-hero">
+          <h1>Práce ve výrobě. Přímo od firem.</h1>
+          <SearchPanel />
+          <QuickChips />
         </div>
+
+        <div className="results-meta">
+          <span>
+            {catalog.ok
+              ? jobs.length > 0
+                ? `${count} ${countLabel} teď online`
+                : "Na nástěnce teď nic není"
+              : "Nabídky teď nejsou k dispozici"}
+          </span>
+          <a href="/nabidky">Všechny nabídky →</a>
+        </div>
+
         {!catalog.ok ? (
           <CatalogUnavailable />
         ) : jobs.length === 0 ? (
           <div className="empty-seek">
             <p className="lead">
-              Na nástěnce teď nic není. Hledání nahoře funguje — zkuste CNC nebo Ostravu, nebo napište na{" "}
-              <a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a>.
+              Hledání nahoře funguje — zkuste CNC nebo Ostravu. Hlídání nabídek ještě nemáme, když chcete vědět, až se něco objeví, napište na{" "}
+              <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">ahoj@dilnajobs.cz</a>.
             </p>
           </div>
         ) : (

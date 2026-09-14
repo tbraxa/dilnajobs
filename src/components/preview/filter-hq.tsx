@@ -14,7 +14,8 @@ export function FilterHq({ defaults }: { defaults?: SearchQuery }) {
   ].filter(Boolean) as string[];
 
   return (
-    <div className="search-hq" id="filtry">
+    <aside className="search-hq" id="filtry">
+      <p className="eyebrow hq-rail-label">Filtry</p>
       <form className="search-panel is-hq" action="/nabidky" method="get">
         <label className="sp-field sp-q">
           <span>Pozice</span>
@@ -77,6 +78,6 @@ export function FilterHq({ defaults }: { defaults?: SearchQuery }) {
           </p>
         ) : null}
       </div>
-    </div>
+    </aside>
   );
 }
