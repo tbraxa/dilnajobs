@@ -24,7 +24,7 @@ export default async function FirmaHome({
   });
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+    <main className="shell py-8 sm:py-10">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="label">Firma</p>
@@ -34,9 +34,11 @@ export default async function FirmaHome({
           </p>
         </div>
         <div className="flex gap-2">
-          <ButtonLink href="/firma/nabidky/nova">Nová nabídka</ButtonLink>
+          <ButtonLink href="/firma/nabidky/nova" variant="accent">
+            Nová nabídka
+          </ButtonLink>
           <form action={logoutAction}>
-            <button className="rounded-[2px] border border-line px-4 py-2.5 text-sm" type="submit">
+            <button className="border border-line bg-paper-0 px-4 py-2.5 text-sm font-semibold" type="submit">
               Odhlásit
             </button>
           </form>

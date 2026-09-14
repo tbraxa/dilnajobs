@@ -15,7 +15,7 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
+    <main className="shell py-16">
       <p className="label">Chyba</p>
       <h1 className="display mt-2 text-3xl font-semibold">Něco se pokazilo</h1>
       <p className="mt-3 max-w-xl text-sm text-steel">

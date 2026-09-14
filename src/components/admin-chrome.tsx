@@ -16,7 +16,7 @@ const NAV = [
 export function AdminChrome({ email, children }: { email: string; children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-line bg-paper/90 backdrop-blur-sm">
+      <header className="border-b border-line bg-paper">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link href="/admin" className="flex items-center gap-2 text-ink">
             <LogoMark className="h-8 w-8" />
@@ -25,7 +25,7 @@ export function AdminChrome({ email, children }: { email: string; children: Reac
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-steel sm:inline">{email}</span>
             <form action={logoutAdminAction}>
-              <button className="rounded-[2px] border border-line px-3 py-1.5 text-sm" type="submit">
+              <button className="border border-line bg-paper-0 px-3 py-1.5 text-sm" type="submit">
                 Odhlásit
               </button>
             </form>
@@ -35,7 +35,7 @@ export function AdminChrome({ email, children }: { email: string; children: Reac
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:flex-row sm:px-6">
         <nav className="flex shrink-0 flex-wrap gap-1 sm:w-44 sm:flex-col">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-[2px] px-3 py-2 text-sm hover:bg-paper-2">
+            <Link key={item.href} href={item.href} className="px-3 py-2 text-sm hover:bg-paper">
               {item.label}
             </Link>
           ))}

@@ -24,7 +24,7 @@ export default async function JobPage({ params }: Props) {
   const catalog = await loadPublishedJobBySlug(slug);
   if (!catalog.ok) {
     return (
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+      <main className="shell py-8 sm:py-10">
         <CatalogUnavailable />
       </main>
     );
@@ -36,36 +36,48 @@ export default async function JobPage({ params }: Props) {
   const profession = professionByDb(job.profession);
 
   return (
-    <main className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-12">
+    <main className="shell grid gap-8 py-8 sm:py-10 lg:grid-cols-12 lg:gap-12">
       <article className="lg:col-span-7">
         <p className="label">{companyName}</p>
-        <h1 className="display mt-2 text-3xl font-semibold sm:text-4xl">{job.title}</h1>
-        <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-steel">
-          <Icon className="h-4 w-4 text-ink" />
-          {profession?.label} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
-          {job.shiftNote ? ` · ${job.shiftNote}` : null}
+        <h1 className="display mt-3 text-3xl leading-[0.95] sm:text-5xl">{job.title}</h1>
+        <p className="mt-4 text-xl font-semibold">{formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}</p>
+        <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-steel">
+          <span className="icon-tile h-8 w-8">
+            <Icon className="h-4 w-4 text-ink" />
+          </span>
+          {profession?.label}
+          <span aria-hidden>·</span>
+          {job.city}
+          {job.shiftNote ? (
+            <>
+              <span aria-hidden>·</span>
+              {job.shiftNote}
+            </>
+          ) : null}
         </p>
-        <section className="mt-8 space-y-6 text-[15px] leading-relaxed">
+        <section className="mt-10 space-y-8 text-[15px] leading-relaxed">
           <div>
-            <h2 className="label mb-2">Práce</h2>
+            <h2 className="label mb-3">Práce</h2>
             <p className="whitespace-pre-wrap">{job.description}</p>
           </div>
           {job.requirements ? (
             <div>
-              <h2 className="label mb-2">Koho hledáme</h2>
+              <h2 className="label mb-3">Koho hledáme</h2>
               <p className="whitespace-pre-wrap">{job.requirements}</p>
             </div>
           ) : null}
           {job.benefits ? (
             <div>
-              <h2 className="label mb-2">Co je na stole</h2>
+              <h2 className="label mb-3">Co je na stole</h2>
               <p className="whitespace-pre-wrap">{job.benefits}</p>
             </div>
           ) : null}
         </section>
       </article>
       <aside className="lg:col-span-5">
-        <ApplyForm jobId={job.id} />
+        <div className="lg:sticky lg:top-20">
+          <ApplyForm jobId={job.id} />
+        </div>
       </aside>
     </main>
   );

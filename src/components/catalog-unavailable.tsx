@@ -6,8 +6,9 @@ export function CatalogUnavailable({
   detail?: string;
 }) {
   return (
-    <div className="border border-line bg-paper p-4 text-sm">
-      <p className="font-semibold text-ink">{title}</p>
+    <div className="border border-line bg-paper p-5 text-sm">
+      <p className="label">Katalog</p>
+      <p className="display mt-2 text-xl text-ink">{title}</p>
       <p className="mt-2 text-steel">{detail}</p>
     </div>
   );

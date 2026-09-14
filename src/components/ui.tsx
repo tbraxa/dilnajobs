@@ -1,15 +1,18 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "ink" | "ghost" | "danger";
+type Variant = "primary" | "ink" | "accent" | "ghost" | "danger";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-accent text-white hover:bg-accent-hover border border-accent hover:border-accent-hover",
-  ink: "bg-ink text-paper hover:bg-black border border-ink",
-  ghost: "bg-transparent text-ink border border-line hover:bg-paper-2",
+  primary: "bg-ink text-paper-0 hover:bg-black border border-ink",
+  ink: "bg-ink text-paper-0 hover:bg-black border border-ink",
+  accent: "bg-accent text-white hover:bg-accent-hover border border-accent hover:border-accent-hover",
+  ghost: "bg-transparent text-ink border border-line hover:bg-paper",
   danger: "bg-danger text-white hover:bg-black border border-danger",
 };
+
+const btn =
+  "inline-flex items-center justify-center gap-2 rounded-none px-4 py-2.5 text-sm font-semibold tracking-wide disabled:opacity-50";
 
 export function Button({
   children,
@@ -18,10 +21,7 @@ export function Button({
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
   return (
-    <button
-      className={`inline-flex items-center justify-center gap-2 rounded-[2px] px-4 py-2.5 text-sm font-semibold tracking-wide disabled:opacity-50 ${variants[variant]} ${className}`}
-      {...props}
-    >
+    <button className={`${btn} ${variants[variant]} ${className}`} {...props}>
       {children}
     </button>
   );
@@ -39,10 +39,7 @@ export function ButtonLink({
   className?: string;
 }) {
   return (
-    <Link
-      href={href}
-      className={`inline-flex items-center justify-center gap-2 rounded-[2px] px-4 py-2.5 text-sm font-semibold tracking-wide ${variants[variant]} ${className}`}
-    >
+    <Link href={href} className={`${btn} ${variants[variant]} ${className}`}>
       {children}
     </Link>
   );
@@ -69,4 +66,4 @@ export function Field({
 }
 
 export const inputClass =
-  "w-full rounded-[2px] border border-line bg-paper px-3 py-2.5 text-ink placeholder:text-steel-2";
+  "w-full rounded-none border border-line bg-paper-0 px-3 py-2.5 text-ink outline-none placeholder:text-steel-2 focus:border-ink";

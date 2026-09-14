@@ -26,7 +26,7 @@ export default async function SeoLanding({ params }: Props) {
   const jobs = catalog.ok ? catalog.rows : [];
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+    <main className="shell py-8 sm:py-10">
       <p className="label">SEO přistání</p>
       <h1 className="display mt-2 text-3xl font-semibold">
         {p.label} v městě {c.label}

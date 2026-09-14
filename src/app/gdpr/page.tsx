@@ -4,7 +4,7 @@ export const metadata: Metadata = { title: "Osobní údaje" };
 
 export default function GdprPage() {
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-8 text-[15px] leading-relaxed sm:px-6">
+    <main className="shell-narrow py-8 text-[15px] leading-relaxed sm:py-10">
       <h1 className="display text-3xl font-semibold">Osobní údaje</h1>
       <p className="mt-4 text-steel">
         Správce: provozovatel DílnaJobs (doplní se před spuštěním na dilnajobs.cz). Kontakt: zdenek@dilnajobs.cz

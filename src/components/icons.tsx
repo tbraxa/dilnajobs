@@ -8,7 +8,7 @@ function Icon({ title, children, ...props }: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.75}
+      strokeWidth={2}
       strokeLinecap="square"
       strokeLinejoin="miter"
       aria-hidden={title ? undefined : true}
@@ -145,6 +145,32 @@ export function IconArrow(props: IconProps) {
   return (
     <Icon {...props}>
       <path d="M4 12h16M14 6l6 6-6 6" />
+    </Icon>
+  );
+}
+
+export function IconMenu(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </Icon>
+  );
+}
+
+export function IconClose(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </Icon>
+  );
+}
+
+export function IconBuilding(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 20V6l8-3 8 3v14" />
+      <path d="M9 20v-6h6v6" />
+      <path d="M9 10h.01M15 10h.01M12 10h.01" />
     </Icon>
   );
 }
