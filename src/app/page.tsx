@@ -113,7 +113,7 @@ export default async function HomePage() {
             <a href="/pro-firmy#cenik" className="btn btn-accent btn-lg btn-square">
               Zobrazit ceník →
             </a>
-            <a href="/pro-firmy" className="btn btn-secondary btn-lg btn-square" style={{ borderColor: "#555", color: "#fff" }}>
+            <a href="/pro-firmy" className="btn btn-secondary btn-lg btn-square">
               Více pro firmy
             </a>
           </div>

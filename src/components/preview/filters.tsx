@@ -6,6 +6,7 @@ const PROFESSION_CHIPS = [
   { label: "CNC", profession: "cnc" },
   { label: "Sváření", profession: "welder" },
   { label: "Zámečník", profession: "locksmith" },
+  { label: "Seřizovači", profession: "setter" },
 ] as const;
 
 export function FilterChips({ defaults }: { defaults?: SearchQuery }) {

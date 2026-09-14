@@ -1,19 +1,32 @@
 @import "tailwindcss";
 
+/* Portal/admin aliases → locked preview tokens (docs/design-tokens-locked.md). */
 :root {
-  --paper: #f2f0ea;
-  --paper-0: #faf9f6;
-  --paper-2: #e7e3d7;
+  --cream: #f2f0ea;
+  --cream-alt: #faf9f6;
+  --cream-deep: #e6e3da;
   --ink: #0b0d12;
-  --steel: #5c6168;
-  --steel-2: #8a8f96;
-  --line: #d2d0c8;
-  --tile: #e8edff;
-  --accent: #003dff;
-  --accent-hover: #0034d6;
+  --ink-soft: #161a22;
+  --muted: #5a5f6a;
+  --muted-2: #8b909a;
+  --border: #d2d0c8;
+  --border-strong: #0b0d12;
+  --blue: #003dff;
+  --blue-dim: #002fcc;
+  --blue-soft: #e8edff;
+  --steel: #3d4554;
+  --white: #ffffff;
+  --paper: var(--cream);
+  --paper-0: var(--cream-alt);
+  --paper-2: var(--cream-deep);
+  --steel-2: var(--muted-2);
+  --line: var(--border);
+  --tile: var(--blue-soft);
+  --accent: var(--blue);
+  --accent-hover: var(--blue-dim);
   --danger: #8b1e1e;
   --ok: #1f4d2c;
-  --background: var(--paper-0);
+  --background: var(--cream);
   --foreground: var(--ink);
 }
 
@@ -41,18 +54,6 @@
   border-color: var(--line);
 }
 
-html,
-body {
-  background: var(--paper-0);
-  color: var(--ink);
-}
-
-body {
-  font-family: Inter, system-ui, sans-serif;
-  min-height: 100dvh;
-  font-feature-settings: "ss01" on, "cv11" on;
-}
-
 .display {
   font-family: Satoshi, Inter, sans-serif;
   letter-spacing: -0.03em;
@@ -64,7 +65,7 @@ body {
   font-size: 0.6875rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--steel);
+  color: var(--muted);
   font-weight: 500;
 }
 
@@ -110,46 +111,6 @@ body {
   width: 3.25rem;
 }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  border: 1px solid var(--line);
-  background: var(--paper-0);
-  padding: 0.4rem 0.75rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--ink);
-  white-space: nowrap;
-  text-decoration: none;
-}
-
-.chip:hover {
-  border-color: var(--ink);
-}
-
-.chip.is-on,
-.chip[aria-current="true"] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-
-.chip.is-on:hover,
-.chip[aria-current="true"]:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  color: #fff;
-}
-
-.rule-grid {
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(to right, rgba(11, 13, 18, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(11, 13, 18, 0.045) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
 .hairline {
   border-color: var(--line);
 }
@@ -161,5 +122,5 @@ body {
 
 ::selection {
   background: var(--ink);
-  color: var(--paper-0);
+  color: var(--cream-alt);
 }

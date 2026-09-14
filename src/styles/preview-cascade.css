@@ -1,0 +1,29 @@
+/* Next.js cascade lock — beat Tailwind/globals paper tokens without editing locked styles.css. */
+html body {
+  background-color: var(--cream);
+  background-image: radial-gradient(circle, rgba(10, 10, 10, 0.055) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.tags .chip,
+.jobs-table .chip,
+.job-card .chip {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  color: var(--muted);
+  border-radius: var(--r-sm);
+}
+
+.tags .chip.is-blue,
+.jobs-table .chip.is-blue,
+.job-card .chip.is-blue {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
+}

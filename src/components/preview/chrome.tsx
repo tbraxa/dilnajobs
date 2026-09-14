@@ -30,7 +30,7 @@ function MegaLink({
   );
 }
 
-export function PreviewHeader() {
+export function PreviewHeader({ liveCount }: { liveCount?: number }) {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [openMega, setOpenMega] = useState<string | null>(null);
@@ -113,10 +113,19 @@ export function PreviewHeader() {
   const nabidkyOn = pathname.startsWith("/nabidky") || pathname.startsWith("/nabidka");
   const firmyOn = pathname.startsWith("/pro-firmy") || pathname.startsWith("/firma");
 
+  const openings =
+    liveCount == null
+      ? "otevřené pozice"
+      : liveCount === 1
+        ? "1 otevřená pozice"
+        : liveCount >= 2 && liveCount <= 4
+          ? `${liveCount} otevřené pozice`
+          : `${liveCount} otevřených pozic`;
+
   let strip: ReactNode = (
     <>
       <span className="strip-code">LIVE</span>
-      <span>Ostrava / Brno / Plzeň — otevřené pozice</span>
+      <span>Ostrava / Brno / Plzeň — {openings}</span>
       <Link href="/nabidky">Zobrazit →</Link>
     </>
   );
@@ -132,7 +141,7 @@ export function PreviewHeader() {
     strip = (
       <>
         <span className="strip-code">LIVE</span>
-        <span>Ostrava / Brno / Plzeň — otevřené pozice</span>
+        <span>Ostrava / Brno / Plzeň — {openings}</span>
         <Link href="/nabidky">Zobrazit →</Link>
       </>
     );
@@ -204,7 +213,7 @@ export function PreviewHeader() {
             <Link href="/nabidky" className="btn btn-ghost btn-square">
               Hledat
             </Link>
-            <Link href="/firma/prihlaseni" className="btn btn-primary btn-square">
+            <Link href="/pro-firmy" className="btn btn-primary btn-square">
               Inzerovat →
             </Link>
             <button
@@ -382,7 +391,7 @@ export function PreviewHeader() {
           <Link href="/nabidky" className="btn btn-secondary btn-block btn-square" data-drawer-close>
             Prohlédnout nabídky
           </Link>
-          <Link href="/firma/prihlaseni" className="btn btn-primary btn-block btn-square" data-drawer-close>
+          <Link href="/pro-firmy" className="btn btn-primary btn-block btn-square" data-drawer-close>
             Inzerovat →
           </Link>
         </div>
