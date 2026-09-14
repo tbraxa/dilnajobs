@@ -43,6 +43,17 @@ describe("v9 public chrome", () => {
     expect(board).toContain("job-row");
     expect(board).toContain("Moravia Precision s.r.o.");
     expect(board.match(/title: "/g)?.length).toBe(8);
+    const register = readFileSync(new URL("../components/auth-forms.tsx", import.meta.url), "utf8");
+    expect(register).not.toContain("Vyplnit ručně");
+    expect(register).toContain("Obchodní název");
+    expect(register).toContain("input-with-action");
+    expect(register).toContain("Kontaktní osoba");
+    expect(register).toContain("Založit účet a poslat odkaz");
+    const registerPage = readFileSync(new URL("../app/firma/registrace/page.tsx", import.meta.url), "utf8");
+    expect(registerPage).toMatch(/wide/);
+    const shell = readFileSync(new URL("../components/auth-shell.tsx", import.meta.url), "utf8");
+    expect(shell).toContain("auth-page");
+    expect(shell).toContain("auth-card");
     const firms = readFileSync(new URL("../app/pro-firmy/page.tsx", import.meta.url), "utf8");
     expect(firms).toContain("2 490 Kč");
     expect(firms).toContain("6 990 Kč");
