@@ -28,6 +28,8 @@ Recommended:
 
 Never commit secrets. No `NEXT_PUBLIC_` secrets.
 
+Blank Vercel dashboard fields are stored as `""`, not unset. Empty strings are treated as missing (defaults apply). Do not leave numeric keys like `SESSION_DAYS` / `MAGIC_LINK_MINUTES` / `CV_MAX_BYTES` as empty if you set them — omit the key, or set a positive integer. Redeploy **latest `main`**; do not retry an old failed deployment SHA.
+
 ## Vercel
 
 1. Import the GitHub repo. Framework: Next.js (no extra `vercel.json` build config).
