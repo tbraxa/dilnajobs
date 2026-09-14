@@ -1,0 +1,23 @@
+name: Migrate
+
+# One-shot schema apply. Not part of `next build` (Vercel Hobby).
+# Repo secrets: DATABASE_URL and/or DATABASE_ADMIN_URL (Neon owner connection).
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_ADMIN_URL: ${{ secrets.DATABASE_ADMIN_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Apply drizzle SQL
+        run: npm run db:migrate
