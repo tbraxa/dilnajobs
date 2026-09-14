@@ -1,61 +1,56 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { LogoMark } from "./icons";
+import { LogoMark } from "@/components/preview/sprite";
 import { logoutAdminAction } from "@/lib/actions/admin-login";
-
-const NAV = [
-  { href: "/admin", label: "Přehled" },
-  { href: "/admin/health", label: "Zdraví" },
-  { href: "/admin/employers", label: "Firmy" },
-  { href: "/admin/jobs", label: "Inzeráty" },
-  { href: "/admin/applications", label: "Přihlášky" },
-  { href: "/admin/audit", label: "Audit" },
-  { href: "/admin/settings", label: "Nastavení" },
-];
+import { AdminNav } from "./admin-nav";
 
 export function AdminChrome({ email, children }: { email: string; children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-b border-line bg-paper/90 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <Link href="/admin" className="flex items-center gap-2 text-ink">
-            <LogoMark className="h-8 w-8" />
-            <span className="display text-lg font-semibold">DílnaJobs · správa</span>
+    <>
+      <div className="top-strip">
+        <span className="strip-code">ADMIN</span>
+        <span>Správa · oddělené od firemního portálu</span>
+      </div>
+      <header className="site-header">
+        <div className="header-inner">
+          <Link className="logo" href="/admin">
+            <LogoMark />
+            DílnaJobs
           </Link>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-steel sm:inline">{email}</span>
+          <div className="header-actions">
+            <span className="admin-email">{email}</span>
             <form action={logoutAdminAction}>
-              <button className="rounded-[2px] border border-line px-3 py-1.5 text-sm" type="submit">
+              <button className="btn btn-ghost btn-square" type="submit">
                 Odhlásit
               </button>
             </form>
           </div>
         </div>
       </header>
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:flex-row sm:px-6">
-        <nav className="flex shrink-0 flex-wrap gap-1 sm:w-44 sm:flex-col">
-          {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-[2px] px-3 py-2 text-sm hover:bg-paper-2">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="min-w-0 flex-1">{children}</div>
+      <AdminNav />
+      <div className="section-band">
+        <div className="board-pad">{children}</div>
       </div>
-    </div>
+    </>
   );
 }
 
 export function AdminLoginChrome({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-b border-line bg-paper">
-        <div className="mx-auto flex max-w-md items-center gap-2 px-4 py-3">
-          <LogoMark className="h-8 w-8" />
-          <span className="display text-lg font-semibold">DílnaJobs · správa</span>
+    <>
+      <div className="top-strip">
+        <span className="strip-code">ADMIN</span>
+        <span>Přihlášení správce · jen seznam provozovatelů</span>
+      </div>
+      <header className="site-header">
+        <div className="header-inner">
+          <span className="logo">
+            <LogoMark />
+            DílnaJobs
+          </span>
         </div>
       </header>
       {children}
-    </div>
+    </>
   );
 }

@@ -17,6 +17,7 @@ const EXPECTED_MIGRATIONS = [
   "0003_employer_user_lookup.sql",
   "0004_admin_ops.sql",
   "0005_payments_email.sql",
+  "0006_employer_contact.sql",
 ];
 
 async function timed<T>(fn: () => Promise<T>, ms = 1500): Promise<{ ok: true; value: T; latencyMs: number } | { ok: false; error: string; latencyMs: number }> {
@@ -118,7 +119,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
       name: "object_storage",
       status: write.ok ? "ok" : "down",
       latencyMs: write.latencyMs,
-      detail: sanitizeDetail(write.ok ? `Lokální stub ${LOCAL_CV_DIR}` : write.error),
+      detail: sanitizeDetail(write.ok ? `Soubory na disku: ${LOCAL_CV_DIR}` : write.error),
       checkedAt,
     });
   }
@@ -130,7 +131,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
       ? "Resend API"
       : mail.provider === "smtp"
         ? "SMTP_URL"
-        : "Stub: výpis do konzole. Nastavte RESEND_API_KEY (nebo SMTP_URL).";
+        : "Pošta není zapojená. Nastavte RESEND_API_KEY nebo SMTP_URL.";
   checks.push({
     name: "mailer",
     status: mail.lastError ? "degraded" : mail.configured ? "ok" : "unconfigured",
@@ -139,7 +140,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
   });
 
   let paymentsStatus: CheckStatus = "unconfigured";
-  let paymentsDetail = "Stub checkout. Nastavte STRIPE_SECRET_KEY a STRIPE_WEBHOOK_SECRET.";
+  let paymentsDetail = "Platba kartou není zapnutá. Nastavte STRIPE_SECRET_KEY a STRIPE_WEBHOOK_SECRET.";
   if (paymentsEnabled() && stripeWebhookConfigured()) {
     paymentsStatus = "ok";
     paymentsDetail = "Stripe Checkout + webhook secret";

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { JobCard } from "@/components/job-card";
-import { CatalogUnavailable } from "@/components/catalog-unavailable";
+import { BoardPage } from "@/components/v9/board";
 import { cityBySlug, professionBySlug } from "@/lib/catalog";
 import { loadSearchJobs } from "@/lib/jobs/search";
 
@@ -14,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = professionBySlug(profese);
   const c = cityBySlug(mesto);
   if (!p || !c) return { title: "Práce" };
-  return { title: `${p.label} — ${c.label}` };
+  return { title: `${p.label} · ${c.label}` };
 }
 
 export default async function SeoLanding({ params }: Props) {
@@ -26,28 +25,15 @@ export default async function SeoLanding({ params }: Props) {
   const jobs = catalog.ok ? catalog.rows : [];
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">SEO přistání</p>
-      <h1 className="display mt-2 text-3xl font-semibold">
-        {p.label} v městě {c.label}
-      </h1>
-      <p className="mt-2 max-w-2xl text-sm text-steel">
-        Stejný katalog jako /nabidky, jen předfiltrovaný. Žádný generovaný článek navíc.
-      </p>
-      <div className="mt-6 grid gap-3">
-        {!catalog.ok ? (
-          <CatalogUnavailable />
-        ) : jobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Tady teď nic není. Zkuste{" "}
-            <a className="underline" href="/nabidky">
-              celý katalog
-            </a>
-            .
-          </p>
-        ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
-        )}
-      </div>
-    </main>
+    <BoardPage
+      claim={`${p.label} · ${c.label}`}
+      helper="Obor, kraj, směna a mzda. Upravte filtry podle toho, co hledáte."
+      query={{ profession: p.db, city: c.label, sort: "newest" }}
+      jobs={jobs}
+      listTitle="Výsledky"
+      filterVariant="full"
+      filtered
+      unavailable={!catalog.ok}
+    />
   );
 }

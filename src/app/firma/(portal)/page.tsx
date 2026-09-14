@@ -1,5 +1,4 @@
 import { desc, eq } from "drizzle-orm";
-import { Button, ButtonLink } from "@/components/ui";
 import { withEmployerRls } from "@/db/rls";
 import { jobs } from "@/db/schema";
 import { getSession } from "@/lib/auth";
@@ -7,6 +6,7 @@ import { logoutAction } from "@/lib/actions/auth";
 import { startCheckoutAction } from "@/lib/actions/jobs";
 import { paymentsEnabled } from "@/lib/env";
 import { PACKAGES, formatCzk } from "@/lib/pricing";
+import { Notice, PageHero } from "@/components/preview/board";
 
 export default async function FirmaHome({
   searchParams,
@@ -24,83 +24,86 @@ export default async function FirmaHome({
   });
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="label">Firma</p>
-          <h1 className="display mt-1 text-3xl font-semibold">{session.companyName}</h1>
-          <p className="mt-1 text-sm text-steel">
-            {session.email} · plán {session.planCode} · ověření: {session.verificationStatus}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <ButtonLink href="/firma/nabidky/nova">Nová nabídka</ButtonLink>
+    <main>
+      <PageHero
+        eyebrow="Firma"
+        title={session.companyName}
+        lead={`${session.email} · plán ${session.planCode} · ověření: ${session.verificationStatus}`}
+      >
+        <div className="hero-ctas">
+          <a href="/firma/nabidky/nova" className="btn btn-accent btn-square">
+            Nová nabídka →
+          </a>
           <form action={logoutAction}>
-            <button className="rounded-[2px] border border-line px-4 py-2.5 text-sm" type="submit">
+            <button className="btn btn-secondary btn-square" type="submit">
               Odhlásit
             </button>
           </form>
         </div>
-      </div>
-      {orderState === "stub" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Objednávka je ve stavu stub — Stripe Checkout není zapnutý. Ozveme se na e-mail.
-        </p>
-      ) : null}
-      {orderState === "ok" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Platba proběhla. Balíček se připíše, jakmile Stripe potvrdí webhook (obvykle okamžitě).
-        </p>
-      ) : null}
-      {orderState === "zruseno" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">Platbu jste zrušili. Můžete to zkusit znovu.</p>
-      ) : null}
-      {orderState === "aktivovano" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">Zkušební balíček je aktivní.</p>
-      ) : null}
-      <h2 className="display mt-8 text-xl font-semibold">Vaše inzeráty</h2>
-      <div className="mt-3 grid gap-2">
-        {ownJobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Zatím žádný inzerát.</p>
-        ) : (
-          ownJobs.map((job) => (
-            <div key={job.id} className="flex flex-wrap items-center justify-between gap-2 border border-line p-4">
-              <div>
-                <p className="font-semibold">{job.title}</p>
-                <p className="text-sm text-steel">
-                  {job.city} · {job.status}
-                </p>
+      </PageHero>
+
+      <section className="section-band" aria-labelledby="ads-title">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Inzeráty</p>
+            <h2 id="ads-title">Vaše nabídky</h2>
+          </div>
+        </div>
+        <div className="board-pad" style={{ paddingTop: 0 }}>
+          {orderState === "stub" ? (
+            <Notice>Platba kartou teď není zapnutá. Ozveme se na e-mail.</Notice>
+          ) : null}
+          {orderState === "ok" ? (
+            <Notice>Platba proběhla. Balíček se připíše, jakmile Stripe potvrdí webhook (obvykle okamžitě).</Notice>
+          ) : null}
+          {orderState === "zruseno" ? <Notice>Platbu jste zrušili. Můžete to zkusit znovu.</Notice> : null}
+          {orderState === "aktivovano" ? <Notice>Zkušební balíček je aktivní.</Notice> : null}
+          {ownJobs.length === 0 ? (
+            <p className="lead">Zatím žádný inzerát.</p>
+          ) : (
+            ownJobs.map((job) => (
+              <div key={job.id} className="app-row">
+                <div>
+                  <p>
+                    <strong>{job.title}</strong>
+                  </p>
+                  <p className="muted">
+                    {job.city} · {job.status}
+                  </p>
+                </div>
+                <a className="btn btn-ghost btn-square" href={`/firma/nabidky/${job.id}/prihlasky`}>
+                  Přihlášky →
+                </a>
               </div>
-              <a className="text-sm underline" href={`/firma/nabidky/${job.id}/prihlasky`}>
-                Přihlášky
-              </a>
-            </div>
-          ))
-        )}
-      </div>
-      <h2 className="display mt-10 text-xl font-semibold">Balíčky</h2>
-      <p className="mt-1 text-sm text-steel">
-        {stripeOn
-          ? "Platba kartou přes Stripe Checkout. Ceny bez DPH."
-          : "Stripe klíče v prostředí chybí — objednávka se uloží jako stub."}
-      </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            ))
+          )}
+        </div>
+      </section>
+
+      <section className="modular-grid" aria-labelledby="pack-title">
+        <div className="mod span-12" style={{ padding: "2rem 2.5rem", background: "var(--cream)" }}>
+          <p className="eyebrow">Balíčky</p>
+          <h2 id="pack-title" className="h2">
+            {stripeOn ? "Platba kartou. Ceny bez DPH." : "Platba kartou teď není zapnutá. Objednávku vezmeme a ozveme se na e-mail."}
+          </h2>
+        </div>
         {PACKAGES.map((pkg) => {
           const action = startCheckoutAction.bind(null, pkg.code);
+          const tone =
+            pkg.code === "standard" ? " is-blue-bg" : pkg.code === "basic" ? " is-dark" : "";
+          const span = pkg.code === "basic" ? "span-7" : pkg.code === "standard" ? "span-5" : "span-4";
           return (
-            <form key={pkg.code} action={action} className="flex flex-col border border-line bg-paper p-4">
-              <p className="label">{pkg.name}</p>
-              <p className="display mt-1 text-2xl font-semibold">
-                {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
-              </p>
-              <p className="mt-2 flex-1 text-sm text-steel">{pkg.blurb}</p>
-              <Button type="submit" className="mt-4">
-                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat (stub)"}
-              </Button>
+            <form key={pkg.code} action={action} className={`mod ${span}${tone}`}>
+              <span className="mod-tag">{pkg.name}</span>
+              <h3>{pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}</h3>
+              <p className="mod-desc">{pkg.blurb}</p>
+              <button type="submit" className={`btn btn-square ${pkg.code === "standard" ? "btn-primary" : "btn-accent"}`}>
+                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat"}
+              </button>
             </form>
           );
         })}
-      </div>
+      </section>
     </main>
   );
 }

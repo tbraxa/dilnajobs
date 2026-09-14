@@ -47,3 +47,6 @@ next-env.d.ts
 
 # drizzle kit leftovers
 /drizzle/meta
+
+# locked-preview upload fragments (assembled HTML lives in design/preview-locked/)
+/design/preview-locked/.parts/

@@ -50,7 +50,12 @@ export async function requestMagicLink(input: {
   ico?: string;
   companyName?: string;
   name?: string;
+  firstName?: string;
+  lastName?: string;
+  dic?: string;
   city?: string;
+  phone?: string;
+  vatPayer?: "nonpayer" | "payer";
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const email = input.email.trim().toLowerCase();
   const ip = await clientIp();
@@ -66,21 +71,26 @@ export async function requestMagicLink(input: {
   if (input.intent === "register") {
     const parsed = registerEmployerSchema.safeParse({
       email,
-      name: input.name,
+      firstName: input.firstName,
+      lastName: input.lastName,
       companyName: input.companyName,
       ico: input.ico,
+      vatPayer: input.vatPayer ?? (input.dic ? "payer" : "nonpayer"),
+      dic: input.dic,
       city: input.city,
+      phone: input.phone,
+      consentTerms: true,
     });
     if (!parsed.success) {
       return { ok: false, error: parsed.error.issues[0]?.message ?? "Zkontrolujte údaje." };
     }
     const ico = normalizeIco(parsed.data.ico);
     if (!isValidIco(ico)) {
-      return { ok: false, error: "IČO nemá platný kontrolní součet. Zkontrolujte osm číslic." };
+      return { ok: false, error: "Toto IČO nevypadá správně. Zkontrolujte osm číslic." };
     }
     const ares = await verifyIcoViaAres(ico);
     if (!ares.ok) {
-      return { ok: false, error: "IČO se nepodařilo ověřit." };
+      return { ok: false, error: "IČO se nepodařilo ověřit. Zkontrolujte osm číslic." };
     }
 
     const existingUser = await sql<{ id: string }[]>`select id from employer_user_by_email(${email})`;
@@ -96,6 +106,7 @@ export async function requestMagicLink(input: {
         companyName: parsed.data.companyName,
         legalName: parsed.data.companyName,
         city: parsed.data.city,
+        dic: parsed.data.dic,
         verificationStatus: "pending",
         planCode: "trial",
         planRenewsAt: new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10),
@@ -108,6 +119,9 @@ export async function requestMagicLink(input: {
       employerId,
       email,
       name: parsed.data.name,
+      firstName: parsed.data.firstName,
+      lastName: parsed.data.lastName,
+      phone: parsed.data.phone,
       role: "owner",
     });
 
@@ -115,7 +129,7 @@ export async function requestMagicLink(input: {
       actorType: "employer_user",
       employerId,
       action: "employer.registered",
-      metadata: { ico, aresStub: true },
+      metadata: { ico },
       ipHash: hashIp(ip),
     });
   } else {

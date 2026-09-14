@@ -30,9 +30,9 @@ export function AdminLoginForm() {
       <Field label="E-mail správce" name="email">
         <input id="email" name="email" type="email" required className={inputClass} autoComplete="email" />
       </Field>
-      {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
-      {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
-      <Button type="submit" disabled={pending}>
+      {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
+      {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
+      <Button type="submit" variant="accent" disabled={pending}>
         {pending ? "Posílám odkaz…" : "Poslat přihlašovací odkaz"}
       </Button>
     </form>

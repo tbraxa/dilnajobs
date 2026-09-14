@@ -43,22 +43,57 @@ export type ApplyInput = z.infer<typeof applySchema>;
 
 export const magicLinkSchema = z.object({
   email: z.string().trim().toLowerCase().email("Zadejte firemní e-mail."),
-  ico: z.string().optional(),
-  companyName: z.string().trim().max(160).optional(),
-  name: z.string().trim().max(120).optional(),
   intent: z.enum(["login", "register"]).default("login"),
 });
 
-export const registerEmployerSchema = z.object({
-  email: z.string().trim().toLowerCase().email("Zadejte firemní e-mail."),
-  name: z.string().trim().min(3, "Vaše jméno je povinné.").max(120),
-  companyName: z.string().trim().min(3, "Název firmy je povinný.").max(160),
-  ico: z
-    .string()
-    .trim()
-    .transform((v) => v.replace(/\s+/g, "")),
-  city: z.string().trim().max(80).optional(),
-});
+const optionalDic = z
+  .string()
+  .trim()
+  .max(16, "DIČ je příliš dlouhé.")
+  .optional()
+  .transform((v) => {
+    if (!v) return undefined;
+    const compact = v.replace(/\s+/g, "").toUpperCase();
+    if (!compact) return undefined;
+    return compact.startsWith("CZ") ? compact : `CZ${compact}`;
+  })
+  .refine((v) => !v || /^CZ\d{8,10}$/.test(v), "DIČ zadejte jako CZ a osm až deset číslic, nebo nechte prázdné.");
+
+export const registerEmployerSchema = z
+  .object({
+    email: z.string().trim().toLowerCase().email("Zadejte pracovní e-mail."),
+    firstName: z.string().trim().min(2, "Jméno je povinné.").max(60, "Jméno je příliš dlouhé."),
+    lastName: z.string().trim().min(2, "Příjmení je povinné.").max(80, "Příjmení je příliš dlouhé."),
+    companyName: z.string().trim().min(3, "Obchodní název je povinný.").max(160),
+    ico: z
+      .string()
+      .trim()
+      .transform((v) => v.replace(/\s+/g, "")),
+    vatPayer: z.enum(["nonpayer", "payer"]).default("nonpayer"),
+    dic: optionalDic,
+    city: z
+      .string()
+      .trim()
+      .max(160)
+      .optional()
+      .transform((v) => (v ? v : undefined)),
+    phone: z
+      .string()
+      .trim()
+      .transform(normalizePhone)
+      .refine((p) => /^(\+420)?[1-9][0-9]{8}$/.test(p), "Telefon má mít 9 číslic, volitelně s +420."),
+    consentTerms: z.preprocess(
+      (v) => v === true || v === "on" || v === "true",
+      z.literal(true, {
+        errorMap: () => ({ message: "Bez souhlasu s podmínkami účet nezaložíme." }),
+      }),
+    ),
+  })
+  .transform((data) => ({
+    ...data,
+    dic: data.vatPayer === "payer" ? data.dic : undefined,
+    name: `${data.firstName} ${data.lastName}`.replace(/\s+/g, " ").trim(),
+  }));
 
 export const searchSchema = z.object({
   q: z.string().trim().max(80).optional(),

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nabídky práce ve výrobě · DílnaJobs</title>
+  <meta name="description" content="CNC, svářeči, operátoři, údržba. Filtrujte podle oboru, kraje, směny a mzdy.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html" aria-label="DílnaJobs">
+        <span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        DílnaJobs
+      </a>
+      <nav class="nav-main" aria-label="Hlavní">
+        <a href="nabidky.html" class="is-active">Nabídky</a>
+      </nav>
+      <div class="header-actions">
+        <a class="link-quiet" href="pro-firmy.html">Pro firmy</a>
+        <a class="btn btn-outline btn-sm" href="firma-registrace.html">Inzerovat</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-drawer wrap" aria-label="Mobilní">
+      <a href="nabidky.html">Nabídky</a>
+      <a href="pro-firmy.html">Pro firmy</a>
+      <a href="firma-prihlaseni.html">Přihlášení firem</a>
+      <a href="firma-registrace.html">Inzerovat nabídku</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wrap board-top">
+      <p class="claim">Všechny výrobní nabídky</p>
+      <p class="claim-helper">Obor, kraj, směna a mzda. Upravte filtry podle toho, co hledáte.</p>
+
+      <form class="search-bar" action="nabidky.html" method="get" role="search">
+        <div class="search-field">
+          <label for="q-pozice">Pozice</label>
+          <input id="q-pozice" name="q" type="search" placeholder="např. CNC operátor, svářeč">
+        </div>
+        <div class="search-field">
+          <label for="q-mesto">Město</label>
+          <input id="q-mesto" name="mesto" type="search" placeholder="např. Ostrava, Brno">
+        </div>
+        <button class="btn btn-primary" type="submit">Hledat</button>
+      </form>
+
+      <div class="chips" aria-label="Rychlé filtry">
+        <a class="chip" href="nabidky.html?obor=cnc">CNC</a>
+        <a class="chip" href="nabidky.html?obor=svarovani">Svářeči</a>
+        <a class="chip" href="nabidky.html?obor=operator">Operátoři</a>
+        <a class="chip" href="nabidky.html?obor=udrzba">Údržba</a>
+        <a class="chip" href="nabidky.html?smena=ranni">Ranní směna</a>
+        <a class="chip" href="nabidky.html?mesto=ostrava">Ostrava</a>
+        <a class="chip" href="nabidky.html?mesto=brno">Brno</a>
+      </div>
+    </div>
+
+    <div class="wrap board-layout">
+      <aside class="filters" aria-label="Filtry">
+        <p class="filters-title">Filtry</p>
+        <div class="filter-group">
+          <h4>Obor</h4>
+          <label><input type="checkbox"> CNC <span class="count">3</span></label>
+          <label><input type="checkbox"> Sváření <span class="count">2</span></label>
+          <label><input type="checkbox"> Operátor <span class="count">2</span></label>
+          <label><input type="checkbox"> Údržba <span class="count">1</span></label>
+          <label><input type="checkbox"> Seřizovač <span class="count">1</span></label>
+        </div>
+        <div class="filter-group">
+          <h4>Kraj</h4>
+          <label><input type="checkbox"> Moravskoslezský <span class="count">2</span></label>
+          <label><input type="checkbox"> Jihomoravský <span class="count">1</span></label>
+          <label><input type="checkbox"> Středočeský <span class="count">1</span></label>
+          <label><input type="checkbox"> Plzeňský <span class="count">1</span></label>
+          <label><input type="checkbox"> Liberecký <span class="count">1</span></label>
+          <label><input type="checkbox"> Vysočina <span class="count">1</span></label>
+          <label><input type="checkbox"> Zlínský <span class="count">1</span></label>
+        </div>
+        <div class="filter-group">
+          <h4>Směna</h4>
+          <label><input type="checkbox"> Ranní</label>
+          <label><input type="checkbox"> Dvousměnný</label>
+          <label><input type="checkbox"> 3směnný</label>
+          <label><input type="checkbox"> Kontinuální</label>
+        </div>
+        <div class="filter-group">
+          <h4>Typ úvazku</h4>
+          <label><input type="checkbox" checked> HPP</label>
+          <label><input type="checkbox"> DPP / DPČ</label>
+          <label><input type="checkbox"> Živnost</label>
+        </div>
+        <div class="filter-group">
+          <h4>Plat od</h4>
+          <label><input type="checkbox"> 35 000 Kč</label>
+          <label><input type="checkbox"> 40 000 Kč</label>
+          <label><input type="checkbox"> 45 000 Kč</label>
+          <label><input type="checkbox"> 50 000 Kč</label>
+        </div>
+      </aside>
+
+      <section aria-label="Nabídky práce">
+        <button class="btn btn-ghost btn-sm filter-toggle" type="button">Zobrazit filtry</button>
+        <div class="list-meta">
+          <h2>Výsledky</h2>
+          <span class="count-label">8 nabídek</span>
+        </div>
+
+        <div class="job-list">
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">CNC operátor / programátor <span class="badge-new">Nové</span></h3>
+              <div class="job-meta">
+                <span class="company">Moravia Precision s.r.o.</span>
+                <span>Ostrava</span>
+                <span>HPP · ihned</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">45 až 55 000 Kč</span>
+              <span class="shift-tag">3směnný provoz</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">Svářeč MIG/MAG</h3>
+              <div class="job-meta">
+                <span class="company">Brněnská ocel a.s.</span>
+                <span>Brno</span>
+                <span>HPP</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">42 až 50 000 Kč</span>
+              <span class="shift-tag">Ranní směna</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">Operátor výroby, automobilový díl</h3>
+              <div class="job-meta">
+                <span class="company">AutoForm Plzeň</span>
+                <span>Plzeň</span>
+                <span>HPP · benefity</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">38 až 44 000 Kč</span>
+              <span class="shift-tag">Kontinuální</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">Zámečník / údržbář strojů <span class="badge-new">Nové</span></h3>
+              <div class="job-meta">
+                <span class="company">KovoTech Liberec</span>
+                <span>Liberec</span>
+                <span>HPP</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">40 až 48 000 Kč</span>
+              <span class="shift-tag">Ranní + pohotovost</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">CNC frézař, 5osé centrum</h3>
+              <div class="job-meta">
+                <span class="company">Precise Tools s.r.o.</span>
+                <span>Mladá Boleslav</span>
+                <span>HPP</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">48 až 58 000 Kč</span>
+              <span class="shift-tag">Dvousměnný</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">Svářeč TIG, nerez</h3>
+              <div class="job-meta">
+                <span class="company">Nerezová výroba Jihlava</span>
+                <span>Jihlava</span>
+                <span>HPP · certifikace výhodou</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">44 až 52 000 Kč</span>
+              <span class="shift-tag">Ranní směna</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">Operátor lisovny</h3>
+              <div class="job-meta">
+                <span class="company">FormTech Zlín</span>
+                <span>Zlín</span>
+                <span>HPP</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">36 až 42 000 Kč</span>
+              <span class="shift-tag">3směnný provoz</span>
+            </div>
+          </a>
+
+          <a class="job-row" href="#">
+            <div class="job-main">
+              <h3 class="job-title">Seřizovač CNC soustruhů</h3>
+              <div class="job-meta">
+                <span class="company">TurnTech Ostrava</span>
+                <span>Ostrava, Kunčice</span>
+                <span>HPP · zkušený</span>
+              </div>
+            </div>
+            <div class="job-side">
+              <span class="salary">50 až 60 000 Kč</span>
+              <span class="shift-tag">Dvousměnný</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 DílnaJobs · nabídky práce ve výrobě</span>
+      <div class="footer-links">
+        <a href="nabidky.html">Nabídky</a>
+        <a href="pro-firmy.html">Pro firmy</a>
+        <a href="firma-prihlaseni.html">Přihlášení</a>
+      </div>
+    </div>
+  </footer>
+  <script src="menu.js"></script>
+</body>
+</html>

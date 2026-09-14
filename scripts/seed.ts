@@ -122,7 +122,7 @@ async function main() {
   const seedJobs = [
     {
       employerId: novak.id,
-      title: "CNC operátor — 5osá frézka",
+      title: "CNC operátor, 5osá frézka",
       profession: "cnc",
       city: "Brno",
       region: "Jihomoravský",
@@ -152,7 +152,7 @@ async function main() {
     },
     {
       employerId: morava.id,
-      title: "Svářeč MIG/MAG — ocelové konstrukce",
+      title: "Svářeč MIG/MAG, ocelové konstrukce",
       profession: "welder",
       city: "Ostrava",
       region: "Moravskoslezský",
@@ -168,7 +168,7 @@ async function main() {
     },
     {
       employerId: morava.id,
-      title: "Svářeč TIG — nerez",
+      title: "Svářeč TIG, nerez",
       profession: "welder",
       city: "Pardubice",
       region: "Pardubický",
@@ -176,7 +176,7 @@ async function main() {
       salaryMin: 43000,
       salaryMax: 58000,
       description:
-        "Potravinářská nerez, potrubí DN 25–150. Švy musí vydržet audit, ne jen pohled z dálky.",
+        "Potravinářská nerez, potrubí DN 25 až 150. Švy musí vydržet audit, ne jen pohled z dálky.",
       requirements: "TIG nerez min. 1 rok. Zkouška 141. Čistota pracoviště je část práce.",
       benefits: "Zkoušky platíme my. 5 týdnů dovolené po roce.",
     },
@@ -191,13 +191,13 @@ async function main() {
       salaryMin: 45000,
       salaryMax: 60000,
       description:
-        "Engel a Arburg 80–400 t. Seřízení, výměna forem, první kusy. Když linka stojí, voláte vy — ne „IT“.",
+        "Engel a Arburg 80 až 400 t. Seřízení, výměna forem, první kusy. Když linka stojí, voláte vy. Ne IT.",
       requirements: "Seřizování vstřiku aspoň 2 roky. Základy hydrauliky. Klid při noční.",
       benefits: "Příplatky za směny. Svoz z Mělníka po dohodě.",
     },
     {
       employerId: energo.id,
-      title: "Průmyslový elektrikář — údržba",
+      title: "Průmyslový elektrikář, údržba",
       profession: "electrician",
       city: "Plzeň",
       region: "Plzeňský",
@@ -211,7 +211,7 @@ async function main() {
     },
     {
       employerId: energo.id,
-      title: "Mechanik údržby — směnný provoz",
+      title: "Mechanik údržby, směnný provoz",
       profession: "maintenance",
       city: "Liberec",
       region: "Liberecký",
@@ -253,7 +253,7 @@ async function main() {
     },
     {
       employerId: morava.id,
-      title: "Údržbář — Kladno",
+      title: "Údržbář, Kladno",
       profession: "maintenance",
       city: "Kladno",
       region: "Středočeský",
@@ -286,8 +286,8 @@ async function main() {
 
   await db.insert(jobs).values({
     employerId: cekani.id,
-    slug: jobSlug("Zámečník — ke schválení", "Jihlava", token(6)),
-    title: "Zámečník — ke schválení",
+    slug: jobSlug("Zámečník, ke schválení", "Jihlava", token(6)),
+    title: "Zámečník, ke schválení",
     profession: "locksmith",
     city: "Jihlava",
     region: "Vysočina",
@@ -330,7 +330,7 @@ async function main() {
 
   console.log(`Seeded ${inserted.length} published jobs + 1 pending_review, 5 employers.`);
   console.log("Dev login firmy: novak@kovovyroba-novak.test (magic link v konzoli serveru)");
-  console.log("Dev admin: tomas@dilnajobs.test — npm run magic:admin");
+  console.log("Dev admin: tomas@dilnajobs.test. npm run magic:admin");
   await sql.end({ timeout: 5 });
 }
 

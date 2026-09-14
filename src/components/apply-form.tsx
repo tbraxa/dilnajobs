@@ -3,11 +3,10 @@
 import { useActionState, useState } from "react";
 import { applyToJob, type ActionState } from "@/lib/actions/apply";
 import { presignCvAction } from "@/lib/actions/cv";
-import { Button, Field, inputClass } from "./ui";
 
 const initial: ActionState | null = null;
 
-export function ApplyForm({ jobId }: { jobId: string }) {
+export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?: string }) {
   const [state, action, pending] = useActionState(async (_prev: ActionState | null, formData: FormData) => {
     return applyToJob(formData);
   }, initial);
@@ -43,60 +42,73 @@ export function ApplyForm({ jobId }: { jobId: string }) {
 
   if (state?.ok) {
     return (
-      <p className="border border-line bg-paper-2 p-4 text-sm">
-        Přihláška je u firmy. Ozvou se vám na telefon.
-      </p>
+      <aside className="apply-panel" aria-label="Odpovědět firmě">
+        <h2>Odesláno</h2>
+        <p className="form-hint">Přihláška je u firmy. Ozvou se vám na telefon.</p>
+      </aside>
     );
   }
 
   return (
-    <form action={action} className="space-y-4 border border-line bg-paper p-4">
-      <input type="hidden" name="jobId" value={jobId} />
-      <input type="hidden" name="cvObjectKey" />
-      <input type="hidden" name="cvFileName" />
-      <input type="hidden" name="cvContentType" />
-      <p className="label">Přihláška — účet nepotřebujete</p>
-      <Field label="Jméno a příjmení" name="fullName">
-        <input id="fullName" name="fullName" required className={inputClass} autoComplete="name" />
-      </Field>
-      <Field label="Telefon" name="phone" hint="Devět číslic, klidně s +420.">
-        <input id="phone" name="phone" required className={inputClass} autoComplete="tel" inputMode="tel" />
-      </Field>
-      <Field label="E-mail (volitelně)" name="email">
-        <input id="email" name="email" type="email" className={inputClass} autoComplete="email" />
-      </Field>
-      <Field label="Životopis PDF / DOC (volitelně)" name="cv">
-        <input
-          id="cv"
-          name="cv"
-          type="file"
-          accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          className={inputClass}
-          onChange={(e) => onFile(e.target.files?.[0], e.currentTarget.form!)}
-        />
-        {cvName ? <span className="text-xs text-steel">Nahráno: {cvName}</span> : null}
-        {cvError ? <span className="text-xs text-danger">{cvError}</span> : null}
-      </Field>
-      <Field label="Zpráva mistrům (volitelně)" name="message">
-        <textarea id="message" name="message" rows={4} className={inputClass} />
-      </Field>
-      <label className="flex items-start gap-2 text-sm">
-        <input type="checkbox" name="consentGdpr" className="mt-1" required />
-        <span>
-          Souhlasím se zpracováním osobních údajů za účelem této přihlášky. Podrobnosti na stránce{" "}
-          <a href="/gdpr" className="underline">
-            Osobní údaje
-          </a>
-          .
-        </span>
-      </label>
-      <div className="hidden" aria-hidden>
-        <input name="website" tabIndex={-1} autoComplete="off" />
-      </div>
-      {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
-      <Button type="submit" disabled={pending}>
-        {pending ? "Odesílám…" : "Odeslat přihlášku"}
-      </Button>
-    </form>
+    <aside className="apply-panel" aria-label="Odpovědět firmě">
+      <h2>Odpovědět firmě</h2>
+      <form action={action}>
+        <input type="hidden" name="jobId" value={jobId} />
+        <input type="hidden" name="cvObjectKey" />
+        <input type="hidden" name="cvFileName" />
+        <input type="hidden" name="cvContentType" />
+        <div className="form-field">
+          <label htmlFor="fullName">Jméno a příjmení</label>
+          <input id="fullName" name="fullName" type="text" required autoComplete="name" placeholder="Jan Novák" />
+        </div>
+        <div className="form-field">
+          <label htmlFor="phone">Telefon</label>
+          <input id="phone" name="phone" type="tel" required autoComplete="tel" placeholder="+420 …" />
+        </div>
+        <div className="form-field">
+          <label htmlFor="email">
+            E-mail <span className="opt">(volitelné)</span>
+          </label>
+          <input id="email" name="email" type="email" autoComplete="email" placeholder="jan@email.cz" />
+        </div>
+        <div className="form-field">
+          <label htmlFor="message">
+            Krátká poznámka <span className="opt">(volitelné)</span>
+          </label>
+          <textarea id="message" name="message" placeholder="Např. zkušenost s Fanuc, dostupnost směn…" />
+        </div>
+        <div className="form-field">
+          <label htmlFor="cv">
+            Životopis <span className="opt">(volitelné)</span>
+          </label>
+          <input
+            id="cv"
+            name="cv"
+            type="file"
+            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            onChange={(e) => onFile(e.target.files?.[0], e.currentTarget.form!)}
+          />
+          {cvName ? <p className="form-hint">Nahráno: {cvName}</p> : null}
+          {cvError ? <p className="form-hint" style={{ color: "var(--danger, #8b1e1e)" }}>{cvError}</p> : null}
+        </div>
+        <label className="form-field" style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start" }}>
+          <input type="checkbox" name="consentGdpr" required style={{ marginTop: "0.35rem" }} />
+          <span>
+            Souhlasím se zpracováním osobních údajů. Podrobnosti na stránce <a href="/gdpr">Osobní údaje</a>.
+          </span>
+        </label>
+        <div className="sr-only" aria-hidden>
+          <input name="website" tabIndex={-1} autoComplete="off" />
+        </div>
+        {state && !state.ok ? <p className="form-hint">{state.error}</p> : null}
+        <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={pending}>
+          {pending ? "Odesílám…" : "Odeslat firmě"}
+        </button>
+        <p className="form-hint">
+          Odpověď přijde přímo{companyName ? ` na ${companyName}` : " firmě"}. Bez registrace. DílnaJobs údaje
+          neprodává.
+        </p>
+      </form>
+    </aside>
   );
 }

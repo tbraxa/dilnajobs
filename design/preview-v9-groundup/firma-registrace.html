@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrace firmy · DílnaJobs</title>
+  <meta name="description" content="Založte účet firmy. Přihlašovací odkaz přijde na e-mail.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html" aria-label="DílnaJobs">
+        <span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        DílnaJobs
+      </a>
+      <nav class="nav-main" aria-label="Hlavní">
+        <a href="nabidky.html">Nabídky</a>
+        <a href="pro-firmy.html">Pro firmy</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-sm" href="firma-prihlaseni.html">Přihlášení firem</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-drawer wrap" aria-label="Mobilní">
+      <a href="nabidky.html">Nabídky</a>
+      <a href="pro-firmy.html">Pro firmy</a>
+      <a href="firma-prihlaseni.html">Přihlášení firem</a>
+    </nav>
+  </header>
+
+  <main class="auth-page">
+    <div class="auth-card auth-card-wide">
+      <h1>Registrace firmy</h1>
+      <p class="sub">Založte účet. Přihlašovací odkaz přijde na e-mail.</p>
+
+      <form action="#" method="post" onsubmit="return false;">
+        <fieldset class="auth-section">
+          <legend>Firma</legend>
+
+          <div class="form-group">
+            <label for="ico">IČO</label>
+            <div class="input-with-action">
+              <input id="ico" name="ico" type="text" inputmode="numeric" maxlength="8" placeholder="12345678" required>
+              <button class="btn btn-ghost btn-sm" type="button" id="ares-btn">Načíst z ARES</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nazev">Obchodní název</label>
+            <input id="nazev" name="nazev" type="text" autocomplete="organization" placeholder="např. Moravia Precision s.r.o." required>
+          </div>
+
+          <div class="form-group">
+            <label for="dph">DPH</label>
+            <div class="segmented" role="group" aria-label="DPH">
+              <label class="segmented-option">
+                <input type="radio" name="dph" value="neplatce" checked>
+                <span>Neplátce</span>
+              </label>
+              <label class="segmented-option">
+                <input type="radio" name="dph" value="platce" id="dph-platce">
+                <span>Plátce</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" id="dic-group" hidden>
+            <label for="dic">DIČ</label>
+            <input id="dic" name="dic" type="text" placeholder="CZ12345678">
+          </div>
+
+          <div class="form-group">
+            <label for="sidlo">Sídlo</label>
+            <input id="sidlo" name="sidlo" type="text" autocomplete="street-address" placeholder="ulice, PSČ, město">
+          </div>
+        </fieldset>
+
+        <fieldset class="auth-section">
+          <legend>Kontaktní osoba</legend>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="jmeno">Jméno</label>
+              <input id="jmeno" name="jmeno" type="text" autocomplete="given-name" required>
+            </div>
+            <div class="form-group">
+              <label for="prijmeni">Příjmení</label>
+              <input id="prijmeni" name="prijmeni" type="text" autocomplete="family-name" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="telefon">Telefon</label>
+            <input id="telefon" name="telefon" type="tel" autocomplete="tel" placeholder="+420 …" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Pracovní e-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="personalista@firma.cz" required>
+          </div>
+        </fieldset>
+
+        <div class="form-group form-check">
+          <label>
+            <input type="checkbox" name="souhlas" required>
+            <span>Souhlasím s <a href="#">obchodními podmínkami</a> a <a href="#">zpracováním osobních údajů</a>.</span>
+          </label>
+        </div>
+
+        <button class="btn btn-primary btn-block" type="submit">Založit účet a poslat odkaz</button>
+        <p class="auth-helper">Po odeslání vám pošleme přihlašovací odkaz na e-mail. Heslo nepoužíváme.</p>
+      </form>
+
+      <p class="auth-footer">Už máte účet? <a href="firma-prihlaseni.html">Přihlaste se</a></p>
+      <p class="auth-note">Náhled. Účet ani odkaz zatím neodesíláme.</p>
+    </div>
+  </main>
+
+  <script src="menu.js"></script>
+  <script>
+    (function () {
+      var platce = document.getElementById('dph-platce');
+      var dicGroup = document.getElementById('dic-group');
+      var radios = document.querySelectorAll('input[name="dph"]');
+      function syncDic() {
+        var isPlatce = platce && platce.checked;
+        if (dicGroup) dicGroup.hidden = !isPlatce;
+      }
+      radios.forEach(function (r) { r.addEventListener('change', syncDic); });
+      syncDic();
+    })();
+  </script>
+</body>
+</html>

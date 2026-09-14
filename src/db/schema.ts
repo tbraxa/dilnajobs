@@ -21,6 +21,7 @@ export const employers = pgTable("employers", {
   companyName: text("company_name").notNull(),
   legalName: text("legal_name").notNull(),
   city: text("city"),
+  dic: text("dic"),
   isAgency: boolean("is_agency").notNull().default(false),
   verificationStatus: text("verification_status").notNull().default("pending"),
   planCode: text("plan_code").notNull().default("trial"),
@@ -37,6 +38,9 @@ export const employerUsers = pgTable("employer_users", {
     .references(() => employers.id, { onDelete: "cascade" }),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  phone: text("phone"),
   role: text("role").notNull().default("owner"),
   createdAt: timestamps.createdAt,
 });

@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui";
 
 export default async function OveritPage({
   searchParams,
@@ -11,16 +10,17 @@ export default async function OveritPage({
   if (!token) redirect("/firma/prihlaseni?chyba=odkaz");
 
   return (
-    <main className="mx-auto max-w-md px-4 py-16">
-      <p className="label">Přihlášení</p>
-      <h1 className="display mt-2 text-3xl font-semibold">Odkaz je v pořádku</h1>
-      <p className="mt-3 text-sm text-steel">
-        Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem — token se spotřebuje až teď.
-      </p>
-      <form action="/firma/prihlaseni/overit/akce" method="post" className="mt-6">
-        <input type="hidden" name="token" value={token} />
-        <Button type="submit">Vstoupit do firmy</Button>
-      </form>
+    <main className="auth-page">
+      <div className="auth-card auth-card-narrow">
+        <h1>Odkaz je v pořádku</h1>
+        <p className="sub">Přihlášení potvrďte tlačítkem. Odkaz platí jednou.</p>
+        <form action="/firma/prihlaseni/overit/akce" method="post">
+          <input type="hidden" name="token" value={token} />
+          <button type="submit" className="btn btn-primary btn-block">
+            Vstoupit do firmy
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

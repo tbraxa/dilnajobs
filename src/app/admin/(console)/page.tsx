@@ -43,7 +43,7 @@ export default async function AdminHomePage() {
     { label: "Ke schválení", value: stats.pending, href: "/admin/jobs" },
     { label: "Přihlášky za 24 h", value: stats.apps24h, href: "/admin/applications" },
     { label: "Firmy", value: stats.employers, href: "/admin/employers" },
-    { label: "Platby stub / selhání", value: stats.stubOrders, href: "/admin/settings" },
+    { label: "Platby k dořešení", value: stats.stubOrders, href: "/admin/settings" },
   ];
 
   return (
@@ -54,8 +54,8 @@ export default async function AdminHomePage() {
         <StatusPill status={health.status} />
       </div>
       <p className="mt-2 text-sm text-steel">
-        Stav systému: Postgres a přihlášení musí být v pořádku. Ostatní služby ve stubu hlásí „nenastaveno“ — to je v
-        dev režimu očekávané.
+        Stav systému: databáze a přihlášení musí být v pořádku. Ostatní služby, které ještě nejsou zapojené, hlásí
+        „nenastaveno“.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (

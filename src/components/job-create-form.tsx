@@ -10,7 +10,7 @@ export function JobCreateForm() {
   return (
     <form action={action} className="space-y-4">
       <Field label="Název pozice" name="title">
-        <input id="title" name="title" required className={inputClass} placeholder="CNC operátor — 5osá frézka" />
+        <input id="title" name="title" required className={inputClass} placeholder="CNC operátor, 5osá frézka" />
       </Field>
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Profese" name="profession">

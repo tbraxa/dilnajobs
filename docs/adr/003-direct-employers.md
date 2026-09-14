@@ -10,7 +10,7 @@ The product is a niche board for manufacturing firms hiring their own people. Ag
 ## Decision
 
 - Customers are **direct employers** (výrobní firmy, závody, servisní provozy s vlastními zaměstnanci).
-- Registration requires a Czech **IČO** (checksum validated; ARES lookup is a stub with a verification path).
+- Registration requires a Czech **IČO** (format + check digit in code; public ARES autofill on `/api/ares`; ops marks `verification_status`).
 - **Agentury práce are forbidden** in Terms. `employers.is_agency` / rejection path exists for ops.
 - **First job posting is reviewable** (`pending_review`) unless an explicit feature flag auto-publishes (seed data is pre-published).
 

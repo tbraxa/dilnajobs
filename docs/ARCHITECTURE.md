@@ -33,7 +33,8 @@ PostgreSQL 16
 | `/pro-firmy` | public | B2B + ceník |
 | `/prace/[profese]/[mesto]` | public | SEO stub landing, same search |
 | `/gdpr`, `/obchodni-podminky` | public | legal |
-| `/firma/prihlaseni` | public | magic-link request |
+| `/firma/prihlaseni` | public | employer magic-link login |
+| `/firma/registrace` | public | employer registration (ARES-first) |
 | `/firma/prihlaseni/overit` | token | sets session cookie |
 | `/firma` | employer | dashboard, own jobs |
 | `/firma/nabidky/nova` | employer | create job |

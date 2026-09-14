@@ -1,71 +1,110 @@
 @import "tailwindcss";
 
+html {
+  background-color: #ffffff;
+  color: #111111;
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+}
+
+/* Shared tokens. Public UI chrome lives in src/styles/v9.css. */
 :root {
-  --paper: #f2f0ea;
-  --paper-2: #e7e3d7;
-  --ink: #0b0d12;
-  --steel: #5c6168;
-  --steel-2: #8a8f96;
-  --line: rgba(11, 13, 18, 0.14);
+  --cream: #ffffff;
+  --cream-alt: #ffffff;
+  --cream-deep: #f8f9fb;
+  --ink: #111827;
+  --ink-soft: #111827;
+  --muted: #6b7280;
+  --muted-2: #6b7280;
+  --border: #e5e7eb;
+  --border-strong: #111827;
+  --blue: #003dff;
+  --blue-dim: #0030cc;
+  --blue-soft: #e8eeff;
+  --steel: #374151;
+  --white: #ffffff;
+  --paper: #ffffff;
+  --paper-0: #ffffff;
+  --paper-2: #f8f9fb;
+  --steel-2: #374151;
+  --line: #e5e7eb;
+  --tile: #e8eeff;
   --accent: #003dff;
-  --accent-hover: #0034d6;
+  --accent-hover: #0030cc;
   --danger: #8b1e1e;
   --ok: #1f4d2c;
-  --background: var(--paper);
-  --foreground: var(--ink);
+  --background: #ffffff;
+  --foreground: #111827;
 }
 
 @theme inline {
   --color-paper: var(--paper);
+  --color-paper-0: var(--paper-0);
   --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
   --color-steel: var(--steel);
   --color-steel-2: var(--steel-2);
   --color-line: var(--line);
+  --color-tile: var(--tile);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-danger: var(--danger);
   --color-ok: var(--ok);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-ibm);
-  --font-display: var(--font-archivo);
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-display: Inter, system-ui, sans-serif;
+  --font-mono: Inter, system-ui, sans-serif;
 }
 
 * {
   border-color: var(--line);
 }
 
-html,
-body {
+.display {
+  font-family: Inter, system-ui, sans-serif;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+h1.display,
+h2.display {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.shell {
+  margin-inline: auto;
+  width: min(1120px, calc(100% - 2.5rem));
+}
+
+.shell-narrow {
+  margin-inline: auto;
+  width: min(28rem, calc(100% - 2.5rem));
+}
+
+.panel {
+  border: 1px solid var(--line);
   background: var(--paper);
+}
+
+.icon-tile {
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--tile);
   color: var(--ink);
 }
 
-body {
-  font-family: var(--font-ibm), "IBM Plex Sans", system-ui, sans-serif;
-  min-height: 100vh;
+.icon-tile-lg {
+  height: 3.25rem;
+  width: 3.25rem;
 }
 
-.workshop-grid {
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(to right, rgba(11, 13, 18, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(11, 13, 18, 0.045) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-.display {
-  font-family: var(--font-archivo), Archivo, sans-serif;
-  letter-spacing: -0.03em;
-}
-
-.label {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--steel);
-  font-weight: 600;
+.hairline {
+  border-color: var(--line);
 }
 
 :focus-visible {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button } from "@/components/ui";
 
 export default function GlobalError({
   error,
@@ -16,16 +15,30 @@ export default function GlobalError({
 
   return (
     <html lang="cs">
-      <body className="bg-[#f2f0ea] text-[#0b0d12]">
-        <main className="mx-auto max-w-xl px-4 py-16">
-          <h1 className="text-2xl font-semibold">Něco se pokazilo</h1>
-          <p className="mt-3 text-sm text-[#5c6168]">
-            Aplikaci teď nejde zobrazit. Zkuste obnovit stránku. Pokud problém trvá, počkejte na dokončení
-            migrací databáze.
+      <body style={{ background: "#F2F0EA", color: "#0B0D12", fontFamily: "Inter, system-ui, sans-serif" }}>
+        <main style={{ maxWidth: 1180, margin: "0 auto", padding: "3rem 1.5rem" }}>
+          <p style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            Chyba
           </p>
-          <Button type="button" className="mt-6" onClick={() => reset()}>
+          <h1 style={{ fontSize: "2rem", letterSpacing: "-0.03em", margin: "0.5rem 0 1rem" }}>Něco se pokazilo</h1>
+          <p style={{ maxWidth: "36em", lineHeight: 1.68, color: "#5A5F6A" }}>
+            Aplikaci teď nejde zobrazit. Zkuste obnovit stránku. Pokud problém trvá, napište na ahoj@dilnajobs.cz.
+          </p>
+          <button
+            type="button"
+            onClick={() => reset()}
+            style={{
+              marginTop: "1.5rem",
+              background: "#0B0D12",
+              color: "#fff",
+              border: "1px solid #0B0D12",
+              padding: "0.85rem 1.25rem",
+              fontWeight: 600,
+              minHeight: 44,
+            }}
+          >
             Zkusit znovu
-          </Button>
+          </button>
         </main>
       </body>
     </html>

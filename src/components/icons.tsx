@@ -8,7 +8,7 @@ function Icon({ title, children, ...props }: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.75}
+      strokeWidth={2}
       strokeLinecap="square"
       strokeLinejoin="miter"
       aria-hidden={title ? undefined : true}
@@ -23,11 +23,14 @@ function Icon({ title, children, ...props }: IconProps) {
 
 export function LogoMark(props: IconProps) {
   return (
-    <Icon title="DílnaJobs" {...props}>
-      <rect x="3" y="3" width="18" height="18" />
-      <path d="M7 16V8h5.2a3.2 3.2 0 0 1 0 6.4H7" />
-      <path d="M7 16h10" />
-    </Icon>
+    <svg viewBox="0 0 22 22" aria-hidden={props.title ? undefined : true} role={props.title ? "img" : undefined} {...props}>
+      {props.title ? <title>{props.title}</title> : null}
+      <rect width="22" height="22" fill="#0B0D12" />
+      <rect x="3" y="3" width="7" height="7" fill="#003DFF" />
+      <rect x="12" y="3" width="7" height="7" fill="#FAF9F6" />
+      <rect x="3" y="12" width="7" height="7" fill="#FAF9F6" />
+      <rect x="12" y="12" width="7" height="7" fill="#003DFF" />
+    </svg>
   );
 }
 
@@ -145,6 +148,32 @@ export function IconArrow(props: IconProps) {
   return (
     <Icon {...props}>
       <path d="M4 12h16M14 6l6 6-6 6" />
+    </Icon>
+  );
+}
+
+export function IconMenu(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </Icon>
+  );
+}
+
+export function IconClose(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </Icon>
+  );
+}
+
+export function IconBuilding(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 20V6l8-3 8 3v14" />
+      <path d="M9 20v-6h6v6" />
+      <path d="M9 10h.01M15 10h.01M12 10h.01" />
     </Icon>
   );
 }

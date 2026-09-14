@@ -15,15 +15,15 @@ export default async function AdminLoginPage() {
 
   return (
     <AdminLoginChrome>
-      <main className="mx-auto max-w-md px-4 py-16">
-        <p className="label">Provozovatel</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Přihlášení správce</h1>
-        <p className="mt-3 text-sm text-steel">
-          Oddělené od firemního portálu. Odkaz posíláme jen na adresy v <code>ADMIN_EMAILS</code>. Platí 15 minut a
-          spotřebuje se až po potvrzení tlačítkem.
-        </p>
-        <div className="mt-6 border border-line bg-paper p-5">
-          <AdminLoginForm />
+      <main className="auth-shell">
+        <div className="auth-stack">
+          <article className="auth-card">
+            <h1>Přihlášení správce</h1>
+            <p className="auth-helper" style={{ marginTop: 0, marginBottom: "1.1rem" }}>
+              Oddělené od firemního portálu. Odkaz platí 15 minut.
+            </p>
+            <AdminLoginForm />
+          </article>
         </div>
       </main>
     </AdminLoginChrome>

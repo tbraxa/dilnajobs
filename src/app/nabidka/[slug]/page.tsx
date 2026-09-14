@@ -1,22 +1,35 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ApplyForm } from "@/components/apply-form";
-import { professionIcon } from "@/components/icons";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
-import { professionByDb } from "@/lib/catalog";
+import { withoutTypographicDashes } from "@/lib/copy";
+import { EMPLOYMENT_TYPES, professionByDb } from "@/lib/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export const dynamic = "force-dynamic";
+
+function empLabel(code: string) {
+  if (code === "full_time") return "HPP";
+  return EMPLOYMENT_TYPES.find((t) => t.slug === code)?.label ?? code;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  return { title: `${row.job.title} — ${row.job.city}` };
+  return { title: `${withoutTypographicDashes(row.job.title)} · ${row.job.city}` };
+}
+
+function toList(text: string | null | undefined) {
+  if (!text) return [];
+  return text
+    .split(/\n+/)
+    .map((line) => withoutTypographicDashes(line.replace(/^\s*[-•]\s*/, "").trim()))
+    .filter(Boolean);
 }
 
 export default async function JobPage({ params }: Props) {
@@ -24,49 +37,105 @@ export default async function JobPage({ params }: Props) {
   const catalog = await loadPublishedJobBySlug(slug);
   if (!catalog.ok) {
     return (
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+      <main className="page">
         <CatalogUnavailable />
       </main>
     );
   }
   const row = catalog.rows;
   if (!row) notFound();
-  const { job, companyName } = row;
-  const Icon = professionIcon(job.profession);
+  const { job, companyName, companyCity } = row;
   const profession = professionByDb(job.profession);
+  const requirements = toList(job.requirements);
+  const benefits = toList(job.benefits);
+  const description = toList(job.description);
 
   return (
-    <main className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-12">
-      <article className="lg:col-span-7">
-        <p className="label">{companyName}</p>
-        <h1 className="display mt-2 text-3xl font-semibold sm:text-4xl">{job.title}</h1>
-        <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-steel">
-          <Icon className="h-4 w-4 text-ink" />
-          {profession?.label} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
-          {job.shiftNote ? ` · ${job.shiftNote}` : null}
-        </p>
-        <section className="mt-8 space-y-6 text-[15px] leading-relaxed">
-          <div>
-            <h2 className="label mb-2">Práce</h2>
-            <p className="whitespace-pre-wrap">{job.description}</p>
+    <main className="job-page">
+      <article>
+        <div className="spec-block">
+          <p className="spec-label">
+            {job.isTop ? <span className="label-box is-blue">Nové</span> : null}{" "}
+            <span className="label-box">{empLabel(job.employmentType)}</span>{" "}
+            <span className="label-box">{job.city}</span>
+          </p>
+          <h1>{withoutTypographicDashes(job.title)}</h1>
+          <p className="spec-company">
+            {companyName}
+            {companyCity ? ` · ${companyCity}` : job.region ? ` · ${job.region}` : ""}
+          </p>
+          <dl className="spec-meta-grid">
+            <div>
+              <dt>Mzda</dt>
+              <dd className="is-pay">{formatSalary(job.salaryMin, job.salaryMax, job.salaryNote).replace(" / měsíc", "")}</dd>
+            </div>
+            <div>
+              <dt>Směny</dt>
+              <dd>{job.shiftNote || "dohodou"}</dd>
+            </div>
+            <div>
+              <dt>Úvazek</dt>
+              <dd>{empLabel(job.employmentType)}</dd>
+            </div>
+            <div>
+              <dt>Profese</dt>
+              <dd>{profession?.label ?? job.profession}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="spec-block">
+          <p className="spec-label">Popis</p>
+          <div className="spec-body">
+            {description.length > 1 ? (
+              <ul>
+                {description.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>{job.description}</p>
+            )}
           </div>
-          {job.requirements ? (
-            <div>
-              <h2 className="label mb-2">Koho hledáme</h2>
-              <p className="whitespace-pre-wrap">{job.requirements}</p>
+        </div>
+
+        {requirements.length ? (
+          <div className="spec-block">
+            <p className="spec-label">Požadujeme</p>
+            <div className="spec-body">
+              <ul>
+                {requirements.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
-          ) : null}
-          {job.benefits ? (
-            <div>
-              <h2 className="label mb-2">Co je na stole</h2>
-              <p className="whitespace-pre-wrap">{job.benefits}</p>
+          </div>
+        ) : null}
+
+        {benefits.length ? (
+          <div className="spec-block">
+            <p className="spec-label">Nabízíme</p>
+            <div className="spec-body">
+              <ul>
+                {benefits.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
-          ) : null}
-        </section>
+          </div>
+        ) : null}
+
+        <div className="spec-block">
+          <p className="spec-label">Firma</p>
+          <div className="spec-body">
+            <p>
+              {companyName}
+              {job.city ? `, ${job.city}` : ""}.
+            </p>
+          </div>
+        </div>
       </article>
-      <aside className="lg:col-span-5">
-        <ApplyForm jobId={job.id} />
-      </aside>
+      <ApplyForm jobId={job.id} companyName={companyName} />
     </main>
   );
 }
