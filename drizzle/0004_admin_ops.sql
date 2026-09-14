@@ -23,9 +23,6 @@ CREATE TABLE system_heartbeats (
   checked_at timestamptz NOT NULL DEFAULT now()
 );
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON admin_sessions TO dilna_app;
-GRANT SELECT, INSERT, UPDATE, DELETE ON system_heartbeats TO dilna_app;
-
 CREATE OR REPLACE FUNCTION is_admin()
 RETURNS boolean
 LANGUAGE sql
@@ -34,7 +31,15 @@ AS $$
   SELECT current_setting('app.is_admin', true) = 'true'
 $$;
 
-GRANT EXECUTE ON FUNCTION is_admin() TO dilna_app;
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
+    GRANT SELECT, INSERT, UPDATE, DELETE ON admin_sessions TO dilna_app;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON system_heartbeats TO dilna_app;
+    GRANT EXECUTE ON FUNCTION is_admin() TO dilna_app;
+  END IF;
+END
+$$;
 
 CREATE POLICY employers_admin_select ON employers
   FOR SELECT USING (is_admin());

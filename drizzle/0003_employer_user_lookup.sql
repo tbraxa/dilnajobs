@@ -56,5 +56,11 @@ $$;
 
 REVOKE ALL ON FUNCTION employer_user_by_email(text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION session_by_token_hash(text) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION employer_user_by_email(text) TO dilna_app;
-GRANT EXECUTE ON FUNCTION session_by_token_hash(text) TO dilna_app;
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
+    GRANT EXECUTE ON FUNCTION employer_user_by_email(text) TO dilna_app;
+    GRANT EXECUTE ON FUNCTION session_by_token_hash(text) TO dilna_app;
+  END IF;
+END
+$$;

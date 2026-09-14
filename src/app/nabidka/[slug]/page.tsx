@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ApplyForm } from "@/components/apply-form";
 import { professionIcon } from "@/components/icons";
-import { getPublishedJobBySlug } from "@/lib/jobs/search";
+import { CatalogUnavailable } from "@/components/catalog-unavailable";
+import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
 
@@ -12,14 +13,23 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const row = await getPublishedJobBySlug(slug);
+  const catalog = await loadPublishedJobBySlug(slug);
+  const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
   return { title: `${row.job.title} — ${row.job.city}` };
 }
 
 export default async function JobPage({ params }: Props) {
   const { slug } = await params;
-  const row = await getPublishedJobBySlug(slug);
+  const catalog = await loadPublishedJobBySlug(slug);
+  if (!catalog.ok) {
+    return (
+      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <CatalogUnavailable />
+      </main>
+    );
+  }
+  const row = catalog.rows;
   if (!row) notFound();
   const { job, companyName } = row;
   const Icon = professionIcon(job.profession);

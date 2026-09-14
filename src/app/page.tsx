@@ -1,5 +1,6 @@
 import { JobCard } from "@/components/job-card";
 import { JobFilters } from "@/components/job-filters";
+import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { ButtonLink } from "@/components/ui";
 import {
   IconArrow,
@@ -10,12 +11,13 @@ import {
   IconWeld,
   IconWrench,
 } from "@/components/icons";
-import { featuredJobs } from "@/lib/jobs/search";
+import { loadFeaturedJobs } from "@/lib/jobs/search";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const jobs = await featuredJobs(6);
+  const catalog = await loadFeaturedJobs(6);
+  const jobs = catalog.ok ? catalog.rows : [];
   return (
     <main>
       <section className="border-b border-line">
@@ -77,7 +79,9 @@ export default async function HomePage() {
           </a>
         </div>
         <div className="mt-4 grid gap-3">
-          {jobs.length === 0 ? (
+          {!catalog.ok ? (
+            <CatalogUnavailable />
+          ) : jobs.length === 0 ? (
             <p className="border border-line p-4 text-sm text-steel">Na nástěnce teď nic není. Zkuste to později.</p>
           ) : (
             jobs.map((job) => <JobCard key={job.id} job={job} />)

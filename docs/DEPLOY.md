@@ -33,11 +33,12 @@ Blank Vercel dashboard fields are stored as `""`, not unset. Empty strings are t
 ## Vercel
 
 1. Import the GitHub repo. Framework: Next.js (no extra `vercel.json` build config).
-2. Attach a Postgres instance (Neon / RDS / Cloud SQL via VPC). Run `npm run db:migrate` against `DATABASE_ADMIN_URL` once (local or a one-off).
-3. First deploy can succeed with only `DATABASE_URL` + `SESSION_SECRET` (≥32 chars). Do **not** leave `APP_URL=""` forever: after the production domain is live, set `APP_URL=https://dilnajobs.cz` (no trailing slash) and redeploy.
-4. Set remaining env vars above. `vercel.json` schedules `GET /api/cron/job-expiry` once daily at **04:00 UTC** (`0 4 * * *`). Hobby plans only allow at most one cron run per day; Vercel Pro is required for hourly. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`. The catalog already hides `expires_at < now()`, so a daily sweep is enough on Hobby.
-5. Stripe webhook URL: `https://<prod>/api/stripe/webhook` (raw body, signature verified).
-6. `/api/health` and `/api/ready` are serverless: liveness has no DB; ready is `SELECT 1` with a 1.5s timeout. The web process does **not** run the expiry worker.
+2. Attach a Postgres instance (Neon / RDS / Cloud SQL via VPC). **`npm run build` runs `db:migrate` first** (idempotent). Vercel Production needs `DATABASE_URL` (owner or a role that can DDL) at build time so tables exist before `/` queries them. `DATABASE_ADMIN_URL` is used when set.
+3. First deploy can succeed with only `DATABASE_URL` + `SESSION_SECRET` (≥32 chars). Optional `SEED_ON_DEPLOY=true` loads sample ads once if `employers` is empty (default off). Do **not** leave `APP_URL=""` forever: after the production domain is live, set `APP_URL=https://dilnajobs.cz` (no trailing slash) and redeploy.
+4. After merging schema/migrate fixes, **Redeploy** the latest `main` once — do not retry an old SHA. Empty catalog is valid (Czech empty state); a 500 on `/` usually meant missing tables.
+5. Set remaining env vars above. `vercel.json` schedules `GET /api/cron/job-expiry` once daily at **04:00 UTC** (`0 4 * * *`). Hobby plans only allow at most one cron run per day; Vercel Pro is required for hourly. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`. The catalog already hides `expires_at < now()`, so a daily sweep is enough on Hobby.
+6. Stripe webhook URL: `https://<prod>/api/stripe/webhook` (raw body, signature verified).
+7. `/api/health` and `/api/ready` are serverless: liveness has no DB; ready is `SELECT 1` with a 1.5s timeout. The web process does **not** run the expiry worker.
 
 ## Cloud Run
 
@@ -52,7 +53,7 @@ gcloud run deploy dilnajobs \
   --set-secrets DATABASE_URL=dilna-db-url:latest,SESSION_SECRET=dilna-session:latest
 ```
 
-Image is Next.js `standalone` (`NEXT_OUTPUT=standalone` at build). Cloud SQL: use the Unix socket in `DATABASE_URL` or Auth Proxy.
+Image is Next.js `standalone` (`NEXT_OUTPUT=standalone` at build). Docker build sets `SKIP_DB_MIGRATE=1` (no Postgres in the image build). Run `npm run db:migrate` against Cloud SQL once (or a release job) before traffic hits `/`. Cloud SQL: use the Unix socket in `DATABASE_URL` or Auth Proxy.
 
 **Expiry:** Cloud Scheduler → HTTP `POST https://…/api/cron/job-expiry` with `Authorization: Bearer $CRON_SECRET` (hourly is fine here; Vercel Hobby cannot). Alternatively a Cloud Run Job:
 

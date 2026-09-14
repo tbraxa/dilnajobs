@@ -17,6 +17,7 @@ ENV NEXT_OUTPUT=standalone
 ENV SESSION_SECRET=build-placeholder-not-for-production-use-32chars
 ENV DATABASE_URL=postgres://dilna_app:dilna@127.0.0.1:5432/dilnajobs
 ENV APP_URL=http://localhost:8080
+ENV SKIP_DB_MIGRATE=1
 RUN npm run build
 
 FROM node:22-alpine AS runner

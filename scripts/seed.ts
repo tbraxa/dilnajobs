@@ -28,7 +28,23 @@ async function main() {
   const icoPlast = makeValidIco("2559664");
   const icoEnergo = makeValidIco("4455667");
 
-  await sql`truncate applications, jobs, sessions, magic_tokens, admin_sessions, employer_users, employers, orders, audit_events, rate_limit_events restart identity cascade`;
+  const deploySeed = ["1", "true", "yes"].includes((process.env.SEED_ON_DEPLOY ?? "").trim().toLowerCase());
+  if (deploySeed) {
+    try {
+      const existing = await sql<{ n: number }[]>`select count(*)::int as n from employers`;
+      if ((existing[0]?.n ?? 0) > 0) {
+        console.log("SEED_ON_DEPLOY: employers already present, skip");
+        await sql.end({ timeout: 5 });
+        return;
+      }
+    } catch (err) {
+      console.error("SEED_ON_DEPLOY: cannot read employers (run migrations first)", err);
+      await sql.end({ timeout: 5 });
+      throw err;
+    }
+  } else {
+    await sql`truncate applications, jobs, sessions, magic_tokens, admin_sessions, employer_users, employers, orders, audit_events, rate_limit_events restart identity cascade`;
+  }
 
   const [novak] = await db
     .insert(employers)
