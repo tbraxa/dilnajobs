@@ -139,8 +139,6 @@ export function SiteFooter() {
           <Link href={NAV.nabidky}>Nabídky</Link>
           <Link href={NAV.proFirmy}>Pro firmy</Link>
           <Link href={NAV.login}>Přihlášení</Link>
-          <Link href="/gdpr">Osobní údaje</Link>
-          <Link href="/obchodni-podminky">Podmínky</Link>
         </div>
       </div>
     </footer>
