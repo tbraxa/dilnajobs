@@ -50,7 +50,7 @@ background-size: 24px 24px;
 
 **LIVE strip** (`.top-strip`) — blue fill, white type, JetBrains `.strip-code` “LIVE”. Never a black strip.
 
-**Header** (`.site-header`) — 60px, cream/blur, `.logo-mark` dark square with four inner `<i>` cells (blue + cream). Mega triggers with chevrons: Nabídky / Pro firmy / Jak to funguje.
+**Header** (`.site-header`) — 60px, cream/blur. `.logo-mark` is **four distinct dots** (2×2, 7px rounds, 4px gap, two blue / two ink) — never a fused square. Mega triggers with chevrons: Nabídky / Pro firmy / Jak to funguje. `.mega-panel` is content-width (`--max: 1180px`), aligned to `.header-inner` borders — not viewport edge-to-edge.
 
 **Hero** (`.hero-board`) — split `.hero-main` + `.hero-live`. Headline: “Práce ve výrobě. Přímo od **firem**.” Dual CTAs: `.btn-primary` + `.btn-secondary`, both `.btn-square`.
 

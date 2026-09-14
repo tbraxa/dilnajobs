@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { withEmployerRls } from "@/db/rls";
 import { applications, jobs } from "@/db/schema";
 import { getSession } from "@/lib/auth";
+import { PageHero } from "@/components/preview/board";
 
 export default async function PrihlaskyPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getSession();
@@ -27,36 +28,45 @@ export default async function PrihlaskyPage({ params }: { params: Promise<{ id: 
   if (!data) notFound();
 
   return (
-    <main className="shell py-8 sm:py-10">
-      <p className="label">Přihlášky</p>
-      <h1 className="display mt-2 text-3xl font-semibold">{data.job.title}</h1>
-      <p className="mt-2 text-sm text-steel">Vidíte jen přihlášky k vašim inzerátům (RLS).</p>
-      <div className="mt-6 grid gap-3">
-        {data.apps.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Zatím nikdo. Až se někdo ozve, bude tady.</p>
-        ) : (
-          data.apps.map((app) => (
-            <article key={app.id} className="border border-line p-4">
-              <p className="font-semibold">{app.fullName}</p>
-              <p className="text-sm">
-                Tel. {app.phone}
-                {app.email ? ` · ${app.email}` : ""}
-              </p>
-              {app.message ? <p className="mt-2 text-sm text-steel">{app.message}</p> : null}
-              {app.cvObjectKey ? (
-                <a
-                  className="mt-3 inline-block text-sm underline"
-                  href={`/firma/nabidky/${data.job.id}/prihlasky/${app.id}/cv`}
-                >
-                  Stáhnout životopis
-                </a>
-              ) : (
-                <p className="mt-2 text-xs text-steel">Bez souboru</p>
-              )}
-            </article>
-          ))
-        )}
-      </div>
+    <main>
+      <PageHero
+        eyebrow="Přihlášky"
+        title={data.job.title}
+        lead="Vidíte jen přihlášky k vašim inzerátům (RLS)."
+      >
+        <a href="/firma" className="btn btn-secondary btn-square">
+          Zpět →
+        </a>
+      </PageHero>
+      <section className="section-band">
+        <div className="board-pad">
+          {data.apps.length === 0 ? (
+            <p className="lead">Zatím nikdo. Až se někdo ozve, bude tady.</p>
+          ) : (
+            data.apps.map((app) => (
+              <article key={app.id} className="app-row">
+                <div>
+                  <p>
+                    <strong>{app.fullName}</strong>
+                  </p>
+                  <p className="muted">
+                    Tel. {app.phone}
+                    {app.email ? ` · ${app.email}` : ""}
+                  </p>
+                  {app.message ? <p className="lead" style={{ marginTop: "0.5rem" }}>{app.message}</p> : null}
+                </div>
+                {app.cvObjectKey ? (
+                  <a className="btn btn-ghost btn-square" href={`/firma/nabidky/${data.job.id}/prihlasky/${app.id}/cv`}>
+                    Stáhnout CV →
+                  </a>
+                ) : (
+                  <span className="muted">Bez souboru</span>
+                )}
+              </article>
+            ))
+          )}
+        </div>
+      </section>
     </main>
   );
 }

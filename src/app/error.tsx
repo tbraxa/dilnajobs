@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button, ButtonLink } from "@/components/ui";
+import Link from "next/link";
 
 export default function ErrorPage({
   error,
@@ -15,21 +15,25 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <main className="shell py-16">
-      <p className="label">Chyba</p>
-      <h1 className="display mt-2 text-3xl font-semibold">Něco se pokazilo</h1>
-      <p className="mt-3 max-w-xl text-sm text-steel">
-        Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, katalog se možná ještě
-        migruje — obnovte za chvíli.
-      </p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Button type="button" onClick={() => reset()}>
-          Zkusit znovu
-        </Button>
-        <ButtonLink href="/" variant="ghost">
-          Na úvod
-        </ButtonLink>
-      </div>
+    <main>
+      <section className="page-hero">
+        <div>
+          <p className="eyebrow">Chyba</p>
+          <h1>Něco se pokazilo</h1>
+          <p className="lead">
+            Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, katalog se možná ještě migruje — obnovte za
+            chvíli.
+          </p>
+        </div>
+        <div className="hero-ctas">
+          <button type="button" className="btn btn-primary btn-square" onClick={() => reset()}>
+            Zkusit znovu
+          </button>
+          <Link href="/" className="btn btn-secondary btn-square">
+            Na úvod
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }

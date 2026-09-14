@@ -23,11 +23,13 @@ function Icon({ title, children, ...props }: IconProps) {
 
 export function LogoMark(props: IconProps) {
   return (
-    <Icon title="DílnaJobs" {...props}>
-      <rect x="3" y="3" width="18" height="18" />
-      <path d="M7 16V8h5.2a3.2 3.2 0 0 1 0 6.4H7" />
-      <path d="M7 16h10" />
-    </Icon>
+    <svg viewBox="0 0 18 18" fill="none" aria-hidden={props.title ? undefined : true} role={props.title ? "img" : undefined} {...props}>
+      {props.title ? <title>{props.title}</title> : null}
+      <circle cx="4" cy="4" r="3" fill="#003DFF" />
+      <circle cx="14" cy="4" r="3" fill="#0B0D12" />
+      <circle cx="4" cy="14" r="3" fill="#0B0D12" />
+      <circle cx="14" cy="14" r="3" fill="#003DFF" />
+    </svg>
   );
 }
 

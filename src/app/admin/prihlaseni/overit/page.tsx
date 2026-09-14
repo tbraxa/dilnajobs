@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui";
 import { AdminLoginChrome } from "@/components/admin-chrome";
+import { PageHero } from "@/components/preview/board";
 
 export default async function AdminOveritPage({
   searchParams,
@@ -13,16 +13,22 @@ export default async function AdminOveritPage({
 
   return (
     <AdminLoginChrome>
-      <main className="mx-auto max-w-md px-4 py-16">
-        <p className="label">Správa</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Odkaz je v pořádku</h1>
-        <p className="mt-3 text-sm text-steel">
-          Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem — token se spotřebuje až teď.
-        </p>
-        <form action="/admin/prihlaseni/overit/akce" method="post" className="mt-6">
-          <input type="hidden" name="token" value={token} />
-          <Button type="submit">Vstoupit do správy</Button>
-        </form>
+      <main>
+        <PageHero
+          eyebrow="Správa"
+          title="Odkaz je v pořádku"
+          lead="Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem — token se spotřebuje až teď."
+        />
+        <section className="section-band">
+          <div className="board-pad">
+            <form action="/admin/prihlaseni/overit/akce" method="post">
+              <input type="hidden" name="token" value={token} />
+              <button type="submit" className="btn btn-accent btn-lg btn-square">
+                Vstoupit do správy →
+              </button>
+            </form>
+          </div>
+        </section>
       </main>
     </AdminLoginChrome>
   );

@@ -1,4 +1,4 @@
-/* Next.js cascade lock — beat Tailwind/globals paper tokens without editing locked styles.css. */
+/* Next.js cascade lock — beat Tailwind/globals paper tokens without inventing a second palette. */
 html body {
   background-color: var(--cream);
   background-image: radial-gradient(circle, rgba(10, 10, 10, 0.055) 1px, transparent 1px);
@@ -26,4 +26,135 @@ html body {
   background: var(--blue);
   color: var(--white);
   border-color: var(--blue);
+}
+
+/* Four distinct dots — never a fused square. */
+html body .logo-mark {
+  width: 18px;
+  height: 18px;
+  background: none;
+  gap: 4px;
+  padding: 0;
+}
+html body .logo-mark i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* Mega opens on the content column only (same --max as .header-inner). */
+html body .mega-panel {
+  left: 50%;
+  right: auto;
+  width: 100%;
+  max-width: var(--max);
+  transform: translate(-50%, -6px);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+html body .mega-panel.is-open {
+  transform: translate(-50%, 0);
+}
+
+.board-pad {
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+.board-pad .lead {
+  margin-top: 0.75rem;
+}
+
+.notice {
+  border: 1px solid var(--border);
+  background: var(--cream);
+  padding: 0.85rem 1rem;
+  font-size: 0.875rem;
+  margin: 0 0 1rem;
+}
+
+.app-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-row:last-child {
+  border-bottom: none;
+}
+
+.filter-bar.is-tools {
+  display: block;
+}
+
+.filter-bar.is-tools .filter-label {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+}
+
+.filter-bar .filter-tools {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.filter-tools .form-field {
+  margin-bottom: 0;
+}
+
+.filter-tools .btn {
+  min-height: 48px;
+}
+
+.form-field select:focus {
+  border-color: var(--blue);
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.legal-copy {
+  max-width: 42em;
+}
+
+.legal-copy h2 {
+  margin: 1.75rem 0 0.5rem;
+}
+
+.legal-copy p + p {
+  margin-top: 0.75rem;
+}
+
+.admin-email {
+  display: none;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  border-left: 1px solid var(--border);
+}
+
+@media (min-width: 901px) {
+  .admin-email {
+    display: flex;
+  }
+}
+
+@media (max-width: 900px) {
+  .filter-tools {
+    grid-template-columns: 1fr 1fr;
+  }
+  .filter-tools .form-field:first-child,
+  .filter-tools .btn {
+    grid-column: 1 / -1;
+  }
 }

@@ -38,7 +38,7 @@ export function RegisterForm() {
       <Field label="Sídlo / provoz (město)" name="city">
         <input id="city" name="city" className={inputClass} />
       </Field>
-      <Field label="Firemní e-mail" name="email">
+      <Field label="Firemní e-mail" name="reg-email">
         <input id="reg-email" name="email" type="email" required className={inputClass} autoComplete="email" />
       </Field>
       {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}

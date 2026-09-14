@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { JobCard } from "@/components/job-card";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
+import { PageHero } from "@/components/preview/board";
+import { JobsTable } from "@/components/preview/jobs";
 import { cityBySlug, professionBySlug } from "@/lib/catalog";
 import { loadSearchJobs } from "@/lib/jobs/search";
 
@@ -26,28 +27,28 @@ export default async function SeoLanding({ params }: Props) {
   const jobs = catalog.ok ? catalog.rows : [];
 
   return (
-    <main className="shell py-8 sm:py-10">
-      <p className="label">SEO přistání</p>
-      <h1 className="display mt-2 text-3xl font-semibold">
-        {p.label} v městě {c.label}
-      </h1>
-      <p className="mt-2 max-w-2xl text-sm text-steel">
-        Stejný katalog jako /nabidky, jen předfiltrovaný. Žádný generovaný článek navíc.
-      </p>
-      <div className="mt-6 grid gap-3">
+    <main>
+      <PageHero
+        eyebrow="Katalog / CZ"
+        title={`${p.label} v městě ${c.label}`}
+        lead="Stejný katalog jako /nabidky, jen předfiltrovaný. Žádný generovaný článek navíc."
+      >
+        <a href="/nabidky" className="btn btn-secondary btn-square">
+          Celý katalog →
+        </a>
+      </PageHero>
+      <section className="section-band" aria-label="Výsledky">
         {!catalog.ok ? (
           <CatalogUnavailable />
         ) : jobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Tady teď nic není. Zkuste{" "}
-            <a className="underline" href="/nabidky">
-              celý katalog
-            </a>
-            .
+          <p className="lead" style={{ padding: "1.25rem 1.5rem" }}>
+            Tady teď nic není. Zkuste{" "}
+            <a href="/nabidky">celý katalog</a>.
           </p>
         ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
+          <JobsTable jobs={jobs} goLabel="Otevřít →" />
         )}
-      </div>
+      </section>
     </main>
   );
 }

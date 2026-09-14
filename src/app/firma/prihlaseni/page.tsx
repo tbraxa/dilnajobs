@@ -1,33 +1,34 @@
 import type { Metadata } from "next";
 import { LoginForm, RegisterForm } from "@/components/auth-forms";
+import { PageHero } from "@/components/preview/board";
 
 export const metadata: Metadata = { title: "Přihlášení firmy" };
 
 export default function LoginPage() {
   return (
-    <main className="wrap" style={{ padding: "2.5rem 0 3rem", display: "grid", gap: "2rem" }}>
-      <section>
-        <p className="label">Firmy</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Přihlášení e-mailem</h1>
-        <p className="mt-3 text-sm text-steel">
-          Odkaz platí 15 minut. Heslo neposíláme — a nechceme ho znát. V lokálním vývoji odkaz vypíšeme do konzole
-          serveru.
-        </p>
-        <div className="mt-6 border border-line bg-paper p-5">
+    <main>
+      <PageHero
+        eyebrow="Firmy"
+        title="Přihlášení e-mailem"
+        lead="Odkaz platí 15 minut. Heslo neposíláme — a nechceme ho znát. V lokálním vývoji odkaz vypíšeme do konzole serveru."
+      >
+        <a href="/pro-firmy" className="btn btn-secondary btn-square">
+          Ceník →
+        </a>
+      </PageHero>
+      <div className="detail-split">
+        <section className="apply-panel" aria-labelledby="login-title">
+          <h2 id="login-title">Existující firma</h2>
           <LoginForm />
-        </div>
-      </section>
-      <section>
-        <p className="label">Nová firma</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Registrace s IČO</h1>
-        <p className="mt-3 text-sm text-steel">
-          Jen přímí zaměstnavatelé. Agentury práce v podmínkách zakazujeme. IČO kontrolujeme checksumem; ARES je v1
-          stub.
-        </p>
-        <div className="mt-6 border border-line bg-paper p-5">
+        </section>
+        <section className="apply-panel" aria-labelledby="register-title">
+          <h2 id="register-title">Nová firma · IČO</h2>
+          <p className="form-hint" style={{ marginTop: 0, marginBottom: "1rem" }}>
+            Jen přímí zaměstnavatelé. Agentury práce v podmínkách zakazujeme. IČO kontrolujeme checksumem.
+          </p>
           <RegisterForm />
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }

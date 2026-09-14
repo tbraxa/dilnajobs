@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AdminLoginChrome } from "@/components/admin-chrome";
 import { AdminLoginForm } from "@/components/admin-ui";
+import { PageHero } from "@/components/preview/board";
 import { getAdminSession } from "@/lib/admin-auth";
 import { redirect } from "next/navigation";
 
@@ -15,16 +16,17 @@ export default async function AdminLoginPage() {
 
   return (
     <AdminLoginChrome>
-      <main className="mx-auto max-w-md px-4 py-16">
-        <p className="label">Provozovatel</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Přihlášení správce</h1>
-        <p className="mt-3 text-sm text-steel">
-          Oddělené od firemního portálu. Odkaz posíláme jen na adresy v <code>ADMIN_EMAILS</code>. Platí 15 minut a
-          spotřebuje se až po potvrzení tlačítkem.
-        </p>
-        <div className="mt-6 border border-line bg-paper p-5">
-          <AdminLoginForm />
-        </div>
+      <main>
+        <PageHero
+          eyebrow="Provozovatel"
+          title="Přihlášení správce"
+          lead="Oddělené od firemního portálu. Odkaz posíláme jen na adresy v ADMIN_EMAILS. Platí 15 minut a spotřebuje se až po potvrzení tlačítkem."
+        />
+        <section className="section-band">
+          <div className="board-pad" style={{ maxWidth: "28rem" }}>
+            <AdminLoginForm />
+          </div>
+        </section>
       </main>
     </AdminLoginChrome>
   );

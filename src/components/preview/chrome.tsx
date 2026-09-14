@@ -408,6 +408,9 @@ export function PreviewFooter() {
         <div className="footer-links">
           <Link href="/nabidky">Nabídky</Link>
           <Link href="/pro-firmy">Pro firmy</Link>
+          <Link href="/firma/prihlaseni">Přihlášení</Link>
+          <Link href="/gdpr">Osobní údaje</Link>
+          <Link href="/obchodni-podminky">Podmínky</Link>
           <a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a>
         </div>
       </div>
