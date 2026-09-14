@@ -13,6 +13,18 @@ Hit these from the load balancer / uptime robot. They are **public**.
 
 Do **not** point public monitors at `/api/admin/health`. That route requires the operator cookie `dj_admin`, is rate-limited (60/min per IP), and enumerates internals.
 
+Importable check list: [`monitoring/uptime.json`](../monitoring/uptime.json).
+
+### Suggested schedule (Better Stack / Checkly / any HTTP monitor)
+
+| Check | Interval | Expect |
+| --- | --- | --- |
+| `GET /api/health` | 1 min | `200` `{ "status": "ok" }` |
+| `GET /api/ready` | 1 min | `200` and `postgres.ok === true` (timeout 5 s) |
+| `GET /nabidky` | 5 min | `200` HTML containing `DílnaJobs` |
+
+Ready is a short `SELECT 1`. It does not assume a background worker. Expired ads are already hidden in the catalog even if expiry cron is late.
+
 ## Deep health (admin only)
 
 `GET /api/admin/health` and the page `/admin/health` return a structured report. Each check:
@@ -42,9 +54,9 @@ Overall rollup: `ok` if every check is ok; `degraded` if something is unconfigur
 | migrations | `schema_migrations` contains 0001–0004 |
 | object_storage | S3 keys present, **or** write+delete a probe file under `storage/cvs/` |
 | cv_disk | Same path as local CV storage (only when S3 is off) |
-| mailer | `SMTP_URL` set? last send error? |
-| payments | Stripe or GoPay secret present vs stub checkout |
-| worker | `system_heartbeats.job_expiry` — written by `npm run worker`. Missing → unconfigured. Older than 26 h → degraded. |
+| mailer | Resend / SMTP configured? last send error? else console stub |
+| payments | Stripe Checkout + webhook secret vs stub |
+| worker | `system_heartbeats.job_expiry` — `npm run worker` or `/api/cron/job-expiry`. Missing → unconfigured. Older than 26 h → degraded. |
 | rate_limiter | can read `rate_limit_events` |
 | auth | `magic_tokens` readable + `employer_user_by_email` + `SESSION_SECRET` length |
 | sentry | `SENTRY_DSN` present vs log-only |
@@ -80,15 +92,36 @@ npm run magic:admin  # prints http://localhost:3000/admin/prihlaseni/overit?toke
 
 Open the URL, click **Vstoupit do správy**. Seed also has a pending employer and a `pending_review` job so the lists are not empty.
 
-Alternatively request a link at `/admin/prihlaseni` with `tomas@dilnajobs.test` and copy it from the server console (SMTP stub).
+Alternatively request a link at `/admin/prihlaseni` with `tomas@dilnajobs.test` and copy it from the server console (email stub).
 
-### Worker heartbeat
+### Worker / cron (job expiry)
+
+Catalog already hides `expires_at < now()`. The worker still marks rows `expired` and writes a heartbeat.
+
+**Local / Cloud Run Job**
 
 ```bash
 npm run worker
 ```
 
-Expires published jobs past `expires_at` and upserts `system_heartbeats` (`job_expiry`). Cron this hourly in production. Catalog already hides expired rows even if the worker is off.
+Uses `DATABASE_ADMIN_URL` if set, otherwise `DATABASE_URL`. Calls SQL `expire_published_jobs()` (migration `0005`).
+
+**Serverless (Vercel Cron, Cloud Scheduler)**
+
+`GET` or `POST /api/cron/job-expiry` with `Authorization: Bearer $CRON_SECRET`.
+
+Vercel: `vercel.json` runs it hourly. Set `CRON_SECRET` in the project env.
+
+Cloud Scheduler example:
+
+```bash
+gcloud scheduler jobs create http dilnajobs-expiry \
+  --schedule="0 * * * *" \
+  --uri="https://dilnajobs.cz/api/cron/job-expiry" \
+  --http-method=GET \
+  --headers="Authorization=Bearer $CRON_SECRET" \
+  --time-zone="Europe/Prague"
+```
 
 ## What not to expose
 

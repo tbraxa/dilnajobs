@@ -33,8 +33,8 @@ export default function ProFirmyPage() {
         ))}
       </div>
       <p className="mt-6 text-sm text-steel">
-        Platba kartou (Stripe) nebo GoPay se zapne, až budou klíče v prostředí. Do té doby je objednávka evidovaná jako
-        stub — ozveme se.
+        Platba kartou jde přes Stripe Checkout, až bude <code>STRIPE_SECRET_KEY</code> v prostředí. Do té doby je
+        objednávka evidovaná jako stub — ozveme se.
       </p>
     </main>
   );

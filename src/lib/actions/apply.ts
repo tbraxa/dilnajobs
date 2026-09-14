@@ -4,13 +4,14 @@ import "server-only";
 
 import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
-import { db } from "@/db/client";
+import { db, sql } from "@/db/client";
 import { applications, jobs } from "@/db/schema";
 import { audit } from "@/lib/audit";
 import { clientIp } from "@/lib/auth";
 import { hashIp } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
 import { log } from "@/lib/logging";
+import { env } from "@/lib/env";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
 import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
@@ -111,12 +112,24 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
     ipHash: hashIp(ip),
   });
 
-  // Employer e-mail is a stub: the public role cannot SELECT employer_users (RLS).
-  await sendEmail({
-    to: "employer-stub@dilnajobs.cz",
-    subject: `Nová přihláška: ${job.title}`,
-    text: `${parsed.data.fullName} se hlásí na ${job.title}. Telefon: ${parsed.data.phone}.`,
-  });
+  const [owner] = await sql<{ email: string | null }[]>`
+    select employer_owner_email(${job.id}::uuid) as email
+  `;
+  if (owner?.email) {
+    try {
+      await sendEmail({
+        to: owner.email,
+        subject: `Nová přihláška: ${job.title}`,
+        text: `${parsed.data.fullName} se hlásí na ${job.title}. Telefon: ${parsed.data.phone}.${
+          parsed.data.email ? ` E-mail: ${parsed.data.email}.` : ""
+        }${parsed.data.message ? `\n\n${parsed.data.message}` : ""}\n\nPřihlášky: ${env.APP_URL}/firma`,
+      });
+    } catch (err) {
+      captureException(err, { event: "application.notify_failed", jobId: job.id, requestId });
+    }
+  } else {
+    log("warn", "application.notify_no_owner", { jobId: job.id, requestId });
+  }
 
   log("info", "application.created", { jobId: job.id, requestId });
   return { ok: true };
