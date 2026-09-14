@@ -1,61 +1,57 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Přihlášení firmy — DílnaJobs</title>
+  <title>Přihlášení firmy · DílnaJobs</title>
+  <meta name="description" content="Přihlaste se k účtu firmy odkazem z e-mailu. Správa inzerátů a odpovědí uchazečů.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap header-row">
-      <a class="logo" href="index.html">
-        <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html" aria-label="DílnaJobs">
+        <span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
         DílnaJobs
       </a>
-      <nav class="nav" aria-label="Hlavní">
+      <nav class="nav-main" aria-label="Hlavní">
         <a href="nabidky.html">Nabídky</a>
         <a href="pro-firmy.html">Pro firmy</a>
       </nav>
-      <span class="spacer"></span>
-      <a class="link-quiet" href="firma-registrace.html">Inzerovat</a>
-      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-sm" href="firma-registrace.html">Registrace firmy</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <div class="nav-mobile">
+    <nav class="nav-drawer wrap" aria-label="Mobilní">
       <a href="nabidky.html">Nabídky</a>
       <a href="pro-firmy.html">Pro firmy</a>
-      <a href="firma-registrace.html">Inzerovat</a>
-      <a href="firma-prihlaseni.html">Přihlášení firmy</a>
-    </div>
+      <a href="firma-registrace.html">Registrace firmy</a>
+    </nav>
   </header>
 
-  <main class="auth">
-    <h1>Přihlášení firmy</h1>
-    <p class="note">Pošleme odkaz na e-mail. Heslo nepoužíváme.</p>
-    <form action="#" method="post" onsubmit="this.querySelector('[data-ok]').hidden=false; return false;">
-      <label class="field">
-        <span>Firemní e-mail</span>
-        <input type="email" name="email" required autocomplete="email" placeholder="jana@firma.cz">
-      </label>
-      <button class="btn btn-accent" type="submit">Poslat přihlašovací odkaz</button>
-      <p class="note" data-ok hidden>Zkontrolujte e-mail. Odkaz platí 15 minut.</p>
-    </form>
-    <p class="auth-links">
-      <a href="firma-registrace.html">Založit účet firmy</a>
-      ·
-      <a href="pro-firmy.html">Ceník</a>
-    </p>
+  <main class="auth-page">
+    <div class="auth-card auth-card-narrow">
+      <h1>Přihlášení firmy</h1>
+      <p class="sub">Na e-mail pošleme odkaz pro přihlášení.</p>
+      <form action="#" method="post" onsubmit="return false;">
+        <div class="form-group">
+          <label for="email">Pracovní e-mail</label>
+          <input id="email" name="email" type="email" autocomplete="username" placeholder="jmeno@firma.cz" required>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Poslat přihlašovací odkaz</button>
+        <p class="auth-helper">Odkaz platí 15 minut. Heslo nepoužíváme.</p>
+      </form>
+      <p class="auth-footer">Nemáte účet? <a href="firma-registrace.html">Zaregistrujte firmu</a></p>
+      <p class="auth-note">Náhled. Odkaz zatím neodesíláme.</p>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <span>DílnaJobs · přímo od firem · bez agentur</span>
-      <span><a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a></span>
-    </div>
-  </footer>
-  <script src="app.js"></script>
+  <script src="menu.js"></script>
 </body>
 </html>
