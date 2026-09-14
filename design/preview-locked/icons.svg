@@ -3,6 +3,7 @@
   <!-- Handmade Swiss / DIN workshop pictograms · stroke 2 · 40×40 · currentColor only -->
 
   <symbol id="icon-cnc" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Spindle head + shaft + circle + table -->
     <path d="M14 6h12v5H14z"/>
     <path d="M20 11v4"/>
     <circle cx="20" cy="20" r="5"/>
@@ -11,22 +12,26 @@
   </symbol>
 
   <symbol id="icon-weld" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Diagonal electrode + V joint -->
     <path d="M10 30L28 10"/>
     <path d="M26 8l4 4"/>
     <path d="M14 30l6-4 6 4"/>
   </symbol>
 
   <symbol id="icon-setter" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Single open-end wrench -->
     <path d="M14 8h8a4 4 0 010 8h-2"/>
     <path d="M14 8v8"/>
     <path d="M20 16L10 26a3.5 3.5 0 005 5l10-10"/>
   </symbol>
 
   <symbol id="icon-electric" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Lightning bolt only -->
     <path d="M22 6L12 20h7l-3 14 12-16h-7l3-12z"/>
   </symbol>
 
   <symbol id="icon-maintain" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Crossed wrench + screwdriver -->
     <path d="M9 27l11-11"/>
     <path d="M16 12l4 4"/>
     <path d="M20 10l4 2-2 4"/>
@@ -36,11 +41,13 @@
   </symbol>
 
   <symbol id="icon-map" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Classic pin -->
     <path d="M20 34s-9-9.5-9-16a9 9 0 0118 0c0 6.5-9 16-9 16z"/>
     <circle cx="20" cy="17" r="3.5"/>
   </symbol>
 
   <symbol id="icon-factory" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 2–3 rectangular buildings, flat roofs -->
     <path d="M4 34V18h10v16"/>
     <path d="M14 34V12h10v22"/>
     <path d="M24 34V16h12v18"/>
@@ -49,21 +56,25 @@
   </symbol>
 
   <symbol id="icon-search" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Circle + handle -->
     <circle cx="17" cy="17" r="9"/>
     <path d="M24 24l9 9"/>
   </symbol>
 
   <symbol id="icon-pricing" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Price tag outline -->
     <path d="M6 18l12-12h14l4 4v14L20 36z"/>
     <circle cx="26" cy="12" r="2"/>
   </symbol>
 
   <symbol id="icon-post" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Document + lines -->
     <rect x="9" y="5" width="22" height="30" rx="1"/>
     <path d="M14 13h12M14 20h12M14 27h8"/>
   </symbol>
 
   <symbol id="icon-direct" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Two people + short link -->
     <circle cx="12" cy="12" r="4"/>
     <circle cx="28" cy="12" r="4"/>
     <path d="M6 30c0-5 3-8 6-8s6 3 6 8"/>
@@ -72,6 +83,7 @@
   </symbol>
 
   <symbol id="icon-why" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Circle + checkmark -->
     <circle cx="20" cy="20" r="14"/>
     <path d="M12 20l5 5 11-11"/>
   </symbol>
