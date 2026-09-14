@@ -27,7 +27,8 @@ export const viewport: Viewport = {
   themeColor: "#F2F0EA",
 };
 
-const FIRST_PAINT = "html,body{background-color:#F2F0EA;color:#0B0D12}body{font-family:Inter,system-ui,sans-serif}";
+const FIRST_PAINT =
+  "html,body{background-color:#F2F0EA;color:#0B0D12}html{scrollbar-gutter:stable;overflow-x:hidden}body{width:100%;overflow-x:hidden;font-family:Inter,system-ui,sans-serif}";
 
 async function employerPostHref(): Promise<string> {
   try {

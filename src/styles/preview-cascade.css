@@ -2,6 +2,8 @@
 html {
   background-color: #f2f0ea;
   color: #0b0d12;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
 }
 html body {
   background-color: var(--cream);
@@ -11,6 +13,20 @@ html body {
   --font-display: Satoshi;
   --font-body: Inter;
   font-family: Inter, system-ui, sans-serif;
+  width: 100%;
+  max-width: none;
+  overflow-x: hidden;
+}
+
+/* Same column math on every public route — never 100vw (includes scrollbar). */
+html body .header-inner,
+html body .auth-shell,
+html body .hero-board,
+html body .page-hero,
+html body .site-footer {
+  max-width: var(--max);
+  margin-inline: auto;
+  width: 100%;
 }
 
 .tags .chip,

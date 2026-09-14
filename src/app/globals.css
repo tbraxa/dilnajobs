@@ -3,6 +3,8 @@
 html {
   background-color: #f2f0ea;
   color: #0b0d12;
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
 }
 
 /* Portal/admin aliases → locked preview tokens (docs/design-tokens-locked.md). */
