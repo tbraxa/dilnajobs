@@ -18,10 +18,11 @@ Header **Hledat** on this page focuses `#hledat`. **Inzerovat** stays secondary 
 
 One sticky control surface (`#filtry`), not three stacked bars.
 
-- Desktop: keyword + město + profese + řazení + Hledat stay visible while results scroll.
+- Desktop: keyword + město + profese + řazení + Hledat stay visible while results scroll (sticky top bar on the `--max` board). A left filter rail would fight the single workshop column, so we do not split the page SJ-style.
 - Chips live in the same HQ. Active filters show a status line and **Zrušit filtry**.
 - Result count sits under the HQ.
 - Mobile: keyword first; město / profese / řazení open in a sheet (`#filtry-sheet`).
+- Empty results stay human. We do not fake an alert product — “upozornit mě” is a mailto until it exists.
 
 ## What we do not copy
 

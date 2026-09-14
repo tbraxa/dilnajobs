@@ -55,7 +55,8 @@ export default async function NabidkyPage({
           <div className="empty-seek">
             <p className="lead">
               Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici, nebo{" "}
-              <a href="/nabidky">zrušte filtry</a>.
+              <a href="/nabidky">zrušte filtry</a>. Hlídání nabídek ještě nemáme — když chcete vědět, až se něco objeví, napište na{" "}
+              <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">ahoj@dilnajobs.cz</a>.
             </p>
           </div>
         ) : (
