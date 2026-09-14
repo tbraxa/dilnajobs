@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { PreviewFooter, PreviewHeader } from "@/components/preview/chrome";
+import { PreviewSpriteDefs } from "@/components/preview/sprite";
 import { resolveAppUrl } from "@/lib/app-url";
 import "./globals.css";
 import "@/styles/preview.css";
@@ -28,16 +29,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const isAdmin = pathname.startsWith("/admin");
   return (
     <html lang="cs">
-      <body className={isAdmin ? undefined : "dot-grid"} data-nonce={nonce}>
-        <a className="skip" href="#obsah">
-          Přeskočit na obsah
-        </a>
+      <body data-nonce={nonce}>
+        <PreviewSpriteDefs />
         {isAdmin ? (
           <div id="obsah">{children}</div>
         ) : (
           <>
             <PreviewHeader />
-            <div id="obsah">{children}</div>
+            {children}
             <PreviewFooter />
           </>
         )}

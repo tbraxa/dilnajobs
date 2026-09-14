@@ -1,83 +1,48 @@
 import Link from "next/link";
-import { CITIES, PROFESSIONS } from "@/lib/catalog";
+import { CITIES } from "@/lib/catalog";
 import { toNabidkyHref, type SearchQuery } from "@/lib/search-params";
-import { SpriteIcon } from "./sprite";
 
-const ICONS: Record<string, string> = {
-  cnc: "cnc",
-  welder: "welder",
-  setter: "setter",
-  electrician: "electrician",
-  maintenance: "maintenance",
-  locksmith: "locksmith",
-  operator: "operator",
-};
+const PROFESSION_CHIPS = [
+  { label: "CNC", profession: "cnc" },
+  { label: "Sváření", profession: "welder" },
+  { label: "Zámečník", profession: "locksmith" },
+] as const;
 
 export function FilterChips({ defaults }: { defaults?: SearchQuery }) {
+  const regionChips = CITIES.slice(0, 3);
   return (
-    <div className="filter-bar">
-      <Link href={toNabidkyHref(defaults, { profession: undefined })} className={`filter-chip${defaults?.profession ? "" : " is-on"}`}>
+    <div className="filter-bar" role="group" aria-label="Filtry">
+      <span className="filter-label">Filtr</span>
+      <Link
+        href={toNabidkyHref(defaults, { profession: undefined, city: undefined })}
+        className={`filter-chip${!defaults?.profession && !defaults?.city ? " is-active" : ""}`}
+      >
         Vše
       </Link>
-      {PROFESSIONS.map((p) => {
-        const on = defaults?.profession === p.db;
+      {PROFESSION_CHIPS.map((chip) => {
+        const on = defaults?.profession === chip.profession;
         return (
           <Link
-            key={p.db}
-            href={toNabidkyHref(defaults, { profession: on ? undefined : p.db })}
-            className={`filter-chip${on ? " is-on" : ""}`}
+            key={chip.profession}
+            href={toNabidkyHref(defaults, { profession: on ? undefined : chip.profession })}
+            className={`filter-chip${on ? " is-active" : ""}`}
           >
-            <SpriteIcon name={ICONS[p.db] ?? "operator"} />
-            {p.label}
+            {chip.label}
+          </Link>
+        );
+      })}
+      {regionChips.map((city) => {
+        const on = defaults?.city === city.label;
+        return (
+          <Link
+            key={city.slug}
+            href={toNabidkyHref(defaults, { city: on ? undefined : city.label })}
+            className={`filter-chip${on ? " is-active" : ""}`}
+          >
+            {city.region}
           </Link>
         );
       })}
     </div>
-  );
-}
-
-export function PreviewFilters({ defaults }: { defaults?: SearchQuery }) {
-  return (
-    <>
-      <FilterChips defaults={defaults} />
-      <form className="filters" action="/nabidky" method="get">
-        <label className="field">
-          <span className="micro">Hledat</span>
-          <input name="q" defaultValue={defaults?.q} placeholder="Pozice, nástroj, technologie" />
-        </label>
-        <label className="field">
-          <span className="micro">Profese</span>
-          <select name="profession" defaultValue={defaults?.profession ?? ""}>
-            <option value="">Všechny</option>
-            {PROFESSIONS.map((p) => (
-              <option key={p.db} value={p.db}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span className="micro">Město</span>
-          <select name="city" defaultValue={defaults?.city ?? ""}>
-            <option value="">Celá ČR</option>
-            {CITIES.map((c) => (
-              <option key={c.slug} value={c.label}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span className="micro">Řazení</span>
-          <select name="sort" defaultValue={defaults?.sort ?? "newest"}>
-            <option value="newest">Nejnovější</option>
-            <option value="salary">Mzda</option>
-          </select>
-        </label>
-        <button className="btn btn-square btn-primary" type="submit">
-          Filtrovat
-        </button>
-      </form>
-    </>
   );
 }
