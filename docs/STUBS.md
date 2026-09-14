@@ -9,7 +9,7 @@ Everything else is implemented against real Postgres. These integrations are **i
 | **Stripe** | Missing `STRIPE_SECRET_KEY` → checkout creates `orders.status = 'stub'`. | Set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`. Endpoint: `POST /api/stripe/webhook`. |
 | **ARES IČO** | Checksum + format only. `verification_status` stays `pending` until ops marks verified. | Call ARES in `src/lib/ico.ts` `verifyIcoViaAres`. |
 | **First-post review** | New jobs from the portal are `pending_review`. Moderate at `/admin/jobs`. `FEATURE_AUTO_PUBLISH_FIRST_JOB` default false. | Leave the flag false in production. |
-| **Job expiry** | Catalog hides `expires_at < now()`. Heartbeat via `npm run worker` or `GET/POST /api/cron/job-expiry` (`CRON_SECRET`). | Cron hourly. See `docs/OPS.md`. |
+| **Job expiry** | Catalog hides `expires_at < now()`. Heartbeat via `npm run worker` or `GET/POST /api/cron/job-expiry` (`CRON_SECRET`). | Vercel Hobby: daily 04:00 UTC. Hourly needs Pro / Cloud Scheduler. See `docs/OPS.md`. |
 | **Sentry** | Empty `SENTRY_DSN` → no SDK init. `captureException` still writes structured logs. | Set `SENTRY_DSN`. |
 | **SEO landings** | `/prace/[profese]/[mesto]` filters the same jobs table. No generated content mill. | Add unique intro copy per pair later. |
 

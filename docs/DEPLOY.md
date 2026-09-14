@@ -32,7 +32,7 @@ Never commit secrets. No `NEXT_PUBLIC_` secrets.
 
 1. Import the GitHub repo. Framework: Next.js (no extra `vercel.json` build config).
 2. Attach a Postgres instance (Neon / RDS / Cloud SQL via VPC). Run `npm run db:migrate` against `DATABASE_ADMIN_URL` once (local or a one-off).
-3. Set env vars above. `vercel.json` already schedules hourly `GET /api/cron/job-expiry`. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`.
+3. Set env vars above. `vercel.json` schedules `GET /api/cron/job-expiry` once daily at **04:00 UTC** (`0 4 * * *`). Hobby plans only allow at most one cron run per day; Vercel Pro is required for hourly. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`. The catalog already hides `expires_at < now()`, so a daily sweep is enough on Hobby.
 4. Stripe webhook URL: `https://<prod>/api/stripe/webhook` (raw body, signature verified).
 5. `/api/health` and `/api/ready` are serverless: liveness has no DB; ready is `SELECT 1` with a 1.5s timeout. The web process does **not** run the expiry worker.
 
@@ -51,7 +51,7 @@ gcloud run deploy dilnajobs \
 
 Image is Next.js `standalone` (`NEXT_OUTPUT=standalone` at build). Cloud SQL: use the Unix socket in `DATABASE_URL` or Auth Proxy.
 
-**Expiry:** Cloud Scheduler → HTTP `POST https://…/api/cron/job-expiry` with `Authorization: Bearer $CRON_SECRET` every hour. Alternatively a Cloud Run Job:
+**Expiry:** Cloud Scheduler → HTTP `POST https://…/api/cron/job-expiry` with `Authorization: Bearer $CRON_SECRET` (hourly is fine here; Vercel Hobby cannot). Alternatively a Cloud Run Job:
 
 ```bash
 gcloud run jobs execute dilnajobs-expiry --command npm --args=run,worker
