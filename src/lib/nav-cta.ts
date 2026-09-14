@@ -5,6 +5,7 @@ export const NAV = {
   howItWorks: "/#jak",
   nabidky: "/nabidky",
   nabidkyFilters: "/nabidky#filtry",
+  homeSearch: "/#hledat",
   proFirmy: "/pro-firmy",
   cenik: "/pro-firmy#cenik",
   login: "/firma/prihlaseni",

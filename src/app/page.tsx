@@ -1,5 +1,6 @@
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
-import { JobsTable, LiveRows } from "@/components/preview/jobs";
+import { JobsTable } from "@/components/preview/jobs";
+import { QuickChips, SearchPanel } from "@/components/preview/search-panel";
 import { loadFeaturedJobs } from "@/lib/jobs/search";
 
 export const dynamic = "force-dynamic";
@@ -7,53 +8,52 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const catalog = await loadFeaturedJobs(6);
   const jobs = catalog.ok ? catalog.rows : [];
+  const count = jobs.length;
+  const countLabel = count === 1 ? "nabídka" : count < 5 ? "nabídky" : "nabídek";
+
   return (
     <main>
-      <section className="hero-board" aria-label="Úvod">
-        <div className="hero-main">
+      <section className="seek-hero" aria-label="Hledat práci">
+        <p className="eyebrow">Výroba / CZ</p>
+        <h1>Práce ve výrobě. Přímo od firem.</h1>
+        <p className="lead">CNC, svářeči, seřizovači. Bez agentur, bez povinného účtu.</p>
+        <SearchPanel />
+        <QuickChips />
+      </section>
+
+      <section className="section-band" aria-labelledby="openings-title">
+        <div className="section-head">
           <div>
-            <p className="eyebrow">Výroba / CZ</p>
-            <h1>
-              Práce ve výrobě.
-              <br />
-              Přímo od <span className="hl">firem</span>.
-            </h1>
-            <p className="lead">
-              CNC, svářeči, seřizovači a další technické pozice. Bez personálních agentur mezi vámi a dílnou.
-            </p>
+            <p className="eyebrow">Otevřené pozice</p>
+            <h2 id="openings-title">Aktuální nabídky</h2>
+            {catalog.ok && jobs.length > 0 ? (
+              <p className="seek-count">
+                {count} {countLabel} teď online
+              </p>
+            ) : null}
           </div>
-          <div className="hero-ctas">
-            <a href="/nabidky" className="btn btn-primary btn-lg btn-square">
-              Prohlédnout nabídky →
-            </a>
-            <a href="/firma/registrace" className="btn btn-secondary btn-lg btn-square">
-              Vystavit nabídku
-            </a>
-          </div>
+          <a href="/nabidky" className="btn btn-secondary btn-square">
+            Všechny nabídky →
+          </a>
         </div>
-        <aside className="hero-live" aria-label="Živý přehled nabídek">
-          <div className="live-head">
-            <span className="live-label">Živé nabídky</span>
-            <a href="/nabidky" className="btn btn-ghost btn-sm">
-              Vše →
-            </a>
-          </div>
-          {!catalog.ok ? (
-            <CatalogUnavailable />
-          ) : jobs.length === 0 ? (
-            <p className="lead" style={{ padding: "1.15rem" }}>
-              Na nástěnce teď nic není.
+        {!catalog.ok ? (
+          <CatalogUnavailable />
+        ) : jobs.length === 0 ? (
+          <div className="empty-seek">
+            <p className="lead">
+              Na nástěnce teď nic není. Hledání nahoře funguje — zkuste CNC nebo Ostravu, nebo napište na{" "}
+              <a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a>.
             </p>
-          ) : (
-            <LiveRows jobs={jobs.slice(0, 4)} />
-          )}
-        </aside>
+          </div>
+        ) : (
+          <JobsTable jobs={jobs} goLabel="Otevřít →" />
+        )}
       </section>
 
       <section className="hero-how" id="jak" aria-label="Jak to funguje">
         <div className="hero-how-intro">
           <p className="eyebrow">Jak to funguje</p>
-          <p>Nabídky přímo od výrobních firem. Odpovíte jedním formulářem — firma vám zavolá sama.</p>
+          <p>Vyberete nabídku, odpovíte firmě — zavolají oni. Bez registrace.</p>
         </div>
         <div className="manifesto-steps">
           <div className="m-step">
@@ -67,7 +67,7 @@ export default async function HomePage() {
             <span className="m-num">02</span>
             <div>
               <strong>Odpovíte firmě</strong>
-              <p>Jméno, telefon, volitelně CV. Bez registrace.</p>
+              <p>Jméno, telefon, volitelně CV.</p>
             </div>
           </div>
           <div className="m-step">
@@ -80,35 +80,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section-band" aria-labelledby="openings-title">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Otevřené pozice</p>
-            <h2 id="openings-title">Aktuální nabídky</h2>
-          </div>
-          <a href="/nabidky" className="btn btn-secondary btn-square">
-            Všechny nabídky →
-          </a>
-        </div>
-        {!catalog.ok ? (
-          <CatalogUnavailable />
-        ) : jobs.length === 0 ? (
-          <p className="lead" style={{ padding: "1.25rem 2rem" }}>
-            Na nástěnce teď nic není. Zkuste to později.
-          </p>
-        ) : (
-          <JobsTable jobs={jobs} />
-        )}
-      </section>
-
       <section className="employer-strip" aria-labelledby="firmy-title">
         <div className="es-copy">
           <p className="eyebrow">Pro firmy</p>
           <h2 id="firmy-title">Hledáte lidi do výroby?</h2>
-          <p>
-            Inzerujte tam, kde uchazeči filtrují podle profese, směn a mzdy — ne podle „jakékoli brigády“. Odpovědi jdou
-            rovnou k vám.
-          </p>
+          <p>Inzerujte tam, kde uchazeči filtrují podle profese a mzdy. Odpovědi jdou rovnou k vám.</p>
           <div className="hero-ctas">
             <a href="/firma/registrace" className="btn btn-accent btn-lg btn-square">
               Vystavit nabídku

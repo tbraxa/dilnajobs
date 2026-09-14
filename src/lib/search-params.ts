@@ -7,12 +7,18 @@ export type SearchQuery = {
   sort?: "newest" | "salary";
 };
 
+function one(input: string | string[] | undefined): string | undefined {
+  if (typeof input !== "string") return undefined;
+  const trimmed = input.trim();
+  return trimmed ? trimmed : undefined;
+}
+
 export function parseSearch(input: Record<string, string | string[] | undefined>): SearchQuery {
   const raw = {
-    q: typeof input.q === "string" ? input.q : undefined,
-    profession: typeof input.profession === "string" ? input.profession : undefined,
-    city: typeof input.city === "string" ? input.city : undefined,
-    sort: typeof input.sort === "string" ? input.sort : undefined,
+    q: one(input.q),
+    profession: one(input.profession),
+    city: one(input.city),
+    sort: one(input.sort),
   };
   const parsed = searchSchema.safeParse(raw);
   if (!parsed.success) return { sort: "newest" };
@@ -40,4 +46,9 @@ export function toNabidkyHref(query: SearchQuery | undefined, patch: SearchPatch
   if (next.sort && next.sort !== "newest") params.set("sort", next.sort);
   const qs = params.toString();
   return qs ? `/nabidky?${qs}` : "/nabidky";
+}
+
+export function hasActiveFilters(query: SearchQuery | undefined): boolean {
+  if (!query) return false;
+  return Boolean(query.q || query.profession || query.city || (query.sort && query.sort !== "newest"));
 }

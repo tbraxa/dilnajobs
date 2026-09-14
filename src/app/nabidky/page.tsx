@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
-import { FilterChips } from "@/components/preview/filters";
+import { FilterHq } from "@/components/preview/filter-hq";
 import { JobsTable } from "@/components/preview/jobs";
 import { parseSearch, loadSearchJobs } from "@/lib/jobs/search";
+import { hasActiveFilters } from "@/lib/search-params";
 
 export const metadata: Metadata = { title: "Nabídky" };
 export const dynamic = "force-dynamic";
@@ -18,39 +19,45 @@ export default async function NabidkyPage({
   const jobs = catalog.ok ? catalog.rows : [];
   const count = jobs.length;
   const countLabel = count === 1 ? "výsledek" : count < 5 ? "výsledky" : "výsledků";
+  const filtered = hasActiveFilters(query);
 
   return (
     <main>
-      <section className="page-hero">
+      <section className="seek-head">
         <div>
-          <p className="eyebrow">Katalog / CZ</p>
+          <p className="eyebrow">Nabídky / CZ</p>
           <h1>Nabídky</h1>
-          <p className="lead">
-            Filtrujte podle profese a města. Na mobilu karty, na desktopu přehledná tabulka. Agenturní inzeráty tady
-            nejsou.
-          </p>
         </div>
-        <a href="/pro-firmy" className="btn btn-secondary btn-square">
-          Jste firma? →
+        <a href="/pro-firmy" className="btn btn-ghost btn-square">
+          Jste firma?
         </a>
       </section>
 
-      <FilterChips defaults={query} />
+      <FilterHq defaults={query} />
 
       <div className="results-meta">
         <span>
-          {catalog.ok ? `${count} ${countLabel} · řazeno: ${query.sort === "salary" ? "mzda" : "nejnovější"}` : "Katalog je dočasně nedostupný."}
+          {catalog.ok
+            ? `${count} ${countLabel}${filtered ? "" : " · řazeno od nejnovějších"}`
+            : "Nabídky teď nejsou k dispozici."}
         </span>
-        <span>Aktuální výpis</span>
+        {filtered ? (
+          <a href="/nabidky">Zrušit filtry</a>
+        ) : (
+          <span>Přímo od firem</span>
+        )}
       </div>
 
       <section className="section-band" aria-label="Výsledky">
         {!catalog.ok ? (
           <CatalogUnavailable />
         ) : jobs.length === 0 ? (
-          <p className="lead" style={{ padding: "1.25rem 1.5rem" }}>
-            Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici.
-          </p>
+          <div className="empty-seek">
+            <p className="lead">
+              Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici, nebo{" "}
+              <a href="/nabidky">zrušte filtry</a>.
+            </p>
+          </div>
         ) : (
           <JobsTable jobs={jobs} goLabel="Otevřít →" />
         )}
@@ -59,7 +66,7 @@ export default async function NabidkyPage({
       <section className="cta-panel">
         <div>
           <h2>Nenašli jste svou profesi?</h2>
-          <p>Napište nám, co hledáte. Až se objeví odpovídající nabídka, dáme vědět — bez spamu.</p>
+          <p>Napište, co hledáte. Až se objeví odpovídající nabídka, dáme vědět — bez spamu.</p>
         </div>
         <a href="mailto:ahoj@dilnajobs.cz?subject=Hledám%20profesi" className="btn btn-accent btn-lg btn-square">
           Napsat →

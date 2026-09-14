@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { toNabidkyHref } from "./search-params";
+import { hasActiveFilters, toNabidkyHref } from "./search-params";
 
 describe("toNabidkyHref", () => {
   it("clears profession when the key is present as undefined", () => {
@@ -14,5 +14,21 @@ describe("toNabidkyHref", () => {
 
   it("omits default newest sort", () => {
     expect(toNabidkyHref({ sort: "newest" })).toBe("/nabidky");
+  });
+});
+
+describe("hasActiveFilters", () => {
+  it("ignores default newest sort", () => {
+    expect(hasActiveFilters({ sort: "newest" })).toBe(false);
+  });
+
+  it("detects keyword, profession, or city", () => {
+    expect(hasActiveFilters({ q: "Fanuc", sort: "newest" })).toBe(true);
+    expect(hasActiveFilters({ profession: "cnc", sort: "newest" })).toBe(true);
+    expect(hasActiveFilters({ city: "Brno", sort: "newest" })).toBe(true);
+  });
+
+  it("treats salary sort as an active filter", () => {
+    expect(hasActiveFilters({ sort: "salary" })).toBe(true);
   });
 });

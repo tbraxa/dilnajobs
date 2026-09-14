@@ -28,5 +28,6 @@ describe("NAV", () => {
     expect(NAV.cenik).toBe("/pro-firmy#cenik");
     expect(NAV.howItWorks).toBe("/#jak");
     expect(NAV.nabidkyFilters).toBe("/nabidky#filtry");
+    expect(NAV.homeSearch).toBe("/#hledat");
   });
 });

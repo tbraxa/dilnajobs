@@ -12,7 +12,7 @@ Source of truth for public labels. If a label changes, the URL must still match 
 | Nabídky (mega) | see mega below |
 | Pro firmy (mega) | see mega below |
 | Jak to funguje | `/#jak` (plain link, no mega) |
-| Hledat | `/nabidky` |
+| Hledat | `/#hledat` on homepage, `/nabidky` elsewhere |
 | Inzerovat → | `/firma/registrace` or `/firma/nabidky/nova` |
 
 ## Mobile drawer
@@ -22,16 +22,17 @@ Source of truth for public labels. If a label changes, the URL must still match 
 | Nabídky accordion | same destinations as Nabídky mega |
 | Pro firmy accordion | same destinations as Pro firmy mega |
 | Jak to funguje | `/#jak` |
-| Prohlédnout nabídky | `/nabidky` |
+| Hledat nabídky | `/#hledat` on homepage, `/nabidky` elsewhere |
 | Inzerovat → | `/firma/registrace` or `/firma/nabidky/nova` |
 
 ## Homepage
 
+Search is the product. Employer CTAs stay below the fold. IA: `docs/ux-candidate-first.md`.
+
 | Label | URL |
 | --- | --- |
-| Prohlédnout nabídky → (hero) | `/nabidky` |
-| Vystavit nabídku (hero) | `/firma/registrace` |
-| Vše → (live board) | `/nabidky` |
+| Hledat nabídky (search panel) | `GET /nabidky?q=&city=` |
+| Quick chips (CNC, Svářeč, … / cities) | `/nabidky?profession=` or `?city=` |
 | Všechny nabídky → | `/nabidky` |
 | Vystavit nabídku (employer strip) | `/firma/registrace` |
 | Zobrazit ceník → | `/pro-firmy#cenik` |

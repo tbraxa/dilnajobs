@@ -1866,7 +1866,7 @@ h3 { font-size: 1.2rem; letter-spacing: -0.02em; }
 @media (max-width: 900px) {
   .nav-desktop { display: none; }
   .nav-toggle { display: flex; }
-  .header-actions .btn-ghost { display: none; }
+  .header-actions .btn-secondary { display: none; }
   .mega-panel { display: none !important; }
 }
 

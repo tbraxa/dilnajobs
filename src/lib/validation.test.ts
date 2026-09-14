@@ -105,4 +105,8 @@ describe("parseSearch", () => {
   it("drops unknown profession instead of throwing", () => {
     expect(parseSearch({ profession: "astronaut" })).toEqual({ sort: "newest" });
   });
+
+  it("ignores empty GET fields instead of dropping the rest of the query", () => {
+    expect(parseSearch({ q: "Fanuc", city: "", sort: "" })).toEqual({ q: "Fanuc", sort: "newest" });
+  });
 });

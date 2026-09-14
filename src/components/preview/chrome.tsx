@@ -244,10 +244,10 @@ export function PreviewHeader({
             </div>
           </nav>
           <div className="header-actions">
-            <Link href={NAV.nabidky} className="btn btn-ghost btn-square" onClick={dismissOverlays}>
+            <a href={pathname === "/" ? NAV.homeSearch : NAV.nabidky} className="btn btn-primary btn-square" onClick={dismissOverlays}>
               Hledat
-            </Link>
-            <Link href={postHref} className="btn btn-primary btn-square" onClick={dismissOverlays}>
+            </a>
+            <Link href={postHref} className="btn btn-secondary btn-square" onClick={dismissOverlays}>
               Inzerovat →
             </Link>
             <button
@@ -386,10 +386,10 @@ export function PreviewHeader({
           </a>
         </div>
         <div className="drawer-cta">
-          <Link href={NAV.nabidky} className="btn btn-secondary btn-block btn-square" data-drawer-close>
-            Prohlédnout nabídky
-          </Link>
-          <Link href={postHref} className="btn btn-primary btn-block btn-square" data-drawer-close>
+          <a href={pathname === "/" ? NAV.homeSearch : NAV.nabidky} className="btn btn-primary btn-block btn-square" data-drawer-close>
+            Hledat nabídky
+          </a>
+          <Link href={postHref} className="btn btn-secondary btn-block btn-square" data-drawer-close>
             Inzerovat →
           </Link>
         </div>

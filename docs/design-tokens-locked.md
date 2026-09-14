@@ -62,7 +62,7 @@ background-size: 24px 24px;
 
 **Header** (`.site-header`) — 60px, cream/blur. `.logo-mark` is a **22px ink square with a 2×2 of small squares** (3px padding, 2px gap; cells 1+4 blue, 2+3 cream-alt). Not round dots, not a single solid cell. Mega triggers with chevrons: Nabídky / Pro firmy / Jak to funguje. `.mega-panel` is content-width (`--max: 1180px`), aligned to `.header-inner` borders — not viewport edge-to-edge.
 
-**Hero** (`.hero-board`) — split `.hero-main` + `.hero-live`. Headline: “Práce ve výrobě. Přímo od **firem**.” Dual CTAs: `.btn-primary` + `.btn-secondary`, both `.btn-square`.
+**Hero** — candidate-first homepage uses `.seek-hero` (headline + search panel + chips), not the marketing `.hero-board` split. Auth and other boards may still use `.hero-board`. Headline: “Práce ve výrobě. Přímo od firem.” Search CTA is `.btn-primary.btn-square`. Employer dual CTAs stay in `.employer-strip` below the fold.
 
 **Jobs** — desktop `.jobs-table` (Profese / Kraj / Mzda / Směny / go), mobile `.jobs-cards` / `.job-card`. Tags use `.chip`; “Nové” is `.chip.is-blue`.
 
