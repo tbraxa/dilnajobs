@@ -1,0 +1,62 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ApplyForm } from "@/components/apply-form";
+import { professionIcon } from "@/components/icons";
+import { getPublishedJobBySlug } from "@/lib/jobs/search";
+import { formatSalary } from "@/lib/pricing";
+import { professionByDb } from "@/lib/catalog";
+
+type Props = { params: Promise<{ slug: string }> };
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const row = await getPublishedJobBySlug(slug);
+  if (!row) return { title: "Nabídka" };
+  return { title: `${row.job.title} — ${row.job.city}` };
+}
+
+export default async function JobPage({ params }: Props) {
+  const { slug } = await params;
+  const row = await getPublishedJobBySlug(slug);
+  if (!row) notFound();
+  const { job, companyName } = row;
+  const Icon = professionIcon(job.profession);
+  const profession = professionByDb(job.profession);
+
+  return (
+    <main className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-12">
+      <article className="lg:col-span-7">
+        <p className="label">{companyName}</p>
+        <h1 className="display mt-2 text-3xl font-semibold sm:text-4xl">{job.title}</h1>
+        <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-steel">
+          <Icon className="h-4 w-4 text-ink" />
+          {profession?.label} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
+          {job.shiftNote ? ` · ${job.shiftNote}` : null}
+        </p>
+        <section className="mt-8 space-y-6 text-[15px] leading-relaxed">
+          <div>
+            <h2 className="label mb-2">Práce</h2>
+            <p className="whitespace-pre-wrap">{job.description}</p>
+          </div>
+          {job.requirements ? (
+            <div>
+              <h2 className="label mb-2">Koho hledáme</h2>
+              <p className="whitespace-pre-wrap">{job.requirements}</p>
+            </div>
+          ) : null}
+          {job.benefits ? (
+            <div>
+              <h2 className="label mb-2">Co je na stole</h2>
+              <p className="whitespace-pre-wrap">{job.benefits}</p>
+            </div>
+          ) : null}
+        </section>
+      </article>
+      <aside className="lg:col-span-5">
+        <ApplyForm jobId={job.id} />
+      </aside>
+    </main>
+  );
+}
