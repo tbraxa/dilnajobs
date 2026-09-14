@@ -18,7 +18,7 @@ npm run dev
 
 Otevřete [http://localhost:3000](http://localhost:3000).
 
-Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru (e-mail je v1 stub).
+Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru. Odkaz otevře potvrzovací stránku (prohlížeče odkazy přednačítají — token se spotřebuje až po kliknutí na **Vstoupit do firmy**).
 
 Volitelné MinIO: `docker compose --profile storage up -d` a doplňte `S3_*` v `.env`.
 

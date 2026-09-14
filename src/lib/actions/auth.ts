@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { destroySession, requestMagicLink } from "@/lib/auth";
+import { consumeMagicLink, destroySession, requestMagicLink } from "@/lib/auth";
 import { magicLinkSchema } from "@/lib/validation";
 
 export type AuthState = { ok: true; message: string } | { ok: false; error: string };
@@ -41,4 +41,10 @@ export async function requestLinkAction(_prev: AuthState | null, formData: FormD
 export async function logoutAction() {
   await destroySession();
   redirect("/firma/prihlaseni");
+}
+
+export async function confirmMagicLinkAction(token: string) {
+  const ok = await consumeMagicLink(token);
+  if (!ok) redirect("/firma/prihlaseni?chyba=odkaz");
+  redirect("/firma");
 }
