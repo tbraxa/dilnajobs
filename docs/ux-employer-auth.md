@@ -19,8 +19,9 @@ Public auth pages keep the same `PreviewHeader` / `PreviewFooter` as the homepag
 
 ## Layout
 
-- One narrow card per page, max-width **460–480px**.
-- Desktop **≥900px**: left trust column (3 short bullets) + right card. Mobile: card only.
+- One narrow card per page, max-width **460–480px**, **left-aligned** to the homepage hero copy (not centered in the column).
+- Desktop **≥900px**: card on the left, trust column on the right (same rhythm as HP hero + live panel). Mobile: card only.
+- Auth sits in the same cream-alt bordered board as `.hero-board` (`--max`, left/right borders) so the footer is not floating in empty dotted cream.
 - Inputs: min-height ~44px (IČO ~52px). Square buttons.
 
 ### Login trust

@@ -14,6 +14,7 @@ export function AuthShell({
   return (
     <main className="auth-shell">
       <div className="auth-layout">
+        <div className="auth-stack">{children}</div>
         <aside className="auth-trust">
           <p className="eyebrow">{eyebrow}</p>
           <h1>{heading}</h1>
@@ -23,7 +24,6 @@ export function AuthShell({
             ))}
           </ul>
         </aside>
-        <div className="auth-stack">{children}</div>
       </div>
     </main>
   );

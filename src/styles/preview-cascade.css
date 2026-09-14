@@ -16,6 +16,15 @@ html body {
   width: 100%;
   max-width: none;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+html body > main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Same column math on every public route — never 100vw (includes scrollbar). */
@@ -27,6 +36,9 @@ html body .site-footer {
   max-width: var(--max);
   margin-inline: auto;
   width: 100%;
+}
+html body .site-footer {
+  margin-top: auto;
 }
 
 .tags .chip,
@@ -189,18 +201,25 @@ html body a.drawer-acc-btn {
   font-family: Satoshi, system-ui, sans-serif;
 }
 
-/* Employer / admin auth — compact cards, not PageHero + apply-panel. */
+/* Employer auth — same board column as homepage hero, form on the left. */
 .auth-shell {
+  flex: 1 0 auto;
   max-width: var(--max);
-  margin: 0 auto;
-  padding: 2.25rem var(--gutter) 4rem;
-  background: transparent;
+  width: 100%;
+  margin-inline: auto;
+  padding: 3.25rem 2.5rem 3rem;
+  background: var(--cream-alt);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   font-family: Inter, system-ui, sans-serif;
 }
 
 .auth-layout {
   display: grid;
   gap: 2rem;
+  justify-content: start;
+  justify-items: stretch;
+  width: 100%;
 }
 
 .auth-trust {
@@ -242,7 +261,7 @@ html body a.drawer-acc-btn {
   gap: 1.15rem;
   width: 100%;
   max-width: 480px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .auth-card {
@@ -446,19 +465,34 @@ html body a.drawer-acc-btn {
 
 @media (min-width: 900px) {
   .auth-layout {
-    grid-template-columns: minmax(0, 240px) minmax(0, 480px);
-    justify-content: center;
+    grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+    justify-content: start;
     align-items: start;
-    gap: 3.25rem;
-    padding-top: 0.5rem;
+    gap: 0;
   }
 
   .auth-trust {
     display: block;
+    border-left: 1px solid var(--border);
+    padding: 0 0 0 2.5rem;
+    margin-left: 2.5rem;
+    min-height: 400px;
   }
 
   .auth-stack {
     margin: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  html body .auth-shell {
+    padding: 2rem 1.5rem 2.5rem;
+  }
+}
+
+@media (max-width: 720px) {
+  html body .auth-shell {
+    padding: 1.5rem 1rem 2rem;
   }
 }
 

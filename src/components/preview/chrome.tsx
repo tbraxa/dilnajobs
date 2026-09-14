@@ -58,7 +58,7 @@ export function PreviewHeader({
 
   function dismissOverlays() {
     window.clearTimeout(leaveTimer.current);
-    hoverLockUntil.current = Date.now() + 600;
+    hoverLockUntil.current = Date.now() + 800;
     setOpenMega(null);
     setDrawer(false);
     setAcc(null);
@@ -67,8 +67,6 @@ export function PreviewHeader({
 
   useEffect(() => {
     dismissOverlays();
-    // Close leftover hover mega after client navigation; do not reopen until hoverLock expires.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- pathname only
   }, [pathname]);
 
   useEffect(() => {
@@ -271,6 +269,9 @@ export function PreviewHeader({
           data-cols="3"
           role="region"
           aria-label="Nabídky"
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest("a")) dismissOverlays();
+          }}
         >
           <div className="mega-inner">
             <div>
@@ -290,7 +291,6 @@ export function PreviewHeader({
                 <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Brno" icon="map" title="Jihomoravský" note="Brno a jižní Morava" />
                 <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Plzeň" icon="map" title="Plzeňský" note="Plzeň a západ Čech" />
                 <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Mladá Boleslav" icon="factory" title="Středočeský" note="Mladá Boleslav a okolí Prahy" />
-                <MegaLink onNavigate={dismissOverlays} href="/nabidky" icon="map" title="Další kraje" note="Olomoucký, Ústecký a další" />
               </div>
             </div>
             <div>
@@ -309,6 +309,9 @@ export function PreviewHeader({
           data-cols="4"
           role="region"
           aria-label="Pro firmy"
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest("a")) dismissOverlays();
+          }}
         >
           <div className="mega-inner">
             <MegaLink onNavigate={dismissOverlays} href={postHref} icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
