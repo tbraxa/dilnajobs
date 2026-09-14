@@ -71,7 +71,7 @@ Hotové v kódu: Stripe Checkout + webhook, Resend (SMTP záloha), liveness/read
 4. Účet [Stripe](https://stripe.com) (sandbox `sk_test_` / `whsec_`, webhook `https://dilnajobs.cz/api/stripe/webhook` → `checkout.session.completed`).
 5. Postgres 16 (Neon / Cloud SQL) — `db:migrate`, `ADMIN_EMAILS`, `SESSION_SECRET` ≥ 32 znaků.
 6. Uptime: import [monitoring/uptime.json](monitoring/uptime.json) do Better Stack / Checkly (`/api/health` 1 min, `/api/ready` 1 min, `/nabidky` 5 min).
-7. `CRON_SECRET` + hourly expiry (Vercel Cron už v `vercel.json`, nebo Cloud Scheduler).
+7. `CRON_SECRET` + job expiry (Vercel Hobby: daily 04:00 UTC in `vercel.json`; hourly needs Pro or Cloud Scheduler).
 8. Volitelně Sentry + S3/R2 na CVčka (Cloud Run nesmí spoléhat na lokální disk).
 9. IČO provozovatele do patičky / GDPR až bude právnická osoba.
 

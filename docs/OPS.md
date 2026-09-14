@@ -110,7 +110,7 @@ Uses `DATABASE_ADMIN_URL` if set, otherwise `DATABASE_URL`. Calls SQL `expire_pu
 
 `GET` or `POST /api/cron/job-expiry` with `Authorization: Bearer $CRON_SECRET`.
 
-Vercel: `vercel.json` runs it hourly. Set `CRON_SECRET` in the project env.
+Vercel: `vercel.json` runs `/api/cron/job-expiry` once daily at 04:00 UTC (`0 4 * * *`). **Hobby** allows at most one cron invocation per day — hourly (`0 * * * *`) will fail the deploy. Use **Pro** (or Cloud Scheduler) if you need hourly. Set `CRON_SECRET` in the project env. The public catalog already hides expired ads even if the sweep is daily.
 
 Cloud Scheduler example:
 
