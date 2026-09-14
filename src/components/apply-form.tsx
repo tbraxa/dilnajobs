@@ -51,7 +51,7 @@ export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?:
 
   return (
     <aside className="apply-panel" aria-label="Odpovědět firmě">
-      <h2>Odpovědět firmě →</h2>
+      <h2>Odpovědět firmě</h2>
       <form action={action}>
         <input type="hidden" name="jobId" value={jobId} />
         <input type="hidden" name="cvObjectKey" />
@@ -102,7 +102,7 @@ export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?:
         </div>
         {state && !state.ok ? <p className="form-hint">{state.error}</p> : null}
         <button type="submit" className="btn btn-accent btn-lg btn-block btn-square" disabled={pending}>
-          {pending ? "Odesílám…" : "Odeslat firmě →"}
+          {pending ? "Odesílám…" : "Odeslat firmě"}
         </button>
         <p className="form-hint">
           Odpověď přijde přímo{companyName ? ` na ${companyName}` : " firmě"}. Bez registrace, bez agentury. DílnaJobs údaje

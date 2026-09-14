@@ -15,24 +15,19 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <main>
-      <section className="page-hero">
-        <div>
-          <p className="eyebrow">Chyba</p>
-          <h1>Něco se pokazilo</h1>
-          <p className="lead">
-            Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, ozvěte se na ahoj@dilnajobs.cz.
-          </p>
-        </div>
-        <div className="hero-ctas">
-          <button type="button" className="btn btn-primary btn-square" onClick={() => reset()}>
-            Zkusit znovu
-          </button>
-          <Link href="/" className="btn btn-secondary btn-square">
-            Na úvod
-          </Link>
-        </div>
-      </section>
+    <main className="page">
+      <h1>Něco se pokazilo</h1>
+      <p className="lede">
+        Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, ozvěte se na ahoj@dilnajobs.cz.
+      </p>
+      <div className="hero-ctas">
+        <button type="button" className="btn btn-accent" onClick={() => reset()}>
+          Zkusit znovu
+        </button>
+        <Link href="/" className="btn btn-outline">
+          Na úvod
+        </Link>
+      </div>
     </main>
   );
 }

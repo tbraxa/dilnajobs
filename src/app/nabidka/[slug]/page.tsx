@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  return { title: `${row.job.title} — ${row.job.city}` };
+  return { title: `${row.job.title} · ${row.job.city}` };
 }
 
 function toList(text: string | null | undefined) {
@@ -36,10 +36,8 @@ export default async function JobPage({ params }: Props) {
   const catalog = await loadPublishedJobBySlug(slug);
   if (!catalog.ok) {
     return (
-      <main>
-        <div className="page-hero">
-          <CatalogUnavailable />
-        </div>
+      <main className="page">
+        <CatalogUnavailable />
       </main>
     );
   }
@@ -52,95 +50,91 @@ export default async function JobPage({ params }: Props) {
   const description = toList(job.description);
 
   return (
-    <main>
-      <div className="detail-split">
-        <article className="detail-spec">
+    <main className="job-page">
+      <article>
+        <div className="spec-block">
+          <p className="spec-label">
+            {job.isTop ? <span className="label-box is-blue">Nové</span> : null}{" "}
+            <span className="label-box">{empLabel(job.employmentType)}</span>{" "}
+            <span className="label-box">{job.city}</span>
+          </p>
+          <h1>{job.title}</h1>
+          <p className="spec-company">
+            {companyName}
+            {companyCity ? ` · ${companyCity}` : job.region ? ` · ${job.region}` : ""}
+          </p>
+          <dl className="spec-meta-grid">
+            <div>
+              <dt>Mzda</dt>
+              <dd className="is-pay">{formatSalary(job.salaryMin, job.salaryMax, job.salaryNote).replace(" / měsíc", "")}</dd>
+            </div>
+            <div>
+              <dt>Směny</dt>
+              <dd>{job.shiftNote || "dohodou"}</dd>
+            </div>
+            <div>
+              <dt>Úvazek</dt>
+              <dd>{empLabel(job.employmentType)}</dd>
+            </div>
+            <div>
+              <dt>Profese</dt>
+              <dd>{profession?.label ?? job.profession}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="spec-block">
+          <p className="spec-label">Popis</p>
+          <div className="spec-body">
+            {description.length > 1 ? (
+              <ul>
+                {description.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>{job.description}</p>
+            )}
+          </div>
+        </div>
+
+        {requirements.length ? (
           <div className="spec-block">
-            <p className="spec-label">
-              {job.isTop ? <span className="label-box is-blue">Nové</span> : null}{" "}
-              <span className="label-box">{empLabel(job.employmentType)}</span>{" "}
-              <span className="label-box">
-                LIVE · {job.city}
-              </span>
-            </p>
-            <h1>{job.title}</h1>
-            <p className="spec-company">
+            <p className="spec-label">Požadujeme</p>
+            <div className="spec-body">
+              <ul>
+                {requirements.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ) : null}
+
+        {benefits.length ? (
+          <div className="spec-block">
+            <p className="spec-label">Nabízíme</p>
+            <div className="spec-body">
+              <ul>
+                {benefits.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="spec-block">
+          <p className="spec-label">Firma</p>
+          <div className="spec-body">
+            <p>
               {companyName}
-              {companyCity ? ` · ${companyCity}` : job.region ? ` · ${job.region}` : ""}
+              {job.city ? `, ${job.city}` : ""}.
             </p>
-            <dl className="spec-meta-grid">
-              <div>
-                <dt>Mzda</dt>
-                <dd className="is-pay">{formatSalary(job.salaryMin, job.salaryMax, job.salaryNote).replace(" / měsíc", "")}</dd>
-              </div>
-              <div>
-                <dt>Směny</dt>
-                <dd>{job.shiftNote || "—"}</dd>
-              </div>
-              <div>
-                <dt>Úvazek</dt>
-                <dd>{empLabel(job.employmentType)}</dd>
-              </div>
-              <div>
-                <dt>Profese</dt>
-                <dd>{profession?.label ?? job.profession}</dd>
-              </div>
-            </dl>
           </div>
-
-          <div className="spec-block">
-            <p className="spec-label">01 · Popis</p>
-            <div className="spec-body">
-              {description.length > 1 ? (
-                <ul>
-                  {description.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>{job.description}</p>
-              )}
-            </div>
-          </div>
-
-          {requirements.length ? (
-            <div className="spec-block">
-              <p className="spec-label">03 · Požadujeme</p>
-              <div className="spec-body">
-                <ul>
-                  {requirements.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ) : null}
-
-          {benefits.length ? (
-            <div className="spec-block">
-              <p className="spec-label">04 · Nabízíme</p>
-              <div className="spec-body">
-                <ul>
-                  {benefits.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ) : null}
-
-          <div className="spec-block">
-            <p className="spec-label">05 · Firma</p>
-            <div className="spec-body">
-              <p>
-                {companyName}
-                {job.city ? `, ${job.city}` : ""}.
-              </p>
-            </div>
-          </div>
-        </article>
-        <ApplyForm jobId={job.id} companyName={companyName} />
-      </div>
+        </div>
+      </article>
+      <ApplyForm jobId={job.id} companyName={companyName} />
     </main>
   );
 }

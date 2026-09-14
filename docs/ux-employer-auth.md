@@ -1,12 +1,12 @@
 # Employer auth — accepted layout and fields
 
-Locked visual language: cream paper (`#F2F0EA` / `#FAF9F6`), Satoshi display, Inter body, `#003DFF` square CTAs. See `docs/design-tokens-locked.md`.
+Live chrome is the same v9 `SiteHeader` / `SiteFooter` as the rest of the public site. White paper, Inter, `#003DFF` primary actions. See `docs/design-tokens-locked.md`.
 
-Czech B2B patterns: StartupJobs (narrow one-email login), Teamio / Fakturoid (IČO first + ARES). **No password** — magic link only.
+Czech B2B patterns: StartupJobs (narrow one-email login), Teamio / Fakturoid (IČO first + ARES). **No password**. Magic link only.
 
 Do **not** use marketing `PageHero`, `.detail-split`, or `.apply-panel`. Do **not** stack login and registration on one page.
 
-Public auth pages keep the same `PreviewHeader` / `PreviewFooter` as the homepage (root layout). Do not swap in Tailwind `SiteHeader`. Body paint is cream `#F2F0EA` from first byte — see `docs/nav-cta-map.md`.
+Body paint is white `#ffffff` from first byte. Header wrap matches homepage wrap so the chrome does not jump.
 
 ## Routes
 
@@ -19,18 +19,17 @@ Public auth pages keep the same `PreviewHeader` / `PreviewFooter` as the homepag
 
 ## Layout
 
-- One narrow card per page, max-width **460–480px**, **left-aligned** to the homepage hero copy (not centered in the column).
-- Desktop **≥900px**: card on the left, trust column on the right (same rhythm as HP hero + live panel). Mobile: card only.
-- Auth sits in the same cream-alt bordered board as `.hero-board` (`--max`, left/right borders) so the footer is not floating in empty dotted cream.
-- Inputs: min-height ~44px (IČO ~52px). Square buttons.
+- Narrow `.auth` column (`min(28rem, calc(100% - 2.5rem))`). Header and footer still use the shared `.wrap`.
+- No competing trust column. Copy stays in the form note.
+- Inputs: **44px** height.
 
-### Login trust
+### Login note
 
-Přímí zaměstnavatelé, bez agentur · Přihlášení odkazem. Heslo nepoužíváme. · Transparentní ceník.
+Pošleme odkaz na e-mail. Heslo nepoužíváme.
 
-### Registration trust
+### Registration note
 
-Přímí zaměstnavatelé, bez agentur · Odpovědi jdou k vám — jméno a telefon · Ceník bez DPH, zkušební inzerát zdarma.
+Nejdřív IČO. Údaje doplníme z ARES, zkontrolujte je.
 
 ## Login (`/firma/prihlaseni`)
 
@@ -49,7 +48,7 @@ No password field.
 
 Progressive disclosure. Default path for a busy HR/owner:
 
-1. **IČO first** — large field + primary CTA **Načíst z ARES** (full-width under the field). Optional **Vyplnit ručně**.
+1. **IČO first**. Large field + primary CTA **Načíst z ARES** (full-width under the field). Optional **Vyplnit ručně**.
 2. On ARES success: fill obchodní název, sídlo, DIČ if present. Quiet note: *Údaje z ARES jsme doplnili. Zkontrolujte je.*
 3. Reveal/confirm company fields (editable).
 4. Reveal **Kontaktní osoba**.
@@ -67,7 +66,7 @@ ARES: `GET /api/ares?ico=` (same-origin).
 | Obchodní název | yes | Autofill `obchodniJmeno`. |
 | DPH | yes | Segmented **Neplátce** / **Plátce**. |
 | DIČ | no | Only when Plátce. Autofill when ARES returns it. |
-| Sídlo / adresa | no | One field. Autofill `sidlo.textovaAdresa` (else obec). Stored in `employers.city` — no extra columns. |
+| Sídlo / adresa | no | One field. Autofill `sidlo.textovaAdresa` (else obec). Stored in `employers.city`. No extra columns. |
 
 ### Kontaktní osoba
 
@@ -82,11 +81,11 @@ ARES: `GET /api/ares?ico=` (same-origin).
 
 | Element | Copy |
 | --- | --- |
-| Title | Založení účtu firmy |
+| Title | Založit účet firmy |
 | CTA | Založit účet a poslat odkaz |
 | Helper under CTA | Na e-mail pošleme přihlašovací odkaz. Heslo nepoužíváme. |
 | Success | Zkontrolujte e-mail |
-| Link | Už máte účet? Přihlásit se → `/firma/prihlaseni` |
+| Link | Už účet máte? Přihlášení → `/firma/prihlaseni` |
 
 Legal (tiny): souhlas s [obchodními podmínkami](/obchodni-podminky) a [zpracováním údajů](/gdpr).
 

@@ -1,16 +1,11 @@
 export default function NotFound() {
   return (
-    <main>
-      <section className="page-hero">
-        <div>
-          <p className="eyebrow">404</p>
-          <h1>Tady nic není</h1>
-          <p className="lead">Stránka neexistuje, nebo nabídka už nesvíti.</p>
-        </div>
-        <a href="/nabidky" className="btn btn-primary btn-square">
-          Nabídky →
-        </a>
-      </section>
+    <main className="page">
+      <h1>Tady nic není</h1>
+      <p className="lede">Stránka neexistuje, nebo nabídka už nesvíti.</p>
+      <a href="/nabidky" className="btn btn-accent" style={{ width: "auto" }}>
+        Nabídky
+      </a>
     </main>
   );
 }

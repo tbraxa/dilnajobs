@@ -1,29 +1,28 @@
 # Candidate-first IA
 
-Product priority: **uchazeč looking for manufacturing work** first, employer posting second. Visual identity stays DílnaJobs (cream / ink / `#003DFF`, Satoshi, square logo and CTAs). Information architecture follows a job-board search HQ (StartupJobs-like), not a marketing landing page. We copy IA and craft, not their orange/blue chrome.
+Product priority: **uchazeč looking for manufacturing work** first, employer posting second.
+
+Live UI source of truth: [`design/preview-v9-groundup/`](../design/preview-v9-groundup/) ported in the App Router (`src/styles/v9.css`, `src/components/v9/`). White board, Inter only, accent `#003DFF` on primary actions. No mega menu, no dotted wallpaper, no cream-grid cascade, no JetBrains chrome.
+
+We copy job-board IA (search first), not another brand’s orange/blue chrome.
 
 ## Homepage `/`
 
-`/` is search, then results — close to `/nabidky`, not a hero board.
+`/` is the board: sticky filter rail + job list in the first viewport.
 
-1. One-line headline under the nav: výroba, přímo od firem.
-2. Search **row** immediately under it (`#hledat`): pozice + město + **Hledat nabídky** → `GET /nabidky?q=&city=`.
-3. Quick chips, then the job list in the **same first viewport**. No second “Aktuální nabídky” heading, no live-panel marketing column.
-4. Jak to funguje (`/#jak`) and employer / ceník sit **below** the fold.
-
-Header **Hledat** focuses `#hledat`. **Inzerovat** is outline / secondary.
+1. Claim in the rail: práce ve výrobě, přímo od firem.
+2. Search (`#hledat`): pozice + **Hledat** → `GET /nabidky?q=&city=`.
+3. Profese as links. Město in the rail (sheet on mobile).
+4. Listings on the right. Employer ceník lives on `/pro-firmy`, not below the homepage fold.
 
 ## `/nabidky`
 
-Same job as the homepage: filters and results share the first viewport.
+Same shell as the homepage. Rail stays sticky. Empty copy stays human; **Upozornit mě** is a mailto until alerts exist.
 
-- Desktop: **left filter rail** + right job list inside the `--max` cream board (SJ split, workshop materials). Rail is sticky. Fields: pozice, město, profese, řazení, chips, **Zrušit filtry**.
-- A full-width sticky search *bar* would stack on top of the list and push results down; the rail keeps jobs at the top of the column.
-- Mobile: keyword + Hledat first; město / profese / řazení in `#filtry-sheet`.
-- Result count in the list header. Empty copy stays human; **Upozornit mě** is a mailto until alerts exist.
+## Consistency
 
-## What we do not copy
-
-Orange/blue StartupJobs chrome, their type, or their logo. No fake “saved jobs” product.
+- `html { scrollbar-gutter: stable; }`. Never `body { max-width: 100vw }`.
+- Same header height and `.wrap` max-width + horizontal padding on every public route.
+- Shared `SiteHeader` / `SiteFooter`. Fonts self-hosted Inter.
 
 See also `docs/nav-cta-map.md` and `docs/design-tokens-locked.md`.

@@ -1,40 +1,40 @@
 @import "tailwindcss";
 
 html {
-  background-color: #f2f0ea;
-  color: #0b0d12;
+  background-color: #ffffff;
+  color: #111111;
   scrollbar-gutter: stable;
   overflow-x: hidden;
 }
 
-/* Portal/admin aliases → locked preview tokens (docs/design-tokens-locked.md). */
+/* Shared tokens. Public UI chrome lives in src/styles/v9.css. */
 :root {
-  --cream: #f2f0ea;
-  --cream-alt: #faf9f6;
-  --cream-deep: #e6e3da;
-  --ink: #0b0d12;
-  --ink-soft: #161a22;
-  --muted: #5a5f6a;
-  --muted-2: #8b909a;
-  --border: #d2d0c8;
-  --border-strong: #0b0d12;
+  --cream: #ffffff;
+  --cream-alt: #ffffff;
+  --cream-deep: #f5f4f0;
+  --ink: #111111;
+  --ink-soft: #111111;
+  --muted: #5a5a5a;
+  --muted-2: #5a5a5a;
+  --border: #e4e2dc;
+  --border-strong: #111111;
   --blue: #003dff;
   --blue-dim: #002fcc;
   --blue-soft: #e8edff;
-  --steel: #3d4554;
+  --steel: #5a5a5a;
   --white: #ffffff;
-  --paper: var(--cream);
-  --paper-0: var(--cream-alt);
-  --paper-2: var(--cream-deep);
-  --steel-2: var(--muted-2);
-  --line: var(--border);
-  --tile: var(--blue-soft);
-  --accent: var(--blue);
-  --accent-hover: var(--blue-dim);
+  --paper: #ffffff;
+  --paper-0: #ffffff;
+  --paper-2: #f5f4f0;
+  --steel-2: #5a5a5a;
+  --line: #e4e2dc;
+  --tile: #e8edff;
+  --accent: #003dff;
+  --accent-hover: #002fcc;
   --danger: #8b1e1e;
   --ok: #1f4d2c;
-  --background: var(--cream);
-  --foreground: var(--ink);
+  --background: #ffffff;
+  --foreground: #111111;
 }
 
 @theme inline {
@@ -52,9 +52,9 @@ html {
   --color-ok: var(--ok);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: Inter, sans-serif;
-  --font-display: Satoshi;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-display: Inter, system-ui, sans-serif;
+  --font-mono: Inter, system-ui, sans-serif;
 }
 
 * {
@@ -62,44 +62,24 @@ html {
 }
 
 .display {
-  font-family: Satoshi;
+  font-family: Inter, system-ui, sans-serif;
   letter-spacing: -0.03em;
   font-weight: 700;
 }
 
 h1.display,
 h2.display {
-  font-family: Satoshi;
-}
-
-.label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-weight: 500;
+  font-family: Inter, system-ui, sans-serif;
 }
 
 .shell {
   margin-inline: auto;
-  width: 100%;
-  max-width: 72rem;
-  padding-inline: 1rem;
+  width: min(1120px, calc(100% - 2.5rem));
 }
 
 .shell-narrow {
   margin-inline: auto;
-  width: 100%;
-  max-width: 48rem;
-  padding-inline: 1rem;
-}
-
-@media (min-width: 640px) {
-  .shell,
-  .shell-narrow {
-    padding-inline: 1.5rem;
-  }
+  width: min(28rem, calc(100% - 2.5rem));
 }
 
 .panel {
@@ -134,5 +114,5 @@ h2.display {
 
 ::selection {
   background: var(--ink);
-  color: var(--cream-alt);
+  color: var(--paper);
 }

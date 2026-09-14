@@ -10,12 +10,9 @@ export function CatalogUnavailable({
   detail?: string;
 }) {
   return (
-    <div style={{ padding: "1.5rem 1.25rem" }}>
-      <p className="eyebrow">Nabídky</p>
-      <h2 className="h2">{title}</h2>
-      <p className="lead" style={{ marginTop: "0.75rem" }}>
-        {detail}
-      </p>
+    <div className="catalog-empty">
+      <h2>{title}</h2>
+      <p>{detail}</p>
     </div>
   );
 }

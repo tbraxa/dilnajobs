@@ -1,30 +1,19 @@
 import type { ReactNode } from "react";
 
 export function AuthShell({
-  eyebrow,
-  heading,
-  bullets,
+  title,
+  note,
   children,
 }: {
-  eyebrow: string;
-  heading: string;
-  bullets: string[];
+  title: string;
+  note?: string;
   children: ReactNode;
 }) {
   return (
-    <main className="auth-shell">
-      <div className="auth-layout">
-        <div className="auth-stack">{children}</div>
-        <aside className="auth-trust">
-          <p className="eyebrow">{eyebrow}</p>
-          <h1>{heading}</h1>
-          <ul>
-            {bullets.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </aside>
-      </div>
+    <main className="auth">
+      <h1>{title}</h1>
+      {note ? <p className="note">{note}</p> : null}
+      {children}
     </main>
   );
 }

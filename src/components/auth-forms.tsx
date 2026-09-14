@@ -9,7 +9,7 @@ export function LoginForm() {
   return (
     <form action={action}>
       <input type="hidden" name="intent" value="login" />
-      <Field label="Firemní e-mail" name="email">
+      <Field label="Pracovní e-mail" name="email">
         <input
           id="email"
           name="email"

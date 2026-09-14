@@ -57,7 +57,7 @@ export function Field({
     <div className="form-field">
       <label htmlFor={name}>
         {label}
-        {hint ? <span className="opt"> — {hint}</span> : null}
+        {hint ? <span className="opt"> ({hint})</span> : null}
       </label>
       {children}
     </div>
