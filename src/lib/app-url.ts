@@ -8,11 +8,7 @@
  *
  * After the first deploy, set `APP_URL` to the real domain (see docs/DEPLOY.md).
  */
-export type AppUrlEnv = {
-  APP_URL?: string;
-  NEXT_PUBLIC_APP_URL?: string;
-  VERCEL_URL?: string;
-};
+export type AppUrlEnv = NodeJS.Dict<string>;
 
 export const LOCAL_APP_URL = "http://localhost:3000";
 
