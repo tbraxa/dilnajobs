@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { resolveAppUrl } from "./app-url";
 
 const optionalUrl = z
   .string()
@@ -7,7 +8,16 @@ const optionalUrl = z
 
 const schema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  APP_URL: z.string().url().default("http://localhost:3000"),
+  // Empty APP_URL (Vercel) is not a valid URL; resolve at parse time.
+  APP_URL: z.preprocess(
+    (value) =>
+      resolveAppUrl({
+        APP_URL: typeof value === "string" ? value : "",
+        NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+        VERCEL_URL: process.env.VERCEL_URL,
+      }),
+    z.string().url(),
+  ),
   DATABASE_URL: z.string().min(1).default("postgres://dilna_app:dilna@localhost:5432/dilnajobs"),
   DATABASE_ADMIN_URL: z
     .string()

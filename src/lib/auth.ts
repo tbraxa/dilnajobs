@@ -5,6 +5,7 @@ import { cookies, headers } from "next/headers";
 import { and, eq, gt, isNull } from "drizzle-orm";
 import { db, sql } from "@/db/client";
 import { employerUsers, employers, magicTokens, sessions } from "@/db/schema";
+import { resolveAppUrl } from "./app-url";
 import { env } from "./env";
 import { hashIp, randomToken, sha256 } from "./crypto";
 import { sendEmail } from "./email";
@@ -132,7 +133,7 @@ export async function requestMagicLink(input: {
 
     await db.insert(magicTokens).values({ email, tokenHash, purpose: "employer", expiresAt });
 
-    const url = `${env.APP_URL}/firma/prihlaseni/overit?token=${encodeURIComponent(token)}`;
+    const url = `${resolveAppUrl()}/firma/prihlaseni/overit?token=${encodeURIComponent(token)}`;
     await sendEmail({
       to: email,
       subject: "Přihlášení na DílnaJobs",

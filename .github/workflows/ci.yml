@@ -26,7 +26,8 @@ jobs:
       DATABASE_URL: postgres://dilna_app:dilna@localhost:5432/dilnajobs
       DATABASE_ADMIN_URL: postgres://dilna:dilna@localhost:5432/dilnajobs
       SESSION_SECRET: ci-session-secret-not-for-production-use-32
-      APP_URL: http://localhost:3000
+      # Empty string matches Vercel’s first-deploy APP_URL=""; build must not throw ERR_INVALID_URL.
+      APP_URL: ""
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

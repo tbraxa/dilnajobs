@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { and, eq, gt, isNull } from "drizzle-orm";
 import { db } from "@/db/client";
 import { adminSessions, magicTokens } from "@/db/schema";
+import { resolveAppUrl } from "@/lib/app-url";
 import { env, isAdminEmail } from "@/lib/env";
 import { hashIp, randomToken, sha256 } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
@@ -56,7 +57,7 @@ export async function requestAdminMagicLink(emailRaw: string): Promise<{ ok: tru
     expiresAt,
   });
 
-  const url = `${env.APP_URL}/admin/prihlaseni/overit?token=${encodeURIComponent(token)}`;
+  const url = `${resolveAppUrl()}/admin/prihlaseni/overit?token=${encodeURIComponent(token)}`;
   await sendEmail({
     to: email,
     subject: "Přihlášení správce DílnaJobs",
