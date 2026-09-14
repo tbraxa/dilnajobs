@@ -45,8 +45,8 @@
   --color-ok: var(--ok);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: Inter, system-ui, sans-serif;
-  --font-display: Satoshi, Inter, sans-serif;
+  --font-sans: Inter, sans-serif;
+  --font-display: Satoshi;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
@@ -55,14 +55,14 @@
 }
 
 .display {
-  font-family: Satoshi, Inter, sans-serif;
+  font-family: Satoshi;
   letter-spacing: -0.03em;
   font-weight: 700;
 }
 
 h1.display,
 h2.display {
-  font-family: var(--font-display, Satoshi, Inter, sans-serif);
+  font-family: Satoshi;
 }
 
 .label {

@@ -23,12 +23,13 @@ function Icon({ title, children, ...props }: IconProps) {
 
 export function LogoMark(props: IconProps) {
   return (
-    <svg viewBox="0 0 18 18" fill="none" aria-hidden={props.title ? undefined : true} role={props.title ? "img" : undefined} {...props}>
+    <svg viewBox="0 0 22 22" aria-hidden={props.title ? undefined : true} role={props.title ? "img" : undefined} {...props}>
       {props.title ? <title>{props.title}</title> : null}
-      <circle cx="4" cy="4" r="3" fill="#003DFF" />
-      <circle cx="14" cy="4" r="3" fill="#0B0D12" />
-      <circle cx="4" cy="14" r="3" fill="#0B0D12" />
-      <circle cx="14" cy="14" r="3" fill="#003DFF" />
+      <rect width="22" height="22" fill="#0B0D12" />
+      <rect x="3" y="3" width="7" height="7" fill="#003DFF" />
+      <rect x="12" y="3" width="7" height="7" fill="#FAF9F6" />
+      <rect x="3" y="12" width="7" height="7" fill="#FAF9F6" />
+      <rect x="12" y="12" width="7" height="7" fill="#003DFF" />
     </svg>
   );
 }

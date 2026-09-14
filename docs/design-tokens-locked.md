@@ -36,6 +36,16 @@ Next.js markup must keep the locked class names (`hero-board`, `employer-strip`,
 
 `--green` / `--green-dim` alias `--blue` so leftover class names do not go neon.
 
+## Fonts (locked)
+
+| Role | Face | Where |
+| --- | --- | --- |
+| Display / logo / headlines | **Satoshi** only | `.logo`, `h1`–`h3`, `.display` — no `system-ui`, no Inter fallback |
+| Body / UI | **Inter** only | `body`, `.btn`, form controls |
+| Micro labels | **JetBrains Mono** only | `.eyebrow`, `.strip-code`, `.mod-tag`, `.filter-label` |
+
+Self-hosted under `/fonts/*.woff2`. Satoshi uses `font-display: block` and is preloaded in `layout.tsx` so the “a” in DílnaJobs does not flash a fallback glyph. Never Space Grotesk. Do not `@import` Fontshare or Google Fonts (CSP `font-src 'self'`).
+
 Portal Tailwind aliases (`--paper`, `--line`, `--accent`) must map to the cream/ink/blue values above. They are not a second palette.
 
 ## Surfaces
@@ -50,7 +60,7 @@ background-size: 24px 24px;
 
 **LIVE strip** (`.top-strip`) — blue fill, white type, JetBrains `.strip-code` “LIVE”. Never a black strip.
 
-**Header** (`.site-header`) — 60px, cream/blur. `.logo-mark` is **four distinct dots** (2×2, 7px rounds, 4px gap, two blue / two ink) — never a fused square. Mega triggers with chevrons: Nabídky / Pro firmy / Jak to funguje. `.mega-panel` is content-width (`--max: 1180px`), aligned to `.header-inner` borders — not viewport edge-to-edge.
+**Header** (`.site-header`) — 60px, cream/blur. `.logo-mark` is a **22px ink square with a 2×2 of small squares** (3px padding, 2px gap; cells 1+4 blue, 2+3 cream-alt). Not round dots, not a single solid cell. Mega triggers with chevrons: Nabídky / Pro firmy / Jak to funguje. `.mega-panel` is content-width (`--max: 1180px`), aligned to `.header-inner` borders — not viewport edge-to-edge.
 
 **Hero** (`.hero-board`) — split `.hero-main` + `.hero-live`. Headline: “Práce ve výrobě. Přímo od **firem**.” Dual CTAs: `.btn-primary` + `.btn-secondary`, both `.btn-square`.
 

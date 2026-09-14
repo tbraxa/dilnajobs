@@ -3,28 +3,28 @@
   font-family: Satoshi;
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url("/fonts/Satoshi-Regular.woff2") format("woff2");
 }
 @font-face {
   font-family: Satoshi;
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
+  font-display: block;
   src: url("/fonts/Satoshi-Medium.woff2") format("woff2");
 }
 @font-face {
   font-family: Satoshi;
   font-style: normal;
   font-weight: 700;
-  font-display: swap;
+  font-display: block;
   src: url("/fonts/Satoshi-Bold.woff2") format("woff2");
 }
 @font-face {
   font-family: Satoshi;
   font-style: normal;
   font-weight: 900;
-  font-display: swap;
+  font-display: block;
   src: url("/fonts/Satoshi-Bold.woff2") format("woff2");
 }
 @font-face {
@@ -343,31 +343,24 @@ h3 { font-size: 1.2rem; letter-spacing: -0.02em; }
 }
 
 .logo-mark {
-  width: 18px;
-  height: 18px;
-  background: none;
+  width: 22px;
+  height: 22px;
+  background: var(--ink);
   display: grid;
-  grid-template-columns: 7px 7px;
-  grid-template-rows: 7px 7px;
-  gap: 4px;
-  padding: 0;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 3px;
   flex-shrink: 0;
-  align-content: center;
-  justify-content: center;
 }
 
 .logo-mark i {
-  width: 7px;
-  height: 7px;
-  background: var(--ink);
+  background: var(--blue);
   display: block;
-  border-radius: 50%;
 }
 
-.logo-mark i:nth-child(1),
-.logo-mark i:nth-child(4) { background: var(--blue); }
 .logo-mark i:nth-child(2),
-.logo-mark i:nth-child(3) { background: var(--ink); }
+.logo-mark i:nth-child(3) { background: var(--cream-alt); }
 
 /* Desktop nav */
 .nav-desktop {

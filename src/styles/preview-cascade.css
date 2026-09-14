@@ -4,7 +4,9 @@ html body {
   background-image: radial-gradient(circle, rgba(10, 10, 10, 0.055) 1px, transparent 1px);
   background-size: 24px 24px;
   color: var(--ink);
-  font-family: var(--font-body);
+  --font-display: Satoshi;
+  --font-body: Inter;
+  font-family: Inter;
 }
 
 .tags .chip,
@@ -28,20 +30,6 @@ html body {
   border-color: var(--blue);
 }
 
-/* Four distinct dots — never a fused square. */
-html body .logo-mark {
-  width: 18px;
-  height: 18px;
-  background: none;
-  gap: 4px;
-  padding: 0;
-}
-html body .logo-mark i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-}
-
 /* Mega opens on the content column only (same --max as .header-inner). */
 html body .mega-panel {
   left: 50%;
@@ -54,6 +42,16 @@ html body .mega-panel {
 }
 html body .mega-panel.is-open {
   transform: translate(-50%, 0);
+}
+
+html body .logo,
+html body h1,
+html body h2,
+html body h3,
+html body .h1,
+html body .h2,
+html body .display {
+  font-family: Satoshi;
 }
 
 .board-pad {
