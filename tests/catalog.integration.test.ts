@@ -5,13 +5,21 @@ const url = process.env.DATABASE_URL;
 const adminUrl = process.env.DATABASE_ADMIN_URL;
 
 describe.skipIf(!url || !adminUrl)("public catalog + apply insert", () => {
-  it("lists published jobs and persists an application", async () => {
+  it("lists published jobs with employer names and persists an application", async () => {
     const app = new Client({ connectionString: url });
     await app.connect();
+
+    const joined = await app.query<{ n: number }>(
+      `select count(*)::int as n
+       from jobs j
+       join employers e on e.id = j.employer_id
+       where j.status = 'published'`,
+    );
+    expect(joined.rows[0].n).toBeGreaterThan(0);
+
     const jobs = await app.query<{ id: string }>(
       "select id from jobs where status = 'published' limit 1",
     );
-    expect(jobs.rows.length).toBe(1);
 
     const drafts = await app.query("select count(*)::int as n from jobs where status <> 'published'");
     expect(drafts.rows[0].n).toBe(0);
