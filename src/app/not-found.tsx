@@ -8,7 +8,7 @@ export default function NotFound() {
           <p className="lead">Stránka neexistuje, nebo nabídka už nesvíti.</p>
         </div>
         <a href="/nabidky" className="btn btn-primary btn-square">
-          Katalog →
+          Nabídky →
         </a>
       </section>
     </main>

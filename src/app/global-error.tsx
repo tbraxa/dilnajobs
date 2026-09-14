@@ -22,8 +22,7 @@ export default function GlobalError({
           </p>
           <h1 style={{ fontSize: "2rem", letterSpacing: "-0.03em", margin: "0.5rem 0 1rem" }}>Něco se pokazilo</h1>
           <p style={{ maxWidth: "36em", lineHeight: 1.68, color: "#5A5F6A" }}>
-            Aplikaci teď nejde zobrazit. Zkuste obnovit stránku. Pokud problém trvá, počkejte na dokončení migrací
-            databáze.
+            Aplikaci teď nejde zobrazit. Zkuste obnovit stránku. Pokud problém trvá, napište na ahoj@dilnajobs.cz.
           </p>
           <button
             type="button"

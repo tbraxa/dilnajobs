@@ -24,7 +24,7 @@ export default function LoginPage() {
           <p className="auth-helper">Odkaz platí 15 minut. Heslo nepoužíváme.</p>
           <p className="auth-links">
             <a href="/firma/registrace">Založit účet firmy</a>
-            <a href="/pro-firmy">Ceník</a>
+            <a href="/pro-firmy#cenik">Ceník</a>
           </p>
         </article>
       </AuthShell>

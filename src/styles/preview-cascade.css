@@ -1,4 +1,8 @@
 /* Next.js cascade lock — beat Tailwind/globals paper tokens without inventing a second palette. */
+html {
+  background-color: #f2f0ea;
+  color: #0b0d12;
+}
 html body {
   background-color: var(--cream);
   background-image: radial-gradient(circle, rgba(10, 10, 10, 0.055) 1px, transparent 1px);
@@ -6,7 +10,7 @@ html body {
   color: var(--ink);
   --font-display: Satoshi;
   --font-body: Inter;
-  font-family: Inter;
+  font-family: Inter, system-ui, sans-serif;
 }
 
 .tags .chip,
@@ -163,11 +167,19 @@ html body .logo-mark i {
   border-radius: 0;
 }
 
+html body a.drawer-acc-btn {
+  background: none;
+  cursor: pointer;
+  font-family: Satoshi, system-ui, sans-serif;
+}
+
 /* Employer / admin auth — compact cards, not PageHero + apply-panel. */
 .auth-shell {
   max-width: var(--max);
   margin: 0 auto;
   padding: 2.25rem var(--gutter) 4rem;
+  background: transparent;
+  font-family: Inter, system-ui, sans-serif;
 }
 
 .auth-layout {

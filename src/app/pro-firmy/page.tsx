@@ -18,11 +18,11 @@ export default function ProFirmyPage() {
             vámi a telefonátem.
           </p>
           <div className="hero-ctas">
-            <a href="#cenik" className="btn btn-primary btn-lg btn-square">
-              Zobrazit ceník →
+            <a href="/firma/registrace" className="btn btn-primary btn-lg btn-square">
+              Vystavit nabídku →
             </a>
-            <a href="mailto:firmy@dilnajobs.cz" className="btn btn-secondary btn-lg btn-square">
-              Napsat nám
+            <a href="#cenik" className="btn btn-secondary btn-lg btn-square">
+              Zobrazit ceník
             </a>
           </div>
         </div>

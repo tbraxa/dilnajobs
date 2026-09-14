@@ -26,7 +26,7 @@ export default async function HomePage() {
             <a href="/nabidky" className="btn btn-primary btn-lg btn-square">
               Prohlédnout nabídky →
             </a>
-            <a href="/pro-firmy" className="btn btn-secondary btn-lg btn-square">
+            <a href="/firma/registrace" className="btn btn-secondary btn-lg btn-square">
               Vystavit nabídku
             </a>
           </div>
@@ -110,11 +110,11 @@ export default async function HomePage() {
             rovnou k vám.
           </p>
           <div className="hero-ctas">
-            <a href="/pro-firmy#cenik" className="btn btn-accent btn-lg btn-square">
-              Zobrazit ceník →
+            <a href="/firma/registrace" className="btn btn-accent btn-lg btn-square">
+              Vystavit nabídku
             </a>
-            <a href="/pro-firmy" className="btn btn-secondary btn-lg btn-square">
-              Více pro firmy
+            <a href="/pro-firmy#cenik" className="btn btn-secondary btn-lg btn-square">
+              Zobrazit ceník →
             </a>
           </div>
         </div>

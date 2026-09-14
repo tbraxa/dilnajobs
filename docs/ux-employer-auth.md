@@ -6,6 +6,8 @@ Czech B2B patterns: StartupJobs (narrow one-email login), Teamio / Fakturoid (IÄ
 
 Do **not** use marketing `PageHero`, `.detail-split`, or `.apply-panel`. Do **not** stack login and registration on one page.
 
+Public auth pages keep the same `PreviewHeader` / `PreviewFooter` as the homepage (root layout). Do not swap in Tailwind `SiteHeader`. Body paint is cream `#F2F0EA` from first byte â€” see `docs/nav-cta-map.md`.
+
 ## Routes
 
 | Path | Purpose |

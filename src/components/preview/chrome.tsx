@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { NAV } from "@/lib/nav-cta";
 import { Chev, LogoMark, MegaIcon } from "./sprite";
 
 function MegaLink({
@@ -30,7 +31,13 @@ function MegaLink({
   );
 }
 
-export function PreviewHeader({ liveCount }: { liveCount?: number }) {
+export function PreviewHeader({
+  liveCount,
+  postHref = NAV.register,
+}: {
+  liveCount?: number;
+  postHref?: string;
+}) {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [openMega, setOpenMega] = useState<string | null>(null);
@@ -195,25 +202,25 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
                 Pro firmy <Chev />
               </button>
             </div>
-            <div className="nav-item" onMouseEnter={() => enterMega("jak")}>
-              <button
-                type="button"
-                className="nav-trigger"
-                data-mega
-                aria-expanded={openMega === "jak"}
-                aria-controls="mega-jak"
-                aria-haspopup="true"
-                onClick={() => setOpenMega((v) => (v === "jak" ? null : "jak"))}
-              >
-                Jak to funguje <Chev />
-              </button>
+            <div
+              className="nav-item"
+              onMouseEnter={() => {
+                if (window.matchMedia("(min-width: 901px)").matches) {
+                  window.clearTimeout(leaveTimer.current);
+                  setOpenMega(null);
+                }
+              }}
+            >
+              <a href={NAV.howItWorks} className="nav-link-plain">
+                Jak to funguje
+              </a>
             </div>
           </nav>
           <div className="header-actions">
-            <Link href="/nabidky" className="btn btn-ghost btn-square">
+            <Link href={NAV.nabidky} className="btn btn-ghost btn-square">
               Hledat
             </Link>
-            <Link href="/pro-firmy" className="btn btn-primary btn-square">
+            <Link href={postHref} className="btn btn-primary btn-square">
               Inzerovat →
             </Link>
             <button
@@ -258,11 +265,10 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
               </div>
             </div>
             <div>
-              <p className="mega-col-title">Jak hledat</p>
+              <p className="mega-col-title">Akce</p>
               <div className="mega-list">
-                <MegaLink href="/nabidky" icon="factory" title="Filtry nabídek" note="Profese, kraj, směny a mzda na jednom místě" />
-                <MegaLink href="/nabidky" icon="search" title="Odpověď bez registrace" note="Jméno, telefon, volitelně CV — hotovo" />
-                <MegaLink href="/" icon="direct" title="Přímo od firem" note="Žádná agentura mezi vámi a dílnou" />
+                <MegaLink href={NAV.nabidky} icon="factory" title="Všechny nabídky" note="Celý výpis, bez agentur" />
+                <MegaLink href={NAV.nabidkyFilters} icon="search" title="Hledat / filtry" note="Profese, město, mzda" />
               </div>
             </div>
           </div>
@@ -276,37 +282,10 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
           aria-label="Pro firmy"
         >
           <div className="mega-inner">
-            <MegaLink href="/firma/registrace" icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
-            <MegaLink href="/pro-firmy#cenik" icon="pricing" title="Ceník" note="0 / 2 990 / 8 900 / 19 900 Kč bez DPH" />
-            <MegaLink href="/pro-firmy" icon="why" title="Proč DílnaJobs" note="Cílení na výrobní profese, přímý kontakt" />
-            <MegaLink href="/pro-firmy" icon="direct" title="Bez agentur" note="Odpovědi jdou rovnou k vám" />
-          </div>
-        </div>
-
-        <div
-          className={`mega-panel${openMega === "jak" ? " is-open" : ""}`}
-          id="mega-jak"
-          data-cols="2"
-          role="region"
-          aria-label="Jak to funguje"
-        >
-          <div className="mega-inner">
-            <div>
-              <p className="mega-col-title">Pro uchazeče</p>
-              <div className="mega-list">
-                <MegaLink href="/nabidky" icon="factory" title="1 · Vyberete profesi" note="Filtr podle kraje, směn a mzdy" />
-                <MegaLink href="/nabidky" icon="post" title="2 · Odpovíte firmě" note="Bez povinné registrace" />
-                <MegaLink href="/" icon="direct" title="3 · Volají přímo oni" note="Žádný prostředník" />
-              </div>
-            </div>
-            <div>
-              <p className="mega-col-title">Pro firmy</p>
-              <div className="mega-list">
-                <MegaLink href="/firma/registrace" icon="post" title="1 · Vystavíte nabídku" note="Jasná specifikace výroby" />
-                <MegaLink href="/pro-firmy" icon="factory" title="2 · Přicházejí odpovědi" note="Jméno, telefon, volitelně CV" />
-                <MegaLink href="/pro-firmy" icon="factory" title="3 · Voláte vy" note="Jeden klik a jste ve spojení" />
-              </div>
-            </div>
+            <MegaLink href={postHref} icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
+            <MegaLink href={NAV.cenik} icon="pricing" title="Ceník" note="0 / 2 990 / 8 900 / 19 900 Kč bez DPH" />
+            <MegaLink href={NAV.login} icon="direct" title="Přihlášení firmy" note="Odkaz na e-mail. Heslo nepoužíváme." />
+            <MegaLink href={NAV.proFirmy} icon="why" title="Pro firmy" note="Cílení, postup, balíčky" />
           </div>
         </div>
       </header>
@@ -348,9 +327,9 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
             <MegaLink drawer href="/nabidky?city=Ostrava" icon="map" title="Moravskoslezský" note="Ostrava · MSK" />
             <MegaLink drawer href="/nabidky?city=Brno" icon="map" title="Jihomoravský" note="Brno" />
             <MegaLink drawer href="/nabidky?city=Plzeň" icon="map" title="Plzeňský" note="Plzeň" />
-            <p className="drawer-section-label">Jak hledat</p>
-            <MegaLink drawer href="/nabidky" icon="factory" title="Filtry nabídek" note="Profese, kraj, směny" />
-            <MegaLink drawer href="/nabidky" icon="search" title="Odpověď bez registrace" note="Jméno a telefon stačí" />
+            <p className="drawer-section-label">Akce</p>
+            <MegaLink drawer href={NAV.nabidky} icon="factory" title="Všechny nabídky" note="Celý výpis" />
+            <MegaLink drawer href={NAV.nabidkyFilters} icon="search" title="Hledat / filtry" note="Profese, město, mzda" />
           </div>
 
           <button
@@ -364,34 +343,21 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
             Pro firmy <Chev />
           </button>
           <div className={`drawer-acc-panel${acc === "firmy" ? " is-open" : ""}`} id="acc-firmy">
-            <MegaLink drawer href="/firma/registrace" icon="post" title="Vystavit nabídku" note="Během pár minut" />
-            <MegaLink drawer href="/pro-firmy#cenik" icon="pricing" title="Ceník" note="Transparentní ceny" />
-            <MegaLink drawer href="/pro-firmy" icon="why" title="Proč DílnaJobs" note="Cílení na výrobu" />
-            <MegaLink drawer href="/pro-firmy" icon="direct" title="Bez agentur" note="Přímý kontakt" />
+            <MegaLink drawer href={postHref} icon="post" title="Vystavit nabídku" note="Během pár minut" />
+            <MegaLink drawer href={NAV.cenik} icon="pricing" title="Ceník" note="Transparentní ceny" />
+            <MegaLink drawer href={NAV.login} icon="direct" title="Přihlášení firmy" note="Odkaz na e-mail" />
+            <MegaLink drawer href={NAV.proFirmy} icon="why" title="Pro firmy" note="Cílení a balíčky" />
           </div>
 
-          <button
-            type="button"
-            className="drawer-acc-btn"
-            data-drawer-acc
-            aria-expanded={acc === "jak"}
-            aria-controls="acc-jak"
-            onClick={() => setAcc((v) => (v === "jak" ? null : "jak"))}
-          >
-            Jak to funguje <Chev />
-          </button>
-          <div className={`drawer-acc-panel${acc === "jak" ? " is-open" : ""}`} id="acc-jak">
-            <p className="drawer-section-label">Pro uchazeče</p>
-            <MegaLink drawer href="/nabidky" icon="factory" title="Vyberete · Odpovíte · Volají" note="Tři kroky bez registrace" />
-            <p className="drawer-section-label">Pro firmy</p>
-            <MegaLink drawer href="/pro-firmy" icon="post" title="Vystavíte · Odpovědi · Voláte" note="Schránka s telefonem" />
-          </div>
+          <a href={NAV.howItWorks} className="drawer-acc-btn" data-drawer-close onClick={() => setDrawer(false)}>
+            Jak to funguje
+          </a>
         </div>
         <div className="drawer-cta">
-          <Link href="/nabidky" className="btn btn-secondary btn-block btn-square" data-drawer-close>
+          <Link href={NAV.nabidky} className="btn btn-secondary btn-block btn-square" data-drawer-close>
             Prohlédnout nabídky
           </Link>
-          <Link href="/pro-firmy" className="btn btn-primary btn-block btn-square" data-drawer-close>
+          <Link href={postHref} className="btn btn-primary btn-block btn-square" data-drawer-close>
             Inzerovat →
           </Link>
         </div>
@@ -400,15 +366,16 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
   );
 }
 
-export function PreviewFooter() {
+export function PreviewFooter({ postHref = NAV.register }: { postHref?: string }) {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
         <span>© {new Date().getFullYear()} DílnaJobs · Výrobní pozice · CZ</span>
         <div className="footer-links">
-          <Link href="/nabidky">Nabídky</Link>
-          <Link href="/pro-firmy">Pro firmy</Link>
-          <Link href="/firma/prihlaseni">Přihlášení</Link>
+          <Link href={NAV.nabidky}>Nabídky</Link>
+          <Link href={NAV.proFirmy}>Pro firmy</Link>
+          <Link href={postHref}>Vystavit nabídku</Link>
+          <Link href={NAV.login}>Přihlášení</Link>
           <Link href="/gdpr">Osobní údaje</Link>
           <Link href="/obchodni-podminky">Podmínky</Link>
           <a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a>

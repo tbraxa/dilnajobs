@@ -41,7 +41,7 @@ export default async function NabidkyPage({
         <span>
           {catalog.ok ? `${count} ${countLabel} · řazeno: ${query.sort === "salary" ? "mzda" : "nejnovější"}` : "Katalog je dočasně nedostupný."}
         </span>
-        <span>Živá databáze</span>
+        <span>Aktuální výpis</span>
       </div>
 
       <section className="section-band" aria-label="Výsledky">

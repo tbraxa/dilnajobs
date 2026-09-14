@@ -4,7 +4,7 @@ import { toNabidkyHref, type SearchQuery } from "@/lib/search-params";
 
 export function FilterChips({ defaults }: { defaults?: SearchQuery }) {
   return (
-    <>
+    <div id="filtry">
       <div className="filter-bar" role="group" aria-label="Profese">
         <span className="filter-label">Profese</span>
         <Link
@@ -88,6 +88,6 @@ export function FilterChips({ defaults }: { defaults?: SearchQuery }) {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }

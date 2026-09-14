@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+html {
+  background-color: #f2f0ea;
+  color: #0b0d12;
+}
+
 /* Portal/admin aliases → locked preview tokens (docs/design-tokens-locked.md). */
 :root {
   --cream: #f2f0ea;

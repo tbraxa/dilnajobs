@@ -21,8 +21,7 @@ export default function ErrorPage({
           <p className="eyebrow">Chyba</p>
           <h1>Něco se pokazilo</h1>
           <p className="lead">
-            Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, katalog se možná ještě migruje — obnovte za
-            chvíli.
+            Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, ozvěte se na ahoj@dilnajobs.cz.
           </p>
         </div>
         <div className="hero-ctas">
