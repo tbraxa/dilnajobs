@@ -14,6 +14,7 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
     "db:studio": "drizzle-kit studio",
+    "magic:dev": "tsx scripts/dev-magic-link.ts",
     "worker": "tsx src/worker.ts",
     "compose:up": "docker compose up -d",
     "ci": "npm run lint && npm run typecheck && npm run test"

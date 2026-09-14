@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { confirmMagicLinkAction } from "@/lib/actions/auth";
 import { Button } from "@/components/ui";
 
 export default async function OveritPage({
@@ -11,8 +10,6 @@ export default async function OveritPage({
   const token = typeof params.token === "string" ? params.token : "";
   if (!token) redirect("/firma/prihlaseni?chyba=odkaz");
 
-  const confirm = confirmMagicLinkAction.bind(null, token);
-
   return (
     <main className="mx-auto max-w-md px-4 py-16">
       <p className="label">Přihlášení</p>
@@ -20,7 +17,8 @@ export default async function OveritPage({
       <p className="mt-3 text-sm text-steel">
         Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem — token se spotřebuje až teď.
       </p>
-      <form action={confirm} className="mt-6">
+      <form action="/firma/prihlaseni/overit/akce" method="post" className="mt-6">
+        <input type="hidden" name="token" value={token} />
         <Button type="submit">Vstoupit do firmy</Button>
       </form>
     </main>

@@ -3,7 +3,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies, headers } from "next/headers";
 import { and, eq, gt, isNull } from "drizzle-orm";
-import { db } from "@/db/client";
+import { db, sql } from "@/db/client";
 import { employerUsers, employers, magicTokens, sessions } from "@/db/schema";
 import { env } from "./env";
 import { hashIp, randomToken, sha256 } from "./crypto";
@@ -79,35 +79,26 @@ export async function requestMagicLink(input: {
       return { ok: false, error: "IČO se nepodařilo ověřit." };
     }
 
-    const [existingUser] = await db
-      .select({ id: employerUsers.id })
-      .from(employerUsers)
-      .where(eq(employerUsers.email, email))
-      .limit(1);
-    if (existingUser) {
+    const existingUser = await sql<{ id: string }[]>`select id from employer_user_by_email(${email})`;
+    if (existingUser[0]) {
       return { ok: false, error: "Tento e-mail už máme. Přihlaste se odkazem." };
     }
 
-    const [existingIco] = await db
-      .select({ id: employers.id })
-      .from(employers)
-      .where(eq(employers.ico, ico))
-      .limit(1);
-    if (existingIco) {
+    const employerId = randomUUID();
+    try {
+      await db.insert(employers).values({
+        id: employerId,
+        ico,
+        companyName: parsed.data.companyName,
+        legalName: parsed.data.companyName,
+        city: parsed.data.city,
+        verificationStatus: "pending",
+        planCode: "trial",
+        planRenewsAt: new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10),
+      });
+    } catch {
       return { ok: false, error: "Toto IČO už je registrované. Přihlaste se jako uživatel firmy." };
     }
-
-    const employerId = randomUUID();
-    await db.insert(employers).values({
-      id: employerId,
-      ico,
-      companyName: parsed.data.companyName,
-      legalName: parsed.data.companyName,
-      city: parsed.data.city,
-      verificationStatus: "pending",
-      planCode: "trial",
-      planRenewsAt: new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10),
-    });
 
     await db.insert(employerUsers).values({
       employerId,
@@ -124,12 +115,8 @@ export async function requestMagicLink(input: {
       ipHash: hashIp(ip),
     });
   } else {
-    const [user] = await db
-      .select({ id: employerUsers.id })
-      .from(employerUsers)
-      .where(eq(employerUsers.email, email))
-      .limit(1);
-    if (!user) {
+    const user = await sql<{ id: string }[]>`select id from employer_user_by_email(${email})`;
+    if (!user[0]) {
       log("info", "magic.unknown_email");
       return { ok: true };
     }
@@ -153,7 +140,24 @@ export async function requestMagicLink(input: {
 }
 
 export async function consumeMagicLink(token: string): Promise<boolean> {
-  if (!token || token.length < 20) return false;
+  const created = await createSessionFromMagicToken(token);
+  if (!created) return false;
+  const jar = await cookies();
+  jar.set(SESSION_COOKIE, created.sessionToken, {
+    httpOnly: true,
+    secure: cookieSecure(),
+    sameSite: "lax",
+    path: "/",
+    expires: created.expiresAt,
+  });
+  return true;
+}
+
+export async function createSessionFromMagicToken(token: string): Promise<{
+  sessionToken: string;
+  expiresAt: Date;
+} | null> {
+  if (!token || token.length < 20) return null;
   const tokenHash = sha256(token);
   const ip = await clientIp();
   const ua = (await headers()).get("user-agent")?.slice(0, 240);
@@ -164,19 +168,18 @@ export async function consumeMagicLink(token: string): Promise<boolean> {
     .where(and(eq(magicTokens.tokenHash, tokenHash), isNull(magicTokens.consumedAt), gt(magicTokens.expiresAt, new Date())))
     .limit(1);
 
-  if (!row) return false;
+  if (!row) return null;
 
   await db
     .update(magicTokens)
     .set({ consumedAt: new Date() })
     .where(eq(magicTokens.id, row.id));
 
-  const [user] = await db
-    .select()
-    .from(employerUsers)
-    .where(eq(employerUsers.email, row.email))
-    .limit(1);
-  if (!user) return false;
+  const users = await sql<
+    { id: string; employer_id: string; email: string; name: string; role: string }[]
+  >`select id, employer_id, email, name, role from employer_user_by_email(${row.email})`;
+  const user = users[0];
+  if (!user) return null;
 
   const sessionToken = randomToken(32);
   const expiresAt = new Date(Date.now() + env.SESSION_DAYS * 86400000);
@@ -188,24 +191,25 @@ export async function consumeMagicLink(token: string): Promise<boolean> {
     ipHash: hashIp(ip),
   });
 
-  const jar = await cookies();
-  jar.set(SESSION_COOKIE, sessionToken, {
-    httpOnly: true,
-    secure: cookieSecure(),
-    sameSite: "lax",
-    path: "/",
-    expires: expiresAt,
-  });
-
   await audit({
     actorType: "employer_user",
     actorId: user.id,
-    employerId: user.employerId,
+    employerId: user.employer_id,
     action: "session.created",
     ipHash: hashIp(ip),
   });
 
-  return true;
+  return { sessionToken, expiresAt };
+}
+
+export function sessionCookieOptions(expiresAt: Date) {
+  return {
+    httpOnly: true,
+    secure: cookieSecure(),
+    sameSite: "lax" as const,
+    path: "/",
+    expires: expiresAt,
+  };
 }
 
 export async function getSession(): Promise<EmployerSession | null> {
@@ -214,26 +218,33 @@ export async function getSession(): Promise<EmployerSession | null> {
   if (!raw) return null;
   const tokenHash = sha256(raw);
 
-  const [row] = await db
-    .select({
-      sessionId: sessions.id,
-      expiresAt: sessions.expiresAt,
-      userId: employerUsers.id,
-      employerId: employerUsers.employerId,
-      email: employerUsers.email,
-      name: employerUsers.name,
-      companyName: employers.companyName,
-      planCode: employers.planCode,
-      adsPostedYear: employers.adsPostedYear,
-      verificationStatus: employers.verificationStatus,
-    })
-    .from(sessions)
-    .innerJoin(employerUsers, eq(sessions.employerUserId, employerUsers.id))
-    .innerJoin(employers, eq(employerUsers.employerId, employers.id))
-    .where(and(eq(sessions.tokenHash, tokenHash), gt(sessions.expiresAt, new Date())))
-    .limit(1);
-
-  return row ?? null;
+  const rows = await sql<
+    {
+      session_id: string;
+      expires_at: Date;
+      user_id: string;
+      employer_id: string;
+      email: string;
+      name: string;
+      company_name: string;
+      plan_code: string;
+      ads_posted_year: number;
+      verification_status: string;
+    }[]
+  >`select * from session_by_token_hash(${tokenHash})`;
+  const row = rows[0];
+  if (!row) return null;
+  return {
+    sessionId: row.session_id,
+    userId: row.user_id,
+    employerId: row.employer_id,
+    email: row.email,
+    name: row.name,
+    companyName: row.company_name,
+    planCode: row.plan_code,
+    adsPostedYear: row.ads_posted_year,
+    verificationStatus: row.verification_status,
+  };
 }
 
 export async function requireSession(): Promise<EmployerSession> {
