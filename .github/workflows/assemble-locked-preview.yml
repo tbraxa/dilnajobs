@@ -19,27 +19,26 @@ jobs:
         run: |
           set -euo pipefail
           PARTS=design/preview-locked/.parts
-          if ls "$PARTS"/index.part* >/dev/null 2>&1; then
-            cat "$PARTS"/index.part0 "$PARTS"/index.part1 "$PARTS"/index.part2 "$PARTS"/index.part3 "$PARTS"/index.part4 > design/preview-locked/index.html
-            echo "assembled index.html ($(wc -c < design/preview-locked/index.html) bytes)"
-          fi
-          if ls "$PARTS"/nabidky.part* >/dev/null 2>&1; then
-            cat "$PARTS"/nabidky.part0 "$PARTS"/nabidky.part1 "$PARTS"/nabidky.part2 "$PARTS"/nabidky.part3 > design/preview-locked/nabidky.html
-            echo "assembled nabidky.html ($(wc -c < design/preview-locked/nabidky.html) bytes)"
-          fi
-          if ls "$PARTS"/nabidka.part* >/dev/null 2>&1; then
-            cat "$PARTS"/nabidka.part0 "$PARTS"/nabidka.part1 "$PARTS"/nabidka.part2 "$PARTS"/nabidka.part3 > design/preview-locked/nabidka.html
-            echo "assembled nabidka.html ($(wc -c < design/preview-locked/nabidka.html) bytes)"
-          fi
-          if ls "$PARTS"/profirmy.part* >/dev/null 2>&1; then
-            cat "$PARTS"/profirmy.part0 "$PARTS"/profirmy.part1 "$PARTS"/profirmy.part2 "$PARTS"/profirmy.part3 > design/preview-locked/pro-firmy.html
-            echo "assembled pro-firmy.html ($(wc -c < design/preview-locked/pro-firmy.html) bytes)"
-          fi
+          assemble() {
+            local prefix="$1"
+            local out="$2"
+            mapfile -t files < <(ls "$PARTS"/${prefix}.part* 2>/dev/null | sort -V)
+            if [ ${#files[@]} -eq 0 ]; then
+              echo "skip $out (no parts)"
+              return 0
+            fi
+            cat "${files[@]}" > "$out"
+            echo "assembled $out ($(wc -c < "$out") bytes) from ${#files[@]} parts"
+          }
+          assemble index design/preview-locked/index.html
+          assemble nabidky design/preview-locked/nabidky.html
+          assemble nabidka design/preview-locked/nabidka.html
+          assemble profirmy design/preview-locked/pro-firmy.html
       - name: Commit assembled files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add design/preview-locked/*.html || true
+          git add design/preview-locked/index.html design/preview-locked/nabidky.html design/preview-locked/nabidka.html design/preview-locked/pro-firmy.html || true
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
