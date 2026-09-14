@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { sql } from "@/db/client";
 import { withEmployerRls } from "@/db/rls";
 import { orders, packages } from "@/db/schema";
+import { resolveAppUrl } from "@/lib/app-url";
 import { env, paymentsEnabled } from "@/lib/env";
 import { log } from "@/lib/logging";
 import { audit } from "@/lib/audit";
@@ -35,8 +36,9 @@ async function createStripeCheckout(input: {
 }) {
   const params = new URLSearchParams();
   params.set("mode", "payment");
-  params.set("success_url", `${env.APP_URL}/firma?objednavka=ok`);
-  params.set("cancel_url", `${env.APP_URL}/firma?objednavka=zruseno`);
+  const origin = resolveAppUrl();
+  params.set("success_url", `${origin}/firma?objednavka=ok`);
+  params.set("cancel_url", `${origin}/firma?objednavka=zruseno`);
   params.set("client_reference_id", input.orderId);
   params.set("customer_email", input.email);
   params.set("metadata[orderId]", input.orderId);

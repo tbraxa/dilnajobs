@@ -8,7 +8,7 @@ Required:
 
 | Variable | Notes |
 | --- | --- |
-| `APP_URL` | `https://dilnajobs.cz` (no trailing slash) |
+| `APP_URL` | Public origin, no trailing slash (`https://dilnajobs.cz`). **Optional on the first Vercel build** — empty/`unset` falls back to `https://$VERCEL_URL` then `http://localhost:3000` so `next build` does not throw `ERR_INVALID_URL`. Set this to the real domain after DNS and redeploy (magic-link, Stripe return URLs, origin checks). |
 | `DATABASE_URL` | `dilna_app` role, RLS on |
 | `DATABASE_ADMIN_URL` | superuser — migrate/seed only, not the web process |
 | `SESSION_SECRET` | ≥32 chars |
@@ -32,9 +32,10 @@ Never commit secrets. No `NEXT_PUBLIC_` secrets.
 
 1. Import the GitHub repo. Framework: Next.js (no extra `vercel.json` build config).
 2. Attach a Postgres instance (Neon / RDS / Cloud SQL via VPC). Run `npm run db:migrate` against `DATABASE_ADMIN_URL` once (local or a one-off).
-3. Set env vars above. `vercel.json` schedules `GET /api/cron/job-expiry` once daily at **04:00 UTC** (`0 4 * * *`). Hobby plans only allow at most one cron run per day; Vercel Pro is required for hourly. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`. The catalog already hides `expires_at < now()`, so a daily sweep is enough on Hobby.
-4. Stripe webhook URL: `https://<prod>/api/stripe/webhook` (raw body, signature verified).
-5. `/api/health` and `/api/ready` are serverless: liveness has no DB; ready is `SELECT 1` with a 1.5s timeout. The web process does **not** run the expiry worker.
+3. First deploy can succeed with only `DATABASE_URL` + `SESSION_SECRET` (≥32 chars). Do **not** leave `APP_URL=""` forever: after the production domain is live, set `APP_URL=https://dilnajobs.cz` (no trailing slash) and redeploy.
+4. Set remaining env vars above. `vercel.json` schedules `GET /api/cron/job-expiry` once daily at **04:00 UTC** (`0 4 * * *`). Hobby plans only allow at most one cron run per day; Vercel Pro is required for hourly. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`. The catalog already hides `expires_at < now()`, so a daily sweep is enough on Hobby.
+5. Stripe webhook URL: `https://<prod>/api/stripe/webhook` (raw body, signature verified).
+6. `/api/health` and `/api/ready` are serverless: liveness has no DB; ready is `SELECT 1` with a 1.5s timeout. The web process does **not** run the expiry worker.
 
 ## Cloud Run
 

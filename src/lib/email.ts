@@ -44,8 +44,12 @@ async function sendViaResend(input: { to: string; subject: string; text: string 
 }
 
 async function sendViaSmtp(input: { to: string; subject: string; text: string }) {
+  const smtpUrl = env.SMTP_URL?.trim();
+  if (!smtpUrl) {
+    throw new Error("SMTP_URL is empty");
+  }
   const { default: nodemailer } = await import("nodemailer");
-  const url = new URL(env.SMTP_URL!);
+  const url = new URL(smtpUrl);
   const port = Number(url.port || (url.protocol === "smtps:" ? 465 : 587));
   const transport = nodemailer.createTransport({
     host: url.hostname,

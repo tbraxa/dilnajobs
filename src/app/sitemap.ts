@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { CITIES, PROFESSIONS } from "@/lib/catalog";
+import { resolveAppUrl } from "@/lib/app-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.APP_URL ?? "http://localhost:3000";
+  const base = resolveAppUrl();
   const landings = PROFESSIONS.flatMap((p) =>
     CITIES.map((c) => ({
       url: `${base}/prace/${p.slug}/${c.slug}`,

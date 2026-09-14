@@ -11,7 +11,7 @@ import { clientIp } from "@/lib/auth";
 import { hashIp } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
 import { log } from "@/lib/logging";
-import { env } from "@/lib/env";
+import { resolveAppUrl } from "@/lib/app-url";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
 import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
@@ -122,7 +122,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
         subject: `Nová přihláška: ${job.title}`,
         text: `${parsed.data.fullName} se hlásí na ${job.title}. Telefon: ${parsed.data.phone}.${
           parsed.data.email ? ` E-mail: ${parsed.data.email}.` : ""
-        }${parsed.data.message ? `\n\n${parsed.data.message}` : ""}\n\nPřihlášky: ${env.APP_URL}/firma`,
+        }${parsed.data.message ? `\n\n${parsed.data.message}` : ""}\n\nPřihlášky: ${resolveAppUrl()}/firma`,
       });
     } catch (err) {
       captureException(err, { event: "application.notify_failed", jobId: job.id, requestId });

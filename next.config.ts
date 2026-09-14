@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { resolveAppHost } from "./src/lib/app-url";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -29,7 +30,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "64kb",
-      allowedOrigins: [process.env.APP_URL?.replace(/^https?:\/\//, "") ?? "localhost:3000"],
+      allowedOrigins: [resolveAppHost()],
     },
   },
   async headers() {

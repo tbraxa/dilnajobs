@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { withEmployerRls } from "@/db/rls";
 import { applications, jobs } from "@/db/schema";
+import { toAppUrl } from "@/lib/app-url";
 import { getSession } from "@/lib/auth";
 import { presignDownload, readCv } from "@/lib/storage/cv";
 
@@ -11,7 +12,7 @@ export async function GET(
 ) {
   const session = await getSession();
   if (!session) {
-    return NextResponse.redirect(new URL("/firma/prihlaseni", process.env.APP_URL ?? "http://localhost:3000"));
+    return NextResponse.redirect(toAppUrl("/firma/prihlaseni"));
   }
   const { id, appId } = await params;
 

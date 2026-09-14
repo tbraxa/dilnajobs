@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Archivo, IBM_Plex_Sans } from "next/font/google";
 import { headers } from "next/headers";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { resolveAppUrl } from "@/lib/app-url";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -19,7 +20,7 @@ const ibm = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(resolveAppUrl()),
   title: {
     default: "DílnaJobs — práce ve výrobě, napřímo",
     template: "%s · DílnaJobs",

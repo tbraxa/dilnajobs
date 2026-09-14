@@ -4,11 +4,12 @@ import {
   createSessionFromMagicToken,
   sessionCookieOptions,
 } from "@/lib/auth";
-import { env } from "@/lib/env";
+import { resolveAppUrl, toAppUrl } from "@/lib/app-url";
 
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
-  if (origin && origin !== env.APP_URL) {
+  const appUrl = resolveAppUrl();
+  if (origin && origin !== appUrl) {
     return NextResponse.json({ error: "bad_origin" }, { status: 403 });
   }
 
@@ -16,10 +17,10 @@ export async function POST(request: Request) {
   const token = String(form.get("token") ?? "");
   const created = await createSessionFromMagicToken(token);
   if (!created) {
-    return NextResponse.redirect(new URL("/firma/prihlaseni?chyba=odkaz", env.APP_URL), 303);
+    return NextResponse.redirect(toAppUrl("/firma/prihlaseni?chyba=odkaz"), 303);
   }
 
-  const res = NextResponse.redirect(new URL("/firma", env.APP_URL), 303);
+  const res = NextResponse.redirect(toAppUrl("/firma"), 303);
   res.cookies.set(SESSION_COOKIE, created.sessionToken, sessionCookieOptions(created.expiresAt));
   return res;
 }
