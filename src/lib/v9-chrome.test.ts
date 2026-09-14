@@ -36,6 +36,13 @@ describe("v9 public chrome", () => {
     expect(chrome).not.toContain("nav-toggle");
     const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
     expect(home).toContain("Práce ve výrobě. Přímo od firem.");
+    const board = readFileSync(new URL("../components/v9/board.tsx", import.meta.url), "utf8");
+    expect(board).toContain("board-top");
+    expect(board).toContain("board-layout");
+    expect(board).toContain("filters-thin");
+    expect(board).toContain("job-row");
+    expect(board).toContain("Moravia Precision s.r.o.");
+    expect(board.match(/title: "/g)?.length).toBe(8);
     const firms = readFileSync(new URL("../app/pro-firmy/page.tsx", import.meta.url), "utf8");
     expect(firms).toContain("2 490 Kč");
     expect(firms).toContain("6 990 Kč");
