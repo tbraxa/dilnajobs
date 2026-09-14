@@ -33,6 +33,7 @@ export type AresCompany = {
   ico: string;
   companyName: string;
   city: string | null;
+  address: string | null;
   dic: string | null;
 };
 
@@ -40,6 +41,21 @@ const ARES_SUBJECT_URL = "https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekon
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
+}
+
+function formatAresAddress(sidlo: Record<string, unknown>): { city: string | null; address: string | null } {
+  const obec = typeof sidlo.nazevObce === "string" ? sidlo.nazevObce.trim() : "";
+  if (typeof sidlo.textovaAdresa === "string" && sidlo.textovaAdresa.trim()) {
+    return { city: obec || null, address: sidlo.textovaAdresa.trim() };
+  }
+  const ulice = typeof sidlo.nazevUlice === "string" ? sidlo.nazevUlice.trim() : "";
+  const house = sidlo.cisloDomovni != null ? String(sidlo.cisloDomovni) : "";
+  const orient = sidlo.cisloOrientacni != null ? String(sidlo.cisloOrientacni) : "";
+  const psc = sidlo.psc != null ? String(sidlo.psc) : "";
+  const number = orient && house ? `${orient}/${house}` : orient || house;
+  const street = [ulice, number].filter(Boolean).join(" ");
+  const line = [street, psc, obec].filter(Boolean).join(", ");
+  return { city: obec || null, address: line || obec || null };
 }
 
 export function parseAresSubject(payload: unknown): AresCompany | null {
@@ -50,9 +66,12 @@ export function parseAresSubject(payload: unknown): AresCompany | null {
   if (!/^\d{8}$/.test(ico) || !companyName) return null;
 
   let city: string | null = null;
+  let address: string | null = null;
   const sidlo = asRecord(p.sidlo);
-  if (sidlo && typeof sidlo.nazevObce === "string" && sidlo.nazevObce.trim()) {
-    city = sidlo.nazevObce.trim();
+  if (sidlo) {
+    const formatted = formatAresAddress(sidlo);
+    city = formatted.city;
+    address = formatted.address;
   }
 
   let dic: string | null = null;
@@ -61,7 +80,7 @@ export function parseAresSubject(payload: unknown): AresCompany | null {
     dic = compact.startsWith("CZ") ? compact : `CZ${compact}`;
   }
 
-  return { ico, companyName, city, dic };
+  return { ico, companyName, city, address, dic };
 }
 
 export async function lookupAresCompany(

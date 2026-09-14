@@ -27,12 +27,13 @@ describe("parseAresSubject", () => {
         ico: "27082440",
         obchodniJmeno: "Alza.cz a.s.",
         dic: "27082440",
-        sidlo: { nazevObce: "Praha" },
+        sidlo: { nazevObce: "Praha", textovaAdresa: "Jankovcova 1522/53, Praha 7" },
       }),
     ).toEqual({
       ico: "27082440",
       companyName: "Alza.cz a.s.",
       city: "Praha",
+      address: "Jankovcova 1522/53, Praha 7",
       dic: "CZ27082440",
     });
   });

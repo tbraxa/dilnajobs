@@ -61,19 +61,20 @@ const optionalDic = z
 
 export const registerEmployerSchema = z
   .object({
-    email: z.string().trim().toLowerCase().email("Zadejte firemní e-mail."),
+    email: z.string().trim().toLowerCase().email("Zadejte pracovní e-mail."),
     firstName: z.string().trim().min(2, "Jméno je povinné.").max(60, "Jméno je příliš dlouhé."),
     lastName: z.string().trim().min(2, "Příjmení je povinné.").max(80, "Příjmení je příliš dlouhé."),
-    companyName: z.string().trim().min(3, "Název firmy je povinný.").max(160),
+    companyName: z.string().trim().min(3, "Obchodní název je povinný.").max(160),
     ico: z
       .string()
       .trim()
       .transform((v) => v.replace(/\s+/g, "")),
+    vatPayer: z.enum(["nonpayer", "payer"]).default("nonpayer"),
     dic: optionalDic,
     city: z
       .string()
       .trim()
-      .max(80)
+      .max(160)
       .optional()
       .transform((v) => (v ? v : undefined)),
     phone: z
@@ -90,6 +91,7 @@ export const registerEmployerSchema = z
   })
   .transform((data) => ({
     ...data,
+    dic: data.vatPayer === "payer" ? data.dic : undefined,
     name: `${data.firstName} ${data.lastName}`.replace(/\s+/g, " ").trim(),
   }));
 

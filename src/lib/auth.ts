@@ -55,6 +55,7 @@ export async function requestMagicLink(input: {
   dic?: string;
   city?: string;
   phone?: string;
+  vatPayer?: "nonpayer" | "payer";
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const email = input.email.trim().toLowerCase();
   const ip = await clientIp();
@@ -74,6 +75,7 @@ export async function requestMagicLink(input: {
       lastName: input.lastName,
       companyName: input.companyName,
       ico: input.ico,
+      vatPayer: input.vatPayer ?? (input.dic ? "payer" : "nonpayer"),
       dic: input.dic,
       city: input.city,
       phone: input.phone,

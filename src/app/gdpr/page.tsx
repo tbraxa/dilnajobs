@@ -28,7 +28,7 @@ export default function GdprPage() {
           </p>
           <h2>Zaměstnavatelé</h2>
           <p>
-            Firemní e-mail, jméno a příjmení kontaktní osoby, telefon, IČO, volitelně DIČ, název firmy a město sídla.
+            Firemní e-mail, jméno a příjmení kontaktní osoby, telefon, IČO, volitelně DIČ, název firmy a sídlo.
             Relace po přihlášení odkazem. Hesla nesbíráme.
           </p>
         </div>

@@ -18,7 +18,7 @@ export async function requestAdminLinkAction(
   return {
     ok: true,
     message:
-      "Když je adresa v seznamu správců, odkaz je na cestě. Platí 15 minut.",
+      "Zkontrolujte e-mail",
   };
 }
 

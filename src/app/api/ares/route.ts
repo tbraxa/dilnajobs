@@ -33,6 +33,7 @@ export async function GET(request: Request) {
     ok: true,
     companyName: result.company.companyName,
     city: result.company.city,
+    address: result.company.address,
     dic: result.company.dic,
     ico: result.company.ico,
   });

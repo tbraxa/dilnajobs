@@ -213,13 +213,13 @@ html body .logo-mark i {
   flex-direction: column;
   gap: 1.15rem;
   width: 100%;
-  max-width: 460px;
+  max-width: 440px;
   margin: 0 auto;
 }
 
 .auth-card {
   width: 100%;
-  max-width: 460px;
+  max-width: 440px;
   background: var(--cream-alt);
   border: 1px solid var(--border);
   padding: 1.4rem 1.35rem 1.5rem;
@@ -287,10 +287,47 @@ html body .logo-mark i {
   padding: 0;
 }
 
-.auth-row-2 {
+.auth-card .form-field > span {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.auth-choice {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.5rem;
+}
+
+.auth-choice label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  margin: 0;
+}
+
+.auth-choice label.is-on {
+  border-color: var(--ink);
+  background: var(--cream-alt);
+}
+
+.auth-choice input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
 }
 
 .auth-ico-row {
@@ -359,7 +396,7 @@ html body .logo-mark i {
 
 @media (min-width: 900px) {
   .auth-layout {
-    grid-template-columns: minmax(0, 220px) minmax(0, 460px);
+    grid-template-columns: minmax(0, 220px) minmax(0, 440px);
     justify-content: center;
     align-items: start;
     gap: 3.25rem;

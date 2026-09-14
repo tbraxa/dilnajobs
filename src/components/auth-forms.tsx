@@ -30,6 +30,7 @@ export function LoginForm() {
 }
 
 type AresNote = { kind: "ok" | "err"; text: string } | null;
+type VatPayer = "nonpayer" | "payer";
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(requestLinkAction, null as AuthState | null);
@@ -37,6 +38,7 @@ export function RegisterForm() {
   const [companyName, setCompanyName] = useState("");
   const [dic, setDic] = useState("");
   const [city, setCity] = useState("");
+  const [vatPayer, setVatPayer] = useState<VatPayer>("nonpayer");
   const [aresBusy, setAresBusy] = useState(false);
   const [aresNote, setAresNote] = useState<AresNote>(null);
 
@@ -50,6 +52,7 @@ export function RegisterForm() {
         error?: string;
         companyName?: string;
         city?: string | null;
+        address?: string | null;
         dic?: string | null;
       };
       if (!res.ok || !body.ok) {
@@ -57,8 +60,14 @@ export function RegisterForm() {
         return;
       }
       if (body.companyName) setCompanyName(body.companyName);
-      if (body.city) setCity(body.city);
-      if (body.dic) setDic(body.dic);
+      const seat = body.address || body.city;
+      if (seat) setCity(seat);
+      if (body.dic) {
+        setDic(body.dic);
+        setVatPayer("payer");
+      } else {
+        setVatPayer("nonpayer");
+      }
       setAresNote({ kind: "ok", text: "Údaje z ARES jsme doplnili. Zkontrolujte je a dokončete formulář." });
     } catch {
       setAresNote({ kind: "err", text: "ARES teď neodpověděl. Vyplňte údaje ručně." });
@@ -73,17 +82,6 @@ export function RegisterForm() {
 
       <fieldset className="auth-section">
         <legend>Firma</legend>
-        <Field label="Název firmy *" name="companyName">
-          <input
-            id="companyName"
-            name="companyName"
-            required
-            className={inputClass}
-            autoComplete="organization"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-          />
-        </Field>
         <div className="form-field">
           <label htmlFor="ico">IČO *</label>
           <div className="auth-ico-row">
@@ -103,22 +101,60 @@ export function RegisterForm() {
           </div>
           {aresNote ? <p className={`ares-note is-${aresNote.kind}`}>{aresNote.text}</p> : null}
         </div>
-        <Field label="DIČ" name="dic" hint="jen pokud jste plátci DPH">
+        <Field label="Obchodní název *" name="companyName">
           <input
-            id="dic"
-            name="dic"
+            id="companyName"
+            name="companyName"
+            required
             className={inputClass}
-            autoComplete="off"
-            value={dic}
-            onChange={(e) => setDic(e.target.value)}
+            autoComplete="organization"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
           />
         </Field>
-        <Field label="Město / sídlo" name="city">
+        <div className="form-field">
+          <span id="dph-label">DPH</span>
+          <div className="auth-choice" role="radiogroup" aria-labelledby="dph-label">
+            <label className={vatPayer === "nonpayer" ? "is-on" : undefined}>
+              <input
+                type="radio"
+                name="vatPayer"
+                value="nonpayer"
+                checked={vatPayer === "nonpayer"}
+                onChange={() => setVatPayer("nonpayer")}
+              />
+              Neplátce
+            </label>
+            <label className={vatPayer === "payer" ? "is-on" : undefined}>
+              <input
+                type="radio"
+                name="vatPayer"
+                value="payer"
+                checked={vatPayer === "payer"}
+                onChange={() => setVatPayer("payer")}
+              />
+              Plátce
+            </label>
+          </div>
+        </div>
+        {vatPayer === "payer" ? (
+          <Field label="DIČ" name="dic">
+            <input
+              id="dic"
+              name="dic"
+              className={inputClass}
+              autoComplete="off"
+              value={dic}
+              onChange={(e) => setDic(e.target.value)}
+            />
+          </Field>
+        ) : null}
+        <Field label="Sídlo / adresa" name="city">
           <input
             id="city"
             name="city"
             className={inputClass}
-            autoComplete="address-level2"
+            autoComplete="street-address"
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />
@@ -138,7 +174,7 @@ export function RegisterForm() {
         <Field label="Telefon *" name="phone">
           <input id="phone" name="phone" type="tel" required className={inputClass} autoComplete="tel" inputMode="tel" />
         </Field>
-        <Field label="Firemní e-mail *" name="reg-email">
+        <Field label="Pracovní e-mail *" name="reg-email">
           <input
             id="reg-email"
             name="email"

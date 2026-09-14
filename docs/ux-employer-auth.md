@@ -2,35 +2,43 @@
 
 Locked visual language: cream paper (`#F2F0EA` / `#FAF9F6`), Satoshi display, Inter body, `#003DFF` square CTAs. See `docs/design-tokens-locked.md`.
 
-`/firma/prihlaseni` uses a dedicated `.auth-shell`. It must **not** use marketing `PageHero`, `.detail-split`, or `.apply-panel` (those stretch inputs edge-to-edge).
+Czech B2B patterns this screen follows: StartupJobs (narrow card, one e-mail, no clutter), Teamio (IČO first), Fakturoid (Načíst z ARES → obchodní název / DIČ / adresa). **No password** — magic link only.
+
+`/firma/prihlaseni` uses a dedicated `.auth-shell`. It must **not** use marketing `PageHero`, `.detail-split`, or `.apply-panel`.
 
 ## Layout
 
-- Narrow cards, max-width **440–480px**, stacked: login first, registration below (`#registrace`).
+- Narrow cards, max-width **400–480px** (implemented 440px), stacked: login first, registration below (`#registrace`).
 - Desktop **≥900px**: optional left trust column (short bullets only). No technical jargon.
 - Trust bullets (accepted): přímí zaměstnavatelé; přihlášení odkazem / heslo nepoužíváme; transparentní ceník.
-- Inputs in auth cards: min-height ~44px, not hero-sized.
+- Inputs: min-height ~44px, not hero-sized.
 
 ## Login card
 
 | Element | Copy |
 | --- | --- |
 | Title | Přihlášení firmy |
-| Field | Firemní e-mail |
+| Field | Firemní e-mail *(one field)* |
 | CTA | Poslat přihlašovací odkaz |
+| Success | Zkontrolujte e-mail |
 | Helper | Odkaz platí 15 minut. Heslo nepoužíváme. |
 | Links | Založit účet · Ceník |
 
+No password field.
+
 ## Register card
+
+Order is locked. IČO is first.
 
 ### Firma
 
 | Field | Required | Notes |
 | --- | --- | --- |
-| Název firmy | yes | Autofill from ARES |
-| IČO | yes | 8 digits. Button **Načíst z ARES** → `GET /api/ares?ico=` (same-origin; CSP `connect-src 'self'`). |
-| DIČ | no | Hint: „jen pokud jste plátci DPH“ |
-| Město / sídlo | no | Autofill `sidlo.nazevObce` |
+| IČO | yes | 8 digits. Button **Načíst z ARES** → `GET /api/ares?ico=` fills obchodní název, DIČ, sídlo/adresa. |
+| Obchodní název | yes | Autofill `obchodniJmeno` |
+| DPH | yes | **Neplátce** / **Plátce**. Neplátce hides DIČ. |
+| DIČ | no | Shown only for Plátce. Autofill from ARES when present. |
+| Sídlo / adresa | no | Autofill `sidlo.textovaAdresa` (else obec). Stored in `employers.city`. |
 
 ### Kontaktní osoba
 
@@ -39,13 +47,16 @@ Locked visual language: cream paper (`#F2F0EA` / `#FAF9F6`), Satoshi display, In
 | Jméno | yes | `employer_users.first_name` |
 | Příjmení | yes | `employer_users.last_name` |
 | Telefon | yes | `employer_users.phone` |
-| Firemní e-mail | yes | `employer_users.email` |
+| Pracovní e-mail | yes | `employer_users.email` |
 
-`employer_users.name` stays `"${firstName} ${lastName}"` so existing session lookups keep working. `employers.dic` is nullable.
+`employer_users.name` stays `"${firstName} ${lastName}"`. `employers.dic` is nullable (empty when Neplátce).
 
-CTA: **Založit účet a poslat odkaz**
+CTA: **Založit účet a poslat odkaz**  
+Success: **Zkontrolujte e-mail**
 
-Legal (tiny): souhlas s [obchodními podmínkami](/obchodni-podminky) a [zpracováním údajů](/gdpr). No checksum talk.
+Legal (tiny): souhlas s [obchodními podmínkami](/obchodni-podminky) a [zpracováním údajů](/gdpr).
+
+No password. No checksum talk.
 
 ## Confirm page
 
@@ -53,4 +64,4 @@ Legal (tiny): souhlas s [obchodními podmínkami](/obchodni-podminky) a [zpracov
 
 ## Copy bans (this surface)
 
-Do not show: checksum, kontrolní součet, konzole serveru, lokální vývoj, stub, env var names.
+Do not show: checksum, kontrolní součet, konzole serveru, lokální vývoj, stub, env var names, AI filler.

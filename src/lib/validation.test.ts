@@ -39,6 +39,7 @@ describe("registerEmployerSchema", () => {
       city: "Ostrava",
       phone: "+420 777 123 456",
       consentTerms: "on",
+      vatPayer: "payer",
     });
     expect(parsed.success).toBe(true);
     if (!parsed.success) return;
@@ -68,6 +69,22 @@ describe("registerEmployerSchema", () => {
       lastName: "Novák",
       companyName: "Kovovýroba Novák",
       ico,
+      phone: "777123456",
+      consentTerms: true,
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.dic).toBeUndefined();
+  });
+
+  it("clears DIČ when the company is a non-payer", () => {
+    const parsed = registerEmployerSchema.safeParse({
+      email: "jan@kovovyroba.test",
+      firstName: "Jan",
+      lastName: "Novák",
+      companyName: "Kovovýroba Novák",
+      ico,
+      vatPayer: "nonpayer",
+      dic: "CZ12345678",
       phone: "777123456",
       consentTerms: true,
     });
