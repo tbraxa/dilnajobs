@@ -21,8 +21,8 @@ export default function ProFirmyPage() {
             <a href="#cenik" className="btn btn-primary btn-lg btn-square">
               Zobrazit ceník →
             </a>
-            <a href="/firma/prihlaseni" className="btn btn-secondary btn-lg btn-square">
-              Přihlásit firmu
+            <a href="mailto:firmy@dilnajobs.cz" className="btn btn-secondary btn-lg btn-square">
+              Napsat nám
             </a>
           </div>
         </div>
@@ -69,8 +69,7 @@ export default function ProFirmyPage() {
             Transparentní ceny. Bez agenturní přirážky.
           </h2>
           <p className="lead" style={{ marginTop: "0.75rem" }}>
-            Ceny bez DPH. Faktura na firmu. Začněte zkušebním inzerátem zdarma. Platba kartou jde přes Stripe Checkout, až
-            bude klíč v prostředí.
+            Ceny bez DPH. Faktura na firmu. Začněte zkušebním inzerátem zdarma.
           </p>
         </div>
 
