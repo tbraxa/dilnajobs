@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrace firmy — DílnaJobs</title>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="logo" href="index.html">
+        <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        DílnaJobs
+      </a>
+      <nav class="nav" aria-label="Hlavní">
+        <a href="nabidky.html">Nabídky</a>
+        <a href="pro-firmy.html">Pro firmy</a>
+      </nav>
+      <span class="spacer"></span>
+      <a class="link-quiet" href="firma-prihlaseni.html">Přihlášení</a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+    </div>
+    <div class="nav-mobile">
+      <a href="nabidky.html">Nabídky</a>
+      <a href="pro-firmy.html">Pro firmy</a>
+      <a href="firma-registrace.html">Inzerovat</a>
+      <a href="firma-prihlaseni.html">Přihlášení firmy</a>
+    </div>
+  </header>
+
+  <main class="auth">
+    <h1>Založit účet firmy</h1>
+    <p class="note">Nejdřív IČO. V tomto HTML náhledu ARES nevoláme — údaje vyplňte ručně.</p>
+    <form action="#" method="post" onsubmit="this.querySelector('[data-ok]').hidden=false; return false;">
+      <label class="field">
+        <span>IČO</span>
+        <input name="ico" inputmode="numeric" maxlength="8" required placeholder="12345678">
+      </label>
+      <button class="btn btn-outline" type="button" style="width:100%;margin-bottom:1rem" onclick="document.getElementById('rest').hidden=false">
+        Pokračovat
+      </button>
+      <div id="rest" hidden>
+        <label class="field">
+          <span>Obchodní název</span>
+          <input name="company" required>
+        </label>
+        <label class="field">
+          <span>Sídlo</span>
+          <input name="address">
+        </label>
+        <label class="field">
+          <span>Jméno</span>
+          <input name="first" required>
+        </label>
+        <label class="field">
+          <span>Příjmení</span>
+          <input name="last" required>
+        </label>
+        <label class="field">
+          <span>Telefon</span>
+          <input name="phone" required placeholder="+420 ">
+        </label>
+        <label class="field">
+          <span>Pracovní e-mail</span>
+          <input type="email" name="email" required>
+        </label>
+        <button class="btn btn-accent" type="submit">Založit účet</button>
+        <p class="note" data-ok hidden>Náhled neodesílá data. V ostré verzi přijde odkaz na e-mail.</p>
+      </div>
+    </form>
+    <p class="auth-links">
+      <a href="firma-prihlaseni.html">Už účet máte? Přihlášení</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>DílnaJobs · přímo od firem · bez agentur</span>
+      <span><a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a></span>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pro firmy — DílnaJobs</title>
+  <meta name="description" content="Inzerujte výrobní pozice tam, kde lidé filtrují podle profese a mzdy.">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="logo" href="index.html">
+        <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        DílnaJobs
+      </a>
+      <nav class="nav" aria-label="Hlavní">
+        <a href="nabidky.html">Nabídky</a>
+        <a href="pro-firmy.html" aria-current="page">Pro firmy</a>
+      </nav>
+      <span class="spacer"></span>
+      <a class="link-quiet" href="firma-registrace.html">Inzerovat</a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+    </div>
+    <div class="nav-mobile">
+      <a href="nabidky.html">Nabídky</a>
+      <a href="pro-firmy.html">Pro firmy</a>
+      <a href="firma-registrace.html">Inzerovat</a>
+      <a href="firma-prihlaseni.html">Přihlášení firmy</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <h1>Hledáte lidi do výroby?</h1>
+    <p class="lede">Inzerujte tam, kde uchazeči filtrují CNC, svářeče a směny. Odpovědi jdou k vám. Ceny bez DPH.</p>
+
+    <div class="prices" id="cenik">
+      <article class="price">
+        <span>Zkušební</span>
+        <strong>0 Kč</strong>
+        <p>Jeden inzerát. Ověříte, jestli sem lidi chodí.</p>
+        <a class="btn btn-outline" href="firma-registrace.html">Začít</a>
+      </article>
+      <article class="price">
+        <span>Inzerát · 30 dní</span>
+        <strong>2 990 Kč</strong>
+        <p>Jedna pozice, bez předplatného.</p>
+        <a class="btn btn-outline" href="firma-registrace.html">Koupit</a>
+      </article>
+      <article class="price">
+        <span>Basic · měsíc</span>
+        <strong>8 900 Kč</strong>
+        <p>Více pozic, faktura na firmu.</p>
+        <a class="btn btn-outline" href="firma-registrace.html">Vybrat</a>
+      </article>
+      <article class="price">
+        <span>Standard · měsíc</span>
+        <strong>19 900 Kč</strong>
+        <p>Pro dílny, které nabírají průběžně.</p>
+        <a class="btn btn-accent" href="firma-registrace.html" style="width:auto">Vybrat</a>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>DílnaJobs · přímo od firem · bez agentur</span>
+      <span>
+        <a href="firma-prihlaseni.html">Přihlášení firmy</a>
+        ·
+        <a href="mailto:firmy@dilnajobs.cz">firmy@dilnajobs.cz</a>
+      </span>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DílnaJobs — práce ve výrobě</title>
+  <meta name="description" content="CNC, svářeči, seřizovači. Přímo od firem, bez agentur.">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="logo" href="index.html">
+        <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        DílnaJobs
+      </a>
+      <nav class="nav" aria-label="Hlavní">
+        <a href="nabidky.html">Nabídky</a>
+        <a href="pro-firmy.html">Pro firmy</a>
+      </nav>
+      <span class="spacer"></span>
+      <a class="link-quiet" href="firma-registrace.html">Inzerovat</a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+    </div>
+    <div class="nav-mobile">
+      <a href="nabidky.html">Nabídky</a>
+      <a href="pro-firmy.html">Pro firmy</a>
+      <a href="firma-registrace.html">Inzerovat</a>
+      <a href="firma-prihlaseni.html">Přihlášení firmy</a>
+    </div>
+  </header>
+
+  <main class="board">
+    <aside class="rail">
+      <p class="claim">Práce ve výrobě. Přímo od firem.</p>
+      <form data-board action="nabidky.html" method="get">
+        <div class="search-row">
+          <label class="field">
+            <span>Pozice</span>
+            <input name="q" type="search" placeholder="CNC, svářeč, Fanuc…" autocomplete="off">
+          </label>
+          <button class="btn btn-accent" type="submit">Hledat</button>
+        </div>
+        <button class="btn btn-outline sheet-open" type="button" data-sheet-open>Filtry</button>
+        <div class="facets">
+          <div class="sheet-head">
+            <strong>Filtry</strong>
+            <button type="button" class="btn-ghost" data-sheet-close>Hotovo</button>
+          </div>
+          <label class="field field-city">
+            <span>Město</span>
+            <select name="city">
+              <option value="">Celá ČR</option>
+              <option>Brno</option>
+              <option>Ostrava</option>
+              <option>Plzeň</option>
+              <option>Mladá Boleslav</option>
+              <option>Liberec</option>
+              <option>Zlín</option>
+              <option>Olomouc</option>
+            </select>
+          </label>
+          <div class="facet">
+            <h2>Profese</h2>
+            <div class="facet-list">
+              <button type="button" data-profession="" class="is-on">Všechny</button>
+              <button type="button" data-profession="cnc">CNC</button>
+              <button type="button" data-profession="welder">Svářeč</button>
+              <button type="button" data-profession="setter">Seřizovač</button>
+              <button type="button" data-profession="electrician">Elektrikář</button>
+              <button type="button" data-profession="maintenance">Údržba</button>
+              <button type="button" data-profession="locksmith">Zámečník</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </aside>
+
+    <section class="results" aria-label="Nabídky">
+      <div class="results-bar">
+        <span data-count>8 nabídek</span>
+        <a href="nabidky.html" data-clear hidden>Zrušit filtry</a>
+      </div>
+      <ol class="jobs">
+        <li class="job" data-profession="cnc" data-city="Brno" data-q="cnc operator operátor fanuc moravia brno">
+          <div>
+            <h2>CNC operátor / operátorka</h2>
+            <p>Moravia Tech · Brno · 3 směny</p>
+          </div>
+          <div class="job-pay">38–48 000 Kč</div>
+        </li>
+        <li class="job" data-profession="welder" data-city="Plzeň" data-q="svářeč svarac tig 141 plzeň kovovýroba">
+          <div>
+            <h2>Svářeč TIG 141</h2>
+            <p>Kovovýroba Západ · Plzeň · 2 směny</p>
+          </div>
+          <div class="job-pay">42–55 000 Kč</div>
+        </li>
+        <li class="job" data-profession="setter" data-city="Ostrava" data-q="seřizovač serizovac cnc fanuc ostrava precision">
+          <div>
+            <h2>Seřizovač CNC</h2>
+            <p>MSK Precision · Ostrava · 3 směny</p>
+          </div>
+          <div class="job-pay">45–60 000 Kč</div>
+        </li>
+        <li class="job" data-profession="locksmith" data-city="Olomouc" data-q="zámečník zamecnik olomouc haná">
+          <div>
+            <h2>Zámečník / zámečnice</h2>
+            <p>Haná Engineering · Olomouc · ranní</p>
+          </div>
+          <div class="job-pay">36–44 000 Kč</div>
+        </li>
+        <li class="job" data-profession="cnc" data-city="Mladá Boleslav" data-q="obráběč obrabec cnc soustruh mladá boleslav">
+          <div>
+            <h2>Obráběč kovů</h2>
+            <p>Auto Components · Mladá Boleslav · 2 směny</p>
+          </div>
+          <div class="job-pay">40–52 000 Kč</div>
+        </li>
+        <li class="job" data-profession="electrician" data-city="Zlín" data-q="elektrikář elektrikar průmyslový zlín linky">
+          <div>
+            <h2>Průmyslový elektrikář</h2>
+            <p>Linky Zlín · Zlín · 2 směny</p>
+          </div>
+          <div class="job-pay">44–58 000 Kč</div>
+        </li>
+        <li class="job" data-profession="maintenance" data-city="Brno" data-q="údržba udrzba údržbář linka brno food">
+          <div>
+            <h2>Údržbář výrobní linky</h2>
+            <p>Food Plant · Brno · 3 směny</p>
+          </div>
+          <div class="job-pay">39–50 000 Kč</div>
+        </li>
+        <li class="job" data-profession="cnc" data-city="Liberec" data-q="cnc programátor programator heidenhain liberec tooling">
+          <div>
+            <h2>CNC programátor</h2>
+            <p>Tooling Liberec · Liberec · ranní</p>
+          </div>
+          <div class="job-pay">52–70 000 Kč</div>
+        </li>
+      </ol>
+      <p class="empty" hidden>
+        Na tento filtr teď nic nemáme. Zkuste jinou pozici, nebo
+        <a href="index.html" data-clear>zrušte filtry</a>.
+        Hlídání nabídek ještě nemáme — napište na
+        <a href="mailto:ahoj@dilnajobs.cz?subject=Upozornit%20m%C4%9B">ahoj@dilnajobs.cz</a>.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>DílnaJobs · přímo od firem · bez agentur</span>
+      <span>
+        <a href="firma-prihlaseni.html">Přihlášení firmy</a>
+        ·
+        <a href="mailto:ahoj@dilnajobs.cz">ahoj@dilnajobs.cz</a>
+      </span>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
