@@ -499,7 +499,7 @@ h3 { font-size: 1.2rem; letter-spacing: -0.02em; }
   transform: translate(-50%, -6px);
   transition: opacity 0.2s var(--ease), transform 0.2s var(--ease), visibility 0.2s;
   pointer-events: none;
-  max-height: min(70vh, 520px);
+  max-height: min(62vh, 440px);
   overflow-y: auto;
   overflow-x: hidden;
 }

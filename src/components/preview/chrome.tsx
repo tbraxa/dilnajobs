@@ -12,16 +12,23 @@ function MegaLink({
   title,
   note,
   drawer,
+  onNavigate,
 }: {
   href: string;
   icon: string;
   title: string;
   note: string;
   drawer?: boolean;
+  onNavigate?: () => void;
 }) {
   const className = drawer ? "drawer-link" : "mega-item";
   return (
-    <Link className={className} href={href} data-drawer-close={drawer ? true : undefined}>
+    <Link
+      className={className}
+      href={href}
+      data-drawer-close={drawer ? true : undefined}
+      onClick={onNavigate}
+    >
       <MegaIcon name={icon} />
       <span className="mega-text">
         <strong>{title}</strong>
@@ -46,11 +53,22 @@ export function PreviewHeader({
   const lastY = useRef(0);
   const deltaAccum = useRef(0);
   const leaveTimer = useRef<number>(0);
+  const hoverLockUntil = useRef(0);
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  function dismissOverlays() {
+    window.clearTimeout(leaveTimer.current);
+    hoverLockUntil.current = Date.now() + 600;
+    setOpenMega(null);
+    setDrawer(false);
+    setAcc(null);
+    document.body.classList.remove("mega-open", "drawer-open");
+  }
 
   useEffect(() => {
-    setDrawer(false);
-    setOpenMega(null);
-    setAcc(null);
+    dismissOverlays();
+    // Close leftover hover mega after client navigation; do not reopen until hoverLock expires.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pathname only
   }, [pathname]);
 
   useEffect(() => {
@@ -98,16 +116,26 @@ export function PreviewHeader({
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpenMega(null);
-        setDrawer(false);
-      }
+      if (event.key === "Escape") dismissOverlays();
+    };
+    const onPointer = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (headerRef.current?.contains(target)) return;
+      const drawerEl = document.getElementById("mobile-drawer");
+      if (drawerEl?.contains(target)) return;
+      if (openMega || drawer) dismissOverlays();
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, []);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [openMega, drawer]);
 
   function enterMega(id: string) {
+    if (Date.now() < hoverLockUntil.current) return;
     if (window.matchMedia("(min-width: 901px)").matches) {
       window.clearTimeout(leaveTimer.current);
       setOpenMega(id);
@@ -166,12 +194,13 @@ export function PreviewHeader({
     <>
       <div className="top-strip">{strip}</div>
       <header
+        ref={headerRef}
         className={`site-header${hidden ? " is-hidden" : ""}`}
         onMouseEnter={() => window.clearTimeout(leaveTimer.current)}
         onMouseLeave={leaveHeader}
       >
         <div className="header-inner">
-          <Link className="logo" href="/">
+          <Link className="logo" href="/" onClick={dismissOverlays}>
             <LogoMark />
             DílnaJobs
           </Link>
@@ -211,16 +240,16 @@ export function PreviewHeader({
                 }
               }}
             >
-              <a href={NAV.howItWorks} className="nav-link-plain">
+              <a href={NAV.howItWorks} className="nav-link-plain" onClick={dismissOverlays}>
                 Jak to funguje
               </a>
             </div>
           </nav>
           <div className="header-actions">
-            <Link href={NAV.nabidky} className="btn btn-ghost btn-square">
+            <Link href={NAV.nabidky} className="btn btn-ghost btn-square" onClick={dismissOverlays}>
               Hledat
             </Link>
-            <Link href={postHref} className="btn btn-primary btn-square">
+            <Link href={postHref} className="btn btn-primary btn-square" onClick={dismissOverlays}>
               Inzerovat →
             </Link>
             <button
@@ -247,28 +276,28 @@ export function PreviewHeader({
             <div>
               <p className="mega-col-title">Profese</p>
               <div className="mega-list">
-                <MegaLink href="/nabidky?profession=cnc" icon="cnc" title="CNC" note="Operátoři a programátoři obráběcích center" />
-                <MegaLink href="/nabidky?profession=welder" icon="welder" title="Svářeči" note="TIG, MIG/MAG a konstrukční svařování" />
-                <MegaLink href="/nabidky?profession=setter" icon="setter" title="Seřizovači" note="Seřízení CNC, Fanuc, Heidenhain" />
-                <MegaLink href="/nabidky?profession=electrician" icon="electrician" title="Elektrikáři" note="Průmyslová elektro a údržba rozvodů" />
-                <MegaLink href="/nabidky?profession=maintenance" icon="maintenance" title="Údržba" note="Strojaři, zámečníci, servis linek" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?profession=cnc" icon="cnc" title="CNC" note="Operátoři a programátoři obráběcích center" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?profession=welder" icon="welder" title="Svářeči" note="TIG, MIG/MAG a konstrukční svařování" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?profession=setter" icon="setter" title="Seřizovači" note="Seřízení CNC, Fanuc, Heidenhain" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?profession=electrician" icon="electrician" title="Elektrikáři" note="Průmyslová elektro a údržba rozvodů" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?profession=maintenance" icon="maintenance" title="Údržba" note="Strojaři, zámečníci, servis linek" />
               </div>
             </div>
             <div>
               <p className="mega-col-title">Podle kraje</p>
               <div className="mega-list">
-                <MegaLink href="/nabidky?city=Ostrava" icon="map" title="Moravskoslezský" note="Ostrava a okolí · MSK" />
-                <MegaLink href="/nabidky?city=Brno" icon="map" title="Jihomoravský" note="Brno a jižní Morava" />
-                <MegaLink href="/nabidky?city=Plzeň" icon="map" title="Plzeňský" note="Plzeň a západ Čech" />
-                <MegaLink href="/nabidky?city=Mladá Boleslav" icon="factory" title="Středočeský" note="Mladá Boleslav a okolí Prahy" />
-                <MegaLink href="/nabidky" icon="map" title="Další kraje" note="Olomoucký, Ústecký a další" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Ostrava" icon="map" title="Moravskoslezský" note="Ostrava a okolí · MSK" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Brno" icon="map" title="Jihomoravský" note="Brno a jižní Morava" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Plzeň" icon="map" title="Plzeňský" note="Plzeň a západ Čech" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky?city=Mladá Boleslav" icon="factory" title="Středočeský" note="Mladá Boleslav a okolí Prahy" />
+                <MegaLink onNavigate={dismissOverlays} href="/nabidky" icon="map" title="Další kraje" note="Olomoucký, Ústecký a další" />
               </div>
             </div>
             <div>
               <p className="mega-col-title">Akce</p>
               <div className="mega-list">
-                <MegaLink href={NAV.nabidky} icon="factory" title="Všechny nabídky" note="Celý výpis, bez agentur" />
-                <MegaLink href={NAV.nabidkyFilters} icon="search" title="Hledat / filtry" note="Profese, město, mzda" />
+                <MegaLink onNavigate={dismissOverlays} href={NAV.nabidky} icon="factory" title="Všechny nabídky" note="Celý výpis, bez agentur" />
+                <MegaLink onNavigate={dismissOverlays} href={NAV.nabidkyFilters} icon="search" title="Hledat / filtry" note="Profese, město, mzda" />
               </div>
             </div>
           </div>
@@ -282,10 +311,10 @@ export function PreviewHeader({
           aria-label="Pro firmy"
         >
           <div className="mega-inner">
-            <MegaLink href={postHref} icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
-            <MegaLink href={NAV.cenik} icon="pricing" title="Ceník" note="0 / 2 990 / 8 900 / 19 900 Kč bez DPH" />
-            <MegaLink href={NAV.login} icon="direct" title="Přihlášení firmy" note="Odkaz na e-mail. Heslo nepoužíváme." />
-            <MegaLink href={NAV.proFirmy} icon="why" title="Pro firmy" note="Cílení, postup, balíčky" />
+            <MegaLink onNavigate={dismissOverlays} href={postHref} icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
+            <MegaLink onNavigate={dismissOverlays} href={NAV.cenik} icon="pricing" title="Ceník" note="0 / 2 990 / 8 900 / 19 900 Kč bez DPH" />
+            <MegaLink onNavigate={dismissOverlays} href={NAV.login} icon="direct" title="Přihlášení firmy" note="Odkaz na e-mail. Heslo nepoužíváme." />
+            <MegaLink onNavigate={dismissOverlays} href={NAV.proFirmy} icon="why" title="Pro firmy" note="Cílení, postup, balíčky" />
           </div>
         </div>
       </header>
@@ -318,18 +347,18 @@ export function PreviewHeader({
           </button>
           <div className={`drawer-acc-panel${acc === "nabidky" ? " is-open" : ""}`} id="acc-nabidky">
             <p className="drawer-section-label">Profese</p>
-            <MegaLink drawer href="/nabidky?profession=cnc" icon="cnc" title="CNC" note="Operátoři a programátoři" />
-            <MegaLink drawer href="/nabidky?profession=welder" icon="welder" title="Svářeči" note="TIG, MIG/MAG" />
-            <MegaLink drawer href="/nabidky?profession=setter" icon="setter" title="Seřizovači" note="Fanuc, Heidenhain" />
-            <MegaLink drawer href="/nabidky?profession=electrician" icon="electrician" title="Elektrikáři" note="Průmyslová elektro" />
-            <MegaLink drawer href="/nabidky?profession=maintenance" icon="maintenance" title="Údržba" note="Strojaři a servis" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?profession=cnc" icon="cnc" title="CNC" note="Operátoři a programátoři" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?profession=welder" icon="welder" title="Svářeči" note="TIG, MIG/MAG" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?profession=setter" icon="setter" title="Seřizovači" note="Fanuc, Heidenhain" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?profession=electrician" icon="electrician" title="Elektrikáři" note="Průmyslová elektro" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?profession=maintenance" icon="maintenance" title="Údržba" note="Strojaři a servis" />
             <p className="drawer-section-label">Podle kraje</p>
-            <MegaLink drawer href="/nabidky?city=Ostrava" icon="map" title="Moravskoslezský" note="Ostrava · MSK" />
-            <MegaLink drawer href="/nabidky?city=Brno" icon="map" title="Jihomoravský" note="Brno" />
-            <MegaLink drawer href="/nabidky?city=Plzeň" icon="map" title="Plzeňský" note="Plzeň" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?city=Ostrava" icon="map" title="Moravskoslezský" note="Ostrava · MSK" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?city=Brno" icon="map" title="Jihomoravský" note="Brno" />
+            <MegaLink onNavigate={dismissOverlays} drawer href="/nabidky?city=Plzeň" icon="map" title="Plzeňský" note="Plzeň" />
             <p className="drawer-section-label">Akce</p>
-            <MegaLink drawer href={NAV.nabidky} icon="factory" title="Všechny nabídky" note="Celý výpis" />
-            <MegaLink drawer href={NAV.nabidkyFilters} icon="search" title="Hledat / filtry" note="Profese, město, mzda" />
+            <MegaLink onNavigate={dismissOverlays} drawer href={NAV.nabidky} icon="factory" title="Všechny nabídky" note="Celý výpis" />
+            <MegaLink onNavigate={dismissOverlays} drawer href={NAV.nabidkyFilters} icon="search" title="Hledat / filtry" note="Profese, město, mzda" />
           </div>
 
           <button
@@ -343,10 +372,10 @@ export function PreviewHeader({
             Pro firmy <Chev />
           </button>
           <div className={`drawer-acc-panel${acc === "firmy" ? " is-open" : ""}`} id="acc-firmy">
-            <MegaLink drawer href={postHref} icon="post" title="Vystavit nabídku" note="Během pár minut" />
-            <MegaLink drawer href={NAV.cenik} icon="pricing" title="Ceník" note="Transparentní ceny" />
-            <MegaLink drawer href={NAV.login} icon="direct" title="Přihlášení firmy" note="Odkaz na e-mail" />
-            <MegaLink drawer href={NAV.proFirmy} icon="why" title="Pro firmy" note="Cílení a balíčky" />
+            <MegaLink onNavigate={dismissOverlays} drawer href={postHref} icon="post" title="Vystavit nabídku" note="Během pár minut" />
+            <MegaLink onNavigate={dismissOverlays} drawer href={NAV.cenik} icon="pricing" title="Ceník" note="Transparentní ceny" />
+            <MegaLink onNavigate={dismissOverlays} drawer href={NAV.login} icon="direct" title="Přihlášení firmy" note="Odkaz na e-mail" />
+            <MegaLink onNavigate={dismissOverlays} drawer href={NAV.proFirmy} icon="why" title="Pro firmy" note="Cílení a balíčky" />
           </div>
 
           <a href={NAV.howItWorks} className="drawer-acc-btn" data-drawer-close onClick={() => setDrawer(false)}>
