@@ -1,0 +1,45 @@
+ <span class="mega-text"><strong>Středočeský</strong><span>Mladá Boleslav a okolí Prahy</span></span>
+            </a>
+            <a class="mega-item" href="nabidky.html">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-map"/></svg></span>
+              <span class="mega-text"><strong>Další kraje</strong><span>Olomoucký, Ústecký a další</span></span>
+            </a>
+          </div>
+        </div>
+        <div>
+          <p class="mega-col-title">Jak hledat</p>
+          <div class="mega-list">
+            <a class="mega-item" href="nabidky.html">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-factory"/></svg></span>
+              <span class="mega-text"><strong>Filtry nabídek</strong><span>Profese, kraj, směny a mzda na jednom místě</span></span>
+            </a>
+            <a class="mega-item" href="nabidka.html">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-search"/></svg></span>
+              <span class="mega-text"><strong>Odpověď bez registrace</strong><span>Jméno, telefon, volitelně CV — hotovo</span></span>
+            </a>
+            <a class="mega-item" href="index.html">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-direct"/></svg></span>
+              <span class="mega-text"><strong>Přímo od firem</strong><span>Žádná agentura mezi vámi a dílnou</span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mega: Pro firmy -->
+    <div class="mega-panel" id="mega-firmy" data-cols="4" role="region" aria-label="Pro firmy">
+      <div class="mega-inner">
+            <a class="mega-item" href="pro-firmy.html">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-post"/></svg></span>
+              <span class="mega-text"><strong>Vystavit nabídku</strong><span>Profese, mzda, směny — během pár minut</span></span>
+            </a>
+            <a class="mega-item" href="pro-firmy.html#cenik">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-pricing"/></svg></span>
+              <span class="mega-text"><strong>Ceník</strong><span>0 / 2 990 / 8 900 / 19 900 Kč bez DPH</span></span>
+            </a>
+            <a class="mega-item" href="pro-firmy.html">
+              <span class="mega-icon" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><use href="icons.svg#icon-why"/></svg></span>
+              <span class="mega-text"><strong>Proč DílnaJobs</strong><span>Cílení na výrobní profese, přímý kontakt</span></span>
+            </a>
+            <a class="mega-item" href="pro-firmy.html">
+              <span class="mega-icon" aria-hidden="true
