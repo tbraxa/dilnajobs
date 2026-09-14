@@ -276,7 +276,7 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
           aria-label="Pro firmy"
         >
           <div className="mega-inner">
-            <MegaLink href="/firma/prihlaseni" icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
+            <MegaLink href="/firma/registrace" icon="post" title="Vystavit nabídku" note="Profese, mzda, směny — během pár minut" />
             <MegaLink href="/pro-firmy#cenik" icon="pricing" title="Ceník" note="0 / 2 990 / 8 900 / 19 900 Kč bez DPH" />
             <MegaLink href="/pro-firmy" icon="why" title="Proč DílnaJobs" note="Cílení na výrobní profese, přímý kontakt" />
             <MegaLink href="/pro-firmy" icon="direct" title="Bez agentur" note="Odpovědi jdou rovnou k vám" />
@@ -302,7 +302,7 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
             <div>
               <p className="mega-col-title">Pro firmy</p>
               <div className="mega-list">
-                <MegaLink href="/firma/prihlaseni" icon="post" title="1 · Vystavíte nabídku" note="Jasná specifikace výroby" />
+                <MegaLink href="/firma/registrace" icon="post" title="1 · Vystavíte nabídku" note="Jasná specifikace výroby" />
                 <MegaLink href="/pro-firmy" icon="factory" title="2 · Přicházejí odpovědi" note="Jméno, telefon, volitelně CV" />
                 <MegaLink href="/pro-firmy" icon="factory" title="3 · Voláte vy" note="Jeden klik a jste ve spojení" />
               </div>
@@ -364,7 +364,7 @@ export function PreviewHeader({ liveCount }: { liveCount?: number }) {
             Pro firmy <Chev />
           </button>
           <div className={`drawer-acc-panel${acc === "firmy" ? " is-open" : ""}`} id="acc-firmy">
-            <MegaLink drawer href="/firma/prihlaseni" icon="post" title="Vystavit nabídku" note="Během pár minut" />
+            <MegaLink drawer href="/firma/registrace" icon="post" title="Vystavit nabídku" note="Během pár minut" />
             <MegaLink drawer href="/pro-firmy#cenik" icon="pricing" title="Ceník" note="Transparentní ceny" />
             <MegaLink drawer href="/pro-firmy" icon="why" title="Proč DílnaJobs" note="Cílení na výrobu" />
             <MegaLink drawer href="/pro-firmy" icon="direct" title="Bez agentur" note="Přímý kontakt" />

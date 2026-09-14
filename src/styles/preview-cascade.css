@@ -213,13 +213,13 @@ html body .logo-mark i {
   flex-direction: column;
   gap: 1.15rem;
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
 .auth-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   background: var(--cream-alt);
   border: 1px solid var(--border);
   padding: 1.4rem 1.35rem 1.5rem;
@@ -330,19 +330,41 @@ html body .logo-mark i {
   clip: rect(0, 0, 0, 0);
 }
 
-.auth-ico-row {
+.auth-row-2 {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.5rem;
-  align-items: stretch;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
 }
 
-.auth-ico-row .btn {
-  width: auto;
+.auth-ico-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.auth-ico-stack .btn {
+  width: 100%;
   margin: 0;
-  min-height: 44px;
-  white-space: nowrap;
-  padding-inline: 0.85rem;
+}
+
+.auth-card .auth-ico-input {
+  min-height: 52px;
+  font-size: 1.0625rem;
+  letter-spacing: 0.06em;
+}
+
+.auth-manual {
+  display: inline-block;
+  margin-top: 0.65rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }
 
 .ares-note {
@@ -396,7 +418,7 @@ html body .logo-mark i {
 
 @media (min-width: 900px) {
   .auth-layout {
-    grid-template-columns: minmax(0, 220px) minmax(0, 440px);
+    grid-template-columns: minmax(0, 240px) minmax(0, 480px);
     justify-content: center;
     align-items: start;
     gap: 3.25rem;
@@ -413,8 +435,7 @@ html body .logo-mark i {
 }
 
 @media (max-width: 520px) {
-  .auth-row-2,
-  .auth-ico-row {
+  .auth-row-2 {
     grid-template-columns: 1fr;
   }
 }

@@ -81,7 +81,7 @@ export function SiteHeader({ compact = false }: { compact?: boolean }) {
               </Link>
             ))}
             {!compact ? (
-              <ButtonLink href="/firma/prihlaseni" variant="accent" className="ml-2 px-3 py-2 text-sm">
+              <ButtonLink href="/firma/registrace" variant="accent" className="ml-2 px-3 py-2 text-sm">
                 Přidat nabídku
               </ButtonLink>
             ) : null}
@@ -156,7 +156,7 @@ export function SiteHeader({ compact = false }: { compact?: boolean }) {
               </ul>
             </nav>
             <div className="border-t border-line p-4">
-              <ButtonLink href="/firma/prihlaseni" variant="accent" className="w-full">
+              <ButtonLink href="/firma/registrace" variant="accent" className="w-full">
                 Přidat nabídku
                 <IconArrow className="h-4 w-4" />
               </ButtonLink>

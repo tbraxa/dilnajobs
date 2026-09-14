@@ -87,7 +87,7 @@ export default function ProFirmyPage() {
             <li>Odpovědi e-mailem</li>
             <li>Bez automatického obnovení</li>
           </ul>
-          <a href="/firma/prihlaseni" className="btn btn-outline-soft btn-square">
+          <a href="/firma/registrace" className="btn btn-outline-soft btn-square">
             Začít zdarma →
           </a>
         </div>
@@ -108,7 +108,7 @@ export default function ProFirmyPage() {
             <li>Schránka odpovědí</li>
             <li>Statistiky zobrazení</li>
           </ul>
-          <a href="/firma/prihlaseni" className="btn btn-secondary btn-square">
+          <a href="/firma/registrace" className="btn btn-secondary btn-square">
             Koupit inzerát →
           </a>
         </div>
@@ -128,7 +128,7 @@ export default function ProFirmyPage() {
             <li>Firemní profil</li>
             <li>Podpora e-mailem</li>
           </ul>
-          <a href="/firma/prihlaseni" className="btn btn-accent btn-square">
+          <a href="/firma/registrace" className="btn btn-accent btn-square">
             Vybrat Basic →
           </a>
         </div>
@@ -152,7 +152,7 @@ export default function ProFirmyPage() {
             <li>Rozšířený firemní profil</li>
             <li>Dedikovaná podpora</li>
           </ul>
-          <a href="/firma/prihlaseni" className="btn btn-primary btn-square">
+          <a href="/firma/registrace" className="btn btn-primary btn-square">
             Vybrat Standard →
           </a>
         </div>
@@ -182,7 +182,7 @@ export default function ProFirmyPage() {
           </p>
         </div>
         <div className="hero-ctas">
-          <a href="/firma/prihlaseni" className="btn btn-accent btn-lg btn-square">
+          <a href="/firma/registrace" className="btn btn-accent btn-lg btn-square">
             Začít zdarma →
           </a>
           <a href="mailto:firmy@dilnajobs.cz" className="btn btn-secondary btn-lg btn-square">

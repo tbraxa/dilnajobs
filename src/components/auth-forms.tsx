@@ -41,6 +41,7 @@ export function RegisterForm() {
   const [vatPayer, setVatPayer] = useState<VatPayer>("nonpayer");
   const [aresBusy, setAresBusy] = useState(false);
   const [aresNote, setAresNote] = useState<AresNote>(null);
+  const [revealed, setRevealed] = useState(false);
 
   async function loadFromAres() {
     setAresBusy(true);
@@ -57,6 +58,7 @@ export function RegisterForm() {
       };
       if (!res.ok || !body.ok) {
         setAresNote({ kind: "err", text: body.error ?? "ARES teď neodpověděl. Vyplňte údaje ručně." });
+        setRevealed(true);
         return;
       }
       if (body.companyName) setCompanyName(body.companyName);
@@ -68,9 +70,11 @@ export function RegisterForm() {
       } else {
         setVatPayer("nonpayer");
       }
-      setAresNote({ kind: "ok", text: "Údaje z ARES jsme doplnili. Zkontrolujte je a dokončete formulář." });
+      setAresNote({ kind: "ok", text: "Údaje z ARES jsme doplnili. Zkontrolujte je." });
+      setRevealed(true);
     } catch {
       setAresNote({ kind: "err", text: "ARES teď neodpověděl. Vyplňte údaje ručně." });
+      setRevealed(true);
     } finally {
       setAresBusy(false);
     }
@@ -84,7 +88,7 @@ export function RegisterForm() {
         <legend>Firma</legend>
         <div className="form-field">
           <label htmlFor="ico">IČO *</label>
-          <div className="auth-ico-row">
+          <div className="auth-ico-stack">
             <input
               id="ico"
               name="ico"
@@ -92,115 +96,145 @@ export function RegisterForm() {
               inputMode="numeric"
               autoComplete="off"
               maxLength={10}
+              className={`${inputClass} auth-ico-input`.trim()}
               value={ico}
               onChange={(e) => setIco(e.target.value)}
             />
-            <button type="button" className="btn btn-secondary btn-square" onClick={() => void loadFromAres()} disabled={aresBusy}>
+            <button
+              type="button"
+              className={`btn btn-square ${revealed ? "btn-secondary" : "btn-accent"}`}
+              onClick={() => void loadFromAres()}
+              disabled={aresBusy}
+            >
               {aresBusy ? "Načítám…" : "Načíst z ARES"}
             </button>
           </div>
           {aresNote ? <p className={`ares-note is-${aresNote.kind}`}>{aresNote.text}</p> : null}
+          {!revealed ? (
+            <button type="button" className="auth-manual" onClick={() => setRevealed(true)}>
+              Vyplnit ručně
+            </button>
+          ) : null}
         </div>
-        <Field label="Obchodní název *" name="companyName">
-          <input
-            id="companyName"
-            name="companyName"
-            required
-            className={inputClass}
-            autoComplete="organization"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-          />
-        </Field>
-        <div className="form-field">
-          <span id="dph-label">DPH</span>
-          <div className="auth-choice" role="radiogroup" aria-labelledby="dph-label">
-            <label className={vatPayer === "nonpayer" ? "is-on" : undefined}>
+
+        {revealed ? (
+          <>
+            <Field label="Obchodní název *" name="companyName">
               <input
-                type="radio"
-                name="vatPayer"
-                value="nonpayer"
-                checked={vatPayer === "nonpayer"}
-                onChange={() => setVatPayer("nonpayer")}
+                id="companyName"
+                name="companyName"
+                required
+                className={inputClass}
+                autoComplete="organization"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
               />
-              Neplátce
-            </label>
-            <label className={vatPayer === "payer" ? "is-on" : undefined}>
+            </Field>
+            <div className="form-field">
+              <span id="dph-label">DPH</span>
+              <div className="auth-choice" role="radiogroup" aria-labelledby="dph-label">
+                <label className={vatPayer === "nonpayer" ? "is-on" : undefined}>
+                  <input
+                    type="radio"
+                    name="vatPayer"
+                    value="nonpayer"
+                    checked={vatPayer === "nonpayer"}
+                    onChange={() => setVatPayer("nonpayer")}
+                  />
+                  Neplátce
+                </label>
+                <label className={vatPayer === "payer" ? "is-on" : undefined}>
+                  <input
+                    type="radio"
+                    name="vatPayer"
+                    value="payer"
+                    checked={vatPayer === "payer"}
+                    onChange={() => setVatPayer("payer")}
+                  />
+                  Plátce
+                </label>
+              </div>
+            </div>
+            {vatPayer === "payer" ? (
+              <Field label="DIČ" name="dic">
+                <input
+                  id="dic"
+                  name="dic"
+                  className={inputClass}
+                  autoComplete="off"
+                  value={dic}
+                  onChange={(e) => setDic(e.target.value)}
+                />
+              </Field>
+            ) : null}
+            <Field label="Sídlo / adresa" name="city">
               <input
-                type="radio"
-                name="vatPayer"
-                value="payer"
-                checked={vatPayer === "payer"}
-                onChange={() => setVatPayer("payer")}
+                id="city"
+                name="city"
+                className={inputClass}
+                autoComplete="street-address"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
               />
-              Plátce
-            </label>
-          </div>
-        </div>
-        {vatPayer === "payer" ? (
-          <Field label="DIČ" name="dic">
-            <input
-              id="dic"
-              name="dic"
-              className={inputClass}
-              autoComplete="off"
-              value={dic}
-              onChange={(e) => setDic(e.target.value)}
-            />
-          </Field>
+            </Field>
+          </>
         ) : null}
-        <Field label="Sídlo / adresa" name="city">
-          <input
-            id="city"
-            name="city"
-            className={inputClass}
-            autoComplete="street-address"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          />
-        </Field>
       </fieldset>
 
-      <fieldset className="auth-section">
-        <legend>Kontaktní osoba</legend>
-        <div className="auth-row-2">
-          <Field label="Jméno *" name="firstName">
-            <input id="firstName" name="firstName" required className={inputClass} autoComplete="given-name" />
-          </Field>
-          <Field label="Příjmení *" name="lastName">
-            <input id="lastName" name="lastName" required className={inputClass} autoComplete="family-name" />
-          </Field>
-        </div>
-        <Field label="Telefon *" name="phone">
-          <input id="phone" name="phone" type="tel" required className={inputClass} autoComplete="tel" inputMode="tel" />
-        </Field>
-        <Field label="Pracovní e-mail *" name="reg-email">
-          <input
-            id="reg-email"
-            name="email"
-            type="email"
-            required
-            className={inputClass}
-            autoComplete="email"
-            inputMode="email"
-          />
-        </Field>
-      </fieldset>
+      {revealed ? (
+        <>
+          <fieldset className="auth-section">
+            <legend>Kontaktní osoba</legend>
+            <div className="auth-row-2">
+              <Field label="Jméno *" name="firstName">
+                <input id="firstName" name="firstName" required className={inputClass} autoComplete="given-name" />
+              </Field>
+              <Field label="Příjmení *" name="lastName">
+                <input id="lastName" name="lastName" required className={inputClass} autoComplete="family-name" />
+              </Field>
+            </div>
+            <Field label="Telefon *" name="phone">
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                required
+                className={inputClass}
+                autoComplete="tel"
+                inputMode="tel"
+                placeholder="+420 "
+              />
+            </Field>
+            <Field label="Pracovní e-mail *" name="reg-email">
+              <input
+                id="reg-email"
+                name="email"
+                type="email"
+                required
+                className={inputClass}
+                autoComplete="email"
+                inputMode="email"
+              />
+            </Field>
+          </fieldset>
 
-      <label className="auth-legal">
-        <input type="checkbox" name="consentTerms" value="on" required />
-        <span>
-          Zakládám účet jako přímý zaměstnavatel a souhlasím s{" "}
-          <a href="/obchodni-podminky">obchodními podmínkami</a> a se{" "}
-          <a href="/gdpr">zpracováním osobních údajů</a>.
-        </span>
-      </label>
+          <label className="auth-legal">
+            <input type="checkbox" name="consentTerms" value="on" required />
+            <span>
+              Zakládám účet jako přímý zaměstnavatel a souhlasím s{" "}
+              <a href="/obchodni-podminky">obchodními podmínkami</a> a se{" "}
+              <a href="/gdpr">zpracováním osobních údajů</a>.
+            </span>
+          </label>
 
-      {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
-      {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
-      <Button type="submit" variant="accent" disabled={pending}>
-        {pending ? "Zakládám účet…" : "Založit účet a poslat odkaz"}
-      </Button>
+          {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
+          {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
+          <Button type="submit" variant="accent" disabled={pending}>
+            {pending ? "Zakládám účet…" : "Založit účet a poslat odkaz"}
+          </Button>
+          <p className="auth-helper">Na e-mail pošleme přihlašovací odkaz. Heslo nepoužíváme.</p>
+        </>
+      ) : null}
     </form>
   );
 }
