@@ -37,6 +37,10 @@ html body .site-footer {
   margin-inline: auto;
   width: 100%;
 }
+/* Header bar is the --max column (borders, padding 0) like .hero-board. Auth uses the same column + --gutter inset. */
+html body .auth-shell {
+  padding-inline: var(--gutter);
+}
 html body .site-footer {
   margin-top: auto;
 }
@@ -207,7 +211,7 @@ html body a.drawer-acc-btn {
   max-width: var(--max);
   width: 100%;
   margin-inline: auto;
-  padding: 3.25rem 2.5rem 3rem;
+  padding: 3.25rem var(--gutter) 3rem;
   background: var(--cream-alt);
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
@@ -486,13 +490,13 @@ html body a.drawer-acc-btn {
 
 @media (max-width: 900px) {
   html body .auth-shell {
-    padding: 2rem 1.5rem 2.5rem;
+    padding: 2rem var(--gutter) 2.5rem;
   }
 }
 
 @media (max-width: 720px) {
   html body .auth-shell {
-    padding: 1.5rem 1rem 2rem;
+    padding: 1.5rem var(--gutter) 2rem;
   }
 }
 
