@@ -20,13 +20,15 @@ Otevřete [http://localhost:3000](http://localhost:3000).
 
 Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru. Odkaz otevře potvrzovací stránku (prohlížeče odkazy přednačítají — token se spotřebuje až po kliknutí na **Vstoupit do firmy**).
 
+Správa provozu (`/admin`, ne firemní portál): v `.env` nastavte `ADMIN_EMAILS=tomas@dilnajobs.test`, pak `npm run magic:admin` a potvrďte odkaz. Sondy: `GET /api/health` (živost), `GET /api/ready` (Postgres). Podrobnosti: [docs/OPS.md](docs/OPS.md).
+
 Volitelné MinIO: `docker compose --profile storage up -d` a doplňte `S3_*` v `.env`.
 
 ## Stack
 
 Next.js 15 App Router, TypeScript, Tailwind, PostgreSQL 16, Drizzle, passwordless magic-link pro firmy, S3-kompatibilní CVs.
 
-Rozhodnutí: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), ADR [001](docs/adr/001-stack.md), [002](docs/adr/002-candidate-apply.md), [003](docs/adr/003-direct-employers.md). Co neděláme: [docs/anti-goals.md](docs/anti-goals.md). Bezpečnost: [SECURITY.md](SECURITY.md). Stuby: [docs/STUBS.md](docs/STUBS.md).
+Rozhodnutí: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), ADR [001](docs/adr/001-stack.md), [002](docs/adr/002-candidate-apply.md), [003](docs/adr/003-direct-employers.md). Co neděláme: [docs/anti-goals.md](docs/anti-goals.md). Bezpečnost: [SECURITY.md](SECURITY.md). Stuby: [docs/STUBS.md](docs/STUBS.md). Provoz a zdraví: [docs/OPS.md](docs/OPS.md).
 
 ## Ceník (bez DPH)
 
@@ -45,12 +47,14 @@ Rozhodnutí: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), ADR [001](docs/adr/00
 | `npm run dev` | Next.js (Turbopack) |
 | `npm run db:migrate` | SQL migrace |
 | `npm run db:seed` | ≥8 CZ výrobních nabídek |
-| `npm run worker` | pg-boss (expirace + e-mail stub) |
+| `npm run magic:dev` | Dev magic-link pro `novak@kovovyroba-novak.test` |
+| `npm run magic:admin` | Dev magic-link pro první adresu v `ADMIN_EMAILS` |
+| `npm run worker` | Expirace inzerátů + heartbeat `job_expiry` |
 | `npm run lint` / `typecheck` / `test` | CI kontroly |
 | `npm run build` | produkční build |
 
 ## Produkční vs. stub
 
-Hotové v1: veřejné stránky z DB, hledání/filtry/řazení, přihláška (Zod + rate limit), magic-link v dev, firma vidí jen svoje přihlášky (RLS), bezpečnostní hlavičky, audit log.
+Hotové v1: veřejné stránky z DB, hledání/filtry/řazení, přihláška (Zod + rate limit), magic-link v dev, firma vidí jen svoje přihlášky (RLS), bezpečnostní hlavičky, audit log, liveness/readiness, admin konzole `/admin` (allowlist `ADMIN_EMAILS`).
 
-Stuby (jasně označené v kódu i v [docs/STUBS.md](docs/STUBS.md)): SMTP, S3 pokud chybí klíče, Stripe/GoPay checkout, ARES ověření IČO, první inzerát ke schválení operátorem.
+Stuby (jasně označené v kódu i v [docs/STUBS.md](docs/STUBS.md)): SMTP, S3 pokud chybí klíče, Stripe/GoPay checkout, ARES ověření IČO, Sentry pokud chybí `SENTRY_DSN`.

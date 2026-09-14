@@ -45,9 +45,27 @@ export const magicTokens = pgTable("magic_tokens", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull(),
   tokenHash: text("token_hash").notNull().unique(),
+  purpose: text("purpose").notNull().default("employer"),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   consumedAt: timestamp("consumed_at", { withTimezone: true }),
   createdAt: timestamps.createdAt,
+});
+
+export const adminSessions = pgTable("admin_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull(),
+  tokenHash: text("token_hash").notNull().unique(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamps.createdAt,
+  userAgent: text("user_agent"),
+  ipHash: text("ip_hash"),
+});
+
+export const systemHeartbeats = pgTable("system_heartbeats", {
+  name: text("name").primaryKey(),
+  status: text("status").notNull(),
+  detail: text("detail"),
+  checkedAt: timestamp("checked_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const sessions = pgTable("sessions", {

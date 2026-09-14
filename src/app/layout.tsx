@@ -34,13 +34,22 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const h = await headers();
+  const nonce = h.get("x-nonce") ?? undefined;
+  const pathname = h.get("x-pathname") ?? "";
+  const isAdmin = pathname.startsWith("/admin");
   return (
     <html lang="cs" className={`${archivo.variable} ${ibm.variable}`}>
       <body className="workshop-grid flex min-h-screen flex-col antialiased" data-nonce={nonce}>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        {isAdmin ? (
+          children
+        ) : (
+          <>
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+          </>
+        )}
       </body>
     </html>
   );

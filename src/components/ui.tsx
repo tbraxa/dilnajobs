@@ -1,13 +1,14 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "ink" | "ghost";
+type Variant = "primary" | "ink" | "ghost" | "danger";
 
 const variants: Record<Variant, string> = {
   primary:
     "bg-accent text-white hover:bg-accent-hover border border-accent hover:border-accent-hover",
   ink: "bg-ink text-paper hover:bg-black border border-ink",
   ghost: "bg-transparent text-ink border border-line hover:bg-paper-2",
+  danger: "bg-danger text-white hover:bg-black border border-danger",
 };
 
 export function Button({

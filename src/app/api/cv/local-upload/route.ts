@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { CV_ALLOWLIST, putLocalFromTicket } from "@/lib/storage/cv";
 import { env } from "@/lib/env";
 import { log } from "@/lib/logging";
+import { captureException } from "@/lib/observability";
+import { getRequestId } from "@/lib/request-id";
 
 export async function PUT(request: Request) {
   const url = new URL(request.url);
@@ -20,9 +22,10 @@ export async function PUT(request: Request) {
 
   try {
     const objectKey = await putLocalFromTicket(ticket, contentType, buf);
-    log("info", "cv.local_upload", { bytes: buf.length });
+    log("info", "cv.local_upload", { bytes: buf.length, requestId: await getRequestId() });
     return NextResponse.json({ objectKey });
-  } catch {
+  } catch (err) {
+    captureException(err, { event: "cv.local_upload.failed", requestId: await getRequestId() });
     return NextResponse.json({ error: "bad_ticket" }, { status: 403 });
   }
 }

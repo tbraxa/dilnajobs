@@ -15,6 +15,7 @@
     "db:seed": "tsx scripts/seed.ts",
     "db:studio": "drizzle-kit studio",
     "magic:dev": "tsx scripts/dev-magic-link.ts",
+    "magic:admin": "tsx scripts/dev-admin-link.ts",
     "worker": "tsx src/worker.ts",
     "compose:up": "docker compose up -d",
     "ci": "npm run lint && npm run typecheck && npm run test"
@@ -22,6 +23,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",
     "@aws-sdk/s3-request-presigner": "^3.864.0",
+    "@sentry/nextjs": "^9.47.1",
     "drizzle-orm": "^0.44.5",
     "next": "15.5.25",
     "pg-boss": "^10.3.2",

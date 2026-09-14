@@ -36,6 +36,14 @@ describe.skipIf(!url || !adminUrl)("RLS applications isolation", () => {
     expect(theirs.rows.some((r) => r.employer_id === novak!.id)).toBe(false);
     await app.query("rollback");
 
+    await app.query("begin");
+    await app.query("select set_config('app.is_admin', 'true', true)");
+    const asAdmin = await app.query<{ employer_id: string }>("select employer_id from applications");
+    const ids = new Set(asAdmin.rows.map((r) => r.employer_id));
+    expect(ids.has(novak!.id)).toBe(true);
+    expect(ids.has(morava!.id)).toBe(true);
+    await app.query("rollback");
+
     await app.end();
   });
 });

@@ -13,6 +13,8 @@ import { enforceRateLimit } from "./rate-limit";
 import { isValidIco, normalizeIco, verifyIcoViaAres } from "./ico";
 import { registerEmployerSchema } from "./validation";
 import { audit } from "./audit";
+import { captureException } from "./observability";
+import { getRequestId } from "./request-id";
 
 export const SESSION_COOKIE = "dj_session";
 
@@ -51,6 +53,7 @@ export async function requestMagicLink(input: {
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const email = input.email.trim().toLowerCase();
   const ip = await clientIp();
+  const requestId = await getRequestId();
 
   try {
     await enforceRateLimit({ bucket: "magic:ip", key: ip, limit: 10, windowMs: 60 * 60 * 1000 });
@@ -117,26 +120,37 @@ export async function requestMagicLink(input: {
   } else {
     const user = await sql<{ id: string }[]>`select id from employer_user_by_email(${email})`;
     if (!user[0]) {
-      log("info", "magic.unknown_email");
+      log("info", "magic.unknown_email", { requestId });
       return { ok: true };
     }
   }
 
-  const token = randomToken(32);
-  const tokenHash = sha256(token);
-  const expiresAt = new Date(Date.now() + env.MAGIC_LINK_MINUTES * 60 * 1000);
+  try {
+    const token = randomToken(32);
+    const tokenHash = sha256(token);
+    const expiresAt = new Date(Date.now() + env.MAGIC_LINK_MINUTES * 60 * 1000);
 
-  await db.insert(magicTokens).values({ email, tokenHash, expiresAt });
+    await db.insert(magicTokens).values({ email, tokenHash, purpose: "employer", expiresAt });
 
-  const url = `${env.APP_URL}/firma/prihlaseni/overit?token=${encodeURIComponent(token)}`;
-  await sendEmail({
-    to: email,
-    subject: "Přihlášení na DílnaJobs",
-    text: `Odkaz platí ${env.MAGIC_LINK_MINUTES} minut a jde použít jen jednou.\n\n${url}\n\nPokud jste o něj nežádali, ignorujte ho.`,
-  });
+    const url = `${env.APP_URL}/firma/prihlaseni/overit?token=${encodeURIComponent(token)}`;
+    await sendEmail({
+      to: email,
+      subject: "Přihlášení na DílnaJobs",
+      text: `Odkaz platí ${env.MAGIC_LINK_MINUTES} minut a jde použít jen jednou.\n\n${url}\n\nPokud jste o něj nežádali, ignorujte ho.`,
+    });
 
-  log("info", "magic.sent", { minutes: env.MAGIC_LINK_MINUTES });
-  return { ok: true };
+    log("info", "magic.sent", { requestId, minutes: env.MAGIC_LINK_MINUTES });
+    return { ok: true };
+  } catch (err) {
+    captureException(err, { event: "magic.send_failed", requestId });
+    await audit({
+      actorType: "system",
+      action: "auth.magic.failed",
+      metadata: { requestId },
+      ipHash: hashIp(ip),
+    });
+    return { ok: false, error: "Odkaz se teď nepodařilo odeslat." };
+  }
 }
 
 export async function consumeMagicLink(token: string): Promise<boolean> {
@@ -169,6 +183,17 @@ export async function createSessionFromMagicToken(token: string): Promise<{
     .limit(1);
 
   if (!row) return null;
+  if (row.purpose !== "employer") {
+    const requestId = await getRequestId();
+    log("warn", "magic.wrong_purpose", { requestId });
+    await audit({
+      actorType: "system",
+      action: "auth.magic.wrong_purpose",
+      metadata: { requestId, purpose: row.purpose },
+      ipHash: hashIp(ip),
+    });
+    return null;
+  }
 
   await db
     .update(magicTokens)

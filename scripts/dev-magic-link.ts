@@ -12,8 +12,8 @@ async function main() {
   if (!url) throw new Error("no db");
   const sql = postgres(url, { max: 1 });
   await sql`
-    insert into magic_tokens (email, token_hash, expires_at)
-    values ('novak@kovovyroba-novak.test', ${tokenHash}, now() + interval '15 minutes')
+    insert into magic_tokens (email, token_hash, purpose, expires_at)
+    values ('novak@kovovyroba-novak.test', ${tokenHash}, 'employer', now() + interval '15 minutes')
   `;
   console.log(`http://localhost:3000/firma/prihlaseni/overit?token=${token}`);
   await sql.end({ timeout: 2 });

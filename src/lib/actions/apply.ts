@@ -11,6 +11,8 @@ import { clientIp } from "@/lib/auth";
 import { hashIp } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
 import { log } from "@/lib/logging";
+import { captureException } from "@/lib/observability";
+import { getRequestId } from "@/lib/request-id";
 import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
 import { applySchema } from "@/lib/validation";
 
@@ -40,6 +42,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
   }
 
   const ip = await clientIp();
+  const requestId = await getRequestId();
   try {
     await enforceRateLimit({ bucket: "apply:ip", key: ip, limit: 8, windowMs: 60 * 60 * 1000 });
     await enforceRateLimit({
@@ -52,6 +55,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
     if (err instanceof RateLimitError) {
       return { ok: false, error: "Z této sítě už přišlo moc přihlášek. Zkuste to později." };
     }
+    captureException(err, { event: "apply.rate_limit", requestId, jobId: parsed.data.jobId });
     throw err;
   }
 
@@ -82,7 +86,18 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
       ipHash: hashIp(ip),
     });
   } catch (err) {
-    log("error", "application.insert_failed", { jobId: job.id });
+    const requestId = await getRequestId();
+    log("error", "application.insert_failed", { jobId: job.id, requestId });
+    captureException(err, { event: "application.insert_failed", jobId: job.id, requestId });
+    await audit({
+      actorType: "system",
+      employerId: job.employerId,
+      action: "application.insert_failed",
+      resourceType: "job",
+      resourceId: job.id,
+      metadata: { requestId },
+      ipHash: hashIp(ip),
+    });
     return { ok: false, error: "Přihlášku se teď nepodařilo uložit. Zkuste to znovu." };
   }
 
@@ -103,6 +118,6 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
     text: `${parsed.data.fullName} se hlásí na ${job.title}. Telefon: ${parsed.data.phone}.`,
   });
 
-  log("info", "application.created", { jobId: job.id });
+  log("info", "application.created", { jobId: job.id, requestId });
   return { ok: true };
 }

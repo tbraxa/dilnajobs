@@ -38,6 +38,11 @@ const schema = z.object({
     .string()
     .optional()
     .transform((v) => v === "true"),
+  ADMIN_EMAILS: z
+    .string()
+    .optional()
+    .transform((v) => v || ""),
+  SENTRY_DSN: optionalUrl,
 });
 
 export type Env = z.infer<typeof schema>;
@@ -62,4 +67,14 @@ export function paymentsEnabled(): boolean {
 
 export function s3Enabled(): boolean {
   return Boolean(env.S3_ACCESS_KEY && env.S3_SECRET_KEY);
+}
+
+export function adminEmails(): string[] {
+  return env.ADMIN_EMAILS.split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+export function isAdminEmail(email: string): boolean {
+  return adminEmails().includes(email.trim().toLowerCase());
 }

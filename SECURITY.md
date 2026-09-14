@@ -6,7 +6,8 @@ DílnaJobs handles candidate CVs and phone numbers (special-category-adjacent em
 
 | Asset | Threat | Control in v1 |
 | --- | --- | --- |
-| Session | theft / XSS | HttpOnly SameSite cookies, CSP nonces, no `document.cookie` |
+| Session | theft / XSS | HttpOnly SameSite cookies (`dj_session`, `dj_admin`), CSP nonces, no `document.cookie` |
+| Admin | employer session used as operator | Separate cookie + `ADMIN_EMAILS` allowlist + `purpose` on magic tokens; RLS `app.is_admin` |
 | Magic link | stuffing / replay | hashed token, 15 min, single use, rate limit per e-mail and IP |
 | Applications / CVs | IDOR, public bucket | unguessable keys, private storage, employer RLS, auth’d download |
 | Jobs | agency spam, XSS in description | IČO path, first-post review, HTML not rendered as markup (text) |
@@ -21,7 +22,7 @@ Trust boundary: Next.js server is the only database client. Browsers never get a
 
 - [x] V2 — no passwords; magic-link with hashed secrets, TTL, one-time use
 - [x] V3 — session cookie flags; logout drops server row + cookie
-- [x] V4 — employer access via `app.employer_id` + FORCE RLS
+- [x] V4 — employer access via `app.employer_id` + FORCE RLS; operator via `app.is_admin` (not the employer cookie)
 - [x] V5 — Zod on apply, auth, job create, query params
 - [x] V7 — structured logs; no secrets; `audit_events`
 - [x] V8 — private CVs; MIME allowlist; size cap; no guessable URLs

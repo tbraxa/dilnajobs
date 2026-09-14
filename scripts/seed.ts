@@ -4,7 +4,7 @@ loadEnv({ path: ".env" });
 
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { applications, employerUsers, employers, jobs } from "../src/db/schema";
+import { applications, employerUsers, employers, jobs, orders } from "../src/db/schema";
 import { makeValidIco } from "../src/lib/ico";
 import { jobSlug } from "../src/lib/slug";
 import { randomBytes } from "node:crypto";
@@ -28,7 +28,7 @@ async function main() {
   const icoPlast = makeValidIco("2559664");
   const icoEnergo = makeValidIco("4455667");
 
-  await sql`truncate applications, jobs, sessions, magic_tokens, employer_users, employers, orders, audit_events, rate_limit_events restart identity cascade`;
+  await sql`truncate applications, jobs, sessions, magic_tokens, admin_sessions, employer_users, employers, orders, audit_events, rate_limit_events restart identity cascade`;
 
   const [novak] = await db
     .insert(employers)
@@ -82,11 +82,25 @@ async function main() {
     })
     .returning();
 
+  const [cekani] = await db
+    .insert(employers)
+    .values({
+      ico: makeValidIco("5566778"),
+      companyName: "Čekající kovovýroba s.r.o.",
+      legalName: "Čekající kovovýroba s.r.o.",
+      city: "Jihlava",
+      verificationStatus: "pending",
+      planCode: "trial",
+      adsPostedYear: 1,
+    })
+    .returning();
+
   await db.insert(employerUsers).values([
     { employerId: novak.id, email: "novak@kovovyroba-novak.test", name: "Jan Novák", role: "owner" },
     { employerId: morava.id, email: "hr@tkmorava.test", name: "Petra Holubová", role: "owner" },
     { employerId: plast.id, email: "vyroba@plastform.test", name: "Martin Král", role: "owner" },
     { employerId: energo.id, email: "servis@energoservis.test", name: "Lucie Benešová", role: "owner" },
+    { employerId: cekani.id, email: "info@cekajici-kov.test", name: "Hana Malá", role: "owner" },
   ]);
 
   const seedJobs = [
@@ -254,6 +268,30 @@ async function main() {
     inserted.push(row);
   }
 
+  await db.insert(jobs).values({
+    employerId: cekani.id,
+    slug: jobSlug("Zámečník — ke schválení", "Jihlava", token(6)),
+    title: "Zámečník — ke schválení",
+    profession: "locksmith",
+    city: "Jihlava",
+    region: "Vysočina",
+    employmentType: "full_time",
+    salaryMin: 36000,
+    salaryMax: 44000,
+    description: "Kusová výroba. Tento inzerát čeká na schválení provozovatelem.",
+    requirements: "Vyučení, čtení výkresu.",
+    status: "pending_review",
+    expiresAt: daysFromNow(30),
+  });
+
+  await db.insert(orders).values({
+    employerId: novak.id,
+    packageCode: "standard",
+    status: "stub",
+    provider: "stub",
+    amountCzkExVat: 19900,
+  });
+
   await db.insert(applications).values([
     {
       jobId: inserted[0]!.id,
@@ -274,8 +312,9 @@ async function main() {
     },
   ]);
 
-  console.log(`Seeded ${inserted.length} jobs, 4 employers.`);
-  console.log("Dev login: novak@kovovyroba-novak.test (magic link in server console)");
+  console.log(`Seeded ${inserted.length} published jobs + 1 pending_review, 5 employers.`);
+  console.log("Dev login firmy: novak@kovovyroba-novak.test (magic link v konzoli serveru)");
+  console.log("Dev admin: tomas@dilnajobs.test — npm run magic:admin");
   await sql.end({ timeout: 5 });
 }
 

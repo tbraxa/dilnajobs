@@ -12,7 +12,8 @@ Next.js 15 (Node)
   │  Drizzle + postgres.js
   ├─ public catalog (published jobs)
   ├─ apply insert (candidate, no account)
-  └─ employer txn: SET LOCAL app.employer_id + RLS
+  ├─ employer txn: SET LOCAL app.employer_id + RLS
+  └─ admin txn: SET LOCAL app.is_admin = true + RLS
         │
         ▼
 PostgreSQL 16
@@ -37,6 +38,17 @@ PostgreSQL 16
 | `/firma` | employer | dashboard, own jobs |
 | `/firma/nabidky/nova` | employer | create job |
 | `/firma/nabidky/[id]/prihlasky` | employer | applications + CV download |
+| `/admin/prihlaseni` | public (allowlist) | operator magic-link request |
+| `/admin` | admin cookie `dj_admin` | health rollup, counts, recent audit |
+| `/admin/health` | admin | live deep health cards |
+| `/admin/employers` | admin | verify / reject / flag agency |
+| `/admin/jobs` | admin | publish / reject / unpublish |
+| `/admin/applications` | admin | cross-tenant list (phone masked) |
+| `/admin/audit` | admin | `audit_events` |
+| `/admin/settings` | admin | read-only integration flags |
+| `GET /api/health` | public | liveness |
+| `GET /api/ready` | public | Postgres readiness |
+| `GET /api/admin/health` | admin | deep health JSON |
 
 ## Data
 
@@ -59,13 +71,17 @@ See migration `drizzle/0001_init.sql`. Employer queries run inside a transaction
 SELECT set_config('app.employer_id', '<uuid>', true); -- SET LOCAL
 ```
 
-Helper: `withEmployerRls()` in `src/db/rls.ts`. Public catalog does not set the GUC; policies allow `SELECT` of published jobs and `INSERT` of applications. Auth lookups (`employer_user_by_email`, `session_by_token_hash`) are `SECURITY DEFINER` so login works without opening `employer_users` to the public role.
+Helper: `withEmployerRls()` in `src/db/rls.ts`. Operator queries use `withAdminRls()` (`SET LOCAL app.is_admin = 'true'`). Admin policies (migration `0004`) allow SELECT across tenants and UPDATE of employers/jobs. Public catalog does not set a GUC; policies allow `SELECT` of published jobs and `INSERT` of applications. Auth lookups (`employer_user_by_email`, `session_by_token_hash`) are `SECURITY DEFINER` so login works without opening `employer_users` to the public role.
+
+An employer session cookie cannot satisfy admin routes. Admin magic-link tokens have `purpose = 'admin'` and are rejected by the employer login consumer.
 
 `FORCE ROW LEVEL SECURITY` is on so the table owner (app role) cannot skip policies.
 
 ## Auth
 
-Passwordless. Employer types email (+ IČO on first registration). Server stores `sha256(token)` in `magic_tokens`, e-mails a single-use link (15 min). Session cookie `dj_session`: HttpOnly, SameSite=Lax, Secure in production, Path=/, 14 days.
+Passwordless. Employer types email (+ IČO on first registration). Server stores `sha256(token)` in `magic_tokens` with `purpose = employer`, e-mails a single-use link (15 min). Session cookie `dj_session`: HttpOnly, SameSite=Lax, Secure in production, Path=/, 14 days.
+
+Operator (`ADMIN_EMAILS`): separate magic-link (`purpose = admin`) and cookie `dj_admin`. Same cookie flags. No privilege escalation from `/firma`.
 
 Candidates have no account in v1.
 
@@ -81,4 +97,4 @@ Stripe Checkout or GoPay is behind env keys. Missing keys → documented stub or
 
 ## Logging
 
-JSON lines via `src/lib/logging.ts`. No raw magic-link tokens, no CV bytes, no session secrets. Audit trail in `audit_events`.
+JSON lines via `src/lib/logging.ts` plus `x-request-id`. No raw magic-link tokens, no CV bytes, no session secrets. Audit trail in `audit_events`. Optional Sentry behind `SENTRY_DSN`. Probes: [docs/OPS.md](OPS.md).
