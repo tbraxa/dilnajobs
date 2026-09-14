@@ -105,7 +105,7 @@ export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?:
           {pending ? "Odesílám…" : "Odeslat firmě"}
         </button>
         <p className="form-hint">
-          Odpověď přijde přímo{companyName ? ` na ${companyName}` : " firmě"}. Bez registrace, bez agentury. DílnaJobs údaje
+          Odpověď přijde přímo{companyName ? ` na ${companyName}` : " firmě"}. Bez registrace. DílnaJobs údaje
           neprodává.
         </p>
       </form>
