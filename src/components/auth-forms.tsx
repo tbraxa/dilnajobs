@@ -1,50 +1,169 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { requestLinkAction, type AuthState } from "@/lib/actions/auth";
 import { Button, Field, inputClass } from "./ui";
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(requestLinkAction, null as AuthState | null);
   return (
-    <form action={action} className="space-y-4">
+    <form action={action}>
       <input type="hidden" name="intent" value="login" />
       <Field label="Firemní e-mail" name="email">
-        <input id="email" name="email" type="email" required className={inputClass} autoComplete="email" />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          className={inputClass}
+          autoComplete="email"
+          inputMode="email"
+        />
       </Field>
-      {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
-      {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
-      <Button type="submit" disabled={pending}>
+      {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
+      {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
+      <Button type="submit" variant="accent" disabled={pending}>
         {pending ? "Posílám odkaz…" : "Poslat přihlašovací odkaz"}
       </Button>
     </form>
   );
 }
 
+type AresNote = { kind: "ok" | "err"; text: string } | null;
+
 export function RegisterForm() {
   const [state, action, pending] = useActionState(requestLinkAction, null as AuthState | null);
+  const [ico, setIco] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [dic, setDic] = useState("");
+  const [city, setCity] = useState("");
+  const [aresBusy, setAresBusy] = useState(false);
+  const [aresNote, setAresNote] = useState<AresNote>(null);
+
+  async function loadFromAres() {
+    setAresBusy(true);
+    setAresNote(null);
+    try {
+      const res = await fetch(`/api/ares?ico=${encodeURIComponent(ico)}`, { credentials: "same-origin" });
+      const body = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        companyName?: string;
+        city?: string | null;
+        dic?: string | null;
+      };
+      if (!res.ok || !body.ok) {
+        setAresNote({ kind: "err", text: body.error ?? "ARES teď neodpověděl. Vyplňte údaje ručně." });
+        return;
+      }
+      if (body.companyName) setCompanyName(body.companyName);
+      if (body.city) setCity(body.city);
+      if (body.dic) setDic(body.dic);
+      setAresNote({ kind: "ok", text: "Údaje z ARES jsme doplnili. Zkontrolujte je a dokončete formulář." });
+    } catch {
+      setAresNote({ kind: "err", text: "ARES teď neodpověděl. Vyplňte údaje ručně." });
+    } finally {
+      setAresBusy(false);
+    }
+  }
+
   return (
-    <form action={action} className="space-y-4">
+    <form action={action}>
       <input type="hidden" name="intent" value="register" />
-      <Field label="Vaše jméno" name="name">
-        <input id="name" name="name" required className={inputClass} autoComplete="name" />
-      </Field>
-      <Field label="Název firmy" name="companyName">
-        <input id="companyName" name="companyName" required className={inputClass} />
-      </Field>
-      <Field label="IČO" name="ico" hint="Osm číslic. Agentury neregistrujeme.">
-        <input id="ico" name="ico" required inputMode="numeric" className={inputClass} />
-      </Field>
-      <Field label="Sídlo / provoz (město)" name="city">
-        <input id="city" name="city" className={inputClass} />
-      </Field>
-      <Field label="Firemní e-mail" name="reg-email">
-        <input id="reg-email" name="email" type="email" required className={inputClass} autoComplete="email" />
-      </Field>
-      {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
-      {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
-      <Button type="submit" disabled={pending}>
-        {pending ? "Zakládám…" : "Založit účet a poslat odkaz"}
+
+      <fieldset className="auth-section">
+        <legend>Firma</legend>
+        <Field label="Název firmy *" name="companyName">
+          <input
+            id="companyName"
+            name="companyName"
+            required
+            className={inputClass}
+            autoComplete="organization"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+          />
+        </Field>
+        <div className="form-field">
+          <label htmlFor="ico">IČO *</label>
+          <div className="auth-ico-row">
+            <input
+              id="ico"
+              name="ico"
+              required
+              inputMode="numeric"
+              autoComplete="off"
+              maxLength={10}
+              value={ico}
+              onChange={(e) => setIco(e.target.value)}
+            />
+            <button type="button" className="btn btn-secondary btn-square" onClick={() => void loadFromAres()} disabled={aresBusy}>
+              {aresBusy ? "Načítám…" : "Načíst z ARES"}
+            </button>
+          </div>
+          {aresNote ? <p className={`ares-note is-${aresNote.kind}`}>{aresNote.text}</p> : null}
+        </div>
+        <Field label="DIČ" name="dic" hint="jen pokud jste plátci DPH">
+          <input
+            id="dic"
+            name="dic"
+            className={inputClass}
+            autoComplete="off"
+            value={dic}
+            onChange={(e) => setDic(e.target.value)}
+          />
+        </Field>
+        <Field label="Město / sídlo" name="city">
+          <input
+            id="city"
+            name="city"
+            className={inputClass}
+            autoComplete="address-level2"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+        </Field>
+      </fieldset>
+
+      <fieldset className="auth-section">
+        <legend>Kontaktní osoba</legend>
+        <div className="auth-row-2">
+          <Field label="Jméno *" name="firstName">
+            <input id="firstName" name="firstName" required className={inputClass} autoComplete="given-name" />
+          </Field>
+          <Field label="Příjmení *" name="lastName">
+            <input id="lastName" name="lastName" required className={inputClass} autoComplete="family-name" />
+          </Field>
+        </div>
+        <Field label="Telefon *" name="phone">
+          <input id="phone" name="phone" type="tel" required className={inputClass} autoComplete="tel" inputMode="tel" />
+        </Field>
+        <Field label="Firemní e-mail *" name="reg-email">
+          <input
+            id="reg-email"
+            name="email"
+            type="email"
+            required
+            className={inputClass}
+            autoComplete="email"
+            inputMode="email"
+          />
+        </Field>
+      </fieldset>
+
+      <label className="auth-legal">
+        <input type="checkbox" name="consentTerms" value="on" required />
+        <span>
+          Zakládám účet jako přímý zaměstnavatel a souhlasím s{" "}
+          <a href="/obchodni-podminky">obchodními podmínkami</a> a se{" "}
+          <a href="/gdpr">zpracováním osobních údajů</a>.
+        </span>
+      </label>
+
+      {state?.ok ? <p className="auth-flash is-ok">{state.message}</p> : null}
+      {state && !state.ok ? <p className="auth-flash is-err">{state.error}</p> : null}
+      <Button type="submit" variant="accent" disabled={pending}>
+        {pending ? "Zakládám účet…" : "Založit účet a poslat odkaz"}
       </Button>
     </form>
   );

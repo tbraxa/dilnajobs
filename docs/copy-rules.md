@@ -10,3 +10,4 @@
 - Errors: say what to do. “Telefon má mít 9 číslic. Zkuste to znovu.”
 - Empty states: “Na tento filtr teď nic nemáme.” Not “Oops.”
 - Legal tone on GDPR / ToS: plain, not theatrical.
+- Customer-facing copy never mentions checksums, server consoles, local-dev, stubs, or env var names. Keep that in `docs/` and operator logs.

@@ -23,8 +23,8 @@ export const HEALTH_LABELS: Record<string, string> = {
   payments: "Platby",
   worker: "Worker (expirace inzerátů)",
   rate_limiter: "Rate limiter",
-  auth: "Přihlášení / magic-link",
-  cv_disk: "Disk CV (lokální)",
+  auth: "Přihlášení odkazem",
+  cv_disk: "Úložiště CV na disku",
   sentry: "Sentry",
 };
 
@@ -32,7 +32,7 @@ export const STATUS_LABELS: Record<CheckStatus, string> = {
   ok: "v pořádku",
   degraded: "omezené",
   down: "mimo provoz",
-  unconfigured: "stub / nenastaveno",
+  unconfigured: "nenastaveno",
 };
 
 /** Overall: down only when Postgres or auth is down. Optional failures → degraded. */

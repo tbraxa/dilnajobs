@@ -9,7 +9,7 @@ export function AdminChrome({ email, children }: { email: string; children: Reac
     <>
       <div className="top-strip">
         <span className="strip-code">ADMIN</span>
-        <span>Provozní konzole · oddělené od firemního portálu</span>
+        <span>Správa · oddělené od firemního portálu</span>
       </div>
       <header className="site-header">
         <div className="header-inner">
@@ -40,7 +40,7 @@ export function AdminLoginChrome({ children }: { children: ReactNode }) {
     <>
       <div className="top-strip">
         <span className="strip-code">ADMIN</span>
-        <span>Přihlášení správce · jen adresy v ADMIN_EMAILS</span>
+        <span>Přihlášení správce · jen seznam provozovatelů</span>
       </div>
       <header className="site-header">
         <div className="header-inner">

@@ -51,7 +51,7 @@ export default async function FirmaHome({
         </div>
         <div className="board-pad" style={{ paddingTop: 0 }}>
           {orderState === "stub" ? (
-            <Notice>Objednávka je ve stavu stub — Stripe Checkout není zapnutý. Ozveme se na e-mail.</Notice>
+            <Notice>Platba kartou teď není zapnutá. Ozveme se na e-mail.</Notice>
           ) : null}
           {orderState === "ok" ? (
             <Notice>Platba proběhla. Balíček se připíše, jakmile Stripe potvrdí webhook (obvykle okamžitě).</Notice>
@@ -84,7 +84,7 @@ export default async function FirmaHome({
         <div className="mod span-12" style={{ padding: "2rem 2.5rem", background: "var(--cream)" }}>
           <p className="eyebrow">Balíčky</p>
           <h2 id="pack-title" className="h2">
-            {stripeOn ? "Platba kartou přes Stripe Checkout. Ceny bez DPH." : "Stripe klíče v prostředí chybí — objednávka se uloží jako stub."}
+            {stripeOn ? "Platba kartou. Ceny bez DPH." : "Platba kartou teď není zapnutá. Objednávku vezmeme a ozveme se na e-mail."}
           </h2>
         </div>
         {PACKAGES.map((pkg) => {
@@ -98,7 +98,7 @@ export default async function FirmaHome({
               <h3>{pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}</h3>
               <p className="mod-desc">{pkg.blurb}</p>
               <button type="submit" className={`btn btn-square ${pkg.code === "standard" ? "btn-primary" : "btn-accent"}`}>
-                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat (stub)"}
+                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat"}
               </button>
             </form>
           );

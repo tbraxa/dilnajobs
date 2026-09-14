@@ -51,7 +51,7 @@ Overall rollup: `ok` if every check is ok; `degraded` if something is unconfigur
 | Name | What it does |
 | --- | --- |
 | postgres | `SELECT 1` |
-| migrations | `schema_migrations` contains 0001–0004 |
+| migrations | `schema_migrations` contains 0001–0006 |
 | object_storage | S3 keys present, **or** write+delete a probe file under `storage/cvs/` |
 | cv_disk | Same path as local CV storage (only when S3 is off) |
 | mailer | Resend / SMTP configured? last send error? else console stub |

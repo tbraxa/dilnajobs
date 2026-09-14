@@ -27,7 +27,10 @@ export default function GdprPage() {
             napište na kontakt výše — v1 nemáte samoobsluhu.
           </p>
           <h2>Zaměstnavatelé</h2>
-          <p>E-mail, jméno, IČO, název firmy, relace po přihlášení odkazem. Hesla nesbíráme.</p>
+          <p>
+            Firemní e-mail, jméno a příjmení kontaktní osoby, telefon, IČO, volitelně DIČ, název firmy a město sídla.
+            Relace po přihlášení odkazem. Hesla nesbíráme.
+          </p>
         </div>
       </section>
     </main>

@@ -12,7 +12,7 @@ function Flag({ on, label, hint }: { on: boolean; label: string; hint: string })
             on ? "bg-ok text-white" : "border border-line text-steel"
           }`}
         >
-          {on ? "nastaveno" : "stub"}
+          {on ? "nastaveno" : "nenastaveno"}
         </span>
       </div>
       <p className="mt-2 text-sm text-steel">{hint}</p>
@@ -38,7 +38,7 @@ export default function AdminSettingsPage() {
               ? "Resend API klíč je nastavený."
               : flags.smtp
                 ? "SMTP_URL je nastavené (záloha za Resend)."
-                : "Bez RESEND_API_KEY / SMTP_URL se odkazy vypíší do konzole."
+                : "Bez RESEND_API_KEY / SMTP_URL odkazy poštou neodejdou."
           }
         />
         <Flag on={flags.s3} label="S3 úložiště CV" hint="Bez klíčů se soubory ukládají do storage/cvs/." />
@@ -50,7 +50,7 @@ export default function AdminSettingsPage() {
               ? "Checkout i webhook secret jsou nastavené."
               : flags.stripe
                 ? "STRIPE_SECRET_KEY je, chybí STRIPE_WEBHOOK_SECRET."
-                : "Checkout zakládá objednávku ve stavu stub."
+                : "Platba kartou není zapnutá. Objednávka se uloží a ozvete se firmě."
           }
         />
         <Flag on={flags.sentry} label="Sentry" hint="Bez SENTRY_DSN jdou výjimky jen do strukturovaných logů." />
