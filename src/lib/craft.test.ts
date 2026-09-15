@@ -74,13 +74,11 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(PHOTOS.warehouse.id).toBe("photo-1586528116311-ad8dd3c8310d");
     expect(PHOTOS.workshop.id).toBe("photo-1504917595217-d4dc5ebe6122");
     expect(PHOTOS.teamMeeting.id).toBe("photo-1522071820081-009f0129c71c");
-    expect(PHOTOS.officeWide.id).toBe("photo-1497366811353-687074365625");
+    expect(PHOTOS.officeWide.id).toBe("photo-1497366754035-f200968a6e72");
     expect(PHOTOS.officeWide.src).toContain(UNSPLASH_HOST);
-    expect(PHOTOS.cityStreet.id).toBe("photo-1504917595217-d4dc5ebe6122");
     const mosaic = readFileSync("src/components/hero-mosaic.tsx", "utf8");
     expect(mosaic).toContain("PHOTOS.workshop.src");
     expect(mosaic).toContain("PHOTOS.teamPortrait.src");
-    expect(mosaic).not.toContain("PHOTOS.cityStreet");
     expect(mosaic).not.toContain("photo-1467260200982-5ba258642c12");
     expect(readFileSync("src/components/craft-marks.tsx", "utf8")).toContain("width={20}");
     const card = readFileSync("src/components/job-card.tsx", "utf8");

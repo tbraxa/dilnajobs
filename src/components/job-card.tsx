@@ -42,14 +42,13 @@ export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" |
   return (
     <Link className="job-card" href={`/nabidka/${job.slug}`}>
       <div className={`job-card-media ${media}`} aria-hidden="true">
-        <div className={`job-card-media-inner ${media}`} />
+        <div className="job-card-media-inner">
+          {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
+        </div>
         <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
       </div>
       <div className="job-card-body">
-        <TitleTag className="job-title">
-          {job.title}
-          {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
-        </TitleTag>
+        <TitleTag className="job-title">{job.title}</TitleTag>
         <JobIdentity job={job} />
         <JobMeta job={job} />
         <div className="job-salary">{displayJobSalary(job)}</div>
@@ -66,7 +65,7 @@ export function JobRowCard({ job }: { job: JobRow }) {
     <Link className="job-row" href={`/nabidka/${job.slug}`}>
       <div className="job-row-inner">
         <div className={`job-row-media ${media}`} aria-hidden="true">
-          <div className={`job-row-media-inner ${media}`} />
+          <div className="job-row-media-inner" />
           <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
         </div>
         <div>
