@@ -28,15 +28,15 @@ export default async function NabidkyPage({
 
   return (
     <main className="serp-canvas">
-      <JobFilters defaults={query} />
+      <JobFilters
+        defaults={query}
+        resultLabel={catalog.ok ? copy.nabidky.resultsCount(total) : copy.nabidky.emptyErrorTitle}
+      />
       <div className="wrap serp-results">
         <div className="serp-head">
           <h1 className="h2" style={{ margin: 0 }}>
             {copy.nabidky.claim}
           </h1>
-          <p className="results-count">
-            {catalog.ok ? copy.nabidky.resultsCount(total) : copy.nabidky.emptyErrorTitle}
-          </p>
         </div>
 
         {!catalog.ok ? (

@@ -52,6 +52,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | cta_search | Hledat |
 | cta_show_filters | Zobrazit filtry |
 | cta_filters | Filtry |
+| cta_edit_filters | Upravit filtry |
 | cta_filters_close | Zavřít |
 | cta_filters_done | Hotovo |
 | section_results | Výsledky |

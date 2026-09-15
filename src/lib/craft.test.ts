@@ -50,10 +50,12 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain(".apply-panel");
     expect(css).toContain(".sticky-apply");
     expect(css).not.toContain(".filters-sticky");
-    expect(css).toContain(".serp-toolbar");
+    expect(css).toContain(".serp-row-search");
+    expect(css).toContain(".serp-row-chips");
     expect(css).toContain(".serp-sheet");
-    expect(css).toContain(".search-shell-compact");
-    expect(css).toMatch(/\.serp-toolbar\s*\{[^}]*position:\s*sticky/);
+    expect(css).toContain(".serp-field");
+    expect(css).not.toContain(".search-shell-compact");
+    expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
     expect(css).toMatch(/a\.job-row/);
     expect(css).toMatch(/\.job-row-inner\s*\{[^}]*grid-template-columns:\s*96px minmax\(0, 1fr\) auto/);
     expect(css).toMatch(/\.job-row-media\s*\{[^}]*overflow:\s*visible/);
@@ -108,10 +110,11 @@ describe("Enterprise Clean Craft tokens", () => {
     const card = readFileSync("src/components/job-card.tsx", "utf8");
     expect(page).not.toContain("filters-sticky");
     expect(page).toContain("JobFilters");
-    expect(filters).toContain("serp-toolbar");
+    expect(filters).toContain("serp-row-search");
+    expect(filters).toContain("serp-row-chips");
     expect(filters).toContain("serp-sheet");
-    expect(filters).toContain("serp-chips");
-    expect(filters).toContain("compact");
+    expect(filters).toContain("ctaEditFilters");
+    expect(filters).toContain("serp-field");
     expect(card).toContain("job-row-media-inner");
   });
 

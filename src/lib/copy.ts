@@ -41,6 +41,7 @@ export const copy = {
     ctaSearch: "Hledat",
     ctaShowFilters: "Zobrazit filtry",
     ctaFilters: "Filtry",
+    ctaEditFilters: "Upravit filtry",
     ctaFiltersClose: "Zavřít",
     ctaFiltersDone: "Hotovo",
     sectionResults: "Výsledky",
