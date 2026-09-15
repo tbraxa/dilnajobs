@@ -48,9 +48,10 @@ export const PHOTOS = {
     width: 350,
     height: 250,
   },
+  // photo-1467260200982-5ba258642c12 404s on Unsplash; shot-c uses the workshop ID.
   cityStreet: {
-    id: "photo-1467260200982-5ba258642c12",
-    src: "https://images.unsplash.com/photo-1467260200982-5ba258642c12?auto=format&fit=crop&w=700&h=500&q=80",
+    id: "photo-1504917595217-d4dc5ebe6122",
+    src: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=700&h=500&q=80",
     width: 350,
     height: 250,
   },

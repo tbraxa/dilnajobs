@@ -41,6 +41,18 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain("font-weight: 700");
     expect(css).toMatch(/\.badge-verified svg[\s\S]*overflow:\s*visible/);
     expect(css).toMatch(/\.filter-chip \.chip-icon[\s\S]*min-width:\s*16px/);
+    expect(css).not.toMatch(/img,\s*svg\s*\{[^}]*max-width:\s*100%/);
+    expect(css).toMatch(/\.why-icon\s*\{[^}]*width:\s*44px/);
+    expect(css).toMatch(/\.why-icon svg\s*\{[^}]*width:\s*20px/);
+    expect(css).toMatch(/\.why-icon svg[\s\S]*max-width:\s*20px/);
+    expect(css).toContain("grid-template-columns: minmax(0, 1fr) 360px");
+    expect(css).toContain(".facts-strip");
+    expect(css).toContain(".apply-panel");
+    expect(css).toContain(".sticky-apply");
+    expect(css).toMatch(/a\.job-row/);
+    expect(css).toMatch(/\.job-row-inner\s*\{[^}]*grid-template-columns:\s*96px minmax\(0, 1fr\) auto/);
+    expect(css).toMatch(/\.footer-inner\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto/);
+    expect(css).toContain("0 12px 28px rgba(10, 10, 10, 0.10)");
     for (const token of FORBIDDEN) {
       expect(css).not.toContain(token);
     }
@@ -53,6 +65,12 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(PHOTOS.workshop.id).toBe("photo-1504917595217-d4dc5ebe6122");
     expect(PHOTOS.teamMeeting.id).toBe("photo-1521737711867-e3b97375f902");
     expect(PHOTOS.officeWide.src).toContain(UNSPLASH_HOST);
+    expect(PHOTOS.cityStreet.id).toBe("photo-1504917595217-d4dc5ebe6122");
+    const mosaic = readFileSync("src/components/hero-mosaic.tsx", "utf8");
+    expect(mosaic).toContain("PHOTOS.workshop.src");
+    expect(mosaic).not.toContain("PHOTOS.cityStreet");
+    expect(mosaic).not.toContain("photo-1467260200982-5ba258642c12");
+    expect(readFileSync("src/components/craft-marks.tsx", "utf8")).toContain("width={20}");
   });
 
   it("maps company marks and category media without text-only cards", () => {
@@ -72,6 +90,9 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(page).not.toContain("Stripe");
     expect(card).toContain("job-card-media-inner");
     expect(copy.employers.sectionPricing).toBe("Ceny");
+    expect(copy.employers.pricingHelper).toBe(
+      "Ceny bez DPH. Orientace pro firmy. Platbu domluvíte po registraci.",
+    );
   });
 
   it("prints pack published labels", () => {

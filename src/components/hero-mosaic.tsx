@@ -23,7 +23,14 @@ export function HeroMosaic({ variant = "home" }: { variant?: "home" | "employers
           <Image src={PHOTOS.cityTower.src} alt="" fill sizes="(max-width: 720px) 50vw, 180px" style={cover} />
         </div>
         <div className="shot shot-c">
-          <Image src={PHOTOS.cityStreet.src} alt="" fill sizes="(max-width: 720px) 50vw, 180px" style={cover} />
+          <Image
+            src={PHOTOS.workshop.src}
+            alt=""
+            fill
+            sizes="(max-width: 720px) 50vw, 180px"
+            priority
+            style={cover}
+          />
         </div>
       </div>
     );

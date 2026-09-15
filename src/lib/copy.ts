@@ -134,7 +134,7 @@ export const copy = {
     bandHelper: "Zveřejněte pozici. Uchazeči odpoví přímo vám. Mzda, místo a úvazek hned vidět.",
     photoAlt: "Tým v kanceláři při schůzce",
     sectionPricing: "Ceny",
-    pricingHelper: "Náhled. Ceny bez DPH. Platbu zatím nespouštíme.",
+    pricingHelper: "Ceny bez DPH. Orientace pro firmy. Platbu domluvíte po registraci.",
     pricingPeriod: "30 dní",
     pricingStartName: "Start",
     pricingStartBody: "Jedna nabídka. Mzda, místo a úvazek hned vidět.",
