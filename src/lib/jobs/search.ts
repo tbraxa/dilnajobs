@@ -59,6 +59,14 @@ function filterClauses(query: SearchQuery) {
     );
   }
 
+  if (query.workMode) {
+    filters.push(eq(jobs.workMode, query.workMode));
+  }
+
+  if (query.contract) {
+    filters.push(or(eq(jobs.contractType, query.contract), eq(jobs.employmentType, query.contract))!);
+  }
+
   return filters;
 }
 

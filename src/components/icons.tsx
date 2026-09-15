@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { copy } from "@/lib/copy";
 
 type IconProps = SVGProps<SVGSVGElement> & { title?: string };
 
@@ -23,7 +24,7 @@ function Icon({ title, children, ...props }: IconProps) {
 
 export function LogoMark(props: IconProps) {
   return (
-      <Icon title="OpenJobs" {...props}>
+      <Icon title={copy.brand} {...props}>
       <rect x="3" y="3" width="18" height="18" />
       <path d="M7 16V8h5.2a3.2 3.2 0 0 1 0 6.4H7" />
       <path d="M7 16h10" />

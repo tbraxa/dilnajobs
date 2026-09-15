@@ -7,6 +7,7 @@ import { displayJobSalary, formatSalary } from "./pricing";
 
 const DASHES = /[—–]/;
 const OLD_BRAND = /DílnaJobs|DilnaJobs/;
+const PREVIOUS_PUBLIC_BRAND = /OpenJobs/;
 
 function walk(value: unknown, path: string, hits: string[]) {
   if (typeof value === "string") {
@@ -34,14 +35,22 @@ function collectFiles(dir: string, match: RegExp, acc: string[] = []) {
   return acc;
 }
 
-describe("COPY-PACK v1.1", () => {
+describe("COPY-PACK v1.3", () => {
   it("keeps the locked homepage claim", () => {
     expect(copy.claim).toBe("Práce v Česku. Od firem.");
   });
 
-  it("uses OpenJobs as the public brand", () => {
-    expect(copy.brand).toBe("OpenJobs");
-    expect(copy.footer).toBe("© 2026 OpenJobs · nabídky práce");
+  it("uses FairJobs as the public brand", () => {
+    expect(copy.brand).toBe("FairJobs");
+    expect(copy.domain).toBe("fairjobs.cz");
+    expect(JSON.stringify(copy)).not.toContain("dilnajobs.cz");
+    expect(JSON.stringify(copy)).not.toContain("OpenJobs");
+    expect(copy.footer).toBe("© 2026 FairJobs · nabídky práce");
+    expect(copy.home.metaTitle).toBe("FairJobs · nabídky práce");
+    expect(copy.employers.sectionWhy).toBe("Proč FairJobs");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("Fair<span>Jobs</span>");
+    expect(readFileSync("src/app/gdpr/page.tsx", "utf8")).toContain("copy.domain");
+    expect(readFileSync("src/app/layout.tsx", "utf8")).toContain("applicationName: copy.brand");
   });
 
   it("exposes pack contract and salary strings", () => {
@@ -50,12 +59,16 @@ describe("COPY-PACK v1.1", () => {
     expect(copy.card.contractDpc).toBe("DPČ");
     expect(copy.card.contractIco).toBe("IČO / živnost");
     expect(copy.card.ctaOpen).toBe("Zobrazit nabídku");
-    expect(copy.card.salaryNegotiable).toBe("Mzda dohodou");
+    expect(copy.card.salaryNegotiable).toBe("mzda dohodou");
     expect(copy.card.salaryUnspecified).toBe("Mzda neuvedena");
     expect(copy.card.badgeAgency).toBe("Agentura");
+    expect(copy.card.badgeVerified).toBe("Ověřeno");
     expect(workModeLabel("onsite")).toBe("Na místě");
     expect(workModeLabel("hybrid")).toBe("Hybrid");
-    expect(workModeLabel("remote")).toBe("Z domova");
+    expect(workModeLabel("remote")).toBe("Na dálku");
+    expect(copy.card.workModeRemote).toBe("Na dálku");
+    expect(copy.card.workModeRemote).not.toBe("Remote");
+    expect(copy.card.publishedToday).toBe("Zveřejněno dnes");
     expect(contractLabel("hpp")).toBe("HPP");
     expect(contractLabel("dpc")).toBe("DPČ");
     expect(contractLabel("ico")).toBe("IČO / živnost");
@@ -69,16 +82,16 @@ describe("COPY-PACK v1.1", () => {
     expect(salaryFrom(40000)).toMatch(/od 40\D000 Kč/);
   });
 
-  it("does not contain DílnaJobs in user-facing strings", () => {
+  it("does not contain DílnaJobs or OpenJobs in user-facing strings", () => {
     const hits: string[] = [];
     function findBrand(value: unknown, path: string) {
       if (typeof value === "string") {
-        if (OLD_BRAND.test(value)) hits.push(`${path}: ${value}`);
+        if (OLD_BRAND.test(value) || PREVIOUS_PUBLIC_BRAND.test(value)) hits.push(`${path}: ${value}`);
         return;
       }
       if (typeof value === "function") {
         const sample = String(value("Acme"));
-        if (OLD_BRAND.test(sample)) hits.push(`${path}(): ${sample}`);
+        if (OLD_BRAND.test(sample) || PREVIOUS_PUBLIC_BRAND.test(sample)) hits.push(`${path}(): ${sample}`);
         return;
       }
       if (value && typeof value === "object") {
@@ -91,7 +104,7 @@ describe("COPY-PACK v1.1", () => {
     expect(hits).toEqual([]);
   });
 
-  it("has no DílnaJobs in app or component UI modules", () => {
+  it("has no DílnaJobs or OpenJobs in app or component UI modules", () => {
     const files = [
       ...collectFiles("src/app", /\.(ts|tsx)$/),
       ...collectFiles("src/components", /\.(ts|tsx)$/),
@@ -99,7 +112,7 @@ describe("COPY-PACK v1.1", () => {
     const hits: string[] = [];
     for (const file of files) {
       const text = readFileSync(file, "utf8");
-      if (OLD_BRAND.test(text)) hits.push(file);
+      if (OLD_BRAND.test(text) || PREVIOUS_PUBLIC_BRAND.test(text)) hits.push(file);
     }
     expect(hits).toEqual([]);
   });

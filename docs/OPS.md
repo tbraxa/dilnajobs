@@ -21,7 +21,7 @@ Importable check list: [`monitoring/uptime.json`](../monitoring/uptime.json).
 | --- | --- | --- |
 | `GET /api/health` | 1 min | `200` `{ "status": "ok" }` |
 | `GET /api/ready` | 1 min | `200` and `postgres.ok === true` (timeout 5 s) |
-| `GET /nabidky` | 5 min | `200` HTML containing `OpenJobs` |
+| `GET /nabidky` | 5 min | `200` HTML containing `FairJobs` |
 
 Ready is a short `SELECT 1`. It does not assume a background worker. Expired ads are already hidden in the catalog even if expiry cron is late.
 

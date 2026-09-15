@@ -12,7 +12,7 @@ export const CATEGORIES = [
   { slug: "education", label: "Školství", db: "education" },
   { slug: "hospitality", label: "Gastronomie a ubytování", db: "hospitality" },
   { slug: "construction", label: "Stavebnictví", db: "construction" },
-  { slug: "manufacturing", label: "Výroba a dílna", db: "manufacturing" },
+  { slug: "manufacturing", label: "Výroba", db: "manufacturing" },
   { slug: "trades", label: "Řemesla", db: "trades" },
   { slug: "facility", label: "Úklid a správa", db: "facility" },
   { slug: "marketing", label: "Marketing", db: "marketing" },

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { LogoMark } from "./icons";
+import { copy } from "@/lib/copy";
 import { logoutAdminAction } from "@/lib/actions/admin-login";
 
 const NAV = [
@@ -20,7 +21,7 @@ export function AdminChrome({ email, children }: { email: string; children: Reac
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link href="/admin" className="flex items-center gap-2 text-ink">
             <LogoMark className="h-8 w-8" />
-            <span className="display text-lg font-semibold">OpenJobs · správa</span>
+            <span className="display text-lg font-semibold">{copy.brand} · správa</span>
           </Link>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-steel sm:inline">{email}</span>
@@ -52,7 +53,7 @@ export function AdminLoginChrome({ children }: { children: ReactNode }) {
       <header className="border-b border-line bg-paper">
         <div className="mx-auto flex max-w-md items-center gap-2 px-4 py-3">
           <LogoMark className="h-8 w-8" />
-          <span className="display text-lg font-semibold">OpenJobs · správa</span>
+          <span className="display text-lg font-semibold">{copy.brand} · správa</span>
         </div>
       </header>
       {children}

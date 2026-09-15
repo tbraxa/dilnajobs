@@ -1,27 +1,34 @@
 import Link from "next/link";
 import { copy } from "@/lib/copy";
-import { ButtonLink } from "./ui";
 
-export function SiteHeader({ compact = false }: { compact?: boolean }) {
+export function Logo({ href = "/" }: { href?: string }) {
   return (
-    <header className="border-b border-line bg-paper">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <Link href="/" className="text-ink">
-          <span className="text-lg font-semibold sm:text-xl">{copy.brand}</span>
-        </Link>
-        <nav className="flex items-center gap-1 sm:gap-3" aria-label={copy.nav.ariaMain}>
-          <Link href="/nabidky" className="px-2 py-1 text-sm text-ink hover:underline">
-            {copy.nav.nabidky}
+    <Link className="logo" href={href} aria-label={copy.brand}>
+      <span className="logo-mark" aria-hidden="true" />
+      Fair<span>Jobs</span>
+    </Link>
+  );
+}
+
+export function SiteHeader() {
+  return (
+    <header className="site-header">
+      <div className="wrap nav">
+        <Logo />
+        <input id="nav-open" className="nav-checkbox" type="checkbox" />
+        <nav className="nav-links" aria-label={copy.nav.ariaMain}>
+          <Link href="/nabidky">{copy.nav.nabidky}</Link>
+          <Link href="/pro-firmy">{copy.nav.proFirmy}</Link>
+          <Link className="nav-cta nav-cta-mobile" href="/firma/prihlaseni">
+            {copy.nav.login}
           </Link>
-          <Link href="/pro-firmy" className="hidden px-2 py-1 text-sm text-ink hover:underline sm:inline">
-            {copy.nav.proFirmy}
-          </Link>
-          {!compact ? (
-            <ButtonLink href="/firma/prihlaseni" variant="ghost" className="px-3 py-2 text-xs sm:text-sm">
-              {copy.nav.login}
-            </ButtonLink>
-          ) : null}
         </nav>
+        <Link className="nav-cta" href="/firma/prihlaseni">
+          {copy.nav.login}
+        </Link>
+        <label className="nav-toggle" htmlFor="nav-open">
+          {copy.nav.ariaMenu}
+        </label>
       </div>
     </header>
   );
@@ -29,23 +36,21 @@ export function SiteHeader({ compact = false }: { compact?: boolean }) {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-line">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 sm:px-6">
-        <p className="text-sm text-steel">{copy.footer}</p>
-        <nav className="flex flex-wrap gap-4 text-sm">
-          <a href="/nabidky" className="hover:underline">
-            {copy.nav.nabidky}
-          </a>
-          <a href="/pro-firmy" className="hover:underline">
-            {copy.nav.proFirmy}
-          </a>
-          <a href="/firma/prihlaseni" className="hover:underline">
-            {copy.nav.login}
-          </a>
-          <a href="/gdpr" className="hover:underline">
-            {copy.nav.personalData}
-          </a>
-        </nav>
+    <footer className="site-footer">
+      <div className="wrap footer-inner">
+        <div>
+          <div className="footer-brand">
+            <span className="logo-mark" aria-hidden="true" />
+            {copy.brand}
+          </div>
+          <div>{copy.footer}</div>
+        </div>
+        <div className="footer-links">
+          <Link href="/nabidky">{copy.nav.nabidky}</Link>
+          <Link href="/pro-firmy">{copy.nav.proFirmy}</Link>
+          <Link href="/firma/prihlaseni">{copy.nav.login}</Link>
+          <Link href="/gdpr">{copy.nav.personalData}</Link>
+        </div>
       </div>
     </footer>
   );

@@ -1,31 +1,36 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { IBM_Plex_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
 import { copy } from "@/lib/copy";
 import "./globals.css";
 
-const ibm = IBM_Plex_Sans({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm",
+  variable: "--font-inter",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(resolveAppUrl()),
+  applicationName: copy.brand,
   title: {
     default: copy.home.metaTitle,
     template: `%s · ${copy.brand}`,
   },
   description: copy.home.metaDescription,
+  openGraph: {
+    siteName: copy.brand,
+    locale: "cs_CZ",
+  },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F2F0EA",
+  themeColor: "#FFFFFF",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -34,8 +39,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const pathname = h.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
   return (
-    <html lang="cs" className={ibm.variable}>
-      <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
+    <html lang="cs" className={inter.variable}>
+      <body className={`${inter.className} antialiased`} data-nonce={nonce}>
         {isAdmin ? (
           children
         ) : (
