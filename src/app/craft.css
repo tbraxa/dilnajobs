@@ -910,6 +910,7 @@ a.job-row:hover,
 }
 .serp-results { padding-top: 18px; }
 .serp-filters { position: relative; }
+/* Layout lock: search and chips are stacked rows. Never a 56px bar packing both. */
 .serp-chrome {
   display: flex;
   flex-direction: column;
@@ -917,13 +918,20 @@ a.job-row:hover,
   width: var(--wrap);
   margin: 0 auto;
   padding: 8px 0 0;
+  height: auto;
   min-height: 0;
+  max-height: none;
+  overflow: visible;
 }
 .serp-row-search {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 10px 12px;
   align-items: stretch;
+  position: relative;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
 }
 .serp-row-search form { min-width: 0; }
 .serp-row-search .search-shell {
@@ -972,6 +980,8 @@ a.job-row:hover,
   flex-wrap: nowrap;
   gap: 8px;
   align-items: center;
+  position: relative;
+  height: auto;
   overflow-x: auto;
   overflow-y: hidden;
   border-top: 1px solid var(--border);
