@@ -43,7 +43,7 @@ export function SiteFooter() {
             {copy.nav.login}
           </a>
           <a href="/gdpr" className="hover:underline">
-            Osobní údaje
+            {copy.nav.personalData}
           </a>
         </nav>
       </div>

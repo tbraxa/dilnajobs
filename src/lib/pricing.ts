@@ -1,4 +1,4 @@
-import { salaryFrom, salaryRange } from "./copy";
+import { copy, salaryFrom, salaryRange } from "./copy";
 
 export const PACKAGES = [
   {
@@ -7,7 +7,7 @@ export const PACKAGES = [
     priceCzkExVat: 0,
     period: "year" as const,
     adLimit: 10,
-    blurb: "10 inzerátů za rok. Ověříte, že sem chodí lidé z dílny, ne z agentury.",
+    blurb: "10 inzerátů za rok. Vyzkoušíte inzerci bez závazku.",
   },
   {
     code: "single",
@@ -24,7 +24,7 @@ export const PACKAGES = [
     priceCzkExVat: 8900,
     period: "year" as const,
     adLimit: 40,
-    blurb: "40 inzerátů za rok. Pro závod, který nabírá průběžně.",
+    blurb: "40 inzerátů za rok. Pro firmu, která nabírá průběžně.",
   },
   {
     code: "standard",
@@ -57,7 +57,7 @@ export function formatSalary(min?: number | null, max?: number | null, note?: st
   }
   if (min) return salaryFrom(min);
   if (max) return `do ${formatCzk(max)} / měsíc`;
-  return "Mzda dohodou";
+  return copy.card.salaryNegotiable;
 }
 
 export function formatDate(d: Date | string): string {

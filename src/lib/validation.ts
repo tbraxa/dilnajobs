@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PROFESSION_DB, CATEGORY_DB } from "./catalog";
+import { copy } from "./copy";
 
 export function normalizePhone(raw: string): string {
   return raw.replace(/[\s().-]/g, "").replace(/^00/, "+");
@@ -17,7 +18,7 @@ export const applySchema = z.object({
     .string()
     .trim()
     .transform(normalizePhone)
-    .refine((p) => /^(\+420)?[1-9][0-9]{8}$/.test(p), "Telefon má mít 9 číslic, volitelně s +420."),
+    .refine((p) => /^(\+420)?[1-9][0-9]{8}$/.test(p), copy.detail.errorPhone),
   email: z
     .string()
     .trim()

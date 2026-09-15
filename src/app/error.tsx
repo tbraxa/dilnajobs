@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button, ButtonLink } from "@/components/ui";
+import { copy } from "@/lib/copy";
 
 export default function ErrorPage({
   error,
@@ -24,7 +25,7 @@ export default function ErrorPage({
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Button type="button" onClick={() => reset()}>
-          Zkusit znovu
+          {copy.nabidky.emptyErrorCta}
         </Button>
         <ButtonLink href="/" variant="ghost">
           Na úvod

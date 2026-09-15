@@ -15,6 +15,7 @@ import { resolveAppUrl } from "@/lib/app-url";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
 import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
+import { copy } from "@/lib/copy";
 import { applySchema } from "@/lib/validation";
 
 export type ActionState = { ok: true } | { ok: false; error: string };
@@ -39,7 +40,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
 
   const parsed = applySchema.safeParse(raw);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Zkontrolujte formulář." };
+    return { ok: false, error: parsed.error.issues[0]?.message ?? copy.detail.errorRequired };
   }
 
   const ip = await clientIp();

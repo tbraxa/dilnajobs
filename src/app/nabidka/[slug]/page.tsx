@@ -4,8 +4,8 @@ import { ApplyForm } from "@/components/apply-form";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
-import { professionByDb, CONTRACT_TYPES } from "@/lib/catalog";
-import { copy } from "@/lib/copy";
+import { professionByDb } from "@/lib/catalog";
+import { contractLabel, copy } from "@/lib/copy";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -41,9 +41,7 @@ export default async function JobPage({ params }: Props) {
   if (!row) notFound();
   const { job } = row;
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
-  const contract =
-    CONTRACT_TYPES.find((t) => t.slug === job.contractType)?.label
-    ?? job.contractType;
+  const contract = contractLabel(job.contractType || job.employmentType);
   const verified = row.verificationStatus === "verified";
   const requirements = splitLines(job.requirements);
 
@@ -51,7 +49,7 @@ export default async function JobPage({ params }: Props) {
     <main className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-12">
       <article className="lg:col-span-7">
         <div className="flex flex-wrap items-center gap-2 text-sm text-steel">
-          <span>{row.companyName}</span>
+          <span>{copy.card.metaCompany(row.companyName)}</span>
           {verified ? (
             <span className="rounded-[2px] bg-ok px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-white">
               {copy.card.badgeVerified}
@@ -65,7 +63,8 @@ export default async function JobPage({ params }: Props) {
         <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{job.title}</h1>
         <p className="mt-3 text-sm text-steel">
           {category?.label} · {job.city}
-          {job.region ? `, ${job.region}` : ""} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryType === "negotiable" ? "Mzda dohodou" : job.salaryNote)} · {contract}
+          {job.region ? `, ${job.region}` : ""} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryType === "negotiable" ? copy.card.salaryNegotiable : job.salaryNote)}
+          {contract ? ` · ${contract}` : ""}
         </p>
         <p className="mt-4 lg:hidden">
           <a

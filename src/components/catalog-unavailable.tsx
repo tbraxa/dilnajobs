@@ -11,6 +11,9 @@ export function CatalogUnavailable({
     <div className="border border-line bg-paper p-4 text-sm">
       <p className="font-semibold text-ink">{title}</p>
       <p className="mt-2 text-steel">{detail}</p>
+      <a href="/nabidky" className="mt-3 inline-block underline">
+        {copy.nabidky.emptyErrorCta}
+      </a>
     </div>
   );
 }

@@ -54,7 +54,7 @@ export default async function AdminHomePage() {
         <StatusPill status={health.status} />
       </div>
       <p className="mt-2 text-sm text-steel">
-        Stav systému: Postgres a přihlášení musí být v pořádku. Ostatní služby ve stubu hlásí „nenastaveno“ — to je v
+        Stav systému: Postgres a přihlášení musí být v pořádku. Ostatní služby ve stubu hlásí „nenastaveno“. To je v
         dev režimu očekávané.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

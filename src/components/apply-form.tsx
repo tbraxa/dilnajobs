@@ -86,9 +86,9 @@ export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?:
       <label className="flex items-start gap-2 text-sm">
         <input type="checkbox" name="consentGdpr" className="mt-1" required />
         <span>
-          Souhlasím se zpracováním osobních údajů za účelem této přihlášky. Podrobnosti na stránce{" "}
+          Souhlasím se zpracováním osobních údajů za účelem této odpovědi. Podrobnosti na stránce{" "}
           <a href="/gdpr" className="underline">
-            Osobní údaje
+            {copy.nav.personalData}
           </a>
           .
         </span>

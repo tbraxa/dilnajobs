@@ -46,7 +46,7 @@ export function JobFilters({
           defaultValue={category}
           className="mt-1 w-full rounded-[2px] border border-line bg-paper px-3 py-2.5"
         >
-          <option value="">Všechny obory</option>
+          <option value="">{copy.nabidky.filtersAllCategories}</option>
           {CATEGORIES.map((p) => (
             <option key={p.db} value={p.db}>
               {p.label}

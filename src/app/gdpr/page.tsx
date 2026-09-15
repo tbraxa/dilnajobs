@@ -21,7 +21,7 @@ export default function GdprPage() {
       </p>
       <p className="mt-2">
         Uchování: do smazání firmou, nebo 12 měsíců po konci inzerátu (úklid je v1 částečně ruční). Výmaz a přístup:
-        napište na kontakt výše — v1 nemáte samoobsluhu.
+        napište na kontakt výše. V1 nemáte samoobsluhu.
       </p>
       <h2 className="display mt-8 text-xl font-semibold">Zaměstnavatelé</h2>
       <p className="mt-2">

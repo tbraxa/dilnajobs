@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { createJobAction, type JobFormState } from "@/lib/actions/jobs";
 import { CITIES, CATEGORIES, EMPLOYMENT_TYPES } from "@/lib/catalog";
+import { copy } from "@/lib/copy";
 import { Button, Field, inputClass } from "./ui";
 
 export function JobCreateForm() {
@@ -22,7 +23,7 @@ export function JobCreateForm() {
             ))}
           </select>
         </Field>
-        <Field label="Typ úvazku" name="employmentType">
+        <Field label={copy.card.labelContract} name="employmentType">
           <select id="employmentType" name="employmentType" required className={inputClass}>
             {EMPLOYMENT_TYPES.map((t) => (
               <option key={t.slug} value={t.slug}>
@@ -33,7 +34,7 @@ export function JobCreateForm() {
         </Field>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Field label="Město" name="city">
+        <Field label={copy.card.labelPlace} name="city">
           <input id="city" name="city" required className={inputClass} list="city-list" />
           <datalist id="city-list">
             {CITIES.map((c) => (
@@ -49,7 +50,7 @@ export function JobCreateForm() {
         <input id="shiftNote" name="shiftNote" className={inputClass} placeholder="dvousměnný provoz" />
       </Field>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Field label="Mzda od (Kč / měsíc)" name="salaryMin">
+        <Field label={copy.nabidky.filtersSalary} name="salaryMin">
           <input id="salaryMin" name="salaryMin" type="number" min={1} className={inputClass} />
         </Field>
         <Field label="Mzda do (Kč / měsíc)" name="salaryMax">
@@ -62,10 +63,10 @@ export function JobCreateForm() {
       <Field label="Popis práce" name="description">
         <textarea id="description" name="description" required rows={7} className={inputClass} />
       </Field>
-      <Field label="Požadavky" name="requirements">
+      <Field label={copy.detail.sectionRequirements} name="requirements">
         <textarea id="requirements" name="requirements" rows={4} className={inputClass} />
       </Field>
-      <Field label="Co nabízíte" name="benefits">
+      <Field label={copy.detail.sectionOffer} name="benefits">
         <textarea id="benefits" name="benefits" rows={3} className={inputClass} />
       </Field>
       <p className="text-xs text-steel">

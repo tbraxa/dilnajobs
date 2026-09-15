@@ -1,7 +1,6 @@
-# OpenJobs COPY PACK (v1)
+# OpenJobs COPY PACK (v1.1)
 
-Public brand (LOCKED): **OpenJobs**
-Domain / repo (technical): dilnajobs.cz / tbraxa/dilnajobs
+Brand lock: **OpenJobs** (display). Doména: dilnajobs.cz.
 Produkt: národní job marketplace, všechny profese, CZ-first.
 Auth: magic link. Registrace: ARES + jméno, příjmení, DIČ.
 Oddělovač: ·   Zakázané v copy: — –
@@ -199,7 +198,7 @@ Tone: viz `docs/copy-rules.md`
 
 ## Poznámky
 
-1. Public brand **OpenJobs** is locked. Domain and repo stay dilnajobs.cz / tbraxa/dilnajobs.
-2. Homepage claim: Práce v Česku. Od firem.
+1. Display name: OpenJobs. Doména zůstává dilnajobs.cz (neplést do UI copy jako brand).
+2. Homepage claim drží směr: Práce v Česku. Od firem.
 3. Žádná hesla. Po odeslání auth formuláře ukázat helper_after_send.
 4. Pricing a e-mailové šablony: další iterace.

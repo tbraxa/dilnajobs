@@ -227,7 +227,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
   checks.push({
     name: "sentry",
     status: env.SENTRY_DSN ? "ok" : "unconfigured",
-    detail: env.SENTRY_DSN ? "DSN nastavené" : "SENTRY_DSN chybí — výjimky jdou do strukturovaných logů",
+      detail: env.SENTRY_DSN ? "DSN nastavené" : "SENTRY_DSN chybí. Výjimky jdou do strukturovaných logů",
     checkedAt,
   });
 

@@ -64,7 +64,7 @@ export default async function HomePage() {
         </div>
         <div className="mt-4 grid gap-3">
           {!catalog.ok ? (
-            <CatalogUnavailable title={copy.nabidky.emptyErrorTitle} detail={copy.nabidky.emptyErrorBody} />
+            <CatalogUnavailable />
           ) : jobs.length === 0 ? (
             <p className="border border-line p-4 text-sm text-steel">{copy.nabidky.emptyNoResultsBody}</p>
           ) : (

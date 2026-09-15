@@ -44,7 +44,7 @@ export default async function FirmaHome({
       </div>
       {orderState === "stub" ? (
         <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Objednávka je ve stavu stub — Stripe Checkout není zapnutý. Ozveme se na e-mail.
+          Objednávka je ve stavu stub. Stripe Checkout není zapnutý. Ozveme se na e-mail.
         </p>
       ) : null}
       {orderState === "ok" ? (
@@ -82,7 +82,7 @@ export default async function FirmaHome({
       <p className="mt-1 text-sm text-steel">
         {stripeOn
           ? "Platba kartou přes Stripe Checkout. Ceny bez DPH."
-          : "Stripe klíče v prostředí chybí — objednávka se uloží jako stub."}
+          : "Stripe klíče v prostředí chybí. Objednávka se uloží jako stub."}
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {PACKAGES.map((pkg) => {

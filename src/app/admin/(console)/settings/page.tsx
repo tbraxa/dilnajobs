@@ -57,13 +57,13 @@ export default function AdminSettingsPage() {
         <Flag
           on={!flags.autoPublish}
           label="Schvalování prvního inzerátu"
-          hint={flags.autoPublish ? "FEATURE_AUTO_PUBLISH_FIRST_JOB=true — inzeráty jdou rovnou ven." : "Nové inzeráty čekají ve pending_review."}
+          hint={flags.autoPublish ? "FEATURE_AUTO_PUBLISH_FIRST_JOB=true. Inzeráty jdou rovnou ven." : "Nové inzeráty čekají ve pending_review."}
         />
         <article className="border border-line bg-paper p-4">
           <h2 className="font-semibold">ADMIN_EMAILS</h2>
           <p className="mt-2 text-sm text-steel">
             {flags.adminEmailCount === 0
-              ? "Seznam je prázdný — do správy se nikdo nepřihlásí."
+              ? "Seznam je prázdný. Do správy se nikdo nepřihlásí."
               : flags.adminEmails.join(", ")}
           </p>
         </article>

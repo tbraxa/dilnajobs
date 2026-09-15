@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { destroySession, requestMagicLink } from "@/lib/auth";
+import { copy } from "@/lib/copy";
 import { magicLinkSchema } from "@/lib/validation";
 
 export type AuthState = { ok: true; message: string } | { ok: false; error: string };
@@ -39,10 +40,7 @@ export async function requestLinkAction(_prev: AuthState | null, formData: FormD
   if (!result.ok) return result;
   return {
     ok: true,
-    message:
-      intent === "register"
-        ? "Účet je založený. Odkaz pro přihlášení jsme poslali na e-mail."
-        : "Odkaz jsme poslali. Podívejte se do schránky.",
+    message: intent === "register" ? copy.register.helperAfterSend : copy.login.helperAfterSend,
   };
 }
 

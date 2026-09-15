@@ -58,7 +58,7 @@ export default async function NabidkyPage({
       </p>
       <div className="mt-3 grid gap-3">
         {!catalog.ok ? (
-          <CatalogUnavailable title={copy.nabidky.emptyErrorTitle} detail={copy.nabidky.emptyErrorBody} />
+          <CatalogUnavailable />
         ) : jobs.length === 0 ? (
           <div className="border border-line p-4 text-sm">
             <p className="font-semibold">

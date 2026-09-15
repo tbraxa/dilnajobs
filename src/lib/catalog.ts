@@ -1,3 +1,5 @@
+import { copy } from "./copy";
+
 export const CATEGORIES = [
   { slug: "administration", label: "Administrativa", db: "administration" },
   { slug: "accounting", label: "Účetnictví a finance", db: "accounting" },
@@ -60,10 +62,10 @@ export const CITIES = [
 export type CitySlug = (typeof CITIES)[number]["slug"];
 
 export const CONTRACT_TYPES = [
-  { slug: "hpp", label: "HPP" },
-  { slug: "dpp", label: "DPP" },
-  { slug: "dpc", label: "DPČ" },
-  { slug: "ico", label: "IČO / živnost" },
+  { slug: "hpp", label: copy.card.contractHpp },
+  { slug: "dpp", label: copy.card.contractDpp },
+  { slug: "dpc", label: copy.card.contractDpc },
+  { slug: "ico", label: copy.card.contractIco },
 ] as const;
 
 export const EMPLOYMENT_TYPES = [

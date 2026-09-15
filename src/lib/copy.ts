@@ -1,4 +1,4 @@
-/** Czech UI copy from docs/copy/COPY-PACK.md. No em dash or en dash. */
+/** Czech UI copy from docs/copy/COPY-PACK.md (v1.1). No em dash or en dash. */
 
 export const copy = {
   brand: "OpenJobs",
@@ -11,6 +11,7 @@ export const copy = {
     register: "Registrace firmy",
     ariaMain: "Hlavní",
     ariaMenu: "Menu",
+    personalData: "Osobní údaje",
   },
   home: {
     metaTitle: "OpenJobs · nabídky práce",
@@ -39,6 +40,7 @@ export const copy = {
     filtersContract: "Úvazek",
     filtersSalary: "Mzda od",
     filtersSeniority: "Seniorita",
+    filtersAllCategories: "Všechny obory",
     emptyNoResultsTitle: "Žádné nabídky pro tyto filtry",
     emptyNoResultsBody: "Upravte pozici, místo nebo mzdu a zkuste to znovu.",
     emptyNoResultsCta: "Zrušit filtry",
@@ -58,7 +60,13 @@ export const copy = {
     badgeFeatured: "Zvýrazněné",
     badgeVerified: "Ověřená firma",
     badgePending: "Ověření probíhá",
+    contractHpp: "HPP",
+    contractDpp: "DPP",
+    contractDpc: "DPČ",
+    contractIco: "IČO / živnost",
     ctaOpen: "Zobrazit nabídku",
+    salaryNegotiable: "Mzda dohodou",
+    metaCompany: (company: string) => company,
   },
   detail: {
     ctaApply: "Odpovědět na nabídku",
@@ -141,4 +149,22 @@ export function salaryRange(from: number, to: number): string {
 
 export function salaryFrom(from: number): string {
   return `od ${new Intl.NumberFormat("cs-CZ").format(from)} Kč`;
+}
+
+export function contractLabel(slug: string | null | undefined): string {
+  switch (slug) {
+    case "hpp":
+    case "full_time":
+    case "shift":
+      return copy.card.contractHpp;
+    case "dpp":
+    case "part_time":
+      return copy.card.contractDpp;
+    case "dpc":
+      return copy.card.contractDpc;
+    case "ico":
+      return copy.card.contractIco;
+    default:
+      return slug ?? "";
+  }
 }
