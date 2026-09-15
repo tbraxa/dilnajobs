@@ -89,6 +89,10 @@ describe("COPY-PACK v1.3", () => {
     expect(copy.card.publishedToday).toBe("Zveřejněno dnes");
     expect(copy.nabidky.ctaFilters).toBe("Filtry");
     expect(copy.nabidky.ctaEditFilters).toBe("Upravit filtry");
+    expect(copy.nabidky.filtersSalaryChip).toBe("Mzda");
+    expect(copy.nabidky.ctaCancel).toBe("Zrušit");
+    expect(copy.nabidky.ctaShowResults(1)).toBe("Zobrazit 1 nabídku");
+    expect(copy.nabidky.ctaShowResults(9)).toBe("Zobrazit 9 nabídek");
     expect(copy.nabidky.ctaFiltersDone).toBe("Hotovo");
     expect(copy.nabidky.filtersSalaryAny).toBe("Bez minima");
     expect(copy.nabidky.filtersCount(1)).toBe("1 filtr");

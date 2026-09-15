@@ -29,7 +29,7 @@ export function parseSearch(input: Record<string, string | string[] | undefined>
     profession: one(input, "profession"),
     place: one(input, "place") ?? one(input, "mesto"),
     city: one(input, "city"),
-    salaryMin: one(input, "salaryMin") ?? one(input, "mzda"),
+    salaryMin: one(input, "salaryCustom") ?? one(input, "salaryMin") ?? one(input, "mzda"),
     workMode: one(input, "mode") ?? one(input, "workMode"),
     contract: one(input, "contract"),
     page: one(input, "page"),
@@ -70,9 +70,10 @@ export function searchHasFilters(query: SearchQuery): boolean {
   );
 }
 
-/** Advanced facets shown on the Filtry control. Query and place live in the search bar. */
+/** Facets outside the search pill (Obor, Místo, Mzda, režim, úvazek). */
 export function facetCount(query: SearchQuery): number {
   let n = 0;
+  if (query.place || query.city) n += 1;
   if (query.category) n += 1;
   if (query.profession && query.profession !== query.category) n += 1;
   if (query.salaryMin != null) n += 1;

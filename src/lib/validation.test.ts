@@ -47,6 +47,18 @@ describe("parseSearch", () => {
     });
   });
 
+  it("prefers salaryCustom over salaryMin for the drawer custom field", () => {
+    expect(parseSearch({ category: "it", place: "Praha", salaryCustom: "45000", q: "vývojář" })).toEqual({
+      q: "vývojář",
+      category: "it",
+      place: "Praha",
+      city: "Praha",
+      salaryMin: 45000,
+      page: 1,
+      sort: "newest",
+    });
+  });
+
   it("accepts mesto and mode aliases from the craft preview", () => {
     expect(parseSearch({ mesto: "Brno", mode: "remote" })).toMatchObject({
       place: "Brno",
@@ -80,8 +92,9 @@ describe("nabidkyHref and facetCount", () => {
     ).toBe("/nabidky?place=Brno&category=it&mode=remote");
   });
 
-  it("counts advanced facets and ignores query plus place", () => {
-    expect(facetCount({ q: "účetní", place: "Praha" })).toBe(0);
+  it("counts chip facets and ignores the search query", () => {
+    expect(facetCount({ q: "účetní" })).toBe(0);
+    expect(facetCount({ q: "účetní", place: "Praha" })).toBe(1);
     expect(facetCount({ category: "it", salaryMin: 40000, workMode: "hybrid", contract: "hpp" })).toBe(4);
     expect(facetCount({ category: "manufacturing", profession: "manufacturing" })).toBe(1);
     expect(facetCount({ category: "manufacturing", profession: "welder" })).toBe(2);

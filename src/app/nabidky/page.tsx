@@ -31,6 +31,7 @@ export default async function NabidkyPage({
       <JobFilters
         defaults={query}
         resultLabel={catalog.ok ? copy.nabidky.resultsCount(total) : copy.nabidky.emptyErrorTitle}
+        resultCount={catalog.ok ? total : 0}
       />
       <div className="wrap serp-results">
         <div className="serp-head">

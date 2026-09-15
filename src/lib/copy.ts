@@ -44,15 +44,31 @@ export const copy = {
     ctaEditFilters: "Upravit filtry",
     ctaFiltersClose: "Zavřít",
     ctaFiltersDone: "Hotovo",
+    ctaCancel: "Zrušit",
+    ctaShowResults: (n: number) => {
+      const abs = Math.abs(n);
+      const mod10 = abs % 10;
+      const mod100 = abs % 100;
+      let noun = "nabídek";
+      if (mod10 === 1 && mod100 !== 11) noun = "nabídku";
+      else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) noun = "nabídky";
+      return `Zobrazit ${n} ${noun}`;
+    },
     sectionResults: "Výsledky",
     filtersPlace: "Místo",
     filtersCategory: "Obor",
     filtersContract: "Úvazek",
+    filtersContractIco: "IČO",
     filtersSalary: "Mzda od",
+    filtersSalaryChip: "Mzda",
     filtersSalaryAny: "Bez minima",
+    filtersSalaryCustom: "Od Kč",
+    filtersSalaryCustomPlaceholder: "např. 45000",
     filtersSeniority: "Seniorita",
     filtersMode: "Režim",
+    filtersModeWork: "Režim práce",
     filtersAllCategories: "Všechny obory",
+    filtersAllPlaces: "Všechna místa",
     filtersActiveAria: "Aktivní filtry",
     chipRemove: "Odebrat filtr",
     filtersCount: (n: number) => {
