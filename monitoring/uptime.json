@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "name": "dilnajobs",
-  "note": "Import into Better Stack, Checkly, or any HTTP uptime tool. Replace https://dilnajobs.cz after DNS is live. Do not monitor /api/admin/health.",
+  "name": "fairjobs",
+  "note": "Import into Better Stack, Checkly, or any HTTP uptime tool. Public origin is https://fairjobs.cz. Do not monitor /api/admin/health.",
   "checks": [
     {
       "name": "liveness",
-      "url": "https://dilnajobs.cz/api/health",
+      "url": "https://fairjobs.cz/api/health",
       "method": "GET",
       "interval_seconds": 60,
       "expect": {
@@ -15,7 +15,7 @@
     },
     {
       "name": "readiness-postgres",
-      "url": "https://dilnajobs.cz/api/ready",
+      "url": "https://fairjobs.cz/api/ready",
       "method": "GET",
       "interval_seconds": 60,
       "timeout_seconds": 5,
@@ -26,7 +26,7 @@
     },
     {
       "name": "public-catalog",
-      "url": "https://dilnajobs.cz/nabidky",
+      "url": "https://fairjobs.cz/nabidky",
       "method": "GET",
       "interval_seconds": 300,
       "expect": {

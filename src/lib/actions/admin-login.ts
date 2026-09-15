@@ -18,7 +18,7 @@ export async function requestAdminLinkAction(
   return {
     ok: true,
     message:
-      "Když je adresa v seznamu správců, odkaz je na cestě. V lokálním vývoji ho vypíšeme do konzole serveru.",
+      "Když je adresa v seznamu správců, odkaz je na cestě.",
   };
 }
 

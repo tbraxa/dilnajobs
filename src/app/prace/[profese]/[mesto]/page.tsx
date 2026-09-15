@@ -27,12 +27,12 @@ export default async function SeoLanding({ params }: Props) {
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">SEO přistání</p>
+      <p className="label">Nabídky</p>
       <h1 className="display mt-2 text-3xl font-semibold">
         {p.label} v městě {c.label}
       </h1>
       <p className="mt-2 max-w-2xl text-sm text-steel">
-        Stejný katalog jako /nabidky, jen předfiltrovaný. Žádný generovaný článek navíc.
+        Stejný katalog jako všechny nabídky, jen předfiltrovaný podle oboru a města.
       </p>
       <div className="mt-6 grid gap-3">
         {!catalog.ok ? (
