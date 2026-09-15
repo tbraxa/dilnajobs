@@ -140,7 +140,7 @@ export function FairJobsNavigation() {
       </div>
 
       {megaOpen ? (
-        <div className="fj-mega-layer" onMouseDown={(event) => {
+        <div className="fj-mega-layer" onClick={(event) => {
           if (event.target === event.currentTarget) setMegaOpen(false);
         }}>
           <div className="fj-guide-mega" id="fj-guide-mega" ref={megaRef} role="region" aria-label="Průvodce">
@@ -176,7 +176,7 @@ export function FairJobsNavigation() {
       ) : null}
 
       {mobileOpen ? (
-        <div className="fj-mobile-sheet-layer" onMouseDown={(event) => {
+        <div className="fj-mobile-sheet-layer" onClick={(event) => {
           if (event.target === event.currentTarget) setMobileOpen(false);
         }}>
           <div className="fj-mobile-sheet" id="fj-mobile-sheet" ref={mobileRef} role="dialog" aria-modal="true" aria-label="Hlavní navigace">

@@ -1,4 +1,4 @@
-# Architecture — DílnaJobs v1
+# Architecture: FairJobs v1
 
 Small Next.js App Router service. Boring boundaries. One PostgreSQL database.
 
