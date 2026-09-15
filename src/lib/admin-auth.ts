@@ -60,7 +60,7 @@ export async function requestAdminMagicLink(emailRaw: string): Promise<{ ok: tru
   const url = `${resolveAppUrl()}/admin/prihlaseni/overit?token=${encodeURIComponent(token)}`;
   await sendEmail({
     to: email,
-    subject: "Přihlášení správce DílnaJobs",
+    subject: "Přihlášení správce FairJobs",
     text: `Odkaz platí ${env.MAGIC_LINK_MINUTES} minut a jde použít jen jednou.\n\n${url}\n\nPokud jste o něj nežádali, ignorujte ho.`,
   });
   log("info", "admin.magic.sent", { requestId, minutes: env.MAGIC_LINK_MINUTES });

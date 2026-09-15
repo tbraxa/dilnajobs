@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BRAND, PUBLIC_DOMAIN } from "@/lib/brand";
 import { ButtonLink } from "./ui";
 import { LogoMark } from "./icons";
 
@@ -8,7 +9,7 @@ export function SiteHeader({ compact = false }: { compact?: boolean }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2 text-ink">
           <LogoMark className="h-8 w-8" />
-          <span className="display text-lg font-semibold sm:text-xl">DílnaJobs</span>
+          <span className="display text-lg font-semibold sm:text-xl">{BRAND}</span>
         </Link>
         <nav className="flex items-center gap-1 sm:gap-3">
           <Link href="/nabidky" className="px-2 py-1 text-sm text-ink hover:underline">
@@ -33,9 +34,9 @@ export function SiteFooter() {
     <footer className="mt-auto border-t border-line">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:grid-cols-3 sm:px-6">
         <div>
-          <p className="display text-lg font-semibold">DílnaJobs</p>
+          <p className="display text-lg font-semibold">{BRAND}</p>
           <p className="mt-2 max-w-xs text-sm text-steel">
-            Práce ve výrobě, napřímo od firem. Agentury neregistrujeme. Cílová doména dilnajobs.cz.
+            Práce ve výrobě, napřímo od firem. Agentury neregistrujeme. {PUBLIC_DOMAIN}
           </p>
         </div>
         <div className="text-sm">
@@ -75,7 +76,7 @@ export function SiteFooter() {
         </div>
       </div>
       <p className="border-t border-line px-4 py-3 text-center text-xs text-steel">
-        © {new Date().getFullYear()} DílnaJobs. Provozovatel bude doplněn před spuštěním.
+        © {new Date().getFullYear()} {BRAND}. Provozovatel bude doplněn před spuštěním.
       </p>
     </footer>
   );

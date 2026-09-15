@@ -57,6 +57,7 @@ describe("parseEnv", () => {
     expect(env.APP_URL).toBe(LOCAL_APP_URL);
     expect(env.SENTRY_DSN).toBeUndefined();
     expect(env.STRIPE_SECRET_KEY).toBeUndefined();
+    expect(env.EMAIL_FROM).toBe("FairJobs <noreply@dilnajobs.cz>");
     expect(env.FEATURE_AUTO_PUBLISH_FIRST_JOB).toBe(false);
     expect(env.ADMIN_EMAILS).toBe("tomas@dilnajobs.test");
   });

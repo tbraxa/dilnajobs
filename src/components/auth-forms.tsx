@@ -41,6 +41,16 @@ export function RegisterForm() {
       <Field label="Firemní e-mail" name="email">
         <input id="reg-email" name="email" type="email" required className={inputClass} autoComplete="email" />
       </Field>
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" name="consentGdpr" className="mt-1" required />
+        <span>
+          Souhlasím se zpracováním údajů za účelem založení firemního účtu. Podrobnosti na stránce{" "}
+          <a href="/gdpr" className="underline">
+            Osobní údaje
+          </a>
+          .
+        </span>
+      </label>
       {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
       {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
       <Button type="submit" disabled={pending}>
