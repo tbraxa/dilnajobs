@@ -5,7 +5,7 @@ export function Logo({ href = "/" }: { href?: string }) {
   return (
     <Link className="logo" href={href}>
       <span className="logo-mark" aria-hidden="true" />
-      Open<span>Jobs</span>
+      Fair<span>Jobs</span>
     </Link>
   );
 }

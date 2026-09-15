@@ -1,9 +1,9 @@
 /** Czech UI copy from docs/copy/COPY-PACK.md (v1.3). No em dash or en dash. */
 
 export const copy = {
-  brand: "OpenJobs",
+  brand: "FairJobs",
   claim: "Práce v Česku. Od firem.",
-  footer: "© 2026 OpenJobs · nabídky práce",
+  footer: "© 2026 FairJobs · nabídky práce",
   nav: {
     nabidky: "Nabídky",
     proFirmy: "Pro firmy",
@@ -14,7 +14,7 @@ export const copy = {
     personalData: "Osobní údaje",
   },
   home: {
-    metaTitle: "OpenJobs · nabídky práce",
+    metaTitle: "FairJobs · nabídky práce",
     metaDescription: "Nabídky práce v Česku. Hledejte podle pozice, místa a mzdy. Odpovězte přímo firmě.",
     helper: "Všechny obory. Filtrujte podle pozice, místa a mzdy.",
     labelQuery: "Pozice nebo klíčové slovo",
@@ -31,7 +31,7 @@ export const copy = {
     shotWorkshop: "Výroba",
   },
   nabidky: {
-    metaTitle: "Nabídky práce · OpenJobs",
+    metaTitle: "Nabídky práce · FairJobs",
     metaDescription: "Procházejte nabídky práce. Filtrujte podle pozice, místa, úvazku a mzdy.",
     claim: "Všechny nabídky",
     helper: "Upravte filtry podle pozice, místa a mzdy.",
@@ -116,14 +116,14 @@ export const copy = {
     labelCity: "Město",
   },
   employers: {
-    metaTitle: "Pro firmy · OpenJobs",
-    metaDescription: "Inzerujte nabídky práce na OpenJobs. Odpovědi od uchazečů na jednom místě.",
+    metaTitle: "Pro firmy · FairJobs",
+    metaDescription: "Inzerujte nabídky práce na FairJobs. Odpovědi od uchazečů na jednom místě.",
     claim: "Inzerce nabídek práce",
     helper: "Zveřejněte pozici. Uchazeči odpoví přímo vám.",
     ctaPrimary: "Založit účet firmy",
     ctaSecondary: "Přihlásit se",
     ctaPost: "Vystavit nabídku",
-    sectionWhy: "Proč OpenJobs",
+    sectionWhy: "Proč FairJobs",
     why1Title: "Jasný inzerát",
     why1Body: "Mzda, místo a úvazek hned vidět. Méně zbytečných odpovědí.",
     why2Title: "Odpovědi na jednom místě",
@@ -144,7 +144,7 @@ export const copy = {
     pricingProBody: "Pro firmu, která nabírá průběžně.",
   },
   login: {
-    metaTitle: "Přihlášení firmy · OpenJobs",
+    metaTitle: "Přihlášení firmy · FairJobs",
     metaDescription: "Přihlaste se k účtu firmy odkazem z e-mailu.",
     claim: "Přihlášení firmy",
     helper: "Na e-mail pošleme odkaz pro přihlášení.",
@@ -157,7 +157,7 @@ export const copy = {
     previewNote: "Náhled. Odkaz zatím neodesíláme.",
   },
   register: {
-    metaTitle: "Registrace firmy · OpenJobs",
+    metaTitle: "Registrace firmy · FairJobs",
     metaDescription: "Založte účet firmy. Přihlašovací odkaz přijde na e-mail.",
     claim: "Registrace firmy",
     helper: "Doplňte firmu a kontakt. Přihlašovací odkaz přijde na e-mail.",

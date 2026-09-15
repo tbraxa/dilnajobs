@@ -1,6 +1,6 @@
-# OpenJobs COPY PACK (v1.3)
+# FairJobs COPY PACK (v1.3)
 
-Brand lock: **OpenJobs** (display). Doména: dilnajobs.cz.
+Brand lock: **FairJobs** (display). Doména: dilnajobs.cz.
 Produkt: národní job marketplace, všechny profese, CZ-first.
 Auth: magic link. Registrace: ARES + jméno, příjmení, DIČ.
 Oddělovač: ·   Zakázané v copy: — –
@@ -21,7 +21,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 | Klíč | Text |
 |---|---|
-| meta_title | OpenJobs · nabídky práce |
+| meta_title | FairJobs · nabídky práce |
 | meta_description | Nabídky práce v Česku. Hledejte podle pozice, místa a mzdy. Odpovězte přímo firmě. |
 | claim | Práce v Česku. Od firem. |
 | helper | Všechny obory. Filtrujte podle pozice, místa a mzdy. |
@@ -35,7 +35,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | nav_pro_firmy | Pro firmy |
 | nav_login | Přihlášení firem |
 | section_latest | Aktuální nabídky |
-| footer | © 2026 OpenJobs · nabídky práce |
+| footer | © 2026 FairJobs · nabídky práce |
 
 ---
 
@@ -43,7 +43,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 | Klíč | Text |
 |---|---|
-| meta_title | Nabídky práce · OpenJobs |
+| meta_title | Nabídky práce · FairJobs |
 | meta_description | Procházejte nabídky práce. Filtrujte podle pozice, místa, úvazku a mzdy. |
 | claim | Všechny nabídky |
 | helper | Upravte filtry podle pozice, místa a mzdy. |
@@ -63,7 +63,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | filter_mode_remote | Na dálku |
 | cta_all_jobs | Zobrazit všechny nabídky |
 | section_fields | Všechny obory |
-| footer | © 2026 OpenJobs · nabídky práce |
+| footer | © 2026 FairJobs · nabídky práce |
 
 ### Empty states
 
@@ -144,14 +144,14 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 | Klíč | Text |
 |---|---|
-| meta_title | Pro firmy · OpenJobs |
-| meta_description | Inzerujte nabídky práce na OpenJobs. Odpovědi od uchazečů na jednom místě. |
+| meta_title | Pro firmy · FairJobs |
+| meta_description | Inzerujte nabídky práce na FairJobs. Odpovědi od uchazečů na jednom místě. |
 | claim | Inzerce nabídek práce |
 | helper | Zveřejněte pozici. Uchazeči odpoví přímo vám. |
 | cta_primary | Založit účet firmy |
 | cta_secondary | Přihlásit se |
 | cta_post | Vystavit nabídku |
-| section_why | Proč OpenJobs |
+| section_why | Proč FairJobs |
 | why_1_title | Jasný inzerát |
 | why_1_body | Mzda, místo a úvazek hned vidět. Méně zbytečných odpovědí. |
 | why_2_title | Odpovědi na jednom místě |
@@ -159,7 +159,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | why_3_title | Rychlé spuštění |
 | why_3_body | Účet firmy a první nabídka během pár minut. |
 | bottom_helper | Založte účet firmy a zveřejněte první nabídku. |
-| footer | © 2026 OpenJobs · nabídky práce |
+| footer | © 2026 FairJobs · nabídky práce |
 
 ---
 
@@ -167,7 +167,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 | Klíč | Text |
 |---|---|
-| meta_title | Přihlášení firmy · OpenJobs |
+| meta_title | Přihlášení firmy · FairJobs |
 | meta_description | Přihlaste se k účtu firmy odkazem z e-mailu. |
 | claim | Přihlášení firmy |
 | helper | Na e-mail pošleme odkaz pro přihlášení. |
@@ -178,7 +178,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | helper_secondary | Nemáte účet? |
 | cta_secondary | Zaregistrujte firmu |
 | preview_note | Náhled. Odkaz zatím neodesíláme. |
-| footer | © 2026 OpenJobs · nabídky práce |
+| footer | © 2026 FairJobs · nabídky práce |
 
 ---
 
@@ -186,7 +186,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 | Klíč | Text |
 |---|---|
-| meta_title | Registrace firmy · OpenJobs |
+| meta_title | Registrace firmy · FairJobs |
 | meta_description | Založte účet firmy. Přihlašovací odkaz přijde na e-mail. |
 | claim | Registrace firmy |
 | helper | Doplňte firmu a kontakt. Přihlašovací odkaz přijde na e-mail. |
@@ -207,7 +207,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | helper_secondary | Už máte účet? |
 | cta_secondary | Přihlaste se |
 | preview_note | Náhled. Účet ani odkaz zatím neodesíláme. |
-| footer | © 2026 OpenJobs · nabídky práce |
+| footer | © 2026 FairJobs · nabídky práce |
 
 ---
 
@@ -215,7 +215,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 | Klíč | Text |
 |---|---|
-| brand | OpenJobs |
+| brand | FairJobs |
 | nav_nabidky | Nabídky |
 | nav_pro_firmy | Pro firmy |
 | nav_login | Přihlášení firem |
@@ -227,7 +227,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 ## Poznámky
 
-1. Display name: OpenJobs. Doména zůstává dilnajobs.cz (neplést do UI copy jako brand).
+1. Display name: FairJobs. Doména zůstává dilnajobs.cz (neplést do UI copy jako brand).
 2. Homepage claim drží směr: Práce v Česku. Od firem.
 3. Žádná hesla. Po odeslání auth formuláře ukázat helper_after_send.
 4. Pricing a e-mailové šablony: stand-by.

@@ -17,7 +17,7 @@ export default function TosPage() {
         <p>První inzerát podléhá kontrole. Ceny na /pro-firmy jsou bez DPH. Nevyžádané hromadné inzeráty mažeme.</p>
         <h2>Odpovědnost</h2>
         <p>
-          OpenJobs zprostředkuje kontakt. Pracovní smlouva je mezi firmou a uchazečem. Nejsme agentura podle zákona o
+          FairJobs zprostředkuje kontakt. Pracovní smlouva je mezi firmou a uchazečem. Nejsme agentura podle zákona o
           zaměstnanosti.
         </p>
       </div>

@@ -8,7 +8,7 @@ export default function GdprPage() {
       <div className="wrap">
         <h1 className="h1">Osobní údaje</h1>
         <p>
-          Správce: provozovatel OpenJobs (doplní se před spuštěním na dilnajobs.cz). Kontakt: zdenek@dilnajobs.cz
+          Správce: provozovatel FairJobs (doplní se před spuštěním na dilnajobs.cz). Kontakt: zdenek@dilnajobs.cz
           (zástupný e-mail).
         </p>
         <h2>Uchazeči</h2>
