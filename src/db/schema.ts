@@ -103,6 +103,8 @@ export const jobs = pgTable(
     region: text("region").notNull(),
     employmentType: text("employment_type").notNull().default("full_time"),
     contractType: text("contract_type").notNull().default("hpp"),
+    workMode: text("work_mode").notNull().default("onsite"),
+    isAgency: boolean("is_agency").notNull().default(false),
     shiftNote: text("shift_note"),
     salaryMin: integer("salary_min"),
     salaryMax: integer("salary_max"),

@@ -106,6 +106,7 @@ export const jobCreateSchema = z.object({
   salaryMin: z.coerce.number().int().positive().optional(),
   salaryMax: z.coerce.number().int().positive().optional(),
   salaryNote: z.string().trim().max(120).optional(),
+  workMode: z.enum(["onsite", "hybrid", "remote"]).default("onsite"),
   description: z.string().trim().min(40, "Popište práci aspoň v několika větách.").max(8000),
   requirements: z.string().trim().max(4000).optional(),
   benefits: z.string().trim().max(2000).optional(),

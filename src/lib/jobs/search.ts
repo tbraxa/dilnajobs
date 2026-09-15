@@ -72,6 +72,8 @@ const jobSelect = {
   region: jobs.region,
   employmentType: jobs.employmentType,
   contractType: jobs.contractType,
+  workMode: jobs.workMode,
+  isAgency: jobs.isAgency,
   shiftNote: jobs.shiftNote,
   salaryMin: jobs.salaryMin,
   salaryMax: jobs.salaryMax,

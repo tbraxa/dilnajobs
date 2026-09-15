@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { ApplyForm } from "@/components/apply-form";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
-import { formatSalary } from "@/lib/pricing";
+import { displayJobSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
-import { contractLabel, copy } from "@/lib/copy";
+import { contractLabel, copy, workModeLabel } from "@/lib/copy";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -42,6 +42,7 @@ export default async function JobPage({ params }: Props) {
   const { job } = row;
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const contract = contractLabel(job.contractType || job.employmentType);
+  const mode = workModeLabel(job.workMode);
   const verified = row.verificationStatus === "verified";
   const requirements = splitLines(job.requirements);
 
@@ -59,11 +60,17 @@ export default async function JobPage({ params }: Props) {
               {copy.card.badgePending}
             </span>
           )}
+          {job.isAgency ? (
+            <span className="rounded-[2px] border border-line px-1.5 py-0.5 text-[10px] font-semibold">
+              {copy.card.badgeAgency}
+            </span>
+          ) : null}
         </div>
         <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{job.title}</h1>
         <p className="mt-3 text-sm text-steel">
           {category?.label} · {job.city}
-          {job.region ? `, ${job.region}` : ""} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryType === "negotiable" ? copy.card.salaryNegotiable : job.salaryNote)}
+          {job.region ? `, ${job.region}` : ""} · {displayJobSalary(job)}
+          {mode ? ` · ${mode}` : ""}
           {contract ? ` · ${contract}` : ""}
         </p>
         <p className="mt-4 lg:hidden">

@@ -2,8 +2,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CONTRACT_TYPES } from "./catalog";
-import { contractLabel, copy, salaryFrom, salaryRange } from "./copy";
-import { formatSalary } from "./pricing";
+import { contractLabel, copy, salaryFrom, salaryRange, workModeLabel } from "./copy";
+import { displayJobSalary, formatSalary } from "./pricing";
 
 const DASHES = /[—–]/;
 const OLD_BRAND = /DílnaJobs|DilnaJobs/;
@@ -51,6 +51,11 @@ describe("COPY-PACK v1.1", () => {
     expect(copy.card.contractIco).toBe("IČO / živnost");
     expect(copy.card.ctaOpen).toBe("Zobrazit nabídku");
     expect(copy.card.salaryNegotiable).toBe("Mzda dohodou");
+    expect(copy.card.salaryUnspecified).toBe("Mzda neuvedena");
+    expect(copy.card.badgeAgency).toBe("Agentura");
+    expect(workModeLabel("onsite")).toBe("Na místě");
+    expect(workModeLabel("hybrid")).toBe("Hybrid");
+    expect(workModeLabel("remote")).toBe("Z domova");
     expect(contractLabel("hpp")).toBe("HPP");
     expect(contractLabel("dpc")).toBe("DPČ");
     expect(contractLabel("ico")).toBe("IČO / živnost");
@@ -106,7 +111,12 @@ describe("COPY-PACK v1.1", () => {
     expect(salaryRange(40000, 50000)).not.toMatch(DASHES);
     expect(salaryFrom(40000)).not.toMatch(DASHES);
     expect(formatSalary(40000, 50000)).not.toMatch(DASHES);
-    expect(formatSalary(null, null)).toBe(copy.card.salaryNegotiable);
+    expect(formatSalary(null, null)).toBe(copy.card.salaryUnspecified);
+    expect(displayJobSalary({ salaryMin: 40000, salaryMax: 50000 })).not.toMatch(DASHES);
+    expect(displayJobSalary({ salaryType: "negotiable" })).toBe(copy.card.salaryNegotiable);
+    expect(displayJobSalary({ salaryNote: "mzda dohodou" })).toBe(copy.card.salaryNegotiable);
+    expect(displayJobSalary({ salaryType: "monthly" })).toBe(copy.card.salaryUnspecified);
+    expect(displayJobSalary({ salaryMin: 40000 })).toMatch(/od 40\D000 Kč/);
   });
 
   it("has no em dash or en dash in app or component UI modules", () => {

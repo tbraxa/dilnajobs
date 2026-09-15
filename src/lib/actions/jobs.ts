@@ -12,6 +12,7 @@ import { PLAN_LIMITS } from "@/lib/pricing";
 import { env } from "@/lib/env";
 import { audit } from "@/lib/audit";
 import { categoryForProfession, cityByLabel, contractForEmployment } from "@/lib/catalog";
+import { LISTING_TTL_DAYS } from "@/lib/job-expiry";
 
 export type JobFormState = { ok: false; error: string } | null;
 
@@ -29,6 +30,7 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
     salaryMin: formData.get("salaryMin") ? Number(formData.get("salaryMin")) : undefined,
     salaryMax: formData.get("salaryMax") ? Number(formData.get("salaryMax")) : undefined,
     salaryNote: String(formData.get("salaryNote") ?? "") || undefined,
+    workMode: String(formData.get("workMode") ?? "") || "onsite",
     description: formData.get("description"),
     requirements: String(formData.get("requirements") ?? "") || undefined,
     benefits: String(formData.get("benefits") ?? "") || undefined,
@@ -65,9 +67,9 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
       const salaryType =
         parsed.data.salaryMin || parsed.data.salaryMax
           ? "monthly"
-          : parsed.data.salaryNote
+          : parsed.data.salaryNote && /dohod/i.test(parsed.data.salaryNote)
             ? "negotiable"
-            : "negotiable";
+            : "monthly";
 
       await tx.insert(jobs).values({
         employerId: session.employerId,
@@ -80,6 +82,8 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
         employmentType: parsed.data.employmentType,
         contractType: contractForEmployment(parsed.data.employmentType),
         shiftNote: parsed.data.shiftNote,
+        workMode: parsed.data.workMode,
+        isAgency: employer.isAgency,
         salaryMin: parsed.data.salaryMin,
         salaryMax: parsed.data.salaryMax,
         salaryType,
@@ -89,7 +93,7 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
         benefits: parsed.data.benefits,
         status,
         publishedAt: autoPublish ? now : null,
-        expiresAt: new Date(now.getTime() + 30 * 86400000),
+        expiresAt: new Date(now.getTime() + LISTING_TTL_DAYS * 86400000),
       });
 
       await tx

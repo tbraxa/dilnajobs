@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { createJobAction, type JobFormState } from "@/lib/actions/jobs";
-import { CITIES, CATEGORIES, EMPLOYMENT_TYPES } from "@/lib/catalog";
+import { CITIES, CATEGORIES, EMPLOYMENT_TYPES, WORK_MODES } from "@/lib/catalog";
 import { copy } from "@/lib/copy";
 import { Button, Field, inputClass } from "./ui";
 
@@ -46,6 +46,15 @@ export function JobCreateForm() {
           <input id="region" name="region" required className={inputClass} placeholder="Jihomoravský" />
         </Field>
       </div>
+      <Field label="Režim práce" name="workMode">
+        <select id="workMode" name="workMode" required className={inputClass} defaultValue="onsite">
+          {WORK_MODES.map((m) => (
+            <option key={m.slug} value={m.slug}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+      </Field>
       <Field label="Směny (volitelně)" name="shiftNote">
         <input id="shiftNote" name="shiftNote" className={inputClass} placeholder="dvousměnný provoz" />
       </Field>
@@ -58,7 +67,12 @@ export function JobCreateForm() {
         </Field>
       </div>
       <Field label="Poznámka ke mzdě" name="salaryNote">
-        <input id="salaryNote" name="salaryNote" className={inputClass} />
+        <input
+          id="salaryNote"
+          name="salaryNote"
+          className={inputClass}
+          placeholder={copy.card.salaryNegotiable}
+        />
       </Field>
       <Field label="Popis práce" name="description">
         <textarea id="description" name="description" required rows={7} className={inputClass} />

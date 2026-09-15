@@ -57,7 +57,24 @@ export function formatSalary(min?: number | null, max?: number | null, note?: st
   }
   if (min) return salaryFrom(min);
   if (max) return `do ${formatCzk(max)} / měsíc`;
-  return copy.card.salaryNegotiable;
+  return copy.card.salaryUnspecified;
+}
+
+export function displayJobSalary(job: {
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryType?: string | null;
+  salaryNote?: string | null;
+}): string {
+  if (job.salaryMin || job.salaryMax) {
+    return formatSalary(job.salaryMin, job.salaryMax, job.salaryType === "negotiable" ? null : job.salaryNote);
+  }
+  const note = job.salaryNote?.trim();
+  if (job.salaryType === "negotiable" || (note && /dohod/i.test(note))) {
+    return copy.card.salaryNegotiable;
+  }
+  if (note) return note;
+  return copy.card.salaryUnspecified;
 }
 
 export function formatDate(d: Date | string): string {

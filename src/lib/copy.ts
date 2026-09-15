@@ -66,6 +66,11 @@ export const copy = {
     contractIco: "IČO / živnost",
     ctaOpen: "Zobrazit nabídku",
     salaryNegotiable: "Mzda dohodou",
+    salaryUnspecified: "Mzda neuvedena",
+    badgeAgency: "Agentura",
+    workModeOnsite: "Na místě",
+    workModeHybrid: "Hybrid",
+    workModeRemote: "Z domova",
     metaCompany: (company: string) => company,
   },
   detail: {
@@ -166,5 +171,18 @@ export function contractLabel(slug: string | null | undefined): string {
       return copy.card.contractIco;
     default:
       return slug ?? "";
+  }
+}
+
+export function workModeLabel(mode: string | null | undefined): string {
+  switch (mode) {
+    case "hybrid":
+      return copy.card.workModeHybrid;
+    case "remote":
+      return copy.card.workModeRemote;
+    case "onsite":
+      return copy.card.workModeOnsite;
+    default:
+      return "";
   }
 }

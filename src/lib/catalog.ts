@@ -74,6 +74,12 @@ export const EMPLOYMENT_TYPES = [
   { slug: "shift", label: "Směnný provoz", contract: "hpp" },
 ] as const;
 
+export const WORK_MODES = [
+  { slug: "onsite", label: copy.card.workModeOnsite },
+  { slug: "hybrid", label: copy.card.workModeHybrid },
+  { slug: "remote", label: copy.card.workModeRemote },
+] as const;
+
 export const PAGE_SIZE = 20;
 
 export function categoryByDb(db: string) {

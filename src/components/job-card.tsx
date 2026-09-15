@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { searchJobs } from "@/lib/jobs/search";
-import { formatSalary } from "@/lib/pricing";
+import { displayJobSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
-import { contractLabel, copy } from "@/lib/copy";
+import { contractLabel, copy, workModeLabel } from "@/lib/copy";
 
 type JobRow = Awaited<ReturnType<typeof searchJobs>>[number];
 
@@ -14,6 +14,7 @@ export function JobCard({ job }: { job: JobRow }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const verified = job.verificationStatus === "verified";
   const contract = jobContractLabel(job);
+  const mode = workModeLabel(job.workMode);
   return (
     <article className="border border-line bg-paper p-4 sm:p-5">
       <div className="flex flex-wrap items-center gap-2 text-xs text-steel">
@@ -25,6 +26,11 @@ export function JobCard({ job }: { job: JobRow }) {
         ) : job.verificationStatus === "pending" || job.verificationStatus === "manual" ? (
           <span className="rounded-[2px] border border-line px-1.5 py-0.5 text-[10px] font-semibold tracking-wide">
             {copy.card.badgePending}
+          </span>
+        ) : null}
+        {job.isAgency ? (
+          <span className="rounded-[2px] border border-line px-1.5 py-0.5 text-[10px] font-semibold tracking-wide">
+            {copy.card.badgeAgency}
           </span>
         ) : null}
         {job.isTop ? (
@@ -40,7 +46,8 @@ export function JobCard({ job }: { job: JobRow }) {
       </h2>
       <p className="mt-2 text-sm text-steel">
         {category?.label ?? job.category} · {job.city}
-        {job.region ? `, ${job.region}` : ""} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryType === "negotiable" ? copy.card.salaryNegotiable : job.salaryNote)}
+        {job.region ? `, ${job.region}` : ""} · {displayJobSalary(job)}
+        {mode ? ` · ${mode}` : ""}
         {contract ? ` · ${contract}` : ""}
       </p>
       <p className="mt-3">
