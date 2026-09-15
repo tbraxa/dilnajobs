@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(resolveAppUrl()),
   title: {
     default: copy.home.metaTitle,
-    template: "%s · DílnaJobs",
+    template: `%s · ${copy.brand}`,
   },
   description: copy.home.metaDescription,
   robots: { index: true, follow: true },

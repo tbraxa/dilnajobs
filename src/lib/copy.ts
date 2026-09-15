@@ -1,9 +1,9 @@
 /** Czech UI copy from docs/copy/COPY-PACK.md. No em dash or en dash. */
 
 export const copy = {
-  brand: "DílnaJobs",
+  brand: "OpenJobs",
   claim: "Práce v Česku. Od firem.",
-  footer: "© 2026 DílnaJobs · nabídky práce",
+  footer: "© 2026 OpenJobs · nabídky práce",
   nav: {
     nabidky: "Nabídky",
     proFirmy: "Pro firmy",
@@ -13,7 +13,7 @@ export const copy = {
     ariaMenu: "Menu",
   },
   home: {
-    metaTitle: "DílnaJobs · nabídky práce",
+    metaTitle: "OpenJobs · nabídky práce",
     metaDescription: "Nabídky práce v Česku. Hledejte podle pozice, místa a mzdy. Odpovězte přímo firmě.",
     helper: "Všechny obory. Filtrujte podle pozice, místa a mzdy.",
     labelQuery: "Pozice nebo klíčové slovo",
@@ -25,7 +25,7 @@ export const copy = {
     sectionLatest: "Aktuální nabídky",
   },
   nabidky: {
-    metaTitle: "Nabídky práce · DílnaJobs",
+    metaTitle: "Nabídky práce · OpenJobs",
     metaDescription: "Procházejte nabídky práce. Filtrujte podle pozice, místa, úvazku a mzdy.",
     claim: "Všechny nabídky",
     helper: "Upravte filtry podle pozice, místa a mzdy.",
@@ -80,14 +80,14 @@ export const copy = {
     errorPhone: "Zkontrolujte telefonní číslo.",
   },
   employers: {
-    metaTitle: "Pro firmy · DílnaJobs",
-    metaDescription: "Inzerujte nabídky práce na DílnaJobs. Odpovědi od uchazečů na jednom místě.",
+    metaTitle: "Pro firmy · OpenJobs",
+    metaDescription: "Inzerujte nabídky práce na OpenJobs. Odpovědi od uchazečů na jednom místě.",
     claim: "Inzerce nabídek práce",
     helper: "Zveřejněte pozici. Uchazeči odpoví přímo vám.",
     ctaPrimary: "Založit účet firmy",
     ctaSecondary: "Přihlásit se",
     ctaPost: "Vystavit nabídku",
-    sectionWhy: "Proč DílnaJobs",
+    sectionWhy: "Proč OpenJobs",
     why1Title: "Jasný inzerát",
     why1Body: "Mzda, místo a úvazek hned vidět. Méně zbytečných odpovědí.",
     why2Title: "Odpovědi na jednom místě",
@@ -97,7 +97,7 @@ export const copy = {
     bottomHelper: "Založte účet firmy a zveřejněte první nabídku.",
   },
   login: {
-    metaTitle: "Přihlášení firmy · DílnaJobs",
+    metaTitle: "Přihlášení firmy · OpenJobs",
     metaDescription: "Přihlaste se k účtu firmy odkazem z e-mailu.",
     claim: "Přihlášení firmy",
     helper: "Na e-mail pošleme odkaz pro přihlášení.",
@@ -110,7 +110,7 @@ export const copy = {
     previewNote: "Náhled. Odkaz zatím neodesíláme.",
   },
   register: {
-    metaTitle: "Registrace firmy · DílnaJobs",
+    metaTitle: "Registrace firmy · OpenJobs",
     metaDescription: "Založte účet firmy. Přihlašovací odkaz přijde na e-mail.",
     claim: "Registrace firmy",
     helper: "Doplňte firmu a kontakt. Přihlašovací odkaz přijde na e-mail.",

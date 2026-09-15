@@ -1,8 +1,8 @@
-# DílnaJobs / dilnajobs.cz - LOCKED Production MVP Spec
+# OpenJobs / dilnajobs.cz - LOCKED Production MVP Spec
 
 **Status:** LOCKED for production MVP  
-**Working brand:** DílnaJobs · dilnajobs.cz (rebrand later)  
-**Repo:** tbraxa/dilnajobs  
+**Public brand:** OpenJobs  
+**Domain / repo (technical):** dilnajobs.cz / tbraxa/dilnajobs  
 **Stack (given):** Next.js, Postgres with RLS, Vercel, magic-link employer auth  
 **Date locked:** 2026-09-15  
 **Owner:** Tomáš Braxatoris  
@@ -15,7 +15,7 @@ This document is the single source of truth for what ships in the first producti
 
 Czech job seekers struggle to find clear, trustworthy openings across professions. Listings are often vague, spammy, or agency-driven. Employers struggle to reach serious applicants without drowning in low-signal boards or paying for opaque packages.
 
-DílnaJobs is a dual-sided Czech job marketplace for **all professions**. It applies Airbnb-style trust and listing clarity to hiring:
+OpenJobs is a dual-sided Czech job marketplace for **all professions**. It applies Airbnb-style trust and listing clarity to hiring:
 
 - **Verified companies** (host analog): IČO / ARES where possible, direct employers preferred.
 - **High-quality structured listings**: salary, location, contract type, requirements, and role clarity as first-class fields, not buried prose.
@@ -77,7 +77,7 @@ Also remain out unless unlocked: payments depth beyond a simple placeholder if n
 
 ## 4. Airbnb principles → product rules
 
-| Airbnb idea | DílnaJobs MVP rule |
+| Airbnb idea | OpenJobs MVP rule |
 |-------------|--------------------|
 | Verified hosts | Verified companies via IČO/ARES; badge on listing and company |
 | Structured listings | Required fields before publish (title, location, contract type, description structure, salary or explicit “dohodou”) |
@@ -347,7 +347,7 @@ Assume weekdays; adjust for Czech holidays if needed. Ship ASAP on existing repo
 
 ## 9. Open decisions for Tomáš (max 5)
 
-1. **Brand (first):** Keep public name **DílnaJobs** through MVP launch, or soft-launch under a clearer all-professions name while keeping dilnajobs.cz / repo? (Rebrand later is already allowed; decide what users see on day 0.)
+1. **Brand (LOCKED):** Public display name is **OpenJobs**. Domain and repo stay dilnajobs.cz / tbraxa/dilnajobs.
 2. **Agency policy enforcement:** Hard block at register (reject known agency signals) vs ToS + manual review only for MVP?
 3. **Salary field strictness:** Require numeric salary for publish, or allow “mzda dohodou” without friction (recommended default: allow dohodou but show it clearly on cards)?
 4. **CV storage provider:** Which S3-compatible bucket in production (and AV scan now vs later)?

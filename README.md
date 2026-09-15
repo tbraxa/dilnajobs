@@ -1,6 +1,6 @@
-# DílnaJobs
+# DílnaJobs (repo) · OpenJobs (public)
 
-Český job marketplace pro **všechny profese**. Working brand: DílnaJobs · dilnajobs.cz.
+Český job marketplace pro **všechny profese**. Public brand: **OpenJobs**. Domain / repo: dilnajobs.cz / tbraxa/dilnajobs.
 
 Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem. Účet není povinný.
 

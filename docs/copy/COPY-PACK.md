@@ -1,11 +1,12 @@
-# DílnaJobs COPY PACK (v1)
+# OpenJobs COPY PACK (v1)
 
-Working brand (do Product locku / schválení rebrandu): **DílnaJobs** · dilnajobs.cz
+Public brand (LOCKED): **OpenJobs**
+Domain / repo (technical): dilnajobs.cz / tbraxa/dilnajobs
 Produkt: národní job marketplace, všechny profese, CZ-first.
 Auth: magic link. Registrace: ARES + jméno, příjmení, DIČ.
 Oddělovač: ·   Zakázané v copy: — –
 
-Tone: viz `/workspace/marketplace/docs/copy-rules.md`
+Tone: viz `docs/copy-rules.md`
 
 ---
 
@@ -13,7 +14,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 | Klíč | Text |
 |---|---|
-| meta_title | DílnaJobs · nabídky práce |
+| meta_title | OpenJobs · nabídky práce |
 | meta_description | Nabídky práce v Česku. Hledejte podle pozice, místa a mzdy. Odpovězte přímo firmě. |
 | claim | Práce v Česku. Od firem. |
 | helper | Všechny obory. Filtrujte podle pozice, místa a mzdy. |
@@ -27,7 +28,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 | nav_pro_firmy | Pro firmy |
 | nav_login | Přihlášení firem |
 | section_latest | Aktuální nabídky |
-| footer | © 2026 DílnaJobs · nabídky práce |
+| footer | © 2026 OpenJobs · nabídky práce |
 
 ---
 
@@ -35,7 +36,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 | Klíč | Text |
 |---|---|
-| meta_title | Nabídky práce · DílnaJobs |
+| meta_title | Nabídky práce · OpenJobs |
 | meta_description | Procházejte nabídky práce. Filtrujte podle pozice, místa, úvazku a mzdy. |
 | claim | Všechny nabídky |
 | helper | Upravte filtry podle pozice, místa a mzdy. |
@@ -48,7 +49,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 | filters_contract | Úvazek |
 | filters_salary | Mzda od |
 | filters_seniority | Seniorita |
-| footer | © 2026 DílnaJobs · nabídky práce |
+| footer | © 2026 OpenJobs · nabídky práce |
 
 ### Empty states
 
@@ -115,14 +116,14 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 | Klíč | Text |
 |---|---|
-| meta_title | Pro firmy · DílnaJobs |
-| meta_description | Inzerujte nabídky práce na DílnaJobs. Odpovědi od uchazečů na jednom místě. |
+| meta_title | Pro firmy · OpenJobs |
+| meta_description | Inzerujte nabídky práce na OpenJobs. Odpovědi od uchazečů na jednom místě. |
 | claim | Inzerce nabídek práce |
 | helper | Zveřejněte pozici. Uchazeči odpoví přímo vám. |
 | cta_primary | Založit účet firmy |
 | cta_secondary | Přihlásit se |
 | cta_post | Vystavit nabídku |
-| section_why | Proč DílnaJobs |
+| section_why | Proč OpenJobs |
 | why_1_title | Jasný inzerát |
 | why_1_body | Mzda, místo a úvazek hned vidět. Méně zbytečných odpovědí. |
 | why_2_title | Odpovědi na jednom místě |
@@ -130,7 +131,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 | why_3_title | Rychlé spuštění |
 | why_3_body | Účet firmy a první nabídka během pár minut. |
 | bottom_helper | Založte účet firmy a zveřejněte první nabídku. |
-| footer | © 2026 DílnaJobs · nabídky práce |
+| footer | © 2026 OpenJobs · nabídky práce |
 
 ---
 
@@ -138,7 +139,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 | Klíč | Text |
 |---|---|
-| meta_title | Přihlášení firmy · DílnaJobs |
+| meta_title | Přihlášení firmy · OpenJobs |
 | meta_description | Přihlaste se k účtu firmy odkazem z e-mailu. |
 | claim | Přihlášení firmy |
 | helper | Na e-mail pošleme odkaz pro přihlášení. |
@@ -149,7 +150,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 | helper_secondary | Nemáte účet? |
 | cta_secondary | Zaregistrujte firmu |
 | preview_note | Náhled. Odkaz zatím neodesíláme. |
-| footer | © 2026 DílnaJobs · nabídky práce |
+| footer | © 2026 OpenJobs · nabídky práce |
 
 ---
 
@@ -157,7 +158,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 | Klíč | Text |
 |---|---|
-| meta_title | Registrace firmy · DílnaJobs |
+| meta_title | Registrace firmy · OpenJobs |
 | meta_description | Založte účet firmy. Přihlašovací odkaz přijde na e-mail. |
 | claim | Registrace firmy |
 | helper | Doplňte firmu a kontakt. Přihlašovací odkaz přijde na e-mail. |
@@ -178,7 +179,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 | helper_secondary | Už máte účet? |
 | cta_secondary | Přihlaste se |
 | preview_note | Náhled. Účet ani odkaz zatím neodesíláme. |
-| footer | © 2026 DílnaJobs · nabídky práce |
+| footer | © 2026 OpenJobs · nabídky práce |
 
 ---
 
@@ -186,7 +187,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 | Klíč | Text |
 |---|---|
-| brand | DílnaJobs |
+| brand | OpenJobs |
 | nav_nabidky | Nabídky |
 | nav_pro_firmy | Pro firmy |
 | nav_login | Přihlášení firem |
@@ -198,7 +199,7 @@ Tone: viz `/workspace/marketplace/docs/copy-rules.md`
 
 ## Poznámky
 
-1. Brand DílnaJobs je dočasný working name. Po schválení rebrandu přepsat claimy a meta.
-2. Homepage claim je pracovní placeholder v tónu marketplace (ne manufacturing).
+1. Public brand **OpenJobs** is locked. Domain and repo stay dilnajobs.cz / tbraxa/dilnajobs.
+2. Homepage claim: Práce v Česku. Od firem.
 3. Žádná hesla. Po odeslání auth formuláře ukázat helper_after_send.
 4. Pricing a e-mailové šablony: další iterace.

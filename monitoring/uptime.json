@@ -31,7 +31,7 @@
       "interval_seconds": 300,
       "expect": {
         "status": 200,
-        "body_contains": "DílnaJobs"
+        "body_contains": "OpenJobs"
       }
     }
   ]
