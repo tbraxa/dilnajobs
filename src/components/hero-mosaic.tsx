@@ -7,11 +7,11 @@ const cover = { objectFit: "cover" as const };
 export function HeroMosaic({ variant = "home" }: { variant?: "home" | "employers" }) {
   if (variant === "employers") {
     return (
-      <div className="hero-visual" aria-hidden="true" style={{ height: 320, minHeight: 320 }}>
+      <div className="hero-visual" aria-hidden="true" style={{ height: 360, minHeight: 360 }}>
         <div className="hero-geo" />
         <div className="shot shot-a">
           <Image
-            src={PHOTOS.officePortrait.src}
+            src={PHOTOS.teamPortrait.src}
             alt=""
             fill
             sizes="(max-width: 720px) 50vw, 280px"
@@ -20,17 +20,10 @@ export function HeroMosaic({ variant = "home" }: { variant?: "home" | "employers
           />
         </div>
         <div className="shot shot-b">
-          <Image src={PHOTOS.cityTower.src} alt="" fill sizes="(max-width: 720px) 50vw, 180px" style={cover} />
+          <Image src={PHOTOS.officeTall.src} alt="" fill sizes="(max-width: 720px) 50vw, 180px" style={cover} />
         </div>
         <div className="shot shot-c">
-          <Image
-            src={PHOTOS.workshop.src}
-            alt=""
-            fill
-            sizes="(max-width: 720px) 50vw, 180px"
-            priority
-            style={cover}
-          />
+          <Image src={PHOTOS.warehouse.src} alt="" fill sizes="(max-width: 720px) 50vw, 180px" style={cover} />
         </div>
       </div>
     );

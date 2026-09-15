@@ -25,29 +25,28 @@ export default async function NabidkyPage({
   const total = counted.ok ? counted.rows : 0;
   const page = query.page ?? 1;
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const filtered = searchHasFilters(query);
 
   return (
     <main className="serp-canvas">
       <JobFilters
         defaults={query}
+        resultCount={total}
         resultLabel={catalog.ok ? copy.nabidky.resultsCount(total) : copy.nabidky.emptyErrorTitle}
       />
-      <div className="wrap serp-results">
-        <div className="serp-head">
-          <div>
-            <h1 className="h2" style={{ margin: 0 }}>
-              {copy.nabidky.claim}
-            </h1>
-            <p className="serp-helper">{copy.nabidky.helper}</p>
-          </div>
+      <div className="wrap">
+        <div className="section-head">
+          <h1 className="h2" id="serpTitle">
+            {filtered ? copy.nabidky.filteredClaim : copy.nabidky.claim}
+          </h1>
         </div>
 
         {!catalog.ok ? (
           <CatalogUnavailable />
         ) : jobs.length === 0 ? (
           <EmptyJobs
-            title={searchHasFilters(query) ? copy.nabidky.emptyNoResultsTitle : copy.nabidky.emptyNoQueryTitle}
-            body={searchHasFilters(query) ? copy.nabidky.emptyNoResultsBody : copy.nabidky.emptyNoQueryBody}
+            title={filtered ? copy.nabidky.emptyNoResultsTitle : copy.nabidky.emptyNoQueryTitle}
+            body={filtered ? copy.nabidky.emptyNoResultsBody : copy.nabidky.emptyNoQueryBody}
           />
         ) : (
           <>

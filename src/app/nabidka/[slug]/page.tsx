@@ -7,9 +7,8 @@ import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { CompanyMark, VerifiedBadge } from "@/components/craft-marks";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { displayJobSalary } from "@/lib/pricing";
-import { professionByDb } from "@/lib/catalog";
 import { companyInitial, companyMarkClass, isNewJob, publishedLabel } from "@/lib/craft";
-import { listingPhotoForCategory } from "@/lib/photos";
+import { PHOTOS } from "@/lib/photos";
 import { contractLabel, copy, workModeLabel } from "@/lib/copy";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -45,21 +44,20 @@ export default async function JobPage({ params }: Props) {
   const row = catalog.rows;
   if (!row) notFound();
   const { job } = row;
-  const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const contract = contractLabel(job.contractType || job.employmentType);
   const mode = workModeLabel(job.workMode);
   const verified = row.verificationStatus === "verified";
   const requirements = splitLines(job.requirements);
   const offer = splitLines(job.benefits);
-  const photo = listingPhotoForCategory(category?.db ?? job.category);
   const mark = companyInitial(row.companyName);
   const tone = companyMarkClass(row.companyName);
   const posted = publishedLabel(job.publishedAt).replace(/^Zveřejněno\s+/i, "");
+  const metaBits = [row.ico ? `${copy.detail.labelIco} ${row.ico}` : null, job.city, mode, contract].filter(Boolean);
 
   return (
     <main>
       <div className="listing-photo" aria-hidden="true">
-        <Image src={photo.src} alt="" fill sizes="100vw" priority style={{ objectFit: "cover" }} />
+        <Image src={PHOTOS.officeWide.src} alt="" fill sizes="100vw" priority style={{ objectFit: "cover" }} />
       </div>
       <div className="wrap detail-hero">
         <p className="meta" style={{ margin: "0 0 16px" }}>
@@ -76,11 +74,23 @@ export default async function JobPage({ params }: Props) {
             <div className="job-company" style={{ marginTop: 8 }}>
               {copy.card.metaCompany(row.companyName)}
               {verified ? <VerifiedBadge label={copy.card.badgeVerified} /> : null}
-              {mode ? <span className="chip">{mode}</span> : null}
               {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
               {job.isAgency ? <span className="chip">{copy.card.badgeAgency}</span> : null}
             </div>
+            {metaBits.length ? (
+              <p className="meta" style={{ margin: "8px 0 0" }}>
+                {metaBits.join(" · ")}
+              </p>
+            ) : null}
           </div>
+        </div>
+      </div>
+
+      <div className="wrap">
+        <div className="apply-mobile-cta">
+          <a className="btn btn-primary" href="#prihlaseni">
+            {copy.detail.ctaApply}
+          </a>
         </div>
       </div>
 
@@ -104,10 +114,10 @@ export default async function JobPage({ params }: Props) {
                 <dd>{contract}</dd>
               </div>
             ) : null}
-            {category ? (
+            {mode ? (
               <div className="fact">
-                <dt>{copy.card.labelField}</dt>
-                <dd>{category.label}</dd>
+                <dt>{copy.card.workModeLabel}</dt>
+                <dd>{mode}</dd>
               </div>
             ) : null}
             {posted ? (
@@ -164,38 +174,18 @@ export default async function JobPage({ params }: Props) {
               </div>
             </div>
           </section>
-
-          <section className="apply-panel" id="prihlaseni" style={{ position: "static", marginTop: 28 }}>
-            <h2 className="h3" id="apply-title-inline">
-              {copy.detail.applyClaim}
-            </h2>
-            <ApplyForm jobId={job.id} companyName={row.companyName} helper={copy.detail.applyHelper(row.companyName)} />
-          </section>
         </article>
 
-        <aside>
-          <div className="apply-panel">
-            <h2 className="h3">{copy.detail.applyClaim}</h2>
-            <p className="hint">{copy.detail.helperNoAccount(row.companyName)}</p>
-            <div className="meta">{copy.card.labelSalary}</div>
-            <div className="job-salary">{displayJobSalary(job)}</div>
-            <div className="meta">{copy.card.metaCompany(row.companyName) ? "Firma" : ""}</div>
-            <div className="job-company" style={{ margin: "6px 0 16px" }}>
-              <CompanyMark name={mark} tone={tone} />
-              {row.companyName}
-              {verified ? <VerifiedBadge label={copy.card.badgeVerified} /> : null}
-            </div>
-            <a className="btn btn-primary btn-block" href="#prihlaseni">
-              {copy.detail.ctaApply}
-            </a>
+        <aside className="apply-panel" id="prihlaseni" aria-labelledby="apply-title">
+          <div className="apply-salary">
+            <div className="label">{copy.card.labelSalary}</div>
+            <div className="value">{displayJobSalary(job)}</div>
           </div>
+          <h2 className="h3" id="apply-title">
+            {copy.detail.applyClaim}
+          </h2>
+          <ApplyForm jobId={job.id} companyName={row.companyName} helper={copy.detail.applyHelper(row.companyName)} />
         </aside>
-      </div>
-
-      <div className="sticky-apply">
-        <a className="btn btn-primary btn-block" href="#prihlaseni">
-          {copy.detail.ctaApply}
-        </a>
       </div>
     </main>
   );

@@ -100,3 +100,6 @@ export const HOME_FIELDS = [
   { db: "accounting", label: "Finance", icon: "finance" },
   { db: "hospitality", label: "Gastronomie", icon: "gastro" },
 ] as const;
+
+/** Home Obory rail matches preview-craft-v4 (six tiles). Drawer keeps the full set. */
+export const HOME_FIELDS_FEATURED = HOME_FIELDS.slice(0, 6);

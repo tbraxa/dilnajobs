@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { CATEGORIES, CITIES, CONTRACT_TYPES, professionByDb } from "@/lib/catalog";
-import { copy, contractLabel, salaryFrom } from "@/lib/copy";
-import { HOME_FIELDS } from "@/lib/craft";
+import { CONTRACT_TYPES, professionByDb } from "@/lib/catalog";
+import { copy, contractLabel } from "@/lib/copy";
+import { HOME_FIELDS, HOME_FIELDS_FEATURED } from "@/lib/craft";
 import { facetCount, nabidkyHref, type SearchQuery } from "@/lib/search-params";
 import { fieldIcons, type FieldIconName } from "./craft-marks";
 
@@ -13,7 +13,8 @@ const MODES = [
 ] as const;
 
 const QUICK_MODES = MODES.filter((mode) => mode.value);
-const SALARY_FROM = [25_000, 40_000, 50_000, 70_000, 100_000] as const;
+const SALARY_STEPS = [20_000, 30_000, 40_000, 50_000, 60_000] as const;
+const DRAWER_CITIES = ["Praha", "Brno", "Ostrava", "Plzeň", "Liberec", "České Budějovice"] as const;
 const FILTERS_ID = "serp-filters-open";
 
 function ChipX() {
@@ -26,14 +27,16 @@ function ChipX() {
 
 function FilterGlyph() {
   return (
-    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" overflow="visible">
-      <path
-        d="M2.5 3.5h11l-4 4.8V12l-3 1.5V8.3L2.5 3.5z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 20 20" width="18" height="18" fill="none" aria-hidden="true" overflow="visible">
+      <path d="M3 5h14M5 10h10M7 15h6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function DrawerCloseGlyph() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" overflow="visible">
+      <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   );
 }
@@ -48,7 +51,7 @@ export function SearchShell({
   includeMode?: boolean;
 }) {
   return (
-    <form action={action} method="get" role="search">
+    <form action={action} method="get" role="search" className={includeMode ? undefined : "filter-search"}>
       <div className="search-shell">
         {!includeMode && defaults?.category ? (
           <input type="hidden" name="category" value={defaults.category} />
@@ -85,7 +88,7 @@ export function SearchShell({
             autoComplete="off"
           />
         </div>
-        <button className="btn btn-primary" type="submit">
+        <button className={includeMode ? "btn btn-primary" : "btn-search"} type="submit">
           {copy.home.ctaSearch}
         </button>
       </div>
@@ -93,44 +96,13 @@ export function SearchShell({
         <div className="mode-row" role="group" aria-label={copy.card.workModeLabel}>
           <span className="mode-label">{copy.card.workModeLabel}</span>
           {QUICK_MODES.map((mode) => (
-            <label key={mode.value} className="filter-chip">
-              <input type="radio" name="mode" value={mode.value} defaultChecked={defaults?.workMode === mode.value} />
+            <Link key={mode.value} className="mode-chip" href={`/nabidky?mode=${mode.value}`}>
               {mode.label}
-            </label>
+            </Link>
           ))}
         </div>
       ) : null}
     </form>
-  );
-}
-
-function FacetChip({
-  label,
-  value,
-  clearHref,
-}: {
-  label: string;
-  value?: string;
-  clearHref?: string;
-}) {
-  if (value && clearHref) {
-    return (
-      <Link
-        href={clearHref}
-        className="filter-chip is-active serp-chip"
-        aria-label={`${value}. ${copy.nabidky.chipRemove}`}
-      >
-        <span>{value}</span>
-        <span className="serp-chip-x" aria-hidden="true">
-          <ChipX />
-        </span>
-      </Link>
-    );
-  }
-  return (
-    <label className="filter-chip" htmlFor={FILTERS_ID}>
-      {label}
-    </label>
   );
 }
 
@@ -142,85 +114,107 @@ function ChipRail({ query }: { query: SearchQuery }) {
     query.profession && query.profession !== query.category
       ? (professionByDb(query.profession)?.label ?? query.profession)
       : undefined;
-  const salaryLabel = query.salaryMin != null ? salaryFrom(query.salaryMin) : undefined;
-  const hasReset = Boolean(
-    query.q ||
-      query.place ||
-      query.category ||
-      query.profession ||
-      query.salaryMin ||
-      query.workMode ||
-      query.contract,
-  );
+  const salaryLabel = query.salaryMin != null ? copy.nabidky.chipSalaryFrom(query.salaryMin) : undefined;
+  const modeLabel = QUICK_MODES.find((mode) => mode.value === query.workMode)?.label;
+  const chips: { key: string; label: string; href: string }[] = [];
+  if (categoryLabel) {
+    chips.push({ key: "obor", label: categoryLabel, href: nabidkyHref(query, { category: undefined, page: 1 }) });
+  }
+  if (professionLabel) {
+    chips.push({
+      key: "profese",
+      label: professionLabel,
+      href: nabidkyHref(query, { profession: undefined, page: 1 }),
+    });
+  }
+  if (query.place) {
+    chips.push({
+      key: "misto",
+      label: query.place,
+      href: nabidkyHref(query, { place: undefined, city: undefined, page: 1 }),
+    });
+  }
+  if (modeLabel) {
+    chips.push({ key: "rezim", label: modeLabel, href: nabidkyHref(query, { workMode: undefined, page: 1 }) });
+  }
+  if (query.contract) {
+    chips.push({
+      key: "uvazek",
+      label: contractLabel(query.contract),
+      href: nabidkyHref(query, { contract: undefined, page: 1 }),
+    });
+  }
+  if (salaryLabel) {
+    chips.push({
+      key: "mzda",
+      label: salaryLabel,
+      href: nabidkyHref(query, { salaryMin: undefined, page: 1 }),
+    });
+  }
+  if (query.q) {
+    chips.push({ key: "q", label: `„${query.q}“`, href: nabidkyHref(query, { q: undefined, page: 1 }) });
+  }
+
+  if (chips.length === 0) return null;
 
   return (
-    <div className="serp-row-chips" aria-label={copy.nabidky.filtersActiveAria}>
-      <FacetChip
-        label={copy.nabidky.filtersCategory}
-        value={categoryLabel}
-        clearHref={nabidkyHref(query, { category: undefined, page: 1 })}
-      />
-      {professionLabel ? (
-        <FacetChip
-          label={copy.nabidky.filtersCategory}
-          value={professionLabel}
-          clearHref={nabidkyHref(query, { profession: undefined, page: 1 })}
-        />
-      ) : null}
-      <FacetChip
-        label={copy.nabidky.filtersPlace}
-        value={query.place}
-        clearHref={nabidkyHref(query, { place: undefined, city: undefined, page: 1 })}
-      />
-      <FacetChip
-        label={copy.nabidky.filtersSalary}
-        value={salaryLabel}
-        clearHref={nabidkyHref(query, { salaryMin: undefined, page: 1 })}
-      />
-      {QUICK_MODES.map((mode) => {
-        const active = query.workMode === mode.value;
-        return (
+    <div className="active-chips serp-row-chips is-visible" aria-label={copy.nabidky.filtersActiveAria}>
+      {chips.map((chip) => (
+        <span key={chip.key} className="filter-chip">
+          {chip.label}
           <Link
-            key={mode.value}
-            href={nabidkyHref(query, {
-              workMode: active ? undefined : (mode.value as SearchQuery["workMode"]),
-              page: 1,
-            })}
-            className={`filter-chip${active ? " is-active" : ""}`}
+            href={chip.href}
+            className="chip-x"
+            aria-label={`${copy.nabidky.chipRemove} ${chip.label}`}
           >
-            {mode.label}
+            <ChipX />
           </Link>
-        );
-      })}
-      {query.contract ? (
-        <FacetChip
-          label={copy.nabidky.filtersContract}
-          value={contractLabel(query.contract)}
-          clearHref={nabidkyHref(query, { contract: undefined, page: 1 })}
-        />
-      ) : null}
-      {hasReset ? (
-        <Link href="/nabidky" className="filter-chip">
-          {copy.nabidky.emptyNoResultsCta}
-        </Link>
-      ) : null}
+        </span>
+      ))}
+      <Link href="/nabidky" className="chip-reset">
+        {copy.nabidky.emptyNoResultsCta}
+      </Link>
     </div>
   );
 }
 
-function FilterSheet({ query }: { query: SearchQuery }) {
+function OptionRow({
+  name,
+  value,
+  label,
+  checked,
+}: {
+  name: string;
+  value: string;
+  label: string;
+  checked: boolean;
+}) {
   return (
-    <div className="serp-sheet" role="dialog" aria-labelledby="serp-sheet-title" aria-modal="true">
-      <label className="serp-sheet-backdrop" htmlFor={FILTERS_ID}>
+    <label className="option-row">
+      <input type="radio" name={name} value={value} defaultChecked={checked} />
+      <span className="check" aria-hidden="true" />
+      {label}
+    </label>
+  );
+}
+
+function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: number }) {
+  const placeOptions = Array.from(
+    new Set([query.place, ...DRAWER_CITIES].filter((city): city is string => Boolean(city))),
+  );
+
+  return (
+    <div className="drawer-root serp-sheet" role="dialog" aria-labelledby="serp-sheet-title" aria-modal="true">
+      <label className="drawer-scrim serp-sheet-backdrop" htmlFor={FILTERS_ID}>
         <span className="visually-hidden">{copy.nabidky.ctaFiltersClose}</span>
       </label>
-      <div className="serp-sheet-panel">
-        <div className="serp-sheet-head">
+      <div className="drawer-panel serp-sheet-panel">
+        <div className="drawer-header serp-sheet-head">
           <h2 className="h3" id="serp-sheet-title">
             {copy.nabidky.ctaEditFilters}
           </h2>
-          <label className="btn btn-ghost serp-sheet-close" htmlFor={FILTERS_ID}>
-            {copy.nabidky.ctaFiltersClose}
+          <label className="drawer-close" htmlFor={FILTERS_ID} aria-label={copy.nabidky.ctaFiltersClose}>
+            <DrawerCloseGlyph />
           </label>
         </div>
         <form className="serp-sheet-form" action="/nabidky" method="get">
@@ -228,78 +222,110 @@ function FilterSheet({ query }: { query: SearchQuery }) {
           {query.profession && query.profession !== query.category ? (
             <input type="hidden" name="profession" value={query.profession} />
           ) : null}
-          <div className="serp-sheet-body">
-            <div className="serp-field">
-              <label htmlFor="sheet-category">{copy.nabidky.filtersCategory}</label>
-              <select id="sheet-category" name="category" defaultValue={query.category ?? ""}>
-                <option value="">{copy.nabidky.filtersAllCategories}</option>
-                {CATEGORIES.map((field) => (
-                  <option key={field.db} value={field.db}>
-                    {field.label}
-                  </option>
+          <div className="drawer-body serp-sheet-body">
+            <section className="drawer-section">
+              <h3>{copy.nabidky.filtersCategory}</h3>
+              <div className="option-list" role="listbox" aria-label={copy.nabidky.filtersCategory}>
+                <OptionRow
+                  name="category"
+                  value=""
+                  label={copy.nabidky.filtersAllCategories}
+                  checked={!query.category}
+                />
+                {HOME_FIELDS.map((field) => (
+                  <OptionRow
+                    key={field.db}
+                    name="category"
+                    value={field.db}
+                    label={field.label}
+                    checked={query.category === field.db}
+                  />
                 ))}
-              </select>
-            </div>
-            <div className="serp-field">
-              <label htmlFor="sheet-place">{copy.nabidky.filtersPlace}</label>
-              <input
-                id="sheet-place"
-                name="place"
-                type="text"
-                defaultValue={query.place}
-                placeholder={copy.home.placeholderPlace}
-                list="sheet-cities"
-                autoComplete="off"
-              />
-              <datalist id="sheet-cities">
-                {CITIES.map((city) => (
-                  <option key={city.slug} value={city.label} />
+              </div>
+            </section>
+            <section className="drawer-section">
+              <h3>{copy.nabidky.filtersPlace}</h3>
+              <div className="option-list" role="listbox" aria-label={copy.nabidky.filtersPlace}>
+                <OptionRow
+                  name="place"
+                  value=""
+                  label={copy.nabidky.filtersAllPlaces}
+                  checked={!query.place}
+                />
+                {placeOptions.map((city) => (
+                  <OptionRow key={city} name="place" value={city} label={city} checked={query.place === city} />
                 ))}
-              </datalist>
-            </div>
-            <div className="serp-field">
-              <label htmlFor="sheet-salary">{copy.nabidky.filtersSalary}</label>
-              <select
-                id="sheet-salary"
-                name="salaryMin"
-                defaultValue={query.salaryMin != null ? String(query.salaryMin) : ""}
-              >
-                <option value="">{copy.nabidky.filtersSalaryAny}</option>
-                {SALARY_FROM.map((amount) => (
-                  <option key={amount} value={amount}>
-                    {salaryFrom(amount)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="serp-field">
-              <label htmlFor="sheet-mode">{copy.nabidky.filtersMode}</label>
-              <select id="sheet-mode" name="mode" defaultValue={query.workMode ?? ""}>
+              </div>
+            </section>
+            <section className="drawer-section">
+              <h3>{copy.nabidky.filtersModeWork}</h3>
+              <div className="segmented" role="group" aria-label={copy.nabidky.filtersModeWork}>
                 {MODES.map((mode) => (
-                  <option key={mode.value || "all"} value={mode.value}>
+                  <label key={mode.value || "all"}>
+                    <input
+                      type="radio"
+                      name="mode"
+                      value={mode.value}
+                      defaultChecked={mode.value ? query.workMode === mode.value : !query.workMode}
+                    />
                     {mode.label}
-                  </option>
+                  </label>
                 ))}
-              </select>
-            </div>
-            <div className="serp-field">
-              <label htmlFor="sheet-contract">{copy.nabidky.filtersContract}</label>
-              <select id="sheet-contract" name="contract" defaultValue={query.contract ?? ""}>
-                <option value="">{copy.nabidky.filterModeAll}</option>
+              </div>
+            </section>
+            <section className="drawer-section">
+              <h3>{copy.nabidky.filtersContract}</h3>
+              <div className="option-list" role="listbox" aria-label={copy.nabidky.filtersContract}>
+                <OptionRow
+                  name="contract"
+                  value=""
+                  label={copy.nabidky.filterModeAll}
+                  checked={!query.contract}
+                />
                 {CONTRACT_TYPES.map((type) => (
-                  <option key={type.slug} value={type.slug}>
-                    {type.label}
-                  </option>
+                  <OptionRow
+                    key={type.slug}
+                    name="contract"
+                    value={type.slug}
+                    label={type.label}
+                    checked={query.contract === type.slug}
+                  />
                 ))}
-              </select>
-            </div>
+              </div>
+            </section>
+            <section className="drawer-section">
+              <h3>{copy.nabidky.filtersSalary}</h3>
+              <div className="salary-steps">
+                {SALARY_STEPS.map((amount) => (
+                  <Link
+                    key={amount}
+                    href={nabidkyHref(query, { salaryMin: amount, page: 1 })}
+                    className={query.salaryMin === amount ? "is-selected" : undefined}
+                  >
+                    {amount === 60_000 ? "60 000+" : new Intl.NumberFormat("cs-CZ").format(amount)}
+                  </Link>
+                ))}
+              </div>
+              <div className="salary-input serp-field">
+                <label htmlFor="mzdaOd">{copy.nabidky.filtersSalaryInput}</label>
+                <input
+                  id="mzdaOd"
+                  name="salaryMin"
+                  type="number"
+                  min={0}
+                  step={1000}
+                  defaultValue={query.salaryMin ?? ""}
+                  placeholder={copy.nabidky.filtersSalaryPlaceholder}
+                />
+              </div>
+            </section>
           </div>
-          <div className="serp-sheet-foot">
+          <div className="drawer-footer serp-sheet-foot">
             <Link href="/nabidky" className="btn btn-ghost">
-              {copy.nabidky.emptyNoResultsCta}
+              {copy.nabidky.ctaDrawerReset}
             </Link>
             <button className="btn btn-primary" type="submit">
-              {copy.nabidky.ctaFiltersDone}
+              {copy.nabidky.ctaShowOffers(resultCount)}
             </button>
           </div>
         </form>
@@ -310,8 +336,8 @@ function FilterSheet({ query }: { query: SearchQuery }) {
 
 export function CategoryRail() {
   return (
-    <div className="cat-rail" aria-label={copy.home.sectionFields}>
-      {HOME_FIELDS.map((field) => (
+    <div className="cat-rail" aria-label={copy.home.sectionCats}>
+      {HOME_FIELDS_FEATURED.map((field) => (
         <Link key={field.db} className="cat-tile" href={`/nabidky?category=${field.db}`}>
           <span className="cat-well" aria-hidden="true">
             {fieldIcons[field.icon as FieldIconName]}
@@ -323,28 +349,48 @@ export function CategoryRail() {
   );
 }
 
-export function JobFilters({ defaults, resultLabel }: { defaults: SearchQuery; resultLabel: string }) {
+export function JobFilters({
+  defaults,
+  resultLabel,
+  resultCount = 0,
+}: {
+  defaults: SearchQuery;
+  resultLabel: string;
+  resultCount?: number;
+}) {
   const facets = facetCount(defaults);
   return (
-    <div className="serp-filters">
+    <div className="filter-chrome serp-filters">
       <input id={FILTERS_ID} className="serp-filters-toggle" type="checkbox" />
-      <div className="serp-chrome">
-        <div className="serp-row-search">
+      <div className="wrap serp-chrome">
+        <div className="filter-bar serp-row-search">
           <SearchShell defaults={defaults} />
-          <label className="btn btn-secondary serp-filter-btn" htmlFor={FILTERS_ID}>
-            <FilterGlyph />
-            {copy.nabidky.ctaEditFilters}
-            {facets > 0 ? (
-              <span className="serp-filter-badge" aria-label={copy.nabidky.filtersCount(facets)}>
+          <div className="bar-actions">
+            <label
+              className={`btn-filters serp-filter-btn${facets > 0 ? " has-count" : ""}`}
+              htmlFor={FILTERS_ID}
+            >
+              <FilterGlyph />
+              {copy.nabidky.ctaEditFilters}
+              <span className="badge serp-filter-badge" aria-label={copy.nabidky.filtersCount(facets)}>
                 {facets}
               </span>
-            ) : null}
-          </label>
-          <p className="serp-toolbar-count">{resultLabel}</p>
+            </label>
+            <span className="results-count serp-toolbar-count">
+              {/^\d/.test(resultLabel) ? (
+                <>
+                  <strong>{resultCount}</strong>
+                  {resultLabel.replace(/^\d+/, "")}
+                </>
+              ) : (
+                resultLabel
+              )}
+            </span>
+          </div>
         </div>
         <ChipRail query={defaults} />
       </div>
-      <FilterSheet query={defaults} />
+      <FilterSheet query={defaults} resultCount={resultCount} />
     </div>
   );
 }

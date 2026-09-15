@@ -80,8 +80,9 @@ describe("nabidkyHref and facetCount", () => {
     ).toBe("/nabidky?place=Brno&category=it&mode=remote");
   });
 
-  it("counts advanced facets and ignores query plus place", () => {
-    expect(facetCount({ q: "účetní", place: "Praha" })).toBe(0);
+  it("counts drawer facets including place, and ignores free-text query", () => {
+    expect(facetCount({ q: "účetní" })).toBe(0);
+    expect(facetCount({ q: "účetní", place: "Praha" })).toBe(1);
     expect(facetCount({ category: "it", salaryMin: 40000, workMode: "hybrid", contract: "hpp" })).toBe(4);
     expect(facetCount({ category: "manufacturing", profession: "manufacturing" })).toBe(1);
     expect(facetCount({ category: "manufacturing", profession: "welder" })).toBe(2);

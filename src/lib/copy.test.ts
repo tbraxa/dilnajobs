@@ -57,11 +57,12 @@ describe("COPY-PACK v1.3", () => {
     expect(copy.nabidky.helper.toLocaleLowerCase("cs")).toContain("pozice");
     expect(copy.nabidky.helper.toLocaleLowerCase("cs")).not.toContain("kategorie");
     expect(copy.nabidky.ctaEditFilters).toBe("Upravit filtry");
+    expect(copy.home.helper).toBe("Pozice, místo, mzda. Všechny obory.");
+    expect(copy.employers.helper).toBe("Jasná mzda. Odpovědi rovnou vám.");
     expect(readFileSync("src/components/job-filters.tsx", "utf8")).not.toMatch(/Kategorie|Lokalita/);
     expect(readFileSync("src/components/job-filters.tsx", "utf8")).toContain("ctaEditFilters");
     expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("copy.footer");
     expect(readFileSync("src/components/site-chrome.tsx", "utf8")).not.toContain("fairjobs.cz");
-    expect(readFileSync("src/app/nabidky/page.tsx", "utf8")).toContain("copy.nabidky.helper");
     expect(readFileSync("src/app/nabidky/page.tsx", "utf8")).toContain("emptyNoResultsTitle");
     expect(readFileSync("src/app/nabidky/page.tsx", "utf8")).toContain("emptyNoResultsBody");
     expect(copy.home.metaTitle).toBe("FairJobs · nabídky práce");

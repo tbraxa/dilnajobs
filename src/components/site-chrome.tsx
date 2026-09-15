@@ -19,18 +19,12 @@ export function SiteHeader() {
         <nav className="nav-links" aria-label={copy.nav.ariaMain}>
           <Link href="/nabidky">{copy.nav.nabidky}</Link>
           <Link href="/pro-firmy">{copy.nav.proFirmy}</Link>
-          <Link className="nav-text nav-cta-mobile" href="/firma/prihlaseni">
+          <Link className="nav-cta nav-cta-mobile" href="/firma/prihlaseni">
             {copy.nav.login}
           </Link>
-          <Link className="nav-cta nav-cta-fill nav-cta-mobile" href="/firma/registrace">
-            {copy.employers.ctaPost}
-          </Link>
         </nav>
-        <Link className="nav-text nav-desktop" href="/firma/prihlaseni">
+        <Link className="nav-cta nav-desktop" href="/firma/prihlaseni">
           {copy.nav.login}
-        </Link>
-        <Link className="nav-cta nav-cta-fill nav-desktop" href="/firma/registrace">
-          {copy.employers.ctaPost}
         </Link>
         <label className="nav-toggle" htmlFor="nav-open">
           {copy.nav.ariaMenu}
@@ -54,7 +48,7 @@ export function SiteFooter() {
         <div className="footer-links">
           <Link href="/nabidky">{copy.nav.nabidky}</Link>
           <Link href="/pro-firmy">{copy.nav.proFirmy}</Link>
-          <Link href="/firma/prihlaseni">{copy.nav.login}</Link>
+          <Link href="/pro-firmy#cenik">{copy.nav.cenik}</Link>
           <Link href="/gdpr">{copy.nav.personalData}</Link>
         </div>
       </div>

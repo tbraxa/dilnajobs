@@ -68,23 +68,27 @@ describe("Enterprise Clean Craft tokens", () => {
     }
   });
 
-  it("keeps Unsplash photo IDs from preview-v3.1", () => {
+  it("locks Craft v4 Unsplash IDs and geometry cards", () => {
     expect(UNSPLASH_HOST).toBe("images.unsplash.com");
     expect(PHOTOS.officeTall.id).toBe("photo-1497366216548-37526070297c");
     expect(PHOTOS.warehouse.id).toBe("photo-1586528116311-ad8dd3c8310d");
     expect(PHOTOS.workshop.id).toBe("photo-1504917595217-d4dc5ebe6122");
-    expect(PHOTOS.teamMeeting.id).toBe("photo-1521737711867-e3b97375f902");
+    expect(PHOTOS.teamMeeting.id).toBe("photo-1522071820081-009f0129c71c");
+    expect(PHOTOS.officeWide.id).toBe("photo-1497366811353-687074365625");
     expect(PHOTOS.officeWide.src).toContain(UNSPLASH_HOST);
     expect(PHOTOS.cityStreet.id).toBe("photo-1504917595217-d4dc5ebe6122");
     const mosaic = readFileSync("src/components/hero-mosaic.tsx", "utf8");
     expect(mosaic).toContain("PHOTOS.workshop.src");
+    expect(mosaic).toContain("PHOTOS.teamPortrait.src");
     expect(mosaic).not.toContain("PHOTOS.cityStreet");
     expect(mosaic).not.toContain("photo-1467260200982-5ba258642c12");
     expect(readFileSync("src/components/craft-marks.tsx", "utf8")).toContain("width={20}");
     const card = readFileSync("src/components/job-card.tsx", "utf8");
-    expect(card).toContain("listingPhotoForCategory");
-    expect(card).toContain("has-photo");
-    expect(card).toContain("<Image");
+    expect(card).toContain("job-card-media");
+    expect(card).toContain("jobMediaClass");
+    expect(card).not.toContain("listingPhotoForCategory");
+    expect(card).not.toContain("<Image");
+    expect(readFileSync("src/app/nabidka/[slug]/page.tsx", "utf8")).toContain("PHOTOS.officeWide");
   });
 
   it("maps company marks and category media without text-only cards", () => {
@@ -111,10 +115,14 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain("FairJobs");
     expect(css).not.toContain("OpenJobs");
     expect(card).toContain("job-card-media-inner");
-    expect(copy.employers.sectionPricing).toBe("Ceny");
-    expect(copy.employers.pricingHelper).toBe(
-      "Ceny bez DPH. Orientace pro firmy. Platbu domluvíte po registraci.",
-    );
+    expect(copy.employers.sectionPricing).toBe("Ceník inzerce");
+    expect(copy.employers.pricingHelper).toBe("Ceny bez DPH. Platba po registraci.");
+    expect(copy.employers.pricingStartName).toBe("Start");
+    expect(copy.employers.pricingStandardName).toBe("Standard");
+    expect(copy.employers.pricingPlusName).toBe("Plus");
+    expect(page).toContain("how-section");
+    expect(page).toContain("culture-band");
+    expect(page).toContain("price-list");
   });
 
   it("keeps /nabidky filters compact instead of a sticky half-screen panel", () => {
@@ -124,16 +132,18 @@ describe("Enterprise Clean Craft tokens", () => {
     const card = readFileSync("src/components/job-card.tsx", "utf8");
     expect(page).not.toContain("filters-sticky");
     expect(page).toContain("JobFilters");
-    expect(page).toContain("copy.nabidky.helper");
     expect(page).toContain("emptyNoResultsTitle");
+    expect(filters).toContain("filter-chrome");
     expect(filters).toContain("serp-row-search");
     expect(filters).toContain("serp-row-chips");
     expect(filters).toContain("serp-sheet");
     expect(filters).toContain("ctaEditFilters");
     expect(filters).toContain("serp-field");
+    expect(filters).toContain("drawer-root");
+    expect(filters).toContain("active-chips");
     expect(card).toContain("job-row-media-inner");
 
-    const searchStart = filters.indexOf('className="serp-row-search"');
+    const searchStart = filters.indexOf("filter-bar");
     const chipStart = filters.indexOf("<ChipRail");
     expect(searchStart).toBeGreaterThan(-1);
     expect(chipStart).toBeGreaterThan(searchStart);
@@ -145,8 +155,10 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).not.toMatch(/\.serp-row-chips\s*\{[^}]*position:\s*absolute/);
     expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
     expect(css).toMatch(/\.serp-filters\s*\{[^}]*position:\s*sticky/);
-    expect(css).toContain(".nav-cta-fill");
-    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("ctaPost");
+    expect(css).toContain(".filter-chrome");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("copy.nav.login");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).not.toContain("ctaPost");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).not.toContain("nav-cta-fill");
   });
 
   it("prints pack published labels", () => {

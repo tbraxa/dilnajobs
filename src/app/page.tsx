@@ -5,6 +5,7 @@ import { JobCard } from "@/components/job-card";
 import { CatalogUnavailable, EmptyJobs } from "@/components/catalog-unavailable";
 import { EmployerBand } from "@/components/employer-band";
 import { HeroMosaic } from "@/components/hero-mosaic";
+import { TrustStrip } from "@/components/trust-strip";
 import { copy } from "@/lib/copy";
 import { loadFeaturedJobs } from "@/lib/jobs/search";
 
@@ -31,7 +32,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="latest">
+      <section className="section" aria-labelledby="cats">
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <h2 className="h2" id="cats">
+                {copy.home.sectionCats}
+              </h2>
+              <p className="meta" style={{ margin: "6px 0 0" }}>
+                {copy.home.sectionCatsHelper}
+              </p>
+            </div>
+          </div>
+          <CategoryRail />
+        </div>
+      </section>
+
+      <section className="section section-wash" aria-labelledby="latest">
         <div className="wrap">
           <div className="section-head">
             <div>
@@ -39,15 +56,14 @@ export default async function HomePage() {
                 {copy.home.sectionLatest}
               </h2>
               <p className="meta" style={{ margin: "6px 0 0" }}>
-                {copy.home.sectionFields}
+                {copy.home.sectionLatestHelper}
               </p>
             </div>
             <Link className="btn btn-ghost" href="/nabidky">
               {copy.home.ctaAllJobs}
             </Link>
           </div>
-          <CategoryRail />
-          <div className="job-grid home">
+          <div className="job-grid home job-grid-home">
             {!catalog.ok ? (
               <CatalogUnavailable />
             ) : jobs.length === 0 ? (
@@ -59,6 +75,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <TrustStrip />
       <EmployerBand />
     </main>
   );
