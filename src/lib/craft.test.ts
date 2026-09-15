@@ -54,8 +54,9 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain(".serp-row-chips");
     expect(css).toContain(".serp-sheet");
     expect(css).toContain(".serp-field");
-    expect(css).toContain(".serp-search-pill");
-    expect(css).not.toContain(".serp-row-search .search-shell");
+    expect(css).toContain(".serp-row-search .search-shell");
+    expect(css).toContain("#activeChips");
+    expect(css).not.toContain(".serp-search-pill");
     expect(css).not.toContain(".search-shell-compact");
     expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
     expect(css).toMatch(/a\.job-row/);
@@ -117,8 +118,11 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(page).toContain("emptyNoResultsTitle");
     expect(filters).toContain("serp-row-search");
     expect(filters).toContain("serp-row-chips");
+    expect(filters).toContain('id="activeChips"');
     expect(filters).toContain("serp-sheet");
-    expect(filters).toContain("serp-search-pill");
+    expect(filters).toContain("SearchShell");
+    expect(filters).toContain("copy.home.labelQuery");
+    expect(filters).toContain("copy.home.labelPlace");
     expect(filters).toContain("serp-radio");
     expect(filters).toContain("ctaEditFilters");
     expect(filters).toContain("serp-field");
@@ -134,7 +138,8 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
     expect(css).not.toMatch(/\.serp-row-search\s*\{[^}]*height:\s*56px/);
     expect(css).not.toMatch(/\.serp-row-chips\s*\{[^}]*position:\s*absolute/);
-    expect(css).toMatch(/\.serp-search-pill\s*\{[^}]*height:\s*48px/);
+    expect(css).toMatch(/\.serp-row-search \.search-shell\s*\{[^}]*height:\s*auto/);
+    expect(css).toMatch(/#activeChips[\s\S]*border-top:\s*1px solid/);
     expect(css).toMatch(/\.serp-radio\s*\{[^}]*min-height:\s*48px/);
     expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
   });

@@ -56,44 +56,11 @@ function FilterGlyph() {
   );
 }
 
-function SearchGlyph() {
-  return (
-    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" overflow="visible">
-      <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M10.2 10.2L13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function CloseGlyph() {
   return (
     <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" overflow="visible">
       <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
-  );
-}
-
-function persistFilters(query: SearchQuery, omit: Array<"category" | "place" | "salaryMin" | "workMode" | "contract" | "q"> = []) {
-  return (
-    <>
-      {!omit.includes("q") && query.q ? <input type="hidden" name="q" value={query.q} /> : null}
-      {!omit.includes("category") && query.category ? (
-        <input type="hidden" name="category" value={query.category} />
-      ) : null}
-      {query.profession && query.profession !== query.category ? (
-        <input type="hidden" name="profession" value={query.profession} />
-      ) : null}
-      {!omit.includes("place") && query.place ? <input type="hidden" name="place" value={query.place} /> : null}
-      {!omit.includes("salaryMin") && query.salaryMin != null ? (
-        <input type="hidden" name="salaryMin" value={String(query.salaryMin)} />
-      ) : null}
-      {!omit.includes("workMode") && query.workMode ? (
-        <input type="hidden" name="mode" value={query.workMode} />
-      ) : null}
-      {!omit.includes("contract") && query.contract ? (
-        <input type="hidden" name="contract" value={query.contract} />
-      ) : null}
-    </>
   );
 }
 
@@ -159,33 +126,6 @@ export function SearchShell({
           ))}
         </div>
       ) : null}
-    </form>
-  );
-}
-
-function SerpSearch({ query }: { query: SearchQuery }) {
-  return (
-    <form className="serp-search" action="/nabidky" method="get" role="search">
-      {persistFilters(query, ["q"])}
-      <div className="serp-search-pill">
-        <span className="serp-search-icon" aria-hidden="true">
-          <SearchGlyph />
-        </span>
-        <label className="visually-hidden" htmlFor="serp-q">
-          {copy.nabidky.labelQuery}
-        </label>
-        <input
-          id="serp-q"
-          name="q"
-          type="search"
-          defaultValue={query.q}
-          placeholder={copy.nabidky.labelQuery}
-          autoComplete="off"
-        />
-        <button className="btn btn-primary" type="submit">
-          {copy.nabidky.ctaSearch}
-        </button>
-      </div>
     </form>
   );
 }
@@ -456,7 +396,7 @@ export function JobFilters({
       <input id={FILTERS_ID} className="serp-filters-toggle" type="checkbox" />
       <div className="serp-chrome">
         <div className="serp-row-search">
-          <SerpSearch query={defaults} />
+          <SearchShell defaults={defaults} />
           <label className="btn btn-secondary serp-filter-btn" htmlFor={FILTERS_ID}>
             <FilterGlyph />
             {copy.nabidky.ctaEditFilters}
