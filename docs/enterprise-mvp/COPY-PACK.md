@@ -1,6 +1,6 @@
 # FairJobs COPY PACK (v1.3)
 
-Brand lock: **FairJobs** (display). Doména: dilnajobs.cz.
+Brand lock: **FairJobs** (display). Cílová doména: fairjobs.cz (soft). Infra/repo: dilnajobs.cz.
 Produkt: národní job marketplace, všechny profese, CZ-first.
 Auth: magic link. Registrace: ARES + jméno, příjmení, DIČ.
 Oddělovač: ·   Zakázané v copy: — –
@@ -216,6 +216,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | Klíč | Text |
 |---|---|
 | brand | FairJobs |
+| domain | fairjobs.cz |
 | nav_nabidky | Nabídky |
 | nav_pro_firmy | Pro firmy |
 | nav_login | Přihlášení firem |
@@ -227,7 +228,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 
 ## Poznámky
 
-1. Display name: FairJobs. Doména zůstává dilnajobs.cz (neplést do UI copy jako brand).
+1. Display name: FairJobs. Cílová doména fairjobs.cz (soft). Technická dilnajobs.cz zatím OK. Neplést do UI copy jako brand.
 2. Homepage claim drží směr: Práce v Česku. Od firem.
 3. Žádná hesla. Po odeslání auth formuláře ukázat helper_after_send.
 4. Pricing a e-mailové šablony: stand-by.

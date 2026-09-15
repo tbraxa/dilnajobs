@@ -42,9 +42,15 @@ describe("COPY-PACK v1.3", () => {
 
   it("uses FairJobs as the public brand", () => {
     expect(copy.brand).toBe("FairJobs");
+    expect(copy.domain).toBe("fairjobs.cz");
+    expect(JSON.stringify(copy)).not.toContain("dilnajobs.cz");
+    expect(JSON.stringify(copy)).not.toContain("OpenJobs");
     expect(copy.footer).toBe("© 2026 FairJobs · nabídky práce");
     expect(copy.home.metaTitle).toBe("FairJobs · nabídky práce");
     expect(copy.employers.sectionWhy).toBe("Proč FairJobs");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("Fair<span>Jobs</span>");
+    expect(readFileSync("src/app/gdpr/page.tsx", "utf8")).toContain("copy.domain");
+    expect(readFileSync("src/app/layout.tsx", "utf8")).toContain("applicationName: copy.brand");
   });
 
   it("exposes pack contract and salary strings", () => {

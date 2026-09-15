@@ -3,7 +3,7 @@ import { copy } from "@/lib/copy";
 
 export function Logo({ href = "/" }: { href?: string }) {
   return (
-    <Link className="logo" href={href}>
+    <Link className="logo" href={href} aria-label={copy.brand}>
       <span className="logo-mark" aria-hidden="true" />
       Fair<span>Jobs</span>
     </Link>

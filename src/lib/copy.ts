@@ -2,6 +2,7 @@
 
 export const copy = {
   brand: "FairJobs",
+  domain: "fairjobs.cz",
   claim: "Práce v Česku. Od firem.",
   footer: "© 2026 FairJobs · nabídky práce",
   nav: {

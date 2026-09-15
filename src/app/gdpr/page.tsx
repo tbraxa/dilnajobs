@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { copy } from "@/lib/copy";
 
 export const metadata: Metadata = { title: "Osobní údaje" };
 
@@ -8,7 +9,7 @@ export default function GdprPage() {
       <div className="wrap">
         <h1 className="h1">Osobní údaje</h1>
         <p>
-          Správce: provozovatel FairJobs (doplní se před spuštěním na dilnajobs.cz). Kontakt: zdenek@dilnajobs.cz
+          Správce: provozovatel {copy.brand} (doplní se před spuštěním na {copy.domain}). Kontakt: zdenek@dilnajobs.cz
           (zástupný e-mail).
         </p>
         <h2>Uchazeči</h2>

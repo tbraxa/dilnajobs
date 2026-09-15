@@ -16,11 +16,16 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(resolveAppUrl()),
+  applicationName: copy.brand,
   title: {
     default: copy.home.metaTitle,
     template: `%s · ${copy.brand}`,
   },
   description: copy.home.metaDescription,
+  openGraph: {
+    siteName: copy.brand,
+    locale: "cs_CZ",
+  },
   robots: { index: true, follow: true },
 };
 
