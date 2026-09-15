@@ -34,7 +34,7 @@ function collectFiles(dir: string, match: RegExp, acc: string[] = []) {
   return acc;
 }
 
-describe("COPY-PACK v1.1", () => {
+describe("COPY-PACK v1.3", () => {
   it("keeps the locked homepage claim", () => {
     expect(copy.claim).toBe("Práce v Česku. Od firem.");
   });
@@ -50,12 +50,16 @@ describe("COPY-PACK v1.1", () => {
     expect(copy.card.contractDpc).toBe("DPČ");
     expect(copy.card.contractIco).toBe("IČO / živnost");
     expect(copy.card.ctaOpen).toBe("Zobrazit nabídku");
-    expect(copy.card.salaryNegotiable).toBe("Mzda dohodou");
+    expect(copy.card.salaryNegotiable).toBe("mzda dohodou");
     expect(copy.card.salaryUnspecified).toBe("Mzda neuvedena");
     expect(copy.card.badgeAgency).toBe("Agentura");
+    expect(copy.card.badgeVerified).toBe("Ověřeno");
     expect(workModeLabel("onsite")).toBe("Na místě");
     expect(workModeLabel("hybrid")).toBe("Hybrid");
-    expect(workModeLabel("remote")).toBe("Z domova");
+    expect(workModeLabel("remote")).toBe("Na dálku");
+    expect(copy.card.workModeRemote).toBe("Na dálku");
+    expect(copy.card.workModeRemote).not.toBe("Remote");
+    expect(copy.card.publishedToday).toBe("Zveřejněno dnes");
     expect(contractLabel("hpp")).toBe("HPP");
     expect(contractLabel("dpc")).toBe("DPČ");
     expect(contractLabel("ico")).toBe("IČO / živnost");

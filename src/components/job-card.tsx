@@ -2,7 +2,9 @@ import Link from "next/link";
 import type { searchJobs } from "@/lib/jobs/search";
 import { displayJobSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
+import { companyInitial, companyMarkClass, isNewJob, jobMediaClass, publishedLabel } from "@/lib/craft";
 import { contractLabel, copy, workModeLabel } from "@/lib/copy";
+import { CompanyMark, VerifiedBadge } from "./craft-marks";
 
 type JobRow = Awaited<ReturnType<typeof searchJobs>>[number];
 
@@ -10,51 +12,81 @@ function jobContractLabel(job: JobRow) {
   return contractLabel(job.contractType || job.employmentType);
 }
 
-export function JobCard({ job }: { job: JobRow }) {
-  const category = professionByDb(job.category) ?? professionByDb(job.profession);
+function JobIdentity({ job }: { job: JobRow }) {
   const verified = job.verificationStatus === "verified";
+  return (
+    <div className="job-company">
+      {copy.card.metaCompany(job.companyName)}
+      {verified ? <VerifiedBadge label={copy.card.badgeVerified} /> : null}
+      {job.isAgency ? <span className="chip">{copy.card.badgeAgency}</span> : null}
+    </div>
+  );
+}
+
+function JobMeta({ job }: { job: JobRow }) {
   const contract = jobContractLabel(job);
   const mode = workModeLabel(job.workMode);
   return (
-    <article className="border border-line bg-paper p-4 sm:p-5">
-      <div className="flex flex-wrap items-center gap-2 text-xs text-steel">
-        <span>{copy.card.metaCompany(job.companyName)}</span>
-        {verified ? (
-          <span className="rounded-[2px] bg-ok px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-white">
-            {copy.card.badgeVerified}
-          </span>
-        ) : job.verificationStatus === "pending" || job.verificationStatus === "manual" ? (
-          <span className="rounded-[2px] border border-line px-1.5 py-0.5 text-[10px] font-semibold tracking-wide">
-            {copy.card.badgePending}
-          </span>
-        ) : null}
-        {job.isAgency ? (
-          <span className="rounded-[2px] border border-line px-1.5 py-0.5 text-[10px] font-semibold tracking-wide">
-            {copy.card.badgeAgency}
-          </span>
-        ) : null}
-        {job.isTop ? (
-          <span className="rounded-[2px] bg-accent px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-white">
-            {copy.card.badgeFeatured}
-          </span>
-        ) : null}
+    <div className="job-meta">
+      <span>{job.city}</span>
+      {contract ? <span>{contract}</span> : null}
+      {mode ? <span className="chip">{mode}</span> : null}
+    </div>
+  );
+}
+
+function JobKicker({ job }: { job: JobRow }) {
+  return (
+    <div className="job-card-kicker">
+      {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
+      {job.isTop ? <span className="badge-new">{copy.card.badgeFeatured}</span> : null}
+    </div>
+  );
+}
+
+export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" | "h3" }) {
+  const category = professionByDb(job.category) ?? professionByDb(job.profession);
+  const media = jobMediaClass(category?.db ?? job.category, job.profession);
+  const TitleTag = heading;
+  return (
+    <Link className="job-card" href={`/nabidka/${job.slug}`}>
+      <div className={`job-card-media ${media}`} aria-hidden="true">
+        <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
       </div>
-      <h2 className="mt-1 text-xl font-semibold leading-tight">
-        <Link href={`/nabidka/${job.slug}`} className="hover:underline">
-          {job.title}
-        </Link>
-      </h2>
-      <p className="mt-2 text-sm text-steel">
-        {category?.label ?? job.category} · {job.city}
-        {job.region ? `, ${job.region}` : ""} · {displayJobSalary(job)}
-        {mode ? ` · ${mode}` : ""}
-        {contract ? ` · ${contract}` : ""}
-      </p>
-      <p className="mt-3">
-        <Link href={`/nabidka/${job.slug}`} className="text-sm font-semibold underline">
-          {copy.card.ctaOpen}
-        </Link>
-      </p>
-    </article>
+      <div className="job-card-body">
+        <JobKicker job={job} />
+        <TitleTag className="job-title">{job.title}</TitleTag>
+        <JobIdentity job={job} />
+        <JobMeta job={job} />
+        <div className="job-salary">{displayJobSalary(job)}</div>
+        <div className="job-posted">{publishedLabel(job.publishedAt)}</div>
+      </div>
+    </Link>
+  );
+}
+
+export function JobRowCard({ job }: { job: JobRow }) {
+  const category = professionByDb(job.category) ?? professionByDb(job.profession);
+  const media = jobMediaClass(category?.db ?? job.category, job.profession);
+  return (
+    <Link className="job-row" href={`/nabidka/${job.slug}`}>
+      <div className="job-row-inner">
+        <div className={`job-row-media ${media}`} aria-hidden="true">
+          <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
+        </div>
+        <div>
+          <div className="job-title">
+            {job.title}
+            {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
+          </div>
+          <JobIdentity job={job} />
+          <JobMeta job={job} />
+        </div>
+        <div className="job-row-pay">
+          <div className="job-salary">{displayJobSalary(job)}</div>
+          <div className="job-posted">{publishedLabel(job.publishedAt)}</div>
+        </div>
+      </div>
+    </Link>
   );
 }

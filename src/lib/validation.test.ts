@@ -47,6 +47,15 @@ describe("parseSearch", () => {
     });
   });
 
+  it("accepts mesto and mode aliases from the craft preview", () => {
+    expect(parseSearch({ mesto: "Brno", mode: "remote" })).toMatchObject({
+      place: "Brno",
+      workMode: "remote",
+      page: 1,
+      sort: "newest",
+    });
+  });
+
   it("drops unknown profession instead of throwing", () => {
     expect(parseSearch({ profession: "astronaut" })).toEqual({ sort: "newest", page: 1 });
   });

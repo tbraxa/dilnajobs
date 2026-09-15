@@ -1,6 +1,9 @@
 import { searchSchema } from "./validation";
 import { isCategoryDb } from "./catalog";
 
+export type WorkModeFilter = "onsite" | "hybrid" | "remote";
+export type ContractFilter = "hpp" | "dpp" | "dpc" | "ico";
+
 export type SearchQuery = {
   q?: string;
   category?: string;
@@ -8,6 +11,8 @@ export type SearchQuery = {
   place?: string;
   city?: string;
   salaryMin?: number;
+  workMode?: WorkModeFilter;
+  contract?: ContractFilter;
   page?: number;
   sort?: "newest" | "salary";
 };
@@ -22,9 +27,11 @@ export function parseSearch(input: Record<string, string | string[] | undefined>
     q: one(input, "q"),
     category: one(input, "category"),
     profession: one(input, "profession"),
-    place: one(input, "place"),
+    place: one(input, "place") ?? one(input, "mesto"),
     city: one(input, "city"),
     salaryMin: one(input, "salaryMin") ?? one(input, "mzda"),
+    workMode: one(input, "mode") ?? one(input, "workMode"),
+    contract: one(input, "contract"),
     page: one(input, "page"),
     sort: one(input, "sort"),
   };
@@ -43,11 +50,38 @@ export function parseSearch(input: Record<string, string | string[] | undefined>
     place: place || undefined,
     city: data.city || place || undefined,
     salaryMin: data.salaryMin,
+    workMode: data.workMode,
+    contract: data.contract,
     page: data.page ?? 1,
     sort: data.sort,
   };
 }
 
 export function searchHasFilters(query: SearchQuery): boolean {
-  return Boolean(query.q || query.place || query.city || query.category || query.profession || query.salaryMin);
+  return Boolean(
+    query.q ||
+      query.place ||
+      query.city ||
+      query.category ||
+      query.profession ||
+      query.salaryMin ||
+      query.workMode ||
+      query.contract,
+  );
+}
+
+export function nabidkyHref(query: SearchQuery, patch: Partial<SearchQuery> = {}): string {
+  const next: SearchQuery = { ...query, ...patch };
+  const params = new URLSearchParams();
+  if (next.q) params.set("q", next.q);
+  if (next.place) params.set("place", next.place);
+  if (next.category) params.set("category", next.category);
+  if (next.profession && next.profession !== next.category) params.set("profession", next.profession);
+  if (next.salaryMin != null) params.set("salaryMin", String(next.salaryMin));
+  if (next.workMode) params.set("mode", next.workMode);
+  if (next.contract) params.set("contract", next.contract);
+  if (next.sort && next.sort !== "newest") params.set("sort", next.sort);
+  if (next.page && next.page > 1) params.set("page", String(next.page));
+  const s = params.toString();
+  return s ? `/nabidky?${s}` : "/nabidky";
 }

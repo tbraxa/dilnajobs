@@ -88,6 +88,14 @@ export const searchSchema = z.object({
     const n = Number(value);
     return Number.isFinite(n) && n >= 0 ? n : undefined;
   }, z.number().int().nonnegative().optional()),
+  workMode: z.preprocess((value) => {
+    if (value == null || value === "" || value === "all") return undefined;
+    return value;
+  }, z.enum(["onsite", "hybrid", "remote"]).optional()),
+  contract: z.preprocess((value) => {
+    if (value == null || value === "") return undefined;
+    return value;
+  }, z.enum(["hpp", "dpp", "dpc", "ico"]).optional()),
   page: z.preprocess((value) => {
     if (value == null || value === "") return 1;
     const n = Number(value);

@@ -1,4 +1,4 @@
-# OpenJobs COPY PACK (v1.1)
+# OpenJobs COPY PACK (v1.3)
 
 Brand lock: **OpenJobs** (display). Doména: dilnajobs.cz.
 Produkt: národní job marketplace, všechny profese, CZ-first.
@@ -7,9 +7,17 @@ Oddělovač: ·   Zakázané v copy: — –
 
 Tone: viz `docs/copy-rules.md`
 
+Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
+- `/` homepage
+- `/nabidky` výpis
+- `/nabidka/[slug]` detail + apply
+- `/pro-firmy`
+- `/firma/prihlaseni` · `/firma/registrace`
+- `/firma/...` manage / post / applications
+
 ---
 
-## 1) Homepage (index)
+## 1) Homepage `/`
 
 | Klíč | Text |
 |---|---|
@@ -31,7 +39,7 @@ Tone: viz `docs/copy-rules.md`
 
 ---
 
-## 2) Nabídky (search / výpis)
+## 2) Nabídky `/nabidky`
 
 | Klíč | Text |
 |---|---|
@@ -48,6 +56,13 @@ Tone: viz `docs/copy-rules.md`
 | filters_contract | Úvazek |
 | filters_salary | Mzda od |
 | filters_seniority | Seniorita |
+| filters_mode | Režim |
+| filter_mode_all | Vše |
+| filter_mode_onsite | Na místě |
+| filter_mode_hybrid | Hybrid |
+| filter_mode_remote | Na dálku |
+| cta_all_jobs | Zobrazit všechny nabídky |
+| section_fields | Všechny obory |
 | footer | © 2026 OpenJobs · nabídky práce |
 
 ### Empty states
@@ -84,18 +99,32 @@ Tone: viz `docs/copy-rules.md`
 | contract_ico | IČO / živnost |
 | cta_open | Zobrazit nabídku |
 | meta_company | {company} |
+| badge_verified | Ověřeno |
+| salary_negotiable | mzda dohodou |
+| work_mode_label | Režim |
+| work_mode_onsite | Na místě |
+| work_mode_hybrid | Hybrid |
+| work_mode_remote | Na dálku |
+| published_today | Zveřejněno dnes |
+| published_yesterday | Zveřejněno včera |
+| published_days_ago | Zveřejněno před {n} dny |
+| label_field | Obor |
 
 ---
 
-## 4) Detail nabídky + apply
+## 4) Detail + apply `/nabidka/[slug]`
 
 | Klíč | Text |
 |---|---|
 | cta_apply | Odpovědět na nabídku |
+| cta_back | Zpět na nabídky |
 | section_about | O pozici |
 | section_requirements | Požadavky |
 | section_offer | Co nabízíme |
 | section_company | O firmě |
+| helper_no_account | Bez účtu. Telefon stačí. Údaje uvidí jen {company}. |
+| consent_gdpr | Souhlasím se zpracováním údajů za účelem kontaktování k této nabídce. |
+| preview_note | Náhled. Odpověď zatím neodesíláme. |
 | apply_claim | Odpovědět na nabídku |
 | apply_helper | Údaje uvidí jen {company}. |
 | label_name | Jméno a příjmení |
@@ -111,7 +140,7 @@ Tone: viz `docs/copy-rules.md`
 
 ---
 
-## 5) Pro firmy (základ)
+## 5) Pro firmy `/pro-firmy`
 
 | Klíč | Text |
 |---|---|
@@ -134,7 +163,7 @@ Tone: viz `docs/copy-rules.md`
 
 ---
 
-## 6) Přihlášení firmy (magic link)
+## 6) Přihlášení `/firma/prihlaseni`
 
 | Klíč | Text |
 |---|---|
@@ -153,7 +182,7 @@ Tone: viz `docs/copy-rules.md`
 
 ---
 
-## 7) Registrace firmy (magic link + ARES)
+## 7) Registrace `/firma/registrace`
 
 | Klíč | Text |
 |---|---|
@@ -201,4 +230,7 @@ Tone: viz `docs/copy-rules.md`
 1. Display name: OpenJobs. Doména zůstává dilnajobs.cz (neplést do UI copy jako brand).
 2. Homepage claim drží směr: Práce v Česku. Od firem.
 3. Žádná hesla. Po odeslání auth formuláře ukázat helper_after_send.
-4. Pricing a e-mailové šablony: další iterace.
+4. Pricing a e-mailové šablony: stand-by.
+5. Auth cesty: jen `/firma/prihlaseni` a `/firma/registrace` (ne `/prihlaseni`).
+6. Režim práce: Na místě / Hybrid / Na dálku. Nikdy „Remote“.
+7. Trust badge: Ověřeno. Mzda bez čísla: mzda dohodou.

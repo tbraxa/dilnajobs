@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { CategoryRail, SearchShell } from "@/components/job-filters";
 import { JobCard } from "@/components/job-card";
-import { CatalogUnavailable } from "@/components/catalog-unavailable";
-import { ButtonLink } from "@/components/ui";
+import { CatalogUnavailable, EmptyJobs } from "@/components/catalog-unavailable";
+import { EmployerBand } from "@/components/employer-band";
+import { HeroMosaic } from "@/components/hero-mosaic";
 import { copy } from "@/lib/copy";
 import { loadFeaturedJobs } from "@/lib/jobs/search";
 
@@ -17,61 +20,46 @@ export default async function HomePage() {
   const jobs = catalog.ok ? catalog.rows : [];
   return (
     <main>
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
-          <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">{copy.claim}</h1>
-          <p className="mt-4 max-w-xl text-base text-steel sm:text-lg">{copy.home.helper}</p>
-          <form action="/nabidky" method="get" className="mt-7 grid gap-3 sm:grid-cols-12">
-            <label className="sm:col-span-5">
-              <span className="label">{copy.home.labelQuery}</span>
-              <input
-                name="q"
-                placeholder={copy.home.placeholderQuery}
-                className="mt-1 w-full rounded-[2px] border border-line bg-paper px-3 py-2.5"
-              />
-            </label>
-            <label className="sm:col-span-4">
-              <span className="label">{copy.home.labelPlace}</span>
-              <input
-                name="place"
-                placeholder={copy.home.placeholderPlace}
-                className="mt-1 w-full rounded-[2px] border border-line bg-paper px-3 py-2.5"
-              />
-            </label>
-            <div className="flex items-end sm:col-span-3">
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center rounded-[2px] bg-accent px-4 py-2.5 text-sm font-semibold text-white"
-              >
-                {copy.home.ctaSearch}
-              </button>
+      <section className="hero">
+        <div className="wrap hero-layout">
+          <div className="hero-copy">
+            <h1 className="h1 hero-claim">{copy.claim}</h1>
+            <p className="hero-sub">{copy.home.helper}</p>
+            <SearchShell includeMode />
+          </div>
+          <HeroMosaic />
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="latest">
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <h2 className="h2" id="latest">
+                {copy.home.sectionLatest}
+              </h2>
+              <p className="meta" style={{ margin: "6px 0 0" }}>
+                {copy.home.sectionFields}
+              </p>
             </div>
-          </form>
-          <div className="mt-5">
-            <ButtonLink href="/pro-firmy" variant="ghost">
-              {copy.home.ctaEmployers}
-            </ButtonLink>
+            <Link className="btn btn-ghost" href="/nabidky">
+              {copy.home.ctaAllJobs}
+            </Link>
+          </div>
+          <CategoryRail />
+          <div className="job-grid home">
+            {!catalog.ok ? (
+              <CatalogUnavailable />
+            ) : jobs.length === 0 ? (
+              <EmptyJobs title={copy.nabidky.emptyNoResultsTitle} body={copy.nabidky.emptyNoResultsBody} />
+            ) : (
+              jobs.map((job) => <JobCard key={job.id} job={job} />)
+            )}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="text-2xl font-semibold">{copy.home.sectionLatest}</h2>
-          <a href="/nabidky" className="text-sm underline">
-            {copy.nav.nabidky}
-          </a>
-        </div>
-        <div className="mt-4 grid gap-3">
-          {!catalog.ok ? (
-            <CatalogUnavailable />
-          ) : jobs.length === 0 ? (
-            <p className="border border-line p-4 text-sm text-steel">{copy.nabidky.emptyNoResultsBody}</p>
-          ) : (
-            jobs.map((job) => <JobCard key={job.id} job={job} />)
-          )}
-        </div>
-      </section>
+      <EmployerBand />
     </main>
   );
 }

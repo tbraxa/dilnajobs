@@ -1,17 +1,18 @@
 @import "tailwindcss";
+@import "./craft.css";
 
 :root {
-  --paper: #f2f0ea;
-  --paper-2: #e7e3d7;
-  --ink: #0b0d12;
-  --steel: #5c6168;
-  --steel-2: #8a8f96;
-  --line: rgba(11, 13, 18, 0.14);
-  --accent: #003dff;
-  --accent-hover: #0034d6;
-  --danger: #8b1e1e;
-  --ok: #1f4d2c;
-  --background: var(--paper);
+  --paper: #ffffff;
+  --paper-2: #f7f7f8;
+  --ink: #0a0a0a;
+  --steel: #717171;
+  --steel-2: #a3a3a3;
+  --line: #ebebeb;
+  --accent: #222222;
+  --accent-hover: #000000;
+  --danger: #b42318;
+  --ok: #008a05;
+  --background: var(--bg);
   --foreground: var(--ink);
 }
 
@@ -28,44 +29,27 @@
   --color-ok: var(--ok);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-ibm);
-  --font-display: var(--font-archivo);
+  --color-link: var(--link);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-inter);
 }
 
 * {
-  border-color: var(--line);
+  border-color: var(--border);
 }
 
 html,
 body {
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
 }
 
-body {
-  font-family: var(--font-ibm), "IBM Plex Sans", system-ui, sans-serif;
-  min-height: 100vh;
-}
-
-.display {
-  font-family: var(--font-archivo), Archivo, sans-serif;
-  letter-spacing: -0.03em;
-}
-
-.label {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--steel);
-  font-weight: 600;
-}
-
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--link);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--link-soft);
+  color: var(--ink);
 }
