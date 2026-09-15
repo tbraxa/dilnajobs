@@ -1,3 +1,5 @@
+import { copy, salaryFrom, salaryRange } from "./copy";
+
 export const PACKAGES = [
   {
     code: "trial",
@@ -5,7 +7,7 @@ export const PACKAGES = [
     priceCzkExVat: 0,
     period: "year" as const,
     adLimit: 10,
-    blurb: "10 inzerátů za rok. Ověříte, že sem chodí lidé z dílny — ne z agentury.",
+    blurb: "10 inzerátů za rok. Vyzkoušíte inzerci bez závazku.",
   },
   {
     code: "single",
@@ -22,7 +24,7 @@ export const PACKAGES = [
     priceCzkExVat: 8900,
     period: "year" as const,
     adLimit: 40,
-    blurb: "40 inzerátů za rok. Pro závod, který nabírá průběžně.",
+    blurb: "40 inzerátů za rok. Pro firmu, která nabírá průběžně.",
   },
   {
     code: "standard",
@@ -43,6 +45,34 @@ export const PACKAGES = [
   },
 ] as const;
 
+/** Lean public placeholder prices on /pro-firmy#cenik. Not Stripe SKUs. */
+export const PUBLIC_PLANS = [
+  {
+    code: "start",
+    name: copy.employers.pricingStartName,
+    priceCzk: 2490,
+    note: copy.employers.pricingStartNote,
+    featured: false,
+    features: copy.employers.pricingStartItems,
+  },
+  {
+    code: "standard",
+    name: copy.employers.pricingStandardName,
+    priceCzk: 4990,
+    note: copy.employers.pricingStandardNote,
+    featured: true,
+    features: copy.employers.pricingStandardItems,
+  },
+  {
+    code: "plus",
+    name: copy.employers.pricingPlusName,
+    priceCzk: 8990,
+    note: copy.employers.pricingPlusNote,
+    featured: false,
+    features: copy.employers.pricingPlusItems,
+  },
+] as const;
+
 export function formatCzk(amount: number): string {
   return `${new Intl.NumberFormat("cs-CZ").format(amount)} Kč`;
 }
@@ -51,13 +81,28 @@ export function formatSalary(min?: number | null, max?: number | null, note?: st
   if (note) return note;
   if (min && max) {
     if (min === max) return `${formatCzk(min)} / měsíc`;
-    const minFmt = new Intl.NumberFormat("cs-CZ").format(min);
-    const maxFmt = new Intl.NumberFormat("cs-CZ").format(max);
-    return `${minFmt}–${maxFmt} Kč / měsíc`;
+    return salaryRange(min, max);
   }
-  if (min) return `od ${formatCzk(min)} / měsíc`;
+  if (min) return salaryFrom(min);
   if (max) return `do ${formatCzk(max)} / měsíc`;
-  return "Mzda dohodou";
+  return copy.card.salaryUnspecified;
+}
+
+export function displayJobSalary(job: {
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryType?: string | null;
+  salaryNote?: string | null;
+}): string {
+  if (job.salaryMin || job.salaryMax) {
+    return formatSalary(job.salaryMin, job.salaryMax, job.salaryType === "negotiable" ? null : job.salaryNote);
+  }
+  const note = job.salaryNote?.trim();
+  if (job.salaryType === "negotiable" || (note && /dohod/i.test(note))) {
+    return copy.card.salaryNegotiable;
+  }
+  if (note) return note;
+  return copy.card.salaryUnspecified;
 }
 
 export function formatDate(d: Date | string): string {

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = professionBySlug(profese);
   const c = cityBySlug(mesto);
   if (!p || !c) return { title: "Práce" };
-  return { title: `${p.label} — ${c.label}` };
+  return { title: `${p.label} · ${c.label}` };
 }
 
 export default async function SeoLanding({ params }: Props) {

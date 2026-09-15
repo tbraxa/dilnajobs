@@ -7,5 +7,6 @@ These are out of scope. Do not sneak them in.
 3. **No mandatory candidate login.** Apply is name + phone. See ADR 002.
 4. **No agencies as customers.** Direct employers only. See ADR 003.
 5. **No native apps.** Mobile web must be compact and clear. That is the mobile story.
+6. **No DílnaJobs / preview-v9 / industrial UI as the product look.** Public markup in the Week 1 foundation is lean and temporary. Visual restyle waits for design direction v2 in a dedicated PR. Do not polish this chrome as if it were final.
 
 Also not v1: multi-tenant marketplaces, candidate messaging inbox, social login, English-first UI, crypto/web3, infinite scrapers.

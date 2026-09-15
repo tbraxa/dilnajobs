@@ -53,6 +53,7 @@ describe("public FairJobs copy", () => {
   it("does not mention Stripe env vars or stub checkout on /pro-firmy", () => {
     const text = readFileSync("src/app/pro-firmy/page.tsx", "utf8");
     expect(text).not.toMatch(/STRIPE_|stub/i);
-    expect(text).toMatch(/FairJobs|Ceny bez DPH/);
+    expect(text).toContain('id="cenik"');
+    expect(text).toContain("copy.employers");
   });
 });

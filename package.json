@@ -2,7 +2,7 @@
   "name": "dilnajobs",
   "version": "0.1.0",
   "private": true,
-  "description": "DílnaJobs — Czech job board for manufacturing and shop-floor roles.",
+  "description": "FairJobs. Czech job marketplace (repo dilnajobs).",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

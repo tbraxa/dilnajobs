@@ -33,7 +33,7 @@ export default async function AdminAuditPage() {
                 <td className="py-2 pr-3">{row.actorType}</td>
                 <td className="py-2 pr-3 font-medium">{row.action}</td>
                 <td className="py-2 text-steel">
-                  {row.resourceType ?? "—"}
+                  {row.resourceType ?? "neuvedeno"}
                   {row.resourceId ? ` ${row.resourceId.slice(0, 8)}` : ""}
                 </td>
               </tr>

@@ -1,14 +1,13 @@
 export default function NotFound() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-16">
-      <h1 className="display text-3xl font-semibold">Tady nic není</h1>
-      <p className="mt-3 text-steel">
-        Stránka neexistuje, nebo nabídka už nesvíti. Zkuste{" "}
-        <a href="/nabidky" className="underline">
-          katalog
-        </a>
-        .
-      </p>
+    <main className="legal-page">
+      <div className="wrap">
+        <h1 className="h1">Tady nic není</h1>
+        <p>
+          Stránka neexistuje, nebo nabídka už nesvítí. Zkuste{" "}
+          <a href="/nabidky">nabídky práce</a>.
+        </p>
+      </div>
     </main>
   );
 }

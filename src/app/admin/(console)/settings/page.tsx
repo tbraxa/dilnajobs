@@ -63,7 +63,7 @@ export default function AdminSettingsPage() {
           <h2 className="font-semibold">Adresy správců</h2>
           <p className="mt-2 text-sm text-steel">
             {flags.adminEmailCount === 0
-              ? "Seznam je prázdný — do správy se nikdo nepřihlásí."
+              ? "Seznam je prázdný. Do správy se nikdo nepřihlásí."
               : flags.adminEmails.join(", ")}
           </p>
         </article>

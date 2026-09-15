@@ -16,10 +16,10 @@ export default function GlobalError({
 
   return (
     <html lang="cs">
-      <body className="bg-[#f2f0ea] text-[#0b0d12]">
+      <body style={{ background: "#FFFFFF", color: "#0A0A0A", fontFamily: "Inter, system-ui, sans-serif" }}>
         <main className="mx-auto max-w-xl px-4 py-16">
           <h1 className="text-2xl font-semibold">Něco se pokazilo</h1>
-          <p className="mt-3 text-sm text-[#5c6168]">
+          <p className="mt-3 text-sm" style={{ color: "#717171" }}>
             Aplikaci teď nejde zobrazit. Zkuste obnovit stránku. Pokud problém trvá, počkejte na dokončení
             migrací databáze.
           </p>
