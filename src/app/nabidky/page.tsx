@@ -34,9 +34,12 @@ export default async function NabidkyPage({
       />
       <div className="wrap serp-results">
         <div className="serp-head">
-          <h1 className="h2" style={{ margin: 0 }}>
-            {copy.nabidky.claim}
-          </h1>
+          <div>
+            <h1 className="h2" style={{ margin: 0 }}>
+              {copy.nabidky.claim}
+            </h1>
+            <p className="serp-helper">{copy.nabidky.helper}</p>
+          </div>
         </div>
 
         {!catalog.ok ? (

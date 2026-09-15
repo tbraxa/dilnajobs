@@ -902,6 +902,12 @@ a.job-row:hover,
   gap: 16px;
   margin-bottom: 18px;
 }
+.serp-helper {
+  margin: 6px 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  max-width: 46ch;
+}
 .serp-results { padding-top: 18px; }
 .serp-filters { position: relative; }
 .serp-chrome {

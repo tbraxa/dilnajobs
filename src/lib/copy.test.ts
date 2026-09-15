@@ -46,6 +46,24 @@ describe("COPY-PACK v1.3", () => {
     expect(JSON.stringify(copy)).not.toContain("dilnajobs.cz");
     expect(JSON.stringify(copy)).not.toContain("OpenJobs");
     expect(copy.footer).toBe("© 2026 FairJobs · nabídky práce");
+    expect(copy.footer).not.toContain("fairjobs.cz");
+    expect(copy.nabidky.emptyNoResultsTitle).toBe("Žádné nabídky pro tyto filtry");
+    expect(copy.nabidky.emptyNoResultsBody).toBe(
+      "Upravte pozici, místo nebo mzdu a zkuste to znovu.",
+    );
+    expect(copy.nabidky.filtersCategory).toBe("Obor");
+    expect(copy.nabidky.filtersPlace).toBe("Místo");
+    expect(copy.nabidky.helper).toBe("Upravte filtry podle pozice, místa a mzdy.");
+    expect(copy.nabidky.helper.toLocaleLowerCase("cs")).toContain("pozice");
+    expect(copy.nabidky.helper.toLocaleLowerCase("cs")).not.toContain("kategorie");
+    expect(copy.nabidky.ctaEditFilters).toBe("Upravit filtry");
+    expect(readFileSync("src/components/job-filters.tsx", "utf8")).not.toMatch(/Kategorie|Lokalita/);
+    expect(readFileSync("src/components/job-filters.tsx", "utf8")).toContain("ctaEditFilters");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("copy.footer");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).not.toContain("fairjobs.cz");
+    expect(readFileSync("src/app/nabidky/page.tsx", "utf8")).toContain("copy.nabidky.helper");
+    expect(readFileSync("src/app/nabidky/page.tsx", "utf8")).toContain("emptyNoResultsTitle");
+    expect(readFileSync("src/app/nabidky/page.tsx", "utf8")).toContain("emptyNoResultsBody");
     expect(copy.home.metaTitle).toBe("FairJobs · nabídky práce");
     expect(copy.employers.sectionWhy).toBe("Proč FairJobs");
     expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("Fair<span>Jobs</span>");
