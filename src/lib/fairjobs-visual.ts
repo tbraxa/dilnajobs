@@ -46,3 +46,10 @@ export function cleanUiText(value: string | null | undefined): string {
     .replace(/\s{2,}/g, " ")
     .trim();
 }
+
+export function cleanUiBlock(value: string | null | undefined): string {
+  return (value ?? "")
+    .replace(/[—–]/g, " ")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
+}

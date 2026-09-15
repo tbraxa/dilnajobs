@@ -66,6 +66,10 @@ export const searchSchema = z.object({
     .enum(["cnc", "welder", "setter", "electrician", "maintenance", "locksmith", "operator", "other"])
     .optional(),
   city: z.string().trim().max(80).optional(),
+  salaryMin: z.coerce.number().int().min(0).max(500000).optional(),
+  workMode: z.enum(["onsite", "hybrid", "remote"]).optional(),
+  employmentType: z.enum(["full_time", "part_time", "shift"]).optional(),
+  page: z.coerce.number().int().min(1).max(100).optional(),
   sort: z.enum(["newest", "salary"]).default("newest"),
 });
 

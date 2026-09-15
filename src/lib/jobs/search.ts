@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, desc, eq, gte, ilike, or, sql as dsql } from "drizzle-orm";
+import { and, count, desc, eq, gte, ilike, not, or, sql as dsql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { employers, jobs } from "@/db/schema";
 import { isMissingRelationError, type CatalogResult } from "@/lib/catalog-error";
@@ -10,7 +10,9 @@ import { parseSearch, type SearchQuery } from "@/lib/search-params";
 export type { SearchQuery };
 export { parseSearch };
 
-export async function searchJobs(query: SearchQuery) {
+export const JOBS_PAGE_SIZE = 10;
+
+function searchFilters(query: SearchQuery) {
   const filters = [
     eq(jobs.status, "published"),
     or(dsql`${jobs.expiresAt} is null`, gte(jobs.expiresAt, new Date()))!,
@@ -20,44 +22,93 @@ export async function searchJobs(query: SearchQuery) {
     filters.push(eq(jobs.profession, query.profession));
   }
   if (query.city) {
-    filters.push(ilike(jobs.city, query.city));
+    const place = `%${query.city}%`;
+    filters.push(or(ilike(jobs.city, place), ilike(jobs.region, place))!);
   }
   if (query.q) {
     const like = `%${query.q}%`;
     filters.push(
-      or(ilike(jobs.title, like), ilike(jobs.description, like), ilike(jobs.city, like))!,
+      or(
+        ilike(jobs.title, like),
+        ilike(jobs.description, like),
+        ilike(jobs.city, like),
+        ilike(jobs.region, like),
+        ilike(employers.companyName, like),
+      )!,
     );
   }
 
+  if (query.salaryMin) {
+    filters.push(or(gte(jobs.salaryMin, query.salaryMin), gte(jobs.salaryMax, query.salaryMin))!);
+  }
+
+  if (query.employmentType) {
+    filters.push(eq(jobs.employmentType, query.employmentType));
+  }
+
+  const remoteText = or(
+    ilike(jobs.title, "%na dálku%"),
+    ilike(jobs.description, "%na dálku%"),
+    ilike(jobs.description, "%remote%"),
+  )!;
+  const hybridText = or(
+    ilike(jobs.title, "%hybrid%"),
+    ilike(jobs.description, "%hybrid%"),
+  )!;
+
+  if (query.workMode === "remote") filters.push(remoteText);
+  if (query.workMode === "hybrid") filters.push(hybridText);
+  if (query.workMode === "onsite") filters.push(not(or(remoteText, hybridText)!));
+
+  return filters;
+}
+
+const jobCardSelect = {
+  id: jobs.id,
+  slug: jobs.slug,
+  title: jobs.title,
+  profession: jobs.profession,
+  city: jobs.city,
+  region: jobs.region,
+  employmentType: jobs.employmentType,
+  shiftNote: jobs.shiftNote,
+  salaryMin: jobs.salaryMin,
+  salaryMax: jobs.salaryMax,
+  salaryNote: jobs.salaryNote,
+  isTop: jobs.isTop,
+  publishedAt: jobs.publishedAt,
+  expiresAt: jobs.expiresAt,
+  companyName: employers.companyName,
+  companyCity: employers.city,
+  verificationStatus: employers.verificationStatus,
+  isAgency: employers.isAgency,
+};
+
+export async function searchJobs(query: SearchQuery) {
+  const filters = searchFilters(query);
   const order =
     query.sort === "salary"
       ? [desc(jobs.salaryMax), desc(jobs.isTop), desc(jobs.publishedAt)]
       : [desc(jobs.isTop), desc(jobs.publishedAt)];
+  const page = Math.max(1, query.page ?? 1);
 
   return db
-    .select({
-      id: jobs.id,
-      slug: jobs.slug,
-      title: jobs.title,
-      profession: jobs.profession,
-      city: jobs.city,
-      region: jobs.region,
-      employmentType: jobs.employmentType,
-      shiftNote: jobs.shiftNote,
-      salaryMin: jobs.salaryMin,
-      salaryMax: jobs.salaryMax,
-      salaryNote: jobs.salaryNote,
-      isTop: jobs.isTop,
-      publishedAt: jobs.publishedAt,
-      expiresAt: jobs.expiresAt,
-      companyName: employers.companyName,
-      companyCity: employers.city,
-    })
+    .select(jobCardSelect)
     .from(jobs)
     .innerJoin(employers, eq(jobs.employerId, employers.id))
     .where(and(...filters))
     .orderBy(...order)
-    .limit(100);
+    .limit(JOBS_PAGE_SIZE)
+    .offset((page - 1) * JOBS_PAGE_SIZE);
+}
+
+export async function countSearchJobs(query: SearchQuery) {
+  const [row] = await db
+    .select({ value: count() })
+    .from(jobs)
+    .innerJoin(employers, eq(jobs.employerId, employers.id))
+    .where(and(...searchFilters(query)));
+  return row?.value ?? 0;
 }
 
 export async function getPublishedJobBySlug(slug: string) {
@@ -67,6 +118,8 @@ export async function getPublishedJobBySlug(slug: string) {
       companyName: employers.companyName,
       companyCity: employers.city,
       ico: employers.ico,
+      verificationStatus: employers.verificationStatus,
+      isAgency: employers.isAgency,
     })
     .from(jobs)
     .innerJoin(employers, eq(jobs.employerId, employers.id))
@@ -82,7 +135,13 @@ export async function getPublishedJobBySlug(slug: string) {
 }
 
 export async function featuredJobs(limit = 6) {
-  return searchJobs({ sort: "newest" }).then((rows) => rows.slice(0, limit));
+  return db
+    .select(jobCardSelect)
+    .from(jobs)
+    .innerJoin(employers, eq(jobs.employerId, employers.id))
+    .where(and(...searchFilters({ sort: "newest" })))
+    .orderBy(desc(jobs.isTop), desc(jobs.publishedAt))
+    .limit(limit);
 }
 
 async function wrapCatalog<T>(fn: () => Promise<T>): Promise<CatalogResult<T>> {
@@ -100,6 +159,10 @@ async function wrapCatalog<T>(fn: () => Promise<T>): Promise<CatalogResult<T>> {
 
 export function loadSearchJobs(query: SearchQuery) {
   return wrapCatalog(() => searchJobs(query));
+}
+
+export function loadSearchJobCount(query: SearchQuery) {
+  return wrapCatalog(() => countSearchJobs(query));
 }
 
 export function loadFeaturedJobs(limit = 6) {

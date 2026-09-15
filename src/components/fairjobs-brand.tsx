@@ -15,9 +15,9 @@ export function FairJobsMark({
       <rect width="44" height="44" rx="12" fill="#1649D8" />
       <path
         d="M12 31V12h15.5v5H18v3.3h8.4v4.8H18V31z"
-        fill="#FFF9F0"
+        fill="#FFFFFF"
       />
-      <circle cx="32.5" cy="31.5" r="4.5" fill="#FF6B4A" />
+      <circle cx="32.5" cy="31.5" r="4.5" fill="#FFD84D" />
     </svg>
   );
 }

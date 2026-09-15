@@ -5,7 +5,7 @@ export const PACKAGES = [
     priceCzkExVat: 0,
     period: "year" as const,
     adLimit: 10,
-    blurb: "10 inzerátů za rok. Ověříte, že sem chodí lidé z dílny — ne z agentury.",
+    blurb: "10 inzerátů za rok. Ověříte, že sem chodí správní lidé, ne agentury.",
   },
   {
     code: "single",
@@ -43,6 +43,30 @@ export const PACKAGES = [
   },
 ] as const;
 
+export const PUBLIC_PLANS = [
+  {
+    code: "start",
+    name: "Start",
+    priceCzk: 2490,
+    note: "Pro jeden rychlý nábor",
+    features: ["1 nabídka na 30 dní", "Firemní profil a logo", "Odpovědi přímo do přehledu"],
+  },
+  {
+    code: "standard",
+    name: "Standard",
+    priceCzk: 4990,
+    note: "Nejčastější volba",
+    features: ["1 nabídka na 45 dní", "TOP pozice na 7 dní", "Doporučení vhodným uchazečům"],
+  },
+  {
+    code: "plus",
+    name: "Plus",
+    priceCzk: 8990,
+    note: "Pro více otevřených rolí",
+    features: ["3 nabídky na 45 dní", "TOP pozice na 14 dní", "Prioritní kontrola a podpora"],
+  },
+] as const;
+
 export function formatCzk(amount: number): string {
   return `${new Intl.NumberFormat("cs-CZ").format(amount)} Kč`;
 }
@@ -53,7 +77,7 @@ export function formatSalary(min?: number | null, max?: number | null, note?: st
     if (min === max) return `${formatCzk(min)} / měsíc`;
     const minFmt = new Intl.NumberFormat("cs-CZ").format(min);
     const maxFmt = new Intl.NumberFormat("cs-CZ").format(max);
-    return `${minFmt}–${maxFmt} Kč / měsíc`;
+    return `${minFmt} až ${maxFmt} Kč / měsíc`;
   }
   if (min) return `od ${formatCzk(min)} / měsíc`;
   if (max) return `do ${formatCzk(max)} / měsíc`;
