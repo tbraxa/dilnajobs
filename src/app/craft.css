@@ -907,10 +907,10 @@ a.job-row:hover,
 .serp-chrome {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
   width: var(--wrap);
   margin: 0 auto;
-  padding: 14px 0 12px;
+  padding: 8px 0 0;
   min-height: 0;
 }
 .serp-row-search {
@@ -922,11 +922,15 @@ a.job-row:hover,
 .serp-row-search form { min-width: 0; }
 .serp-row-search .search-shell {
   height: auto;
-  min-height: 56px;
+  min-height: 0;
+  padding: 6px 6px 6px 14px;
 }
+.serp-row-search .search-shell .field { padding: 0 12px 0 0; gap: 0; }
+.serp-row-search .search-shell input { height: 26px; }
+.serp-row-search .search-shell .btn { height: 40px; padding: 0 16px; }
 .serp-filter-btn {
   height: auto;
-  min-height: 56px;
+  min-height: 52px;
   padding: 0 16px;
   flex: 0 0 auto;
   gap: 8px;
@@ -965,8 +969,8 @@ a.job-row:hover,
   overflow-x: auto;
   overflow-y: hidden;
   border-top: 1px solid var(--border);
-  padding-top: 10px;
-  padding-bottom: 2px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   scrollbar-width: thin;
 }
 .serp-row-chips .filter-chip { flex: 0 0 auto; }
