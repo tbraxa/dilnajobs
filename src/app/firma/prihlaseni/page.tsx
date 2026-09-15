@@ -10,8 +10,7 @@ export default function LoginPage() {
         <p className="label">Firmy</p>
         <h1 className="display mt-2 text-3xl font-semibold">Přihlášení e-mailem</h1>
         <p className="mt-3 text-sm text-steel">
-          Odkaz platí 15 minut. Heslo neposíláme — a nechceme ho znát. V lokálním vývoji odkaz vypíšeme do konzole
-          serveru.
+          Odkaz platí 15 minut. Heslo neposíláme — a nechceme ho znát.
         </p>
         <div className="mt-6 border border-line bg-paper p-5">
           <LoginForm />
@@ -21,8 +20,7 @@ export default function LoginPage() {
         <p className="label">Nová firma</p>
         <h1 className="display mt-2 text-3xl font-semibold">Registrace s IČO</h1>
         <p className="mt-3 text-sm text-steel">
-          Jen přímí zaměstnavatelé. Agentury práce v podmínkách zakazujeme. IČO kontrolujeme checksumem; ARES je v1
-          stub.
+          Jen přímí zaměstnavatelé. Agentury práce v podmínkách zakazujeme. IČO kontrolujeme.
         </p>
         <div className="mt-6 border border-line bg-paper p-5">
           <RegisterForm />

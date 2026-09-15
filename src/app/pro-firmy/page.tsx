@@ -33,8 +33,7 @@ export default function ProFirmyPage() {
         ))}
       </div>
       <p className="mt-6 text-sm text-steel">
-        Platba kartou jde přes Stripe Checkout, až bude <code>STRIPE_SECRET_KEY</code> v prostředí. Do té doby je
-        objednávka evidovaná jako stub — ozveme se.
+        Ceny bez DPH. Orientace pro firmy. Platbu na FairJobs domluvíte po registraci.
       </p>
     </main>
   );

@@ -19,6 +19,13 @@ export async function requestLinkAction(_prev: AuthState | null, formData: FormD
     return { ok: false, error: parsed.error.issues[0]?.message ?? "Zkontrolujte údaje." };
   }
 
+  if (intent === "register") {
+    const consent = formData.get("consentGdpr") === "on" || formData.get("consentGdpr") === "true";
+    if (!consent) {
+      return { ok: false, error: "Bez souhlasu se zpracováním údajů účet nezaložíme." };
+    }
+  }
+
   const result = await requestMagicLink({
     email: parsed.data.email,
     intent: parsed.data.intent,
@@ -33,8 +40,8 @@ export async function requestLinkAction(_prev: AuthState | null, formData: FormD
     ok: true,
     message:
       intent === "register"
-        ? "Když je IČO v pořádku, poslali jsme odkaz na e-mail. V dev režimu ho najdete v konzoli serveru."
-        : "Když u nás e-mail evidujeme, odkaz je na cestě. V dev režimu ho vypíšeme do konzole.",
+        ? "Když je IČO v pořádku, poslali jsme odkaz na e-mail."
+        : "Když u nás e-mail evidujeme, odkaz je na cestě.",
   };
 }
 

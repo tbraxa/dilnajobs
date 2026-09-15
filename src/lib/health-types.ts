@@ -32,7 +32,7 @@ export const STATUS_LABELS: Record<CheckStatus, string> = {
   ok: "v pořádku",
   degraded: "omezené",
   down: "mimo provoz",
-  unconfigured: "stub / nenastaveno",
+  unconfigured: "nenastaveno",
 };
 
 /** Overall: down only when Postgres or auth is down. Optional failures → degraded. */

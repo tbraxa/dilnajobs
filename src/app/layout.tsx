@@ -4,6 +4,7 @@ import { Archivo, IBM_Plex_Sans } from "next/font/google";
 import { headers } from "next/headers";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
+import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -22,11 +23,10 @@ const ibm = IBM_Plex_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(resolveAppUrl()),
   title: {
-    default: "DílnaJobs — práce ve výrobě, napřímo",
-    template: "%s · DílnaJobs",
+    default: BRAND_TITLE,
+    template: BRAND_TITLE_TEMPLATE,
   },
-  description:
-    "CNC, svářeči, seřizovači, elektrikáři, údržba. Nabídky od výrobních firem. Bez agentur, bez povinného účtu.",
+  description: BRAND_DESCRIPTION,
   robots: { index: true, follow: true },
 };
 

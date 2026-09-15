@@ -114,5 +114,5 @@ export async function startCheckoutAction(packageCode: string) {
   });
   if (result.kind === "redirect") redirect(result.url);
   if (result.kind === "activated") redirect("/firma?objednavka=aktivovano");
-  redirect("/firma?objednavka=stub");
+  redirect("/firma?objednavka=evidovano");
 }

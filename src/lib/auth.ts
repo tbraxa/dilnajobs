@@ -136,7 +136,7 @@ export async function requestMagicLink(input: {
     const url = `${resolveAppUrl()}/firma/prihlaseni/overit?token=${encodeURIComponent(token)}`;
     await sendEmail({
       to: email,
-      subject: "Přihlášení na DílnaJobs",
+      subject: "Přihlášení na FairJobs",
       text: `Odkaz platí ${env.MAGIC_LINK_MINUTES} minut a jde použít jen jednou.\n\n${url}\n\nPokud jste o něj nežádali, ignorujte ho.`,
     });
 

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { resolveAppUrl } from "./app-url";
+import { DEFAULT_EMAIL_FROM } from "./brand";
 
 /**
  * Vercel stores unset dashboard keys as `""`. Zod’s `z.coerce.number()` then
@@ -99,7 +100,7 @@ function makeSchema(softBuild: boolean) {
     STRIPE_WEBHOOK_SECRET: optionalString,
     EMAIL_FROM: z.preprocess(
       emptyToUndefined,
-      z.string().min(1).default("DílnaJobs <noreply@dilnajobs.cz>"),
+      z.string().min(1).default(DEFAULT_EMAIL_FROM),
     ),
     RESEND_API_KEY: optionalString,
     SMTP_URL: optionalUrl,

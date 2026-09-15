@@ -18,7 +18,7 @@ export default function TosPage() {
       </p>
       <h2 className="display mt-8 text-xl font-semibold">Odpovědnost</h2>
       <p className="mt-2">
-        DílnaJobs zprostředkuje kontakt. Pracovní smlouva je mezi firmou a uchazečem. Nejsme agentura podle zákona o
+        FairJobs zprostředkuje kontakt. Pracovní smlouva je mezi firmou a uchazečem. Nejsme agentura podle zákona o
         zaměstnanosti.
       </p>
     </main>

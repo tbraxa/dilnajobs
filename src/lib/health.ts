@@ -118,7 +118,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
       name: "object_storage",
       status: write.ok ? "ok" : "down",
       latencyMs: write.latencyMs,
-      detail: sanitizeDetail(write.ok ? `Lokální stub ${LOCAL_CV_DIR}` : write.error),
+      detail: sanitizeDetail(write.ok ? `Lokální úložiště ${LOCAL_CV_DIR}` : write.error),
       checkedAt,
     });
   }
@@ -129,8 +129,8 @@ export async function runDeepHealth(): Promise<HealthReport> {
     : mail.provider === "resend"
       ? "Resend API"
       : mail.provider === "smtp"
-        ? "SMTP_URL"
-        : "Stub: výpis do konzole. Nastavte RESEND_API_KEY (nebo SMTP_URL).";
+        ? "SMTP"
+        : "Pošta není nastavená. Odkazy jdou jen do provozního logu.";
   checks.push({
     name: "mailer",
     status: mail.lastError ? "degraded" : mail.configured ? "ok" : "unconfigured",
@@ -139,13 +139,13 @@ export async function runDeepHealth(): Promise<HealthReport> {
   });
 
   let paymentsStatus: CheckStatus = "unconfigured";
-  let paymentsDetail = "Stub checkout. Nastavte STRIPE_SECRET_KEY a STRIPE_WEBHOOK_SECRET.";
+  let paymentsDetail = "Checkout není zapnutý. Objednávky evidujeme a ozveme se firmě.";
   if (paymentsEnabled() && stripeWebhookConfigured()) {
     paymentsStatus = "ok";
-    paymentsDetail = "Stripe Checkout + webhook secret";
+    paymentsDetail = "Checkout i potvrzení plateb jsou nastavené.";
   } else if (paymentsEnabled()) {
     paymentsStatus = "degraded";
-    paymentsDetail = "STRIPE_SECRET_KEY je nastavené, chybí STRIPE_WEBHOOK_SECRET";
+    paymentsDetail = "Checkout je zapnutý, chybí potvrzení plateb (webhook).";
   }
   checks.push({
     name: "payments",
@@ -202,7 +202,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
   const auth = await timed(async () => {
     await sql`select 1 from magic_tokens limit 1`;
     await sql`select 1 from employer_user_by_email('health-probe@invalid.test')`;
-    if (env.SESSION_SECRET.length < 16) throw new Error("SESSION_SECRET too short");
+    if (env.SESSION_SECRET.length < 16) throw new Error("session pepper too short");
   });
   checks.push({
     name: "auth",
@@ -225,7 +225,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
   checks.push({
     name: "sentry",
     status: env.SENTRY_DSN ? "ok" : "unconfigured",
-    detail: env.SENTRY_DSN ? "DSN nastavené" : "SENTRY_DSN chybí — výjimky jdou do strukturovaných logů",
+    detail: env.SENTRY_DSN ? "Sledování výjimek zapnuté" : "Sledování výjimek není nastavené — chyby jdou do strukturovaných logů",
     checkedAt,
   });
 
