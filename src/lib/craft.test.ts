@@ -74,13 +74,11 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(PHOTOS.warehouse.id).toBe("photo-1586528116311-ad8dd3c8310d");
     expect(PHOTOS.workshop.id).toBe("photo-1504917595217-d4dc5ebe6122");
     expect(PHOTOS.teamMeeting.id).toBe("photo-1522071820081-009f0129c71c");
-    expect(PHOTOS.officeWide.id).toBe("photo-1497366811353-687074365625");
+    expect(PHOTOS.officeWide.id).toBe("photo-1497366754035-f200968a6e72");
     expect(PHOTOS.officeWide.src).toContain(UNSPLASH_HOST);
-    expect(PHOTOS.cityStreet.id).toBe("photo-1504917595217-d4dc5ebe6122");
     const mosaic = readFileSync("src/components/hero-mosaic.tsx", "utf8");
     expect(mosaic).toContain("PHOTOS.workshop.src");
     expect(mosaic).toContain("PHOTOS.teamPortrait.src");
-    expect(mosaic).not.toContain("PHOTOS.cityStreet");
     expect(mosaic).not.toContain("photo-1467260200982-5ba258642c12");
     expect(readFileSync("src/components/craft-marks.tsx", "utf8")).toContain("width={20}");
     const card = readFileSync("src/components/job-card.tsx", "utf8");
@@ -130,9 +128,13 @@ describe("Enterprise Clean Craft tokens", () => {
     const filters = readFileSync("src/components/job-filters.tsx", "utf8");
     const css = readFileSync("src/app/craft.css", "utf8");
     const card = readFileSync("src/components/job-card.tsx", "utf8");
+    const chrome = readFileSync("src/components/site-chrome.tsx", "utf8");
     expect(page).not.toContain("filters-sticky");
     expect(page).toContain("JobFilters");
     expect(page).toContain("emptyNoResultsTitle");
+    expect(page).toContain("Frontend vývojář");
+    expect(page).toContain("Northbyte s.r.o.");
+    expect(page.indexOf("<JobFilters")).toBeLessThan(page.indexOf('<main className="serp-canvas"'));
     expect(filters).toContain("filter-chrome");
     expect(filters).toContain("serp-row-search");
     expect(filters).toContain("serp-row-chips");
@@ -141,7 +143,15 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(filters).toContain("serp-field");
     expect(filters).toContain("drawer-root");
     expect(filters).toContain("active-chips");
+    expect(filters).toContain('id="filterChrome"');
+    expect(filters).toContain('id="activeChips"');
+    expect(filters).toContain('id="filterDrawer"');
+    expect(filters).not.toContain("serp-filters-toggle");
+    expect(filters).not.toContain("FILTERS_ID");
+    expect(filters).not.toContain("filter-search");
     expect(card).toContain("job-row-media-inner");
+    expect(card).not.toContain('job-card-media-inner ${media}');
+    expect(card).not.toContain('job-row-media-inner ${media}');
 
     const searchStart = filters.indexOf("filter-bar");
     const chipStart = filters.indexOf("<ChipRail");
@@ -155,10 +165,16 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).not.toMatch(/\.serp-row-chips\s*\{[^}]*position:\s*absolute/);
     expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
     expect(css).toMatch(/\.serp-filters\s*\{[^}]*position:\s*sticky/);
+    expect(css).toMatch(/@media \(max-width: 720px\)[\s\S]*\.search-shell\s*\{\s*flex-direction:\s*column/);
+    expect(css).toContain("@media (max-width: 960px)");
+    expect(css).not.toContain("@media (max-width: 900px)");
+    expect(css).not.toMatch(/\.serp-row-search \.search-shell\s*\{[^}]*grid-template-columns/);
+    expect(css).toMatch(/\.job-card-media-inner\s*\{[^}]*background:\s*transparent/);
     expect(css).toContain(".filter-chrome");
-    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("copy.nav.login");
-    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).not.toContain("ctaPost");
-    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).not.toContain("nav-cta-fill");
+    expect(chrome).toContain("copy.nav.login");
+    expect(chrome).not.toContain("ctaPost");
+    expect(chrome).not.toContain("nav-cta-fill");
+    expect(chrome).not.toContain("copy.nav.personalData");
   });
 
   it("prints pack published labels", () => {

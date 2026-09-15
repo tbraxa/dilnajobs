@@ -7,12 +7,32 @@ import { contractLabel, copy, workModeLabel } from "@/lib/copy";
 import { CompanyMark, VerifiedBadge } from "./craft-marks";
 
 type JobRow = Awaited<ReturnType<typeof searchJobs>>[number];
+export type JobCardData = Pick<
+  JobRow,
+  | "id"
+  | "slug"
+  | "title"
+  | "profession"
+  | "category"
+  | "city"
+  | "employmentType"
+  | "contractType"
+  | "workMode"
+  | "isAgency"
+  | "salaryMin"
+  | "salaryMax"
+  | "salaryNote"
+  | "salaryType"
+  | "publishedAt"
+  | "companyName"
+  | "verificationStatus"
+>;
 
-function jobContractLabel(job: JobRow) {
+function jobContractLabel(job: JobCardData) {
   return contractLabel(job.contractType || job.employmentType);
 }
 
-function JobIdentity({ job }: { job: JobRow }) {
+function JobIdentity({ job }: { job: JobCardData }) {
   const verified = job.verificationStatus === "verified";
   return (
     <div className="job-company">
@@ -23,7 +43,7 @@ function JobIdentity({ job }: { job: JobRow }) {
   );
 }
 
-function JobMeta({ job }: { job: JobRow }) {
+function JobMeta({ job }: { job: JobCardData }) {
   const contract = jobContractLabel(job);
   const mode = workModeLabel(job.workMode);
   return (
@@ -35,21 +55,20 @@ function JobMeta({ job }: { job: JobRow }) {
   );
 }
 
-export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" | "h3" }) {
+export function JobCard({ job, heading = "h3" }: { job: JobCardData; heading?: "h2" | "h3" }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const media = jobMediaClass(category?.db ?? job.category, job.profession);
   const TitleTag = heading;
   return (
     <Link className="job-card" href={`/nabidka/${job.slug}`}>
       <div className={`job-card-media ${media}`} aria-hidden="true">
-        <div className={`job-card-media-inner ${media}`} />
+        <div className="job-card-media-inner">
+          {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
+        </div>
         <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
       </div>
       <div className="job-card-body">
-        <TitleTag className="job-title">
-          {job.title}
-          {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
-        </TitleTag>
+        <TitleTag className="job-title">{job.title}</TitleTag>
         <JobIdentity job={job} />
         <JobMeta job={job} />
         <div className="job-salary">{displayJobSalary(job)}</div>
@@ -59,14 +78,14 @@ export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" |
   );
 }
 
-export function JobRowCard({ job }: { job: JobRow }) {
+export function JobRowCard({ job }: { job: JobCardData }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const media = jobMediaClass(category?.db ?? job.category, job.profession);
   return (
     <Link className="job-row" href={`/nabidka/${job.slug}`}>
       <div className="job-row-inner">
         <div className={`job-row-media ${media}`} aria-hidden="true">
-          <div className={`job-row-media-inner ${media}`} />
+          <div className="job-row-media-inner" />
           <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
         </div>
         <div>

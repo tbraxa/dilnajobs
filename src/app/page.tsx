@@ -39,7 +39,7 @@ export default async function HomePage() {
               <h2 className="h2" id="cats">
                 {copy.home.sectionCats}
               </h2>
-              <p className="meta" style={{ margin: "6px 0 0" }}>
+              <p className="meta section-helper">
                 {copy.home.sectionCatsHelper}
               </p>
             </div>
@@ -55,7 +55,7 @@ export default async function HomePage() {
               <h2 className="h2" id="latest">
                 {copy.home.sectionLatest}
               </h2>
-              <p className="meta" style={{ margin: "6px 0 0" }}>
+              <p className="meta section-helper">
                 {copy.home.sectionLatestHelper}
               </p>
             </div>

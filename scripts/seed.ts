@@ -23,6 +23,7 @@ const DEMO = {
   logi: "44444444-4444-4444-8444-444444444444",
   soft: "55555555-5555-4555-8555-555555555555",
   pending: "66666666-6666-4666-8666-666666666666",
+  north: "77777777-7777-4777-8777-777777777777",
 } as const;
 
 async function main() {
@@ -55,6 +56,7 @@ async function main() {
   const icoLogi = makeValidIco("4455667");
   const icoSoft = makeValidIco("2708244");
   const icoPending = makeValidIco("5566778");
+  const icoNorth = makeValidIco("2789012");
 
   await db.insert(employers).values([
     {
@@ -129,6 +131,18 @@ async function main() {
       planCode: "trial",
       adsPostedYear: 1,
     },
+    {
+      id: DEMO.north,
+      ico: icoNorth,
+      companyName: "Northbyte s.r.o.",
+      displayName: "Northbyte s.r.o.",
+      legalName: "Northbyte s.r.o.",
+      city: "Praha",
+      address: { city: "Praha", region: "Hlavní město Praha" },
+      verificationStatus: "verified",
+      planCode: "standard",
+      adsPostedYear: 1,
+    },
   ]);
 
   await db.insert(employerUsers).values([
@@ -138,6 +152,7 @@ async function main() {
     { employerId: DEMO.logi, email: "dispecink@logitrans.test", name: "Martin Král", role: "owner" },
     { employerId: DEMO.soft, email: "jobs@softforge.test", name: "Lucie Benešová", role: "owner" },
     { employerId: DEMO.pending, email: "info@cekajici.test", name: "Hana Malá", role: "owner" },
+    { employerId: DEMO.north, email: "jobs@northbyte.test", name: "Nina Procházková", role: "owner" },
   ]);
 
   const seedJobs = [
@@ -218,22 +233,22 @@ async function main() {
       benefits: "Služební telefon, příplatek za víkend.",
     },
     {
-      employerId: DEMO.soft,
+      employerId: DEMO.north,
       slug: "vyvojar-praha-demo",
-      title: "Vývojář TypeScript",
+      title: "Frontend vývojář",
       profession: "it",
       category: "it",
       city: "Praha",
       region: "Hlavní město Praha",
       employmentType: "full_time",
       contractType: "hpp",
-      salaryMin: 80000,
-      salaryMax: 110000,
+      salaryMin: 70000,
+      salaryMax: 95000,
       salaryType: "monthly",
-      workMode: "remote",
-      description: "Next.js a Postgres. Produkt pro české firmy, ne outsourcing na tři kontinenty.",
-      requirements: "TypeScript v produkci.\nSQL bez ORM-only myšlení.\nČeština nebo slovenština.",
-      benefits: "Hybrid Praha, notebook, vzdělávání.",
+      workMode: "hybrid",
+      description: "React a TypeScript pro produkt, který používají české firmy každý den.",
+      requirements: "TypeScript v produkci.\nCit pro přístupné rozhraní.\nČeština nebo slovenština.",
+      benefits: "Hybridní práce v Praze, notebook a rozpočet na vzdělávání.",
     },
     {
       employerId: DEMO.ucto,
@@ -283,7 +298,7 @@ async function main() {
       salaryMin: 50000,
       salaryMax: 80000,
       salaryType: "monthly",
-      workMode: "hybrid",
+      workMode: "onsite",
       description: "Noví klienti v Praze a Středočeském kraji. Software pro firmy, žádný telco džbán.",
       requirements: "B2B prodej.\nŘidičák B.\nČeština.",
       benefits: "Provize navíc k základu, auto.",
@@ -402,9 +417,9 @@ async function main() {
     },
   ]);
 
-  console.log(`Seeded ${inserted.length} published jobs + 1 draft, 6 employers (all-profession demo).`);
+  console.log(`Seeded ${inserted.length} published jobs + 1 draft, 7 employers (all-profession demo).`);
   console.log("Dev login firmy: novak@kovovyroba-novak.test (magic link v konzoli serveru)");
-  console.log("Další demo: hr@ucetni-praha.test, jobs@softforge.test, dispecink@logitrans.test");
+  console.log("Další demo: hr@ucetni-praha.test, jobs@northbyte.test, jobs@softforge.test, dispecink@logitrans.test");
   if (envFlag("DEMO_SEED")) console.log("DEMO_SEED=true");
   await sql.end({ timeout: 5 });
 }

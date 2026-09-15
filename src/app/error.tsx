@@ -20,7 +20,7 @@ export default function ErrorPage({
       <div className="wrap">
         <h1 className="h1">{copy.nabidky.emptyErrorTitle}</h1>
         <p className="hint">{copy.nabidky.emptyErrorBody}</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 24 }}>
+        <div className="error-actions">
           <Button type="button" onClick={() => reset()}>
             {copy.nabidky.emptyErrorCta}
           </Button>

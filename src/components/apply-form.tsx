@@ -55,9 +55,7 @@ export function ApplyForm({
     return (
       <div>
         <h3 className="h3">{copy.detail.successTitle}</h3>
-        <p className="hint" style={{ margin: 0 }}>
-          {copy.detail.successBody}
-        </p>
+        <p className="hint hint-flush">{copy.detail.successBody}</p>
       </div>
     );
   }
