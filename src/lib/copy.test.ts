@@ -58,7 +58,15 @@ describe("COPY-PACK v1.3", () => {
     expect(copy.nabidky.helper.toLocaleLowerCase("cs")).not.toContain("kategorie");
     expect(copy.nabidky.ctaEditFilters).toBe("Upravit filtry");
     expect(copy.home.helper).toBe("Pozice, místo, mzda. Všechny obory.");
+    expect(copy.home.labelQuery).toBe("Pozice nebo klíčové slovo");
+    expect(copy.nabidky.labelQuery).toBe("Pozice nebo klíčové slovo");
+    expect(copy.employers.claim).toBe("Inzerce pro firmy");
     expect(copy.employers.helper).toBe("Jasná mzda. Odpovědi rovnou vám.");
+    expect(copy.detail.sectionAbout).toBe("O pozici");
+    expect(copy.detail.sectionOffer).toBe("Co nabízíme");
+    expect(copy.detail.ctaSubmit).toBe("Odeslat firmě");
+    expect(copy.employers.pricingPlusItems).toContain("Priorita ve výpisu");
+    expect(JSON.stringify(copy)).not.toContain("Topování");
     expect(readFileSync("src/components/job-filters.tsx", "utf8")).not.toMatch(/Kategorie|Lokalita/);
     expect(readFileSync("src/components/job-filters.tsx", "utf8")).toContain("ctaEditFilters");
     expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("copy.footer");

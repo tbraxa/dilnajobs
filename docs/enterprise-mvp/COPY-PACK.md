@@ -146,7 +146,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 |---|---|
 | meta_title | Pro firmy · FairJobs |
 | meta_description | Inzerujte nabídky práce na FairJobs. Odpovědi od uchazečů na jednom místě. |
-| claim | Inzerce nabídek práce |
+| claim | Inzerce pro firmy |
 | helper | Zveřejněte pozici. Uchazeči odpoví přímo vám. |
 | cta_primary | Založit účet firmy |
 | cta_secondary | Přihlásit se |
