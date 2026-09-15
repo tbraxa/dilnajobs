@@ -49,8 +49,15 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain(".facts-strip");
     expect(css).toContain(".apply-panel");
     expect(css).toContain(".sticky-apply");
+    expect(css).not.toContain(".filters-sticky");
+    expect(css).toContain(".serp-toolbar");
+    expect(css).toContain(".serp-sheet");
+    expect(css).toContain(".search-shell-compact");
+    expect(css).toMatch(/\.serp-toolbar\s*\{[^}]*position:\s*sticky/);
     expect(css).toMatch(/a\.job-row/);
     expect(css).toMatch(/\.job-row-inner\s*\{[^}]*grid-template-columns:\s*96px minmax\(0, 1fr\) auto/);
+    expect(css).toMatch(/\.job-row-media\s*\{[^}]*overflow:\s*visible/);
+    expect(css).toMatch(/\.job-row-media-inner\s*\{[^}]*overflow:\s*hidden/);
     expect(css).toMatch(/\.footer-inner\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto/);
     expect(css).toContain("0 12px 28px rgba(10, 10, 10, 0.10)");
     for (const token of FORBIDDEN) {
@@ -93,6 +100,19 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(copy.employers.pricingHelper).toBe(
       "Ceny bez DPH. Orientace pro firmy. Platbu domluvíte po registraci.",
     );
+  });
+
+  it("keeps /nabidky filters compact instead of a sticky half-screen panel", () => {
+    const page = readFileSync("src/app/nabidky/page.tsx", "utf8");
+    const filters = readFileSync("src/components/job-filters.tsx", "utf8");
+    const card = readFileSync("src/components/job-card.tsx", "utf8");
+    expect(page).not.toContain("filters-sticky");
+    expect(page).toContain("JobFilters");
+    expect(filters).toContain("serp-toolbar");
+    expect(filters).toContain("serp-sheet");
+    expect(filters).toContain("serp-chips");
+    expect(filters).toContain("compact");
+    expect(card).toContain("job-row-media-inner");
   });
 
   it("prints pack published labels", () => {

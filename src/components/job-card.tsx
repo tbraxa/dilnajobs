@@ -72,7 +72,8 @@ export function JobRowCard({ job }: { job: JobRow }) {
   return (
     <Link className="job-row" href={`/nabidka/${job.slug}`}>
       <div className="job-row-inner">
-        <div className={`job-row-media ${media}`} aria-hidden="true">
+        <div className="job-row-media" aria-hidden="true">
+          <div className={`job-row-media-inner ${media}`} />
           <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
         </div>
         <div>

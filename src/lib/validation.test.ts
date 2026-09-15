@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { applySchema } from "./validation";
-import { parseSearch } from "./search-params";
+import { facetCount, nabidkyHref, parseSearch } from "./search-params";
 
 describe("applySchema", () => {
   it("requires name, phone and GDPR consent", () => {
@@ -58,5 +58,32 @@ describe("parseSearch", () => {
 
   it("drops unknown profession instead of throwing", () => {
     expect(parseSearch({ profession: "astronaut" })).toEqual({ sort: "newest", page: 1 });
+  });
+});
+
+describe("nabidkyHref and facetCount", () => {
+  it("writes category, place, salary and mode to the query string", () => {
+    expect(
+      nabidkyHref(
+        { page: 1, sort: "newest" },
+        { category: "it", place: "Praha", salaryMin: 40000, workMode: "hybrid" },
+      ),
+    ).toBe("/nabidky?place=Praha&category=it&salaryMin=40000&mode=hybrid");
+  });
+
+  it("clears a facet when the patch is undefined", () => {
+    expect(
+      nabidkyHref(
+        { category: "it", place: "Brno", salaryMin: 40000, workMode: "remote", page: 1, sort: "newest" },
+        { salaryMin: undefined, page: 1 },
+      ),
+    ).toBe("/nabidky?place=Brno&category=it&mode=remote");
+  });
+
+  it("counts advanced facets and ignores query plus place", () => {
+    expect(facetCount({ q: "účetní", place: "Praha" })).toBe(0);
+    expect(facetCount({ category: "it", salaryMin: 40000, workMode: "hybrid", contract: "hpp" })).toBe(4);
+    expect(facetCount({ category: "manufacturing", profession: "manufacturing" })).toBe(1);
+    expect(facetCount({ category: "manufacturing", profession: "welder" })).toBe(2);
   });
 });

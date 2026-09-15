@@ -40,14 +40,25 @@ export const copy = {
     labelPlace: "Místo",
     ctaSearch: "Hledat",
     ctaShowFilters: "Zobrazit filtry",
+    ctaFilters: "Filtry",
+    ctaFiltersClose: "Zavřít",
+    ctaFiltersDone: "Hotovo",
     sectionResults: "Výsledky",
     filtersPlace: "Místo",
     filtersCategory: "Obor",
     filtersContract: "Úvazek",
     filtersSalary: "Mzda od",
+    filtersSalaryAny: "Bez minima",
     filtersSeniority: "Seniorita",
     filtersMode: "Režim",
     filtersAllCategories: "Všechny obory",
+    filtersActiveAria: "Aktivní filtry",
+    chipRemove: "Odebrat filtr",
+    filtersCount: (n: number) => {
+      if (n === 1) return "1 filtr";
+      if (n >= 2 && n <= 4) return `${n} filtry`;
+      return `${n} filtrů`;
+    },
     filterModeAll: "Vše",
     filterModeOnsite: "Na místě",
     filterModeHybrid: "Hybrid",

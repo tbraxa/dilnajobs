@@ -70,6 +70,17 @@ export function searchHasFilters(query: SearchQuery): boolean {
   );
 }
 
+/** Advanced facets shown on the Filtry control. Query and place live in the search bar. */
+export function facetCount(query: SearchQuery): number {
+  let n = 0;
+  if (query.category) n += 1;
+  if (query.profession && query.profession !== query.category) n += 1;
+  if (query.salaryMin != null) n += 1;
+  if (query.workMode) n += 1;
+  if (query.contract) n += 1;
+  return n;
+}
+
 export function nabidkyHref(query: SearchQuery, patch: Partial<SearchQuery> = {}): string {
   const next: SearchQuery = { ...query, ...patch };
   const params = new URLSearchParams();
