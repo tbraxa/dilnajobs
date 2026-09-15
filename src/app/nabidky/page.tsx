@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { JobCard } from "@/components/job-card";
-import { JobFilters } from "@/components/job-filters";
-import { CatalogUnavailable } from "@/components/catalog-unavailable";
-import { parseSearch, loadSearchJobs } from "@/lib/jobs/search";
+import Link from "next/link";
+import { JobResultRow } from "@/components/fairjobs-job-row";
+import { JobSearchPanel } from "@/components/job-search-panel";
+import {
+  JOBS_PAGE_SIZE,
+  loadSearchJobCount,
+  loadSearchJobs,
+  parseSearch,
+} from "@/lib/jobs/search";
+import { jobsHref, searchHasFilters } from "@/lib/search-params";
 
 export const metadata: Metadata = { title: "Nabídky práce" };
 export const dynamic = "force-dynamic";
@@ -14,32 +20,90 @@ export default async function NabidkyPage({
 }) {
   const params = await searchParams;
   const query = parseSearch(params);
-  const catalog = await loadSearchJobs(query);
+  const [catalog, countCatalog] = await Promise.all([
+    loadSearchJobs(query),
+    loadSearchJobCount(query),
+  ]);
   const jobs = catalog.ok ? catalog.rows : [];
+  const count = countCatalog.ok ? countCatalog.rows : jobs.length;
+  const currentPage = query.page ?? 1;
+  const pageCount = Math.max(1, Math.ceil(count / JOBS_PAGE_SIZE));
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">Katalog</p>
-      <h1 className="display mt-2 text-3xl font-semibold sm:text-4xl">Nabídky práce</h1>
-      <p className="mt-2 max-w-2xl text-sm text-steel">
-        Řazení a filtry berou data z databáze. Agenturní inzeráty tady nejsou — a nebudou.
-      </p>
-      <div className="mt-6">
-        <JobFilters defaults={query} />
-      </div>
-      <p className="mt-4 text-sm text-steel">
-        {catalog.ok
-          ? `${jobs.length} ${jobs.length === 1 ? "nabídka" : jobs.length < 5 ? "nabídky" : "nabídek"}`
-          : "Katalog je dočasně nedostupný."}
-      </p>
-      <div className="mt-3 grid gap-3">
-        {!catalog.ok ? (
-          <CatalogUnavailable />
-        ) : jobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici.</p>
-        ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
-        )}
+    <main className="fj-serp-page">
+      <section className="fj-serp-banner">
+        <div>
+          <p className="fj-eyebrow">Práce v celém Česku</p>
+          <h1 className="fj-display">Nabídky práce</h1>
+        </div>
+        <p>Porovnejte mzdu, místo a režim práce bez otevírání deseti záložek.</p>
+      </section>
+
+      <div className="fj-serp-shell">
+        <JobSearchPanel query={query} resultCount={count} />
+
+        <section className="fj-results-region" aria-labelledby="results-title">
+          <div className="fj-results-head">
+            <div>
+              <h2 id="results-title">
+                {catalog.ok ? `${count} ${count === 1 ? "nabídka" : count < 5 ? "nabídky" : "nabídek"}` : "Nabídky"}
+              </h2>
+              <p>
+                {searchHasFilters(query)
+                  ? "Výsledky podle vašich filtrů"
+                  : "Nejnovější ověřené nabídky"}
+              </p>
+            </div>
+            {searchHasFilters(query) ? (
+              <Link href="/nabidky" className="fj-clear-results">
+                Zrušit filtry
+              </Link>
+            ) : null}
+          </div>
+
+          <div className="fj-job-ledger">
+            <div className="fj-job-ledger-head" aria-hidden="true">
+              <span>Firma a pozice</span>
+              <span>Lokalita</span>
+              <span>Odměna</span>
+            </div>
+
+            {!catalog.ok ? (
+              <div className="fj-empty-results">
+                <strong>Katalog se teď nepodařilo načíst.</strong>
+                <p>Zkuste stránku obnovit za chvíli.</p>
+              </div>
+            ) : jobs.length === 0 ? (
+              <div className="fj-empty-results">
+                <strong>Na tento výběr teď nic nemáme.</strong>
+                <p>Zkuste jiné město, nižší mzdu nebo širší název pozice.</p>
+                <Link href="/nabidky" className="fj-secondary-button">Zobrazit všechny nabídky</Link>
+              </div>
+            ) : (
+              jobs.map((job) => <JobResultRow key={job.id} job={job} />)
+            )}
+          </div>
+
+          {catalog.ok && pageCount > 1 ? (
+            <nav className="fj-pagination" aria-label="Stránkování nabídek">
+              {currentPage > 1 ? (
+                <Link href={jobsHref(query, { page: currentPage - 1 })}>← Předchozí</Link>
+              ) : <span />}
+              <p>Strana {currentPage} z {pageCount}</p>
+              {currentPage < pageCount ? (
+                <Link href={jobsHref(query, { page: currentPage + 1 })}>Další →</Link>
+              ) : <span />}
+            </nav>
+          ) : null}
+        </section>
+
+        <aside className="fj-serp-note">
+          <div>
+            <span aria-hidden="true">✓</span>
+            <p><strong>Ověřená firma</strong> znamená, že jsme zkontrolovali její IČO a identitu.</p>
+          </div>
+          <Link href="/pro-firmy">Jste zaměstnavatel? Vložit nabídku →</Link>
+        </aside>
       </div>
     </main>
   );

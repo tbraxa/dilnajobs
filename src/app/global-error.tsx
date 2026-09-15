@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button } from "@/components/ui";
 
 export default function GlobalError({
   error,
@@ -16,16 +15,20 @@ export default function GlobalError({
 
   return (
     <html lang="cs">
-      <body className="bg-[#f2f0ea] text-[#0b0d12]">
+      <body className="bg-white text-[#14233a]">
         <main className="mx-auto max-w-xl px-4 py-16">
           <h1 className="text-2xl font-semibold">Něco se pokazilo</h1>
-          <p className="mt-3 text-sm text-[#5c6168]">
+          <p className="mt-3 text-sm text-[#627083]">
             Aplikaci teď nejde zobrazit. Zkuste obnovit stránku. Pokud problém trvá, počkejte na dokončení
             migrací databáze.
           </p>
-          <Button type="button" className="mt-6" onClick={() => reset()}>
+          <button
+            type="button"
+            className="mt-6 rounded-md bg-[#14233a] px-5 py-3 text-sm font-bold text-white"
+            onClick={() => reset()}
+          >
             Zkusit znovu
-          </Button>
+          </button>
         </main>
       </body>
     </html>

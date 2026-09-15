@@ -1,8 +1,8 @@
-# DílnaJobs
+# FairJobs
 
-Česká nástěnka práce pro výrobní a dílenské profese: CNC, svářeči, seřizovači, průmysloví elektrikáři, údržba. Cílová doména: [dilnajobs.cz](https://dilnajobs.cz).
+Český pracovní portál pro všechny profese. Jasná mzda, ověřená firma a přímá odpověď zaměstnavateli. Cílová doména: [fairjobs.cz](https://fairjobs.cz).
 
-Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem — účet není povinný.
+Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem. Účet není povinný.
 
 ## Rychlý start
 
@@ -18,7 +18,7 @@ npm run dev
 
 Otevřete [http://localhost:3000](http://localhost:3000).
 
-Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru. Odkaz otevře potvrzovací stránku (prohlížeče odkazy přednačítají — token se spotřebuje až po kliknutí na **Vstoupit do firmy**).
+Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru. Odkaz otevře potvrzovací stránku. Prohlížeče odkazy přednačítají, proto se token spotřebuje až po kliknutí na **Vstoupit do firmy**.
 
 Správa provozu (`/admin`, ne firemní portál): v `.env` nastavte `ADMIN_EMAILS=tomas@dilnajobs.test`, pak `npm run magic:admin` a potvrďte odkaz. Sondy: `GET /api/health` (živost), `GET /api/ready` (Postgres). Podrobnosti: [docs/OPS.md](docs/OPS.md).
 

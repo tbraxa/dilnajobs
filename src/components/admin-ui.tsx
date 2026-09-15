@@ -7,16 +7,16 @@ import { requestAdminLinkAction, type AdminAuthState } from "@/lib/actions/admin
 import { Button, Field, inputClass } from "./ui";
 
 const pillClass: Record<CheckStatus, string> = {
-  ok: "bg-ok text-white",
-  degraded: "border border-ink bg-paper-2 text-ink",
+  ok: "bg-green-700 text-white",
+  degraded: "border border-slate-950 bg-slate-50 text-slate-950",
   down: "bg-danger text-white",
-  unconfigured: "border border-line bg-paper text-steel",
+  unconfigured: "border border-slate-200 bg-white text-slate-600",
 };
 
 export function StatusPill({ status }: { status: CheckStatus }) {
   return (
     <span
-      className={`inline-flex items-center rounded-[2px] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${pillClass[status]}`}
+      className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-semibold ${pillClass[status]}`}
     >
       {STATUS_LABELS[status]}
     </span>
@@ -30,8 +30,8 @@ export function AdminLoginForm() {
       <Field label="E-mail správce" name="email">
         <input id="email" name="email" type="email" required className={inputClass} autoComplete="email" />
       </Field>
-      {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
-      {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
+      {state?.ok ? <p className="text-sm text-green-700">{state.message}</p> : null}
+      {state && !state.ok ? <p className="text-sm text-red-700">{state.error}</p> : null}
       <Button type="submit" disabled={pending}>
         {pending ? "Posílám odkaz…" : "Poslat přihlašovací odkaz"}
       </Button>
@@ -57,17 +57,17 @@ export function HealthCards({ initial }: { initial: HealthReport }) {
     <div>
       <div className="flex flex-wrap items-center gap-3">
         <StatusPill status={report.status} />
-        <p className="text-xs text-steel">Kontrola {new Date(report.checkedAt).toLocaleString("cs-CZ")} · obnovení každých 30 s</p>
+        <p className="text-xs text-slate-600">Kontrola {new Date(report.checkedAt).toLocaleString("cs-CZ")} · obnovení každých 30 s</p>
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {report.checks.map((check) => (
-          <article key={check.name} className="border border-line bg-paper p-4">
+          <article key={check.name} className="border border-slate-200 bg-white p-4">
             <div className="flex items-start justify-between gap-2">
               <h2 className="font-semibold">{HEALTH_LABELS[check.name] ?? check.name}</h2>
               <StatusPill status={check.status} />
             </div>
-            {check.latencyMs != null ? <p className="mt-1 text-xs text-steel">{check.latencyMs} ms</p> : null}
-            {check.detail ? <p className="mt-2 text-sm text-steel">{check.detail}</p> : null}
+            {check.latencyMs != null ? <p className="mt-1 text-xs text-slate-600">{check.latencyMs} ms</p> : null}
+            {check.detail ? <p className="mt-2 text-sm text-slate-600">{check.detail}</p> : null}
           </article>
         ))}
       </div>

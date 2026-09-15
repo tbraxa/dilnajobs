@@ -10,7 +10,7 @@ export function JobCreateForm() {
   return (
     <form action={action} className="space-y-4">
       <Field label="Název pozice" name="title">
-        <input id="title" name="title" required className={inputClass} placeholder="CNC operátor — 5osá frézka" />
+        <input id="title" name="title" required className={inputClass} placeholder="CNC operátor, 5osá frézka" />
       </Field>
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Profese" name="profession">
@@ -68,10 +68,10 @@ export function JobCreateForm() {
       <Field label="Co nabízíte" name="benefits">
         <textarea id="benefits" name="benefits" rows={3} className={inputClass} />
       </Field>
-      <p className="text-xs text-steel">
+      <p className="text-xs text-slate-600">
         První inzerát jde ke kontrole. Na nástěnce se objeví až po schválení. Agentury neregistrujeme.
       </p>
-      {state?.ok === false ? <p className="text-sm text-danger">{state.error}</p> : null}
+      {state?.ok === false ? <p className="text-sm text-red-700">{state.error}</p> : null}
       <Button type="submit" disabled={pending}>
         {pending ? "Ukládám…" : "Odeslat ke kontrole"}
       </Button>

@@ -26,26 +26,26 @@ export default async function AdminApplicationsPage() {
 
   return (
     <main>
-      <p className="label">Moderace</p>
-      <h1 className="display mt-1 text-3xl font-semibold">Přihlášky</h1>
-      <p className="mt-2 text-sm text-steel">
+      <p className="text-sm font-semibold text-slate-600">Moderace</p>
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight">Přihlášky</h1>
+      <p className="mt-2 text-sm text-slate-600">
         Přehled napříč firmami. Telefon v seznamu částečně maskujeme. Životopisy stahují jen firmy ve svém portálu.
       </p>
       <div className="mt-6 grid gap-3">
         {rows.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Zatím žádné přihlášky.</p>
+          <p className="border border-slate-200 p-4 text-sm">Zatím žádné přihlášky.</p>
         ) : (
           rows.map((row) => (
-            <article key={row.id} className="border border-line bg-paper p-4">
+            <article key={row.id} className="border border-slate-200 bg-white p-4">
               <h2 className="font-semibold">{row.fullName}</h2>
-              <p className="text-sm text-steel">
+              <p className="text-sm text-slate-600">
                 {row.jobTitle} · {row.companyName}
               </p>
               <p className="mt-1 text-sm">
                 Tel. {maskPhone(row.phone)}
                 {row.email ? ` · ${row.email}` : ""}
               </p>
-              <p className="mt-1 text-xs text-steel">{row.createdAt.toLocaleString("cs-CZ")}</p>
+              <p className="mt-1 text-xs text-slate-600">{row.createdAt.toLocaleString("cs-CZ")}</p>
             </article>
           ))
         )}

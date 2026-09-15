@@ -12,6 +12,6 @@ export function captureException(err: unknown, context: Record<string, unknown> 
       Sentry.captureException(err, { extra: context });
     })
     .catch(() => {
-      /* STUB: SDK load failed — already logged */
+      /* STUB: SDK load failed. Already logged. */
     });
 }

@@ -1,22 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, IBM_Plex_Sans } from "next/font/google";
+import { Manrope, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
-import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { FairJobsFooter, FairJobsHeader } from "@/components/fairjobs-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
 import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
 import "./globals.css";
+import "./fairjobs.css";
 
-const archivo = Archivo({
+const manrope = Manrope({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-archivo",
+  variable: "--font-manrope",
   display: "swap",
 });
 
-const ibm = IBM_Plex_Sans({
+const newsreader = Newsreader({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm",
+  variable: "--font-newsreader",
   display: "swap",
 });
 
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F2F0EA",
+  themeColor: "#FFFFFF",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -40,15 +40,15 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const pathname = h.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
   return (
-    <html lang="cs" className={`${archivo.variable} ${ibm.variable}`}>
-      <body className="workshop-grid flex min-h-screen flex-col antialiased" data-nonce={nonce}>
+    <html lang="cs" className={`${manrope.variable} ${newsreader.variable}`}>
+      <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
         {isAdmin ? (
           children
         ) : (
           <>
-            <SiteHeader />
+            <FairJobsHeader />
             {children}
-            <SiteFooter />
+            <FairJobsFooter />
           </>
         )}
       </body>

@@ -63,9 +63,30 @@ export const registerEmployerSchema = z.object({
 export const searchSchema = z.object({
   q: z.string().trim().max(80).optional(),
   profession: z
-    .enum(["cnc", "welder", "setter", "electrician", "maintenance", "locksmith", "operator", "other"])
+    .enum([
+      "cnc",
+      "welder",
+      "setter",
+      "electrician",
+      "maintenance",
+      "locksmith",
+      "operator",
+      "administration",
+      "accounting",
+      "sales",
+      "it",
+      "logistics",
+      "driver",
+      "hospitality",
+      "healthcare",
+      "other",
+    ])
     .optional(),
   city: z.string().trim().max(80).optional(),
+  salaryMin: z.coerce.number().int().min(0).max(500000).optional(),
+  workMode: z.enum(["onsite", "hybrid", "remote"]).optional(),
+  employmentType: z.enum(["full_time", "part_time", "shift"]).optional(),
+  page: z.coerce.number().int().min(1).max(100).optional(),
   sort: z.enum(["newest", "salary"]).default("newest"),
 });
 
@@ -79,6 +100,14 @@ export const jobCreateSchema = z.object({
     "maintenance",
     "locksmith",
     "operator",
+    "administration",
+    "accounting",
+    "sales",
+    "it",
+    "logistics",
+    "driver",
+    "hospitality",
+    "healthcare",
     "other",
   ]),
   city: z.string().trim().min(2).max(80),
