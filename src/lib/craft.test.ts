@@ -49,8 +49,20 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain(".facts-strip");
     expect(css).toContain(".apply-panel");
     expect(css).toContain(".sticky-apply");
+    expect(css).not.toContain(".filters-sticky");
+    expect(css).toContain(".serp-row-search");
+    expect(css).toContain(".serp-row-chips");
+    expect(css).toContain(".serp-sheet");
+    expect(css).toContain(".serp-field");
+    expect(css).toContain(".serp-row-search .search-shell");
+    expect(css).toContain("#activeChips");
+    expect(css).not.toContain(".serp-search-pill");
+    expect(css).not.toContain(".search-shell-compact");
+    expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
     expect(css).toMatch(/a\.job-row/);
     expect(css).toMatch(/\.job-row-inner\s*\{[^}]*grid-template-columns:\s*96px minmax\(0, 1fr\) auto/);
+    expect(css).toMatch(/\.job-row-media\s*\{[^}]*overflow:\s*visible/);
+    expect(css).toMatch(/\.job-row-media-inner\s*\{[^}]*overflow:\s*hidden/);
     expect(css).toMatch(/\.footer-inner\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto/);
     expect(css).toContain("0 12px 28px rgba(10, 10, 10, 0.10)");
     for (const token of FORBIDDEN) {
@@ -93,6 +105,43 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(copy.employers.pricingHelper).toBe(
       "Ceny bez DPH. Orientace pro firmy. Platbu domluvíte po registraci.",
     );
+  });
+
+  it("keeps /nabidky filters compact instead of a sticky half-screen panel", () => {
+    const page = readFileSync("src/app/nabidky/page.tsx", "utf8");
+    const filters = readFileSync("src/components/job-filters.tsx", "utf8");
+    const css = readFileSync("src/app/craft.css", "utf8");
+    const card = readFileSync("src/components/job-card.tsx", "utf8");
+    expect(page).not.toContain("filters-sticky");
+    expect(page).toContain("JobFilters");
+    expect(page).toContain("copy.nabidky.helper");
+    expect(page).toContain("emptyNoResultsTitle");
+    expect(filters).toContain("serp-row-search");
+    expect(filters).toContain("serp-row-chips");
+    expect(filters).toContain('id="activeChips"');
+    expect(filters).toContain("serp-sheet");
+    expect(filters).toContain("SearchShell");
+    expect(filters).toContain("copy.home.labelQuery");
+    expect(filters).toContain("copy.home.labelPlace");
+    expect(filters).toContain("serp-radio");
+    expect(filters).toContain("ctaEditFilters");
+    expect(filters).toContain("serp-field");
+    expect(card).toContain("job-row-media-inner");
+
+    const searchStart = filters.indexOf('className="serp-row-search"');
+    const chipStart = filters.indexOf("<ChipRail");
+    expect(searchStart).toBeGreaterThan(-1);
+    expect(chipStart).toBeGreaterThan(searchStart);
+    expect(filters.slice(searchStart, chipStart)).not.toMatch(/ChipRail|filter-chip|serp-row-chips/);
+    expect(css).toMatch(/\.serp-chrome\s*\{[^}]*flex-direction:\s*column/);
+    expect(css).toMatch(/\.serp-chrome\s*\{[^}]*height:\s*auto/);
+    expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
+    expect(css).not.toMatch(/\.serp-row-search\s*\{[^}]*height:\s*56px/);
+    expect(css).not.toMatch(/\.serp-row-chips\s*\{[^}]*position:\s*absolute/);
+    expect(css).toMatch(/\.serp-row-search \.search-shell\s*\{[^}]*height:\s*auto/);
+    expect(css).toMatch(/#activeChips[\s\S]*border-top:\s*1px solid/);
+    expect(css).toMatch(/\.serp-radio\s*\{[^}]*min-height:\s*48px/);
+    expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
   });
 
   it("prints pack published labels", () => {
