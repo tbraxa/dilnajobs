@@ -54,6 +54,7 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain(".serp-row-chips");
     expect(css).toContain(".serp-sheet");
     expect(css).toContain(".serp-field");
+    expect(css).toContain(".serp-row-search .search-shell");
     expect(css).not.toContain(".search-shell-compact");
     expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
     expect(css).toMatch(/a\.job-row/);
