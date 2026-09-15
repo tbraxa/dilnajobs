@@ -1,16 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, IBM_Plex_Sans } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
 import { headers } from "next/headers";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
+import { copy } from "@/lib/copy";
 import "./globals.css";
-
-const archivo = Archivo({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-archivo",
-  display: "swap",
-});
 
 const ibm = IBM_Plex_Sans({
   subsets: ["latin", "latin-ext"],
@@ -22,11 +17,10 @@ const ibm = IBM_Plex_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(resolveAppUrl()),
   title: {
-    default: "DílnaJobs — práce ve výrobě, napřímo",
+    default: copy.home.metaTitle,
     template: "%s · DílnaJobs",
   },
-  description:
-    "CNC, svářeči, seřizovači, elektrikáři, údržba. Nabídky od výrobních firem. Bez agentur, bez povinného účtu.",
+  description: copy.home.metaDescription,
   robots: { index: true, follow: true },
 };
 
@@ -40,8 +34,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const pathname = h.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
   return (
-    <html lang="cs" className={`${archivo.variable} ${ibm.variable}`}>
-      <body className="workshop-grid flex min-h-screen flex-col antialiased" data-nonce={nonce}>
+    <html lang="cs" className={ibm.variable}>
+      <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
         {isAdmin ? (
           children
         ) : (

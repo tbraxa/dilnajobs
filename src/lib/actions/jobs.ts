@@ -11,7 +11,7 @@ import { randomToken } from "@/lib/crypto";
 import { PLAN_LIMITS } from "@/lib/pricing";
 import { env } from "@/lib/env";
 import { audit } from "@/lib/audit";
-import { cityByLabel } from "@/lib/catalog";
+import { categoryForProfession, cityByLabel, contractForEmployment } from "@/lib/catalog";
 
 export type JobFormState = { ok: false; error: string } | null;
 
@@ -62,17 +62,27 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
       const status = autoPublish ? "published" : "pending_review";
       const now = new Date();
 
+      const salaryType =
+        parsed.data.salaryMin || parsed.data.salaryMax
+          ? "monthly"
+          : parsed.data.salaryNote
+            ? "negotiable"
+            : "negotiable";
+
       await tx.insert(jobs).values({
         employerId: session.employerId,
         slug,
         title: parsed.data.title,
         profession: parsed.data.profession,
+        category: categoryForProfession(parsed.data.profession),
         city: parsed.data.city,
         region,
         employmentType: parsed.data.employmentType,
+        contractType: contractForEmployment(parsed.data.employmentType),
         shiftNote: parsed.data.shiftNote,
         salaryMin: parsed.data.salaryMin,
         salaryMax: parsed.data.salaryMax,
+        salaryType,
         salaryNote: parsed.data.salaryNote,
         description: parsed.data.description,
         requirements: parsed.data.requirements,

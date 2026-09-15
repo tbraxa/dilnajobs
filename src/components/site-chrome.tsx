@@ -1,25 +1,24 @@
 import Link from "next/link";
+import { copy } from "@/lib/copy";
 import { ButtonLink } from "./ui";
-import { LogoMark } from "./icons";
 
 export function SiteHeader({ compact = false }: { compact?: boolean }) {
   return (
-    <header className="border-b border-line bg-paper/90 backdrop-blur-sm">
+    <header className="border-b border-line bg-paper">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 text-ink">
-          <LogoMark className="h-8 w-8" />
-          <span className="display text-lg font-semibold sm:text-xl">DílnaJobs</span>
+        <Link href="/" className="text-ink">
+          <span className="text-lg font-semibold sm:text-xl">{copy.brand}</span>
         </Link>
-        <nav className="flex items-center gap-1 sm:gap-3">
+        <nav className="flex items-center gap-1 sm:gap-3" aria-label={copy.nav.ariaMain}>
           <Link href="/nabidky" className="px-2 py-1 text-sm text-ink hover:underline">
-            Nabídky
+            {copy.nav.nabidky}
           </Link>
           <Link href="/pro-firmy" className="hidden px-2 py-1 text-sm text-ink hover:underline sm:inline">
-            Pro firmy
+            {copy.nav.proFirmy}
           </Link>
           {!compact ? (
-            <ButtonLink href="/firma/prihlaseni" className="px-3 py-2 text-xs sm:text-sm">
-              Přidat nabídku
+            <ButtonLink href="/firma/prihlaseni" variant="ghost" className="px-3 py-2 text-xs sm:text-sm">
+              {copy.nav.login}
             </ButtonLink>
           ) : null}
         </nav>
@@ -31,52 +30,23 @@ export function SiteHeader({ compact = false }: { compact?: boolean }) {
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-line">
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:grid-cols-3 sm:px-6">
-        <div>
-          <p className="display text-lg font-semibold">DílnaJobs</p>
-          <p className="mt-2 max-w-xs text-sm text-steel">
-            Práce ve výrobě, napřímo od firem. Agentury neregistrujeme. Cílová doména dilnajobs.cz.
-          </p>
-        </div>
-        <div className="text-sm">
-          <p className="label mb-2">Uchazeči</p>
-          <ul className="space-y-1">
-            <li>
-              <a href="/nabidky" className="hover:underline">
-                Nabídky práce
-              </a>
-            </li>
-            <li>
-              <a href="/gdpr" className="hover:underline">
-                Osobní údaje
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="text-sm">
-          <p className="label mb-2">Firmy</p>
-          <ul className="space-y-1">
-            <li>
-              <a href="/pro-firmy" className="hover:underline">
-                Ceník
-              </a>
-            </li>
-            <li>
-              <a href="/obchodni-podminky" className="hover:underline">
-                Obchodní podmínky
-              </a>
-            </li>
-            <li>
-              <a href="/firma/prihlaseni" className="hover:underline">
-                Přihlášení
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 sm:px-6">
+        <p className="text-sm text-steel">{copy.footer}</p>
+        <nav className="flex flex-wrap gap-4 text-sm">
+          <a href="/nabidky" className="hover:underline">
+            {copy.nav.nabidky}
+          </a>
+          <a href="/pro-firmy" className="hover:underline">
+            {copy.nav.proFirmy}
+          </a>
+          <a href="/firma/prihlaseni" className="hover:underline">
+            {copy.nav.login}
+          </a>
+          <a href="/gdpr" className="hover:underline">
+            Osobní údaje
+          </a>
+        </nav>
       </div>
-      <p className="border-t border-line px-4 py-3 text-center text-xs text-steel">
-        © {new Date().getFullYear()} DílnaJobs. Provozovatel bude doplněn před spuštěním.
-      </p>
     </footer>
   );
 }

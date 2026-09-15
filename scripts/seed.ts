@@ -7,28 +7,31 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { applications, employerUsers, employers, jobs, orders } from "../src/db/schema";
 import { makeValidIco } from "../src/lib/ico";
 import { jobSlug } from "../src/lib/slug";
-import { randomBytes } from "node:crypto";
 
 function daysFromNow(days: number) {
   return new Date(Date.now() + days * 86400000);
 }
 
-function token(n = 6) {
-  return randomBytes(n).toString("base64url");
+function envFlag(name: string) {
+  return ["1", "true", "yes"].includes((process.env[name] ?? "").trim().toLowerCase());
 }
+
+const DEMO = {
+  novak: "11111111-1111-4111-8111-111111111111",
+  morava: "22222222-2222-4222-8222-222222222222",
+  ucto: "33333333-3333-4333-8333-333333333333",
+  logi: "44444444-4444-4444-8444-444444444444",
+  soft: "55555555-5555-4555-8555-555555555555",
+  pending: "66666666-6666-4666-8666-666666666666",
+} as const;
 
 async function main() {
   const url = process.env.DATABASE_ADMIN_URL ?? process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_ADMIN_URL or DATABASE_URL required");
-  const sql = postgres(url, { max: 1, prepare: false });
+  const sql = postgres(url, { max: 1, prepare: false, ssl: /localhost|127\.0\.0\.1/.test(url) ? false : "require" });
   const db = drizzle(sql);
 
-  const icoNovak = makeValidIco("2691930");
-  const icoMorava = makeValidIco("2777268");
-  const icoPlast = makeValidIco("2559664");
-  const icoEnergo = makeValidIco("4455667");
-
-  const deploySeed = ["1", "true", "yes"].includes((process.env.SEED_ON_DEPLOY ?? "").trim().toLowerCase());
+  const deploySeed = envFlag("SEED_ON_DEPLOY");
   if (deploySeed) {
     try {
       const existing = await sql<{ n: number }[]>`select count(*)::int as n from employers`;
@@ -46,230 +49,277 @@ async function main() {
     await sql`truncate applications, jobs, sessions, magic_tokens, admin_sessions, employer_users, employers, orders, audit_events, rate_limit_events restart identity cascade`;
   }
 
-  const [novak] = await db
-    .insert(employers)
-    .values({
+  const icoNovak = makeValidIco("2691930");
+  const icoMorava = makeValidIco("2777268");
+  const icoUcto = makeValidIco("2559664");
+  const icoLogi = makeValidIco("4455667");
+  const icoSoft = makeValidIco("2708244");
+  const icoPending = makeValidIco("5566778");
+
+  await db.insert(employers).values([
+    {
+      id: DEMO.novak,
       ico: icoNovak,
       companyName: "Kovovýroba Novák s.r.o.",
+      displayName: "Kovovýroba Novák s.r.o.",
       legalName: "Kovovýroba Novák s.r.o.",
       city: "Brno",
+      address: { city: "Brno", region: "Jihomoravský" },
       verificationStatus: "verified",
       planCode: "standard",
       adsPostedYear: 3,
-    })
-    .returning();
-
-  const [morava] = await db
-    .insert(employers)
-    .values({
+    },
+    {
+      id: DEMO.morava,
       ico: icoMorava,
       companyName: "Těžká konstrukce Morava a.s.",
+      displayName: "Těžká konstrukce Morava a.s.",
       legalName: "Těžká konstrukce Morava a.s.",
       city: "Ostrava",
+      address: { city: "Ostrava", region: "Moravskoslezský" },
       verificationStatus: "verified",
       planCode: "basic",
       adsPostedYear: 2,
-    })
-    .returning();
-
-  const [plast] = await db
-    .insert(employers)
-    .values({
-      ico: icoPlast,
-      companyName: "PlastForm s.r.o.",
-      legalName: "PlastForm s.r.o.",
-      city: "Mladá Boleslav",
+    },
+    {
+      id: DEMO.ucto,
+      ico: icoUcto,
+      companyName: "Účetní servis Praha s.r.o.",
+      displayName: "Účetní servis Praha s.r.o.",
+      legalName: "Účetní servis Praha s.r.o.",
+      city: "Praha",
+      address: { city: "Praha", region: "Hlavní město Praha" },
       verificationStatus: "verified",
       planCode: "trial",
       adsPostedYear: 2,
-    })
-    .returning();
-
-  const [energo] = await db
-    .insert(employers)
-    .values({
-      ico: icoEnergo,
-      companyName: "EnergoServis západ s.r.o.",
-      legalName: "EnergoServis západ s.r.o.",
-      city: "Plzeň",
+    },
+    {
+      id: DEMO.logi,
+      ico: icoLogi,
+      companyName: "LogiTrans jih s.r.o.",
+      displayName: "LogiTrans jih s.r.o.",
+      legalName: "LogiTrans jih s.r.o.",
+      city: "Brno",
+      address: { city: "Brno", region: "Jihomoravský" },
       verificationStatus: "verified",
       planCode: "basic",
       adsPostedYear: 2,
-    })
-    .returning();
-
-  const [cekani] = await db
-    .insert(employers)
-    .values({
-      ico: makeValidIco("5566778"),
-      companyName: "Čekající kovovýroba s.r.o.",
-      legalName: "Čekající kovovýroba s.r.o.",
+    },
+    {
+      id: DEMO.soft,
+      ico: icoSoft,
+      companyName: "SoftForge Czech s.r.o.",
+      displayName: "SoftForge Czech s.r.o.",
+      legalName: "SoftForge Czech s.r.o.",
+      city: "Praha",
+      address: { city: "Praha", region: "Hlavní město Praha" },
+      verificationStatus: "verified",
+      planCode: "standard",
+      adsPostedYear: 2,
+    },
+    {
+      id: DEMO.pending,
+      ico: icoPending,
+      companyName: "Čekající služby s.r.o.",
+      displayName: "Čekající služby s.r.o.",
+      legalName: "Čekající služby s.r.o.",
       city: "Jihlava",
+      address: { city: "Jihlava", region: "Vysočina" },
       verificationStatus: "pending",
       planCode: "trial",
       adsPostedYear: 1,
-    })
-    .returning();
+    },
+  ]);
 
   await db.insert(employerUsers).values([
-    { employerId: novak.id, email: "novak@kovovyroba-novak.test", name: "Jan Novák", role: "owner" },
-    { employerId: morava.id, email: "hr@tkmorava.test", name: "Petra Holubová", role: "owner" },
-    { employerId: plast.id, email: "vyroba@plastform.test", name: "Martin Král", role: "owner" },
-    { employerId: energo.id, email: "servis@energoservis.test", name: "Lucie Benešová", role: "owner" },
-    { employerId: cekani.id, email: "info@cekajici-kov.test", name: "Hana Malá", role: "owner" },
+    { employerId: DEMO.novak, email: "novak@kovovyroba-novak.test", name: "Jan Novák", role: "owner" },
+    { employerId: DEMO.morava, email: "hr@tkmorava.test", name: "Petra Holubová", role: "owner" },
+    { employerId: DEMO.ucto, email: "hr@ucetni-praha.test", name: "Eva Svobodová", role: "owner" },
+    { employerId: DEMO.logi, email: "dispecink@logitrans.test", name: "Martin Král", role: "owner" },
+    { employerId: DEMO.soft, email: "jobs@softforge.test", name: "Lucie Benešová", role: "owner" },
+    { employerId: DEMO.pending, email: "info@cekajici.test", name: "Hana Malá", role: "owner" },
   ]);
 
   const seedJobs = [
     {
-      employerId: novak.id,
-      title: "CNC operátor — 5osá frézka",
+      employerId: DEMO.novak,
+      slug: "cnc-operator-brno-demo",
+      title: "CNC operátor",
       profession: "cnc",
+      category: "manufacturing",
       city: "Brno",
       region: "Jihomoravský",
       employmentType: "shift",
+      contractType: "hpp",
       shiftNote: "dvousměnný provoz",
       salaryMin: 42000,
       salaryMax: 52000,
+      salaryType: "monthly",
       isTop: true,
       description:
-        "Obsluha 5osého centra DMG MORI. Upínání, měření, drobné korekce. Díly do 800 mm, ocel a hliník. Mistr je na hale, ne v kanceláři.",
-      requirements: "Praxe na CNC aspoň 2 roky. Čtení výkresu. Základy M a G kódu. Řidičák vítán, není podmínka.",
-      benefits: "Příspěvek na stravování, dílenská šatna, roční prémie podle zmetkovitosti.",
+        "Obsluha 5osého centra. Upínání, měření, drobné korekce. Díly do 800 mm, ocel a hliník.",
+      requirements: "Praxe na CNC aspoň 2 roky.\nČtení výkresu.\nZáklady M a G kódu.",
+      benefits: "Příspěvek na stravování, dílenská šatna, roční prémie.",
     },
     {
-      employerId: novak.id,
-      title: "CNC soustružník",
-      profession: "cnc",
-      city: "Zlín",
-      region: "Zlínský",
-      employmentType: "full_time",
-      salaryMin: 38000,
-      salaryMax: 47000,
-      description:
-        "Přesné soustružení na Okuma. Malé série, tolerance v setinách. Předáváte díl kontrolorovi, ne do krabice „někam“.",
-      requirements: "Praxe na CNC soustruhu. Mikrometr, posuvka, drsnost. Slušná čeština nebo slovenština.",
-      benefits: "Stabilní HPP, nářadí od firmy.",
-    },
-    {
-      employerId: morava.id,
-      title: "Svářeč MIG/MAG — ocelové konstrukce",
+      employerId: DEMO.morava,
+      slug: "svarac-ostrava-demo",
+      title: "Svářeč MIG/MAG",
       profession: "welder",
+      category: "trades",
       city: "Ostrava",
       region: "Moravskoslezský",
       employmentType: "shift",
-      shiftNote: "ranní / odpolední",
+      contractType: "hpp",
       salaryMin: 40000,
       salaryMax: 55000,
+      salaryType: "monthly",
       isTop: true,
-      description:
-        "Svařování nosníků a rámových konstrukcí do 12 m. Poloha PA, PF. Díly jdou ven na stavbu, ne do e-shopu.",
-      requirements: "Oprávnění MIG/MAG. Čtení WPS. Výška do 3 m bez problémů. Svůj svářecí štít klidně přineste.",
-      benefits: "Příplatek za výšku a přesčasy. Nové odsávání od 2025.",
+      description: "Svařování nosníků a rámových konstrukcí. Poloha PA, PF.",
+      requirements: "Oprávnění MIG/MAG.\nČtení WPS.",
+      benefits: "Příplatek za výšku a přesčasy.",
     },
     {
-      employerId: morava.id,
-      title: "Svářeč TIG — nerez",
-      profession: "welder",
-      city: "Pardubice",
-      region: "Pardubický",
+      employerId: DEMO.ucto,
+      slug: "uctetni-praha-demo",
+      title: "Účetní",
+      profession: "accounting",
+      category: "accounting",
+      city: "Praha",
+      region: "Hlavní město Praha",
       employmentType: "full_time",
-      salaryMin: 43000,
-      salaryMax: 58000,
-      description:
-        "Potravinářská nerez, potrubí DN 25–150. Švy musí vydržet audit, ne jen pohled z dálky.",
-      requirements: "TIG nerez min. 1 rok. Zkouška 141. Čistota pracoviště je část práce.",
-      benefits: "Zkoušky platíme my. 5 týdnů dovolené po roce.",
+      contractType: "hpp",
+      salaryMin: 38000,
+      salaryMax: 48000,
+      salaryType: "monthly",
+      description: "Vedete agendu malých s.r.o. DPH, mzdy, komunikace s klienty. Pohoda a Excel denně.",
+      requirements: "Praxe v podvojném účetnictví.\nDaňová evidence.\nSlušná čeština.",
+      benefits: "Home office 2 dny v týdnu, stravenkový paušál.",
     },
     {
-      employerId: plast.id,
-      title: "Seřizovač vstřikolisů",
-      profession: "setter",
-      city: "Mladá Boleslav",
-      region: "Středočeský",
-      employmentType: "shift",
-      shiftNote: "třísměnný provoz",
+      employerId: DEMO.logi,
+      slug: "ridic-brno-demo",
+      title: "Řidič C+E",
+      profession: "driver",
+      category: "driver",
+      city: "Brno",
+      region: "Jihomoravský",
+      employmentType: "full_time",
+      contractType: "hpp",
       salaryMin: 45000,
       salaryMax: 60000,
-      description:
-        "Engel a Arburg 80–400 t. Seřízení, výměna forem, první kusy. Když linka stojí, voláte vy — ne „IT“.",
-      requirements: "Seřizování vstřiku aspoň 2 roky. Základy hydrauliky. Klid při noční.",
-      benefits: "Příplatky za směny. Svoz z Mělníka po dohodě.",
+      salaryType: "monthly",
+      description: "Rozvozy po ČR. Ráno depo, večer zpátky. Tahač s návěsem, žádné mezinárodní týdny mimo domov.",
+      requirements: "Skupina C+E.\nKartu řidiče.\nČistý bodový účet.",
+      benefits: "Služební telefon, příplatek za víkend.",
     },
     {
-      employerId: energo.id,
-      title: "Průmyslový elektrikář — údržba",
-      profession: "electrician",
-      city: "Plzeň",
-      region: "Plzeňský",
+      employerId: DEMO.soft,
+      slug: "vyvojar-praha-demo",
+      title: "Vývojář TypeScript",
+      profession: "it",
+      category: "it",
+      city: "Praha",
+      region: "Hlavní město Praha",
       employmentType: "full_time",
-      salaryMin: 44000,
-      salaryMax: 56000,
-      description:
-        "Rozvaděče 400 V, pohony, čidla na lince. Diagnostika, ne jen výměna stykače naslepo.",
-      requirements: "Vyhláška 50/1978 Sb. min. §6. Čtení schémat.",
-      benefits: "Služební dodávka na výjezdy. Nářadí Fluke.",
+      contractType: "hpp",
+      salaryMin: 80000,
+      salaryMax: 110000,
+      salaryType: "monthly",
+      description: "Next.js a Postgres. Produkt pro české firmy, ne outsourcing na tři kontinenty.",
+      requirements: "TypeScript v produkci.\nSQL bez ORM-only myšlení.\nČeština nebo slovenština.",
+      benefits: "Hybrid Praha, notebook, vzdělávání.",
     },
     {
-      employerId: energo.id,
-      title: "Mechanik údržby — směnný provoz",
-      profession: "maintenance",
-      city: "Liberec",
-      region: "Liberecký",
+      employerId: DEMO.ucto,
+      slug: "asistentka-praha-demo",
+      title: "Asistentka kanceláře",
+      profession: "administration",
+      category: "administration",
+      city: "Praha",
+      region: "Hlavní město Praha",
+      employmentType: "part_time",
+      contractType: "dpp",
+      salaryMin: 22000,
+      salaryMax: 28000,
+      salaryType: "monthly",
+      description: "Příjem pošty, faktury, kalendář jednatelů. Kancelář u metra C.",
+      requirements: "Jistá čeština v e-mailu.\nExcel základy.",
+      benefits: "Pružná pracovní doba.",
+    },
+    {
+      employerId: DEMO.logi,
+      slug: "skladnik-brno-demo",
+      title: "Skladník",
+      profession: "logistics",
+      category: "logistics",
+      city: "Brno",
+      region: "Jihomoravský",
       employmentType: "shift",
-      salaryMin: 39000,
-      salaryMax: 50000,
-      description:
-        "Ložiska, převodovky, dopravníky. Preventivní prohlídky podle plánu, havárie když spadne řemen v noci.",
-      requirements: "Vyučený strojař / mechanik. Svářečka drobných oprav vítána. Ochota ke směnám.",
-      benefits: "13. plat při docházce. Ubytovna na první měsíc.",
+      contractType: "hpp",
+      salaryMin: 32000,
+      salaryMax: 38000,
+      salaryType: "monthly",
+      description: "Příjem, výdej, paletový vozík. Směny po 8 hodinách.",
+      requirements: "Vysokozdvižný vozík výhodou.\nSměnný provoz.",
+      benefits: "Doprava od nádraží.",
     },
     {
-      employerId: novak.id,
-      title: "Zámečník výroby",
-      profession: "locksmith",
-      city: "České Budějovice",
-      region: "Jihočeský",
+      employerId: DEMO.soft,
+      slug: "obchodnik-praha-demo",
+      title: "Obchodní zástupce",
+      profession: "sales",
+      category: "sales",
+      city: "Praha",
+      region: "Hlavní město Praha",
       employmentType: "full_time",
-      salaryMin: 36000,
-      salaryMax: 45000,
-      description:
-        "Kusová výroba rámů a krytů. Řezání, ohýbání, montáž. Výkres na stole, ne v PowerPointu.",
-      requirements: "Vyučení, čtení výkresu, úhlová bruska bez nehod. Sváření bodů stačí.",
-      benefits: "Čistá hala, nový ohraňovací lis.",
+      contractType: "hpp",
+      salaryMin: 50000,
+      salaryMax: 80000,
+      salaryType: "monthly",
+      description: "Noví klienti v Praze a Středočeském kraji. Software pro firmy, žádný telco džbán.",
+      requirements: "B2B prodej.\nŘidičák B.\nČeština.",
+      benefits: "Provize navíc k základu, auto.",
     },
     {
-      employerId: plast.id,
-      title: "Operátor CNC frézky",
-      profession: "operator",
-      city: "Kolín",
-      region: "Středočeský",
-      employmentType: "shift",
+      employerId: DEMO.morava,
+      slug: "kuchar-ostrava-demo",
+      title: "Kuchař závodní jídelny",
+      profession: "hospitality",
+      category: "hospitality",
+      city: "Ostrava",
+      region: "Moravskoslezský",
+      employmentType: "full_time",
+      contractType: "hpp",
       salaryMin: 34000,
-      salaryMax: 41000,
-      description:
-        "Obsluha 3osých center, výměna palet, kontrola prvního kusu. Program připravuje seřizovač.",
-      requirements: "Šikovné ruce, směny, základní měření. Zaškolíme obsluhu Fanuc.",
-      benefits: "Doprava od nádraží. Příspěvek na bydlení do 6 měsíců.",
+      salaryMax: 40000,
+      salaryType: "monthly",
+      description: "Obědy pro halu. Klasická česká kuchyně, žádný fine dining.",
+      requirements: "Vyučení kuchař.\nHygienický průkaz.",
+      benefits: "Strava v práci, ranní směna.",
     },
     {
-      employerId: morava.id,
-      title: "Údržbář — Kladno",
-      profession: "maintenance",
-      city: "Kladno",
-      region: "Středočeský",
+      employerId: DEMO.ucto,
+      slug: "sestra-brno-demo",
+      title: "Všeobecná sestra",
+      profession: "healthcare",
+      category: "healthcare",
+      city: "Brno",
+      region: "Jihomoravský",
       employmentType: "full_time",
-      salaryMin: 37000,
-      salaryMax: 46000,
-      description:
-        "Hala lisovny. Hydraulika, pneumatika, drobné elektro. Jste na místě, ne na telefonu z Brna.",
-      requirements: "Praxe v údržbě výroby. §4 elektro výhodou. Ochota k pohotovosti 1× za 3 týdnů.",
-      benefits: "Fond pracovní doby, stravenkový paušál.",
+      contractType: "hpp",
+      salaryMin: 42000,
+      salaryMax: 50000,
+      salaryType: "monthly",
+      description: "Ambulance praktického lékaře. Objednávání, odběry, dokumentace.",
+      requirements: "Registrace sestry.\nPraxe v ambulanci výhodou.",
+      benefits: "Bez nočních, 5 týdnů dovolené.",
     },
   ];
 
   const inserted = [];
   for (const job of seedJobs) {
-    const slug = jobSlug(job.title, job.city, token(6));
+    const slug = job.slug || jobSlug(job.title, job.city, "demo");
     const [row] = await db
       .insert(jobs)
       .values({
@@ -285,23 +335,26 @@ async function main() {
   }
 
   await db.insert(jobs).values({
-    employerId: cekani.id,
-    slug: jobSlug("Zámečník — ke schválení", "Jihlava", token(6)),
-    title: "Zámečník — ke schválení",
-    profession: "locksmith",
+    employerId: DEMO.pending,
+    slug: "asistent-jihlava-ke-schvaleni",
+    title: "Asistent kanceláře (návrh)",
+    profession: "administration",
+    category: "administration",
     city: "Jihlava",
     region: "Vysočina",
     employmentType: "full_time",
-    salaryMin: 36000,
-    salaryMax: 44000,
-    description: "Kusová výroba. Tento inzerát čeká na schválení provozovatelem.",
-    requirements: "Vyučení, čtení výkresu.",
-    status: "pending_review",
+    contractType: "hpp",
+    salaryMin: 28000,
+    salaryMax: 34000,
+    salaryType: "monthly",
+    description: "Tento inzerát čeká na schválení. Ve veřejném výpisu není.",
+    requirements: "Čeština, základy Excelu.",
+    status: "draft",
     expiresAt: daysFromNow(30),
   });
 
   await db.insert(orders).values({
-    employerId: novak.id,
+    employerId: DEMO.novak,
     packageCode: "standard",
     status: "stub",
     provider: "stub",
@@ -311,26 +364,41 @@ async function main() {
   await db.insert(applications).values([
     {
       jobId: inserted[0]!.id,
-      employerId: novak.id,
+      employerId: DEMO.novak,
       fullName: "Tomáš Dvořák",
       phone: "+420777111222",
       email: "tomas.dvorak@example.test",
-      message: "Pět let na 3ose, chci 5osu. Mohu nastoupit od 1. v měsíci.",
+      message: "Pět let na CNC. Mohu nastoupit od 1. v měsíci.",
       consentGdpr: true,
+      consentAt: new Date(),
+      status: "new",
     },
     {
-      jobId: inserted[2]!.id,
-      employerId: morava.id,
+      jobId: inserted[1]!.id,
+      employerId: DEMO.morava,
       fullName: "Marek Polách",
       phone: "+420603444555",
       consentGdpr: true,
-      message: "Zkouška MAG 135 platná. Konstrukce hal.",
+      consentAt: new Date(),
+      status: "new",
+      message: "Zkouška MAG platná. Konstrukce hal.",
+    },
+    {
+      jobId: inserted[2]!.id,
+      employerId: DEMO.ucto,
+      fullName: "Marie Pokorná",
+      phone: "+420603444555",
+      consentGdpr: true,
+      consentAt: new Date(),
+      status: "seen",
+      message: "Účetní s praxí v DPH. Praha.",
     },
   ]);
 
-  console.log(`Seeded ${inserted.length} published jobs + 1 pending_review, 5 employers.`);
+  console.log(`Seeded ${inserted.length} published jobs + 1 draft, 6 employers (all-profession demo).`);
   console.log("Dev login firmy: novak@kovovyroba-novak.test (magic link v konzoli serveru)");
-  console.log("Dev admin: tomas@dilnajobs.test — npm run magic:admin");
+  console.log("Další demo: hr@ucetni-praha.test, jobs@softforge.test, dispecink@logitrans.test");
+  if (envFlag("DEMO_SEED")) console.log("DEMO_SEED=true");
   await sql.end({ timeout: 5 });
 }
 

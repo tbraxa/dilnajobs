@@ -296,11 +296,15 @@ VALUES
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
-    BEGIN
-      CREATE ROLE dilna_app LOGIN PASSWORD 'dilna' NOSUPERUSER NOCREATEDB NOCREATEROLE;
-    EXCEPTION WHEN OTHERS THEN
-      RAISE NOTICE 'skip CREATE ROLE dilna_app: %', SQLERRM;
-    END;
+    IF current_setting('is_superuser') = 'on' THEN
+      BEGIN
+        CREATE ROLE dilna_app LOGIN PASSWORD 'dilna' NOSUPERUSER NOCREATEDB NOCREATEROLE;
+      EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'skip CREATE ROLE dilna_app: %', SQLERRM;
+      END;
+    ELSE
+      RAISE NOTICE 'skip CREATE ROLE dilna_app (not superuser / hosted Postgres)';
+    END IF;
   END IF;
   IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'dilna_app') THEN
     BEGIN

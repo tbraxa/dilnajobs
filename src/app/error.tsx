@@ -20,7 +20,7 @@ export default function ErrorPage({
       <h1 className="display mt-2 text-3xl font-semibold">Něco se pokazilo</h1>
       <p className="mt-3 max-w-xl text-sm text-steel">
         Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, katalog se možná ještě
-        migruje — obnovte za chvíli.
+        migruje. Obnovte za chvíli.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Button type="button" onClick={() => reset()}>

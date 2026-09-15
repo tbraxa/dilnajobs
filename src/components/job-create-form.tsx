@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { createJobAction, type JobFormState } from "@/lib/actions/jobs";
-import { CITIES, PROFESSIONS, EMPLOYMENT_TYPES } from "@/lib/catalog";
+import { CITIES, CATEGORIES, EMPLOYMENT_TYPES } from "@/lib/catalog";
 import { Button, Field, inputClass } from "./ui";
 
 export function JobCreateForm() {
@@ -10,12 +10,12 @@ export function JobCreateForm() {
   return (
     <form action={action} className="space-y-4">
       <Field label="Název pozice" name="title">
-        <input id="title" name="title" required className={inputClass} placeholder="CNC operátor — 5osá frézka" />
+        <input id="title" name="title" required className={inputClass} placeholder="Účetní, řidič, vývojář" />
       </Field>
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Profese" name="profession">
           <select id="profession" name="profession" required className={inputClass}>
-            {PROFESSIONS.map((p) => (
+            {CATEGORIES.map((p) => (
               <option key={p.db} value={p.db}>
                 {p.label}
               </option>

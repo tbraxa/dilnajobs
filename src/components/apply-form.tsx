@@ -3,11 +3,12 @@
 import { useActionState, useState } from "react";
 import { applyToJob, type ActionState } from "@/lib/actions/apply";
 import { presignCvAction } from "@/lib/actions/cv";
+import { copy } from "@/lib/copy";
 import { Button, Field, inputClass } from "./ui";
 
 const initial: ActionState | null = null;
 
-export function ApplyForm({ jobId }: { jobId: string }) {
+export function ApplyForm({ jobId, companyName }: { jobId: string; companyName?: string }) {
   const [state, action, pending] = useActionState(async (_prev: ActionState | null, formData: FormData) => {
     return applyToJob(formData);
   }, initial);
@@ -43,9 +44,10 @@ export function ApplyForm({ jobId }: { jobId: string }) {
 
   if (state?.ok) {
     return (
-      <p className="border border-line bg-paper-2 p-4 text-sm">
-        Přihláška je u firmy. Ozvou se vám na telefon.
-      </p>
+      <div className="border border-line bg-paper-2 p-4 text-sm">
+        <p className="font-semibold">{copy.detail.successTitle}</p>
+        <p className="mt-1">{copy.detail.successBody}</p>
+      </div>
     );
   }
 
@@ -55,17 +57,18 @@ export function ApplyForm({ jobId }: { jobId: string }) {
       <input type="hidden" name="cvObjectKey" />
       <input type="hidden" name="cvFileName" />
       <input type="hidden" name="cvContentType" />
-      <p className="label">Přihláška — účet nepotřebujete</p>
-      <Field label="Jméno a příjmení" name="fullName">
+      <p className="label">{copy.detail.applyClaim}</p>
+      <p className="text-sm text-steel">{copy.detail.applyHelper(companyName ?? "firmy")}</p>
+      <Field label={copy.detail.labelName} name="fullName">
         <input id="fullName" name="fullName" required className={inputClass} autoComplete="name" />
       </Field>
-      <Field label="Telefon" name="phone" hint="Devět číslic, klidně s +420.">
+      <Field label={copy.detail.labelPhone} name="phone">
         <input id="phone" name="phone" required className={inputClass} autoComplete="tel" inputMode="tel" />
       </Field>
-      <Field label="E-mail (volitelně)" name="email">
+      <Field label={copy.detail.labelEmail} name="email">
         <input id="email" name="email" type="email" className={inputClass} autoComplete="email" />
       </Field>
-      <Field label="Životopis PDF / DOC (volitelně)" name="cv">
+      <Field label={copy.detail.labelCv} name="cv">
         <input
           id="cv"
           name="cv"
@@ -77,7 +80,7 @@ export function ApplyForm({ jobId }: { jobId: string }) {
         {cvName ? <span className="text-xs text-steel">Nahráno: {cvName}</span> : null}
         {cvError ? <span className="text-xs text-danger">{cvError}</span> : null}
       </Field>
-      <Field label="Zpráva mistrům (volitelně)" name="message">
+      <Field label={copy.detail.labelNote} name="message">
         <textarea id="message" name="message" rows={4} className={inputClass} />
       </Field>
       <label className="flex items-start gap-2 text-sm">
@@ -95,7 +98,7 @@ export function ApplyForm({ jobId }: { jobId: string }) {
       </div>
       {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
       <Button type="submit" disabled={pending}>
-        {pending ? "Odesílám…" : "Odeslat přihlášku"}
+        {pending ? "Odesílám…" : copy.detail.ctaSubmit}
       </Button>
     </form>
   );

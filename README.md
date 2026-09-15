@@ -1,8 +1,10 @@
 # DílnaJobs
 
-Česká nástěnka práce pro výrobní a dílenské profese: CNC, svářeči, seřizovači, průmysloví elektrikáři, údržba. Cílová doména: [dilnajobs.cz](https://dilnajobs.cz).
+Český job marketplace pro **všechny profese**. Working brand: DílnaJobs · dilnajobs.cz.
 
-Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem — účet není povinný.
+Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem. Účet není povinný.
+
+Locked MVP spec: [docs/enterprise-mvp/MVP-SPEC.md](docs/enterprise-mvp/MVP-SPEC.md). Czech UI copy: [docs/copy/COPY-PACK.md](docs/copy/COPY-PACK.md).
 
 ## Rychlý start
 
@@ -18,7 +20,9 @@ npm run dev
 
 Otevřete [http://localhost:3000](http://localhost:3000).
 
-Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru. Odkaz otevře potvrzovací stránku (prohlížeče odkazy přednačítají — token se spotřebuje až po kliknutí na **Vstoupit do firmy**).
+Dev přihlášení firmy: na `/firma/prihlaseni` zadejte `novak@kovovyroba-novak.test`. Magic-link se vypíše do konzole serveru. Odkaz otevře potvrzovací stránku (prohlížeče odkazy přednačítají; token se spotřebuje až po kliknutí na **Vstoupit do firmy**).
+
+Registrace: `/firma/registrace` (IČO + ARES s timeoutem; když ARES neodpoví, účet jde jako `pending` / `manual`).
 
 Správa provozu (`/admin`, ne firemní portál): v `.env` nastavte `ADMIN_EMAILS=tomas@dilnajobs.test`, pak `npm run magic:admin` a potvrďte odkaz. Sondy: `GET /api/health` (živost), `GET /api/ready` (Postgres). Podrobnosti: [docs/OPS.md](docs/OPS.md).
 
@@ -46,7 +50,7 @@ Rozhodnutí: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), ADR [001](docs/adr/00
 | --- | --- |
 | `npm run dev` | Next.js (Turbopack) |
 | `npm run db:migrate` | SQL migrace |
-| `npm run db:seed` | ≥8 CZ výrobních nabídek |
+| `npm run db:seed` | Demo firmy + nabídky napříč obory (`DEMO_SEED`) |
 | `npm run magic:dev` | Dev magic-link pro `novak@kovovyroba-novak.test` |
 | `npm run magic:admin` | Dev magic-link pro první adresu v `ADMIN_EMAILS` |
 | `npm run worker` | Expirace inzerátů + heartbeat `job_expiry` |
@@ -57,7 +61,7 @@ Rozhodnutí: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), ADR [001](docs/adr/00
 
 Hotové v1: veřejné stránky z DB, hledání/filtry/řazení, přihláška (Zod + rate limit), magic-link v dev, firma vidí jen svoje přihlášky (RLS), bezpečnostní hlavičky, audit log, liveness/readiness, admin konzole `/admin` (allowlist `ADMIN_EMAILS`).
 
-Stuby (jasně označené v kódu i v [docs/STUBS.md](docs/STUBS.md)): e-mail bez Resend/SMTP, S3 pokud chybí klíče, Stripe Checkout pokud chybí `STRIPE_SECRET_KEY`, ARES ověření IČO, Sentry pokud chybí `SENTRY_DSN`.
+Stuby (jasně označené v kódu i v [docs/STUBS.md](docs/STUBS.md)): e-mail bez Resend/SMTP, S3 pokud chybí klíče, Stripe Checkout pokud chybí `STRIPE_SECRET_KEY`, ARES když je `ARES_DISABLED` nebo timeout (účet jde jako pending/manual), Sentry pokud chybí `SENTRY_DSN`.
 
 ## Phase 2: go-live checklist
 

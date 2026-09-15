@@ -81,6 +81,8 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
       email: parsed.data.email,
       message: parsed.data.message,
       consentGdpr: true,
+      consentAt: new Date(),
+      status: "new",
       cvObjectKey: parsed.data.cvObjectKey,
       cvFileName: parsed.data.cvFileName,
       cvContentType: parsed.data.cvContentType,

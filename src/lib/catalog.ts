@@ -1,43 +1,89 @@
-export const PROFESSIONS = [
-  { slug: "cnc", label: "CNC", db: "cnc" },
-  { slug: "svarac", label: "Svářeč", db: "welder" },
-  { slug: "serizovac", label: "Seřizovač", db: "setter" },
-  { slug: "elektrikar", label: "Průmyslový elektrikář", db: "electrician" },
-  { slug: "udrzba", label: "Údržba", db: "maintenance" },
-  { slug: "zamecnik", label: "Zámečník", db: "locksmith" },
-  { slug: "operator", label: "Operátor výroby", db: "operator" },
+export const CATEGORIES = [
+  { slug: "administration", label: "Administrativa", db: "administration" },
+  { slug: "accounting", label: "Účetnictví a finance", db: "accounting" },
+  { slug: "sales", label: "Obchod a prodej", db: "sales" },
+  { slug: "customer_service", label: "Zákaznický servis", db: "customer_service" },
+  { slug: "logistics", label: "Doprava a logistika", db: "logistics" },
+  { slug: "driver", label: "Řidiči", db: "driver" },
+  { slug: "it", label: "IT a vývoj", db: "it" },
+  { slug: "healthcare", label: "Zdravotnictví", db: "healthcare" },
+  { slug: "education", label: "Školství", db: "education" },
+  { slug: "hospitality", label: "Gastronomie a ubytování", db: "hospitality" },
+  { slug: "construction", label: "Stavebnictví", db: "construction" },
+  { slug: "manufacturing", label: "Výroba a dílna", db: "manufacturing" },
+  { slug: "trades", label: "Řemesla", db: "trades" },
+  { slug: "facility", label: "Úklid a správa", db: "facility" },
+  { slug: "marketing", label: "Marketing", db: "marketing" },
+  { slug: "hr", label: "Personalistika", db: "hr" },
+  { slug: "other", label: "Ostatní", db: "other" },
 ] as const;
 
-export type ProfessionDb = (typeof PROFESSIONS)[number]["db"] | "other";
-export type ProfessionSlug = (typeof PROFESSIONS)[number]["slug"];
+/** Legacy manufacturing slugs still stored on older rows. */
+export const LEGACY_PROFESSIONS = [
+  { slug: "cnc", label: "CNC", db: "cnc", category: "manufacturing" },
+  { slug: "svarac", label: "Svářeč", db: "welder", category: "trades" },
+  { slug: "serizovac", label: "Seřizovač", db: "setter", category: "manufacturing" },
+  { slug: "elektrikar", label: "Průmyslový elektrikář", db: "electrician", category: "trades" },
+  { slug: "udrzba", label: "Údržba", db: "maintenance", category: "trades" },
+  { slug: "zamecnik", label: "Zámečník", db: "locksmith", category: "trades" },
+  { slug: "operator", label: "Operátor výroby", db: "operator", category: "manufacturing" },
+] as const;
+
+export const PROFESSIONS = CATEGORIES;
+
+export type CategoryDb = (typeof CATEGORIES)[number]["db"];
+export type ProfessionDb = CategoryDb | (typeof LEGACY_PROFESSIONS)[number]["db"] | "other";
+export type ProfessionSlug = (typeof CATEGORIES)[number]["slug"] | (typeof LEGACY_PROFESSIONS)[number]["slug"];
+
+export const CATEGORY_DB = CATEGORIES.map((c) => c.db);
+export const PROFESSION_DB = [
+  ...CATEGORY_DB,
+  ...LEGACY_PROFESSIONS.map((p) => p.db),
+] as const;
 
 export const CITIES = [
+  { slug: "praha", label: "Praha", region: "Hlavní město Praha" },
   { slug: "brno", label: "Brno", region: "Jihomoravský" },
   { slug: "ostrava", label: "Ostrava", region: "Moravskoslezský" },
   { slug: "plzen", label: "Plzeň", region: "Plzeňský" },
-  { slug: "mlada-boleslav", label: "Mladá Boleslav", region: "Středočeský" },
+  { slug: "olomouc", label: "Olomouc", region: "Olomoucký" },
   { slug: "liberec", label: "Liberec", region: "Liberecký" },
-  { slug: "zlin", label: "Zlín", region: "Zlínský" },
-  { slug: "pardubice", label: "Pardubice", region: "Pardubický" },
   { slug: "ceske-budejovice", label: "České Budějovice", region: "Jihočeský" },
-  { slug: "kolin", label: "Kolín", region: "Středočeský" },
+  { slug: "hradec-kralove", label: "Hradec Králové", region: "Královéhradecký" },
+  { slug: "pardubice", label: "Pardubice", region: "Pardubický" },
+  { slug: "zlin", label: "Zlín", region: "Zlínský" },
+  { slug: "mlada-boleslav", label: "Mladá Boleslav", region: "Středočeský" },
   { slug: "kladno", label: "Kladno", region: "Středočeský" },
+  { slug: "kolin", label: "Kolín", region: "Středočeský" },
 ] as const;
 
 export type CitySlug = (typeof CITIES)[number]["slug"];
 
-export const EMPLOYMENT_TYPES = [
-  { slug: "full_time", label: "Hlavní pracovní poměr" },
-  { slug: "part_time", label: "Zkrácený úvazek" },
-  { slug: "shift", label: "Směnný provoz" },
+export const CONTRACT_TYPES = [
+  { slug: "hpp", label: "HPP" },
+  { slug: "dpp", label: "DPP" },
+  { slug: "dpc", label: "DPČ" },
+  { slug: "ico", label: "IČO / živnost" },
 ] as const;
 
+export const EMPLOYMENT_TYPES = [
+  { slug: "full_time", label: "Hlavní pracovní poměr", contract: "hpp" },
+  { slug: "part_time", label: "Zkrácený úvazek", contract: "dpp" },
+  { slug: "shift", label: "Směnný provoz", contract: "hpp" },
+] as const;
+
+export const PAGE_SIZE = 20;
+
+export function categoryByDb(db: string) {
+  return CATEGORIES.find((c) => c.db === db) ?? LEGACY_PROFESSIONS.find((p) => p.db === db);
+}
+
 export function professionBySlug(slug: string) {
-  return PROFESSIONS.find((p) => p.slug === slug);
+  return CATEGORIES.find((p) => p.slug === slug) ?? LEGACY_PROFESSIONS.find((p) => p.slug === slug);
 }
 
 export function professionByDb(db: string) {
-  return PROFESSIONS.find((p) => p.db === db);
+  return categoryByDb(db);
 }
 
 export function cityBySlug(slug: string) {
@@ -47,4 +93,26 @@ export function cityBySlug(slug: string) {
 export function cityByLabel(label: string) {
   const lower = label.toLocaleLowerCase("cs");
   return CITIES.find((c) => c.label.toLocaleLowerCase("cs") === lower);
+}
+
+export function categoryForProfession(profession: string): string {
+  const legacy = LEGACY_PROFESSIONS.find((p) => p.db === profession);
+  if (legacy) return legacy.category;
+  if (CATEGORY_DB.includes(profession as CategoryDb)) return profession;
+  return "other";
+}
+
+export function contractForEmployment(employmentType: string): string {
+  if (employmentType === "part_time" || employmentType === "dpp") return "dpp";
+  if (employmentType === "dpc") return "dpc";
+  if (employmentType === "ico") return "ico";
+  return "hpp";
+}
+
+export function isProfessionDb(value: string): value is ProfessionDb {
+  return (PROFESSION_DB as readonly string[]).includes(value);
+}
+
+export function isCategoryDb(value: string): value is CategoryDb {
+  return (CATEGORY_DB as readonly string[]).includes(value);
 }

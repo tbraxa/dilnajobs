@@ -5,8 +5,8 @@
 - Employers: transparent B2B. Price without VAT, what you get, what we refuse (agentury).
 - No AI filler: “inovativní ekosystém”, “synergie”, “digitální transformace talentu”.
 - Brand: **DílnaJobs** (one word, capital D and J). Domain: dilnajobs.cz.
-- Professions in UI: CNC, svářeč, seřizovač, průmyslový elektrikář, údržba, zámečník, operátor výroby.
-- Money: `2 990 Kč` (narrow space). Salary ranges on ads: `45–55 000 Kč / měsíc`.
+- Professions in UI: all-profession taxonomy (administrativa, účetnictví, obchod, IT, řidiči, zdravotnictví, výroba, řemesla, …). See `src/lib/catalog.ts`.
+- Money: `2 990 Kč` (narrow space). Salary ranges on ads: `45 000 až 55 000 Kč` (no em dash or en dash in UI copy).
 - Errors: say what to do. “Telefon má mít 9 číslic. Zkuste to znovu.”
 - Empty states: “Na tento filtr teď nic nemáme.” Not “Oops.”
 - Legal tone on GDPR / ToS: plain, not theatrical.
