@@ -11,7 +11,7 @@ export function CatalogUnavailable({
     <div className="empty-panel">
       <p className="h3">{title}</p>
       <p className="hint">{detail}</p>
-      <a href="/nabidky" className="btn btn-ghost" style={{ marginTop: 12 }}>
+      <a href="/nabidky" className="btn btn-ghost empty-action">
         {copy.nabidky.emptyErrorCta}
       </a>
     </div>
@@ -33,7 +33,7 @@ export function EmptyJobs({
     <div className="empty-panel">
       <p className="h3">{title}</p>
       <p className="hint">{body}</p>
-      <a href={ctaHref} className="btn btn-ghost" style={{ marginTop: 12 }}>
+      <a href={ctaHref} className="btn btn-ghost empty-action">
         {ctaLabel}
       </a>
     </div>

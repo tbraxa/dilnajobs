@@ -21,7 +21,7 @@ export default function ProFirmyPage() {
           <div className="hero-copy">
             <h1 className="h1 hero-claim">{copy.employers.claim}</h1>
             <p className="hero-sub">{copy.employers.helper}</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 8 }}>
+            <div className="hero-actions">
               <Link className="btn btn-primary" href="/firma/registrace" id="registrace">
                 {copy.employers.ctaPrimary}
               </Link>

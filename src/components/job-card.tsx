@@ -7,12 +7,32 @@ import { contractLabel, copy, workModeLabel } from "@/lib/copy";
 import { CompanyMark, VerifiedBadge } from "./craft-marks";
 
 type JobRow = Awaited<ReturnType<typeof searchJobs>>[number];
+export type JobCardData = Pick<
+  JobRow,
+  | "id"
+  | "slug"
+  | "title"
+  | "profession"
+  | "category"
+  | "city"
+  | "employmentType"
+  | "contractType"
+  | "workMode"
+  | "isAgency"
+  | "salaryMin"
+  | "salaryMax"
+  | "salaryNote"
+  | "salaryType"
+  | "publishedAt"
+  | "companyName"
+  | "verificationStatus"
+>;
 
-function jobContractLabel(job: JobRow) {
+function jobContractLabel(job: JobCardData) {
   return contractLabel(job.contractType || job.employmentType);
 }
 
-function JobIdentity({ job }: { job: JobRow }) {
+function JobIdentity({ job }: { job: JobCardData }) {
   const verified = job.verificationStatus === "verified";
   return (
     <div className="job-company">
@@ -23,7 +43,7 @@ function JobIdentity({ job }: { job: JobRow }) {
   );
 }
 
-function JobMeta({ job }: { job: JobRow }) {
+function JobMeta({ job }: { job: JobCardData }) {
   const contract = jobContractLabel(job);
   const mode = workModeLabel(job.workMode);
   return (
@@ -35,7 +55,7 @@ function JobMeta({ job }: { job: JobRow }) {
   );
 }
 
-export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" | "h3" }) {
+export function JobCard({ job, heading = "h3" }: { job: JobCardData; heading?: "h2" | "h3" }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const media = jobMediaClass(category?.db ?? job.category, job.profession);
   const TitleTag = heading;
@@ -58,7 +78,7 @@ export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" |
   );
 }
 
-export function JobRowCard({ job }: { job: JobRow }) {
+export function JobRowCard({ job }: { job: JobCardData }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const media = jobMediaClass(category?.db ?? job.category, job.profession);
   return (

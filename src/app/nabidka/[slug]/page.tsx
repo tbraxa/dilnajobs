@@ -36,7 +36,7 @@ export default async function JobPage({ params }: Props) {
   const catalog = await loadPublishedJobBySlug(slug);
   if (!catalog.ok) {
     return (
-      <main className="wrap" style={{ padding: "40px 0 72px" }}>
+      <main className="wrap catalog-fallback">
         <CatalogUnavailable title={copy.nabidky.emptyErrorTitle} detail={copy.nabidky.emptyErrorBody} />
       </main>
     );
@@ -60,27 +60,23 @@ export default async function JobPage({ params }: Props) {
         <Image src={PHOTOS.officeWide.src} alt="" fill sizes="100vw" priority style={{ objectFit: "cover" }} />
       </div>
       <div className="wrap detail-hero">
-        <p className="meta" style={{ margin: "0 0 16px" }}>
-          <Link href="/nabidky" style={{ color: "var(--ink-muted)" }}>
+        <p className="meta detail-back">
+          <Link href="/nabidky" className="detail-back-link">
             {copy.detail.ctaBack}
           </Link>
         </p>
         <div className="detail-hero-inner">
           <CompanyMark name={mark} tone={tone} large />
           <div>
-            <h1 className="h1" style={{ fontSize: "clamp(1.75rem,3vw,2.35rem)", maxWidth: "18ch" }}>
-              {job.title}
-            </h1>
-            <div className="job-company" style={{ marginTop: 8 }}>
+            <h1 className="h1 detail-title">{job.title}</h1>
+            <div className="job-company detail-company">
               {copy.card.metaCompany(row.companyName)}
               {verified ? <VerifiedBadge label={copy.card.badgeVerified} /> : null}
               {isNewJob(job.publishedAt) ? <span className="badge-new">{copy.card.badgeNew}</span> : null}
               {job.isAgency ? <span className="chip">{copy.card.badgeAgency}</span> : null}
             </div>
             {metaBits.length ? (
-              <p className="meta" style={{ margin: "8px 0 0" }}>
-                {metaBits.join(" · ")}
-              </p>
+              <p className="meta detail-meta">{metaBits.join(" · ")}</p>
             ) : null}
           </div>
         </div>
@@ -130,7 +126,7 @@ export default async function JobPage({ params }: Props) {
 
           <div className="prose">
             <h3 id="about">{copy.detail.sectionAbout}</h3>
-            <p style={{ whiteSpace: "pre-wrap" }}>{job.description}</p>
+            <p className="preserve-lines">{job.description}</p>
             {requirements.length ? (
               <>
                 <h3 id="requirements">{copy.detail.sectionRequirements}</h3>
@@ -151,7 +147,7 @@ export default async function JobPage({ params }: Props) {
                     ))}
                   </ul>
                 ) : (
-                  <p style={{ whiteSpace: "pre-wrap" }}>{job.benefits}</p>
+                  <p className="preserve-lines">{job.benefits}</p>
                 )}
               </>
             ) : null}

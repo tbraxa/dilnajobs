@@ -7,7 +7,7 @@ const cover = { objectFit: "cover" as const };
 export function HeroMosaic({ variant = "home" }: { variant?: "home" | "employers" }) {
   if (variant === "employers") {
     return (
-      <div className="hero-visual" aria-hidden="true" style={{ height: 360, minHeight: 360 }}>
+      <div className="hero-visual hero-visual-employers" aria-hidden="true">
         <div className="hero-geo" />
         <div className="shot shot-a">
           <Image
