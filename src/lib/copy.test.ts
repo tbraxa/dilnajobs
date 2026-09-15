@@ -69,6 +69,12 @@ describe("COPY-PACK v1.3", () => {
     expect(copy.card.workModeRemote).toBe("Na dálku");
     expect(copy.card.workModeRemote).not.toBe("Remote");
     expect(copy.card.publishedToday).toBe("Zveřejněno dnes");
+    expect(copy.nabidky.ctaFilters).toBe("Filtry");
+    expect(copy.nabidky.ctaFiltersDone).toBe("Hotovo");
+    expect(copy.nabidky.filtersSalaryAny).toBe("Bez minima");
+    expect(copy.nabidky.filtersCount(1)).toBe("1 filtr");
+    expect(copy.nabidky.filtersCount(3)).toBe("3 filtry");
+    expect(copy.nabidky.filtersCount(5)).toBe("5 filtrů");
     expect(contractLabel("hpp")).toBe("HPP");
     expect(contractLabel("dpc")).toBe("DPČ");
     expect(contractLabel("ico")).toBe("IČO / živnost");

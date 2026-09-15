@@ -51,10 +51,14 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | label_place | Místo |
 | cta_search | Hledat |
 | cta_show_filters | Zobrazit filtry |
+| cta_filters | Filtry |
+| cta_filters_close | Zavřít |
+| cta_filters_done | Hotovo |
 | section_results | Výsledky |
 | filters_place | Místo |
 | filters_contract | Úvazek |
 | filters_salary | Mzda od |
+| filters_salary_any | Bez minima |
 | filters_seniority | Seniorita |
 | filters_mode | Režim |
 | filter_mode_all | Vše |
