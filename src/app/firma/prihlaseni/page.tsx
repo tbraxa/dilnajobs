@@ -3,7 +3,7 @@ import { LoginForm } from "@/components/auth-forms";
 import { copy } from "@/lib/copy";
 
 export const metadata: Metadata = {
-  title: copy.login.metaTitle,
+  title: { absolute: copy.login.metaTitle },
   description: copy.login.metaDescription,
 };
 

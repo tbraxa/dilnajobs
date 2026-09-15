@@ -3,7 +3,7 @@ import { ButtonLink } from "@/components/ui";
 import { copy } from "@/lib/copy";
 
 export const metadata: Metadata = {
-  title: copy.employers.metaTitle,
+  title: { absolute: copy.employers.metaTitle },
   description: copy.employers.metaDescription,
 };
 

@@ -8,7 +8,7 @@ import { PAGE_SIZE } from "@/lib/catalog";
 import { searchHasFilters } from "@/lib/search-params";
 
 export const metadata: Metadata = {
-  title: copy.nabidky.metaTitle,
+  title: { absolute: copy.nabidky.metaTitle },
   description: copy.nabidky.metaDescription,
 };
 export const dynamic = "force-dynamic";

@@ -8,7 +8,7 @@ import { loadFeaturedJobs } from "@/lib/jobs/search";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: copy.home.metaTitle,
+  title: { absolute: copy.home.metaTitle },
   description: copy.home.metaDescription,
 };
 

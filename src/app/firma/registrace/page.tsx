@@ -3,7 +3,7 @@ import { RegisterForm } from "@/components/auth-forms";
 import { copy } from "@/lib/copy";
 
 export const metadata: Metadata = {
-  title: copy.register.metaTitle,
+  title: { absolute: copy.register.metaTitle },
   description: copy.register.metaDescription,
 };
 
