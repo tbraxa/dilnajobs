@@ -47,14 +47,6 @@ body {
   min-height: 100vh;
 }
 
-.workshop-grid {
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(to right, rgba(11, 13, 18, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(11, 13, 18, 0.045) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
 .display {
   font-family: var(--font-archivo), Archivo, sans-serif;
   letter-spacing: -0.03em;

@@ -7,7 +7,7 @@ export default function GdprPage() {
     <main className="mx-auto w-full max-w-3xl px-4 py-8 text-[15px] leading-relaxed sm:px-6">
       <h1 className="display text-3xl font-semibold">Osobní údaje</h1>
       <p className="mt-4 text-steel">
-        Správce: provozovatel DílnaJobs (doplní se před spuštěním na dilnajobs.cz). Kontakt: zdenek@dilnajobs.cz
+        Správce: provozovatel OpenJobs (doplní se před spuštěním na dilnajobs.cz). Kontakt: zdenek@dilnajobs.cz
         (zástupný e-mail).
       </p>
       <h2 className="display mt-8 text-xl font-semibold">Uchazeči</h2>
@@ -21,7 +21,7 @@ export default function GdprPage() {
       </p>
       <p className="mt-2">
         Uchování: do smazání firmou, nebo 12 měsíců po konci inzerátu (úklid je v1 částečně ruční). Výmaz a přístup:
-        napište na kontakt výše — v1 nemáte samoobsluhu.
+        napište na kontakt výše. V1 nemáte samoobsluhu.
       </p>
       <h2 className="display mt-8 text-xl font-semibold">Zaměstnavatelé</h2>
       <p className="mt-2">

@@ -6,6 +6,7 @@ import { and, eq, gt, isNull } from "drizzle-orm";
 import { db, sql } from "@/db/client";
 import { employerUsers, employers, magicTokens, sessions } from "@/db/schema";
 import { resolveAppUrl } from "./app-url";
+import { copy } from "./copy";
 import { env } from "./env";
 import { hashIp, randomToken, sha256 } from "./crypto";
 import { sendEmail } from "./email";
@@ -51,6 +52,8 @@ export async function requestMagicLink(input: {
   companyName?: string;
   name?: string;
   city?: string;
+  dic?: string;
+  phone?: string;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const email = input.email.trim().toLowerCase();
   const ip = await clientIp();
@@ -70,6 +73,8 @@ export async function requestMagicLink(input: {
       companyName: input.companyName,
       ico: input.ico,
       city: input.city,
+      dic: input.dic,
+      phone: input.phone,
     });
     if (!parsed.success) {
       return { ok: false, error: parsed.error.issues[0]?.message ?? "Zkontrolujte údaje." };
@@ -79,8 +84,8 @@ export async function requestMagicLink(input: {
       return { ok: false, error: "IČO nemá platný kontrolní součet. Zkontrolujte osm číslic." };
     }
     const ares = await verifyIcoViaAres(ico);
-    if (!ares.ok) {
-      return { ok: false, error: "IČO se nepodařilo ověřit." };
+    if (ares.source === "checksum") {
+      return { ok: false, error: "IČO nemá platný kontrolní součet. Zkontrolujte osm číslic." };
     }
 
     const existingUser = await sql<{ id: string }[]>`select id from employer_user_by_email(${email})`;
@@ -88,15 +93,24 @@ export async function requestMagicLink(input: {
       return { ok: false, error: "Tento e-mail už máme. Přihlaste se odkazem." };
     }
 
+    const legalName = ares.legalName?.trim() || parsed.data.companyName;
+    const displayName = parsed.data.companyName || legalName;
+    const city = ares.city || parsed.data.city;
+    const verificationStatus = ares.verificationStatus;
+
     const employerId = randomUUID();
     try {
       await db.insert(employers).values({
         id: employerId,
         ico,
-        companyName: parsed.data.companyName,
-        legalName: parsed.data.companyName,
-        city: parsed.data.city,
-        verificationStatus: "pending",
+        companyName: displayName,
+        displayName,
+        legalName,
+        dic: parsed.data.dic || ares.dic,
+        city,
+        address: ares.address ? { ...ares.address } : city ? { city } : null,
+        aresRaw: ares.raw ?? { source: ares.source },
+        verificationStatus,
         planCode: "trial",
         planRenewsAt: new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10),
       });
@@ -108,6 +122,7 @@ export async function requestMagicLink(input: {
       employerId,
       email,
       name: parsed.data.name,
+      phone: parsed.data.phone,
       role: "owner",
     });
 
@@ -115,7 +130,12 @@ export async function requestMagicLink(input: {
       actorType: "employer_user",
       employerId,
       action: "employer.registered",
-      metadata: { ico, aresStub: true },
+      metadata: {
+        ico,
+        aresSource: ares.source,
+        verificationStatus,
+        aresStub: ares.stub === true,
+      },
       ipHash: hashIp(ip),
     });
   } else {
@@ -136,7 +156,7 @@ export async function requestMagicLink(input: {
     const url = `${resolveAppUrl()}/firma/prihlaseni/overit?token=${encodeURIComponent(token)}`;
     await sendEmail({
       to: email,
-      subject: "Přihlášení na DílnaJobs",
+      subject: `Přihlášení na ${copy.brand}`,
       text: `Odkaz platí ${env.MAGIC_LINK_MINUTES} minut a jde použít jen jednou.\n\n${url}\n\nPokud jste o něj nežádali, ignorujte ho.`,
     });
 
@@ -216,6 +236,18 @@ export async function createSessionFromMagicToken(token: string): Promise<{
     userAgent: ua,
     ipHash: hashIp(ip),
   });
+
+  try {
+    const { withEmployerRls } = await import("@/db/rls");
+    await withEmployerRls(user.employer_id, async (tx) => {
+      await tx
+        .update(employerUsers)
+        .set({ lastLoginAt: new Date() })
+        .where(eq(employerUsers.id, user.id));
+    });
+  } catch {
+    /* last_login_at is best-effort */
+  }
 
   await audit({
     actorType: "employer_user",

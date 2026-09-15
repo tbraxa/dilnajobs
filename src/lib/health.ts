@@ -17,6 +17,8 @@ const EXPECTED_MIGRATIONS = [
   "0003_employer_user_lookup.sql",
   "0004_admin_ops.sql",
   "0005_payments_email.sql",
+  "0006_enterprise_mvp.sql",
+  "0007_app_role_grants.sql",
 ];
 
 async function timed<T>(fn: () => Promise<T>, ms = 1500): Promise<{ ok: true; value: T; latencyMs: number } | { ok: false; error: string; latencyMs: number }> {
@@ -225,7 +227,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
   checks.push({
     name: "sentry",
     status: env.SENTRY_DSN ? "ok" : "unconfigured",
-    detail: env.SENTRY_DSN ? "DSN nastavené" : "SENTRY_DSN chybí — výjimky jdou do strukturovaných logů",
+      detail: env.SENTRY_DSN ? "DSN nastavené" : "SENTRY_DSN chybí. Výjimky jdou do strukturovaných logů",
     checkedAt,
   });
 

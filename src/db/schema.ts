@@ -15,12 +15,17 @@ const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 };
 
+/** MVP-SPEC Company. Table name stays `employers` (existing RLS + app role). */
 export const employers = pgTable("employers", {
   id: uuid("id").primaryKey().defaultRandom(),
   ico: char("ico", { length: 8 }).notNull().unique(),
   companyName: text("company_name").notNull(),
+  displayName: text("display_name").notNull(),
   legalName: text("legal_name").notNull(),
+  dic: text("dic"),
   city: text("city"),
+  address: jsonb("address").$type<Record<string, unknown> | null>(),
+  aresRaw: jsonb("ares_raw").$type<unknown>(),
   isAgency: boolean("is_agency").notNull().default(false),
   verificationStatus: text("verification_status").notNull().default("pending"),
   planCode: text("plan_code").notNull().default("trial"),
@@ -30,6 +35,7 @@ export const employers = pgTable("employers", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/** MVP-SPEC EmployerUser */
 export const employerUsers = pgTable("employer_users", {
   id: uuid("id").primaryKey().defaultRandom(),
   employerId: uuid("employer_id")
@@ -37,8 +43,10 @@ export const employerUsers = pgTable("employer_users", {
     .references(() => employers.id, { onDelete: "cascade" }),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
+  phone: text("phone"),
   role: text("role").notNull().default("owner"),
   createdAt: timestamps.createdAt,
+  lastLoginAt: timestamp("last_login_at", { withTimezone: true }),
 });
 
 export const magicTokens = pgTable("magic_tokens", {
@@ -90,13 +98,18 @@ export const jobs = pgTable(
     slug: text("slug").notNull().unique(),
     title: text("title").notNull(),
     profession: text("profession").notNull(),
+    category: text("category").notNull().default("other"),
     city: text("city").notNull(),
     region: text("region").notNull(),
     employmentType: text("employment_type").notNull().default("full_time"),
+    contractType: text("contract_type").notNull().default("hpp"),
+    workMode: text("work_mode").notNull().default("onsite"),
+    isAgency: boolean("is_agency").notNull().default(false),
     shiftNote: text("shift_note"),
     salaryMin: integer("salary_min"),
     salaryMax: integer("salary_max"),
     salaryCurrency: text("salary_currency").notNull().default("CZK"),
+    salaryType: text("salary_type").notNull().default("monthly"),
     salaryNote: text("salary_note"),
     description: text("description").notNull(),
     requirements: text("requirements"),
@@ -112,6 +125,7 @@ export const jobs = pgTable(
   (t) => [
     index("jobs_status_expires_idx").on(t.status, t.expiresAt),
     index("jobs_profession_city_idx").on(t.profession, t.city),
+    index("jobs_category_idx").on(t.category),
   ],
 );
 
@@ -133,6 +147,8 @@ export const applications = pgTable(
     cvContentType: text("cv_content_type"),
     message: text("message"),
     consentGdpr: boolean("consent_gdpr").notNull(),
+    consentAt: timestamp("consent_at", { withTimezone: true }),
+    status: text("status").notNull().default("new"),
     ipHash: text("ip_hash"),
     createdAt: timestamps.createdAt,
   },

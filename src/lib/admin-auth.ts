@@ -5,6 +5,7 @@ import { and, eq, gt, isNull } from "drizzle-orm";
 import { db } from "@/db/client";
 import { adminSessions, magicTokens } from "@/db/schema";
 import { resolveAppUrl } from "@/lib/app-url";
+import { copy } from "@/lib/copy";
 import { env, isAdminEmail } from "@/lib/env";
 import { hashIp, randomToken, sha256 } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
@@ -60,7 +61,7 @@ export async function requestAdminMagicLink(emailRaw: string): Promise<{ ok: tru
   const url = `${resolveAppUrl()}/admin/prihlaseni/overit?token=${encodeURIComponent(token)}`;
   await sendEmail({
     to: email,
-    subject: "Přihlášení správce DílnaJobs",
+    subject: `Přihlášení správce ${copy.brand}`,
     text: `Odkaz platí ${env.MAGIC_LINK_MINUTES} minut a jde použít jen jednou.\n\n${url}\n\nPokud jste o něj nežádali, ignorujte ho.`,
   });
   log("info", "admin.magic.sent", { requestId, minutes: env.MAGIC_LINK_MINUTES });

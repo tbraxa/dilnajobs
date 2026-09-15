@@ -17,7 +17,7 @@ export default async function AdminOveritPage({
         <p className="label">Správa</p>
         <h1 className="display mt-2 text-3xl font-semibold">Odkaz je v pořádku</h1>
         <p className="mt-3 text-sm text-steel">
-          Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem — token se spotřebuje až teď.
+          Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem. Token se spotřebuje až teď.
         </p>
         <form action="/admin/prihlaseni/overit/akce" method="post" className="mt-6">
           <input type="hidden" name="token" value={token} />

@@ -1,5 +1,7 @@
 /** Czech IČO: 8 digits + weighted checksum (ARES algorithm). */
 
+import { lookupCompanyByIco, type AresLookupResult } from "./ares";
+
 export function normalizeIco(raw: string): string {
   return raw.replace(/\s+/g, "");
 }
@@ -29,12 +31,10 @@ export function makeValidIco(firstSeven: string): string {
   return firstSeven + String(last);
 }
 
-/** STUB: ARES HTTP lookup. v1 only validates checksum; ops marks verified. */
-export async function verifyIcoViaAres(ico: string): Promise<{
-  ok: boolean;
-  legalName?: string;
-  stub: true;
-}> {
-  if (!isValidIco(ico)) return { ok: false, stub: true };
-  return { ok: true, stub: true };
+/**
+ * ARES lookup for registration. Checksum-invalid → not ok.
+ * Network/timeout → ok with pending/manual so registration is not blocked.
+ */
+export async function verifyIcoViaAres(ico: string): Promise<AresLookupResult> {
+  return lookupCompanyByIco(ico);
 }

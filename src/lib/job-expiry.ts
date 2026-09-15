@@ -1,5 +1,8 @@
 import { sql } from "@/db/client";
 
+/** Public listings close after this many days. Cron + catalog hide `expires_at < now()`. */
+export const LISTING_TTL_DAYS = 30;
+
 export async function expirePublishedJobs(): Promise<number> {
   const rows = await sql<{ expire_published_jobs: number }[]>`select expire_published_jobs()`;
   return Number(rows[0]?.expire_published_jobs ?? 0);

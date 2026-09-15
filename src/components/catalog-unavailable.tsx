@@ -1,6 +1,8 @@
+import { copy } from "@/lib/copy";
+
 export function CatalogUnavailable({
-  title = "Katalog teď nejde načíst",
-  detail = "Databáze odpovídá, ale tabulky s nabídkami ještě nejsou připravené. Po nasazení migrací stránku obnovte. Pokud je nástěnka prázdná schválně, zkuste to později.",
+  title = copy.nabidky.emptyErrorTitle,
+  detail = copy.nabidky.emptyErrorBody,
 }: {
   title?: string;
   detail?: string;
@@ -9,6 +11,9 @@ export function CatalogUnavailable({
     <div className="border border-line bg-paper p-4 text-sm">
       <p className="font-semibold text-ink">{title}</p>
       <p className="mt-2 text-steel">{detail}</p>
+      <a href="/nabidky" className="mt-3 inline-block underline">
+        {copy.nabidky.emptyErrorCta}
+      </a>
     </div>
   );
 }

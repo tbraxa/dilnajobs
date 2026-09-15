@@ -26,7 +26,7 @@ export default async function AdminEmployersPage() {
       <p className="label">Moderace</p>
       <h1 className="display mt-1 text-3xl font-semibold">Firmy</h1>
       <p className="mt-2 text-sm text-steel">
-        Ověření je ruční. Označení agentury firmu zamítne — agentury práce neregistrujeme.
+        Ověření je ruční. Označení agentury firmu zamítne. Agentury práce neregistrujeme.
       </p>
       <div className="mt-6 grid gap-3">
         {rows.map((row) => (
@@ -35,7 +35,7 @@ export default async function AdminEmployersPage() {
               <div>
                 <h2 className="font-semibold">{row.companyName}</h2>
                 <p className="text-sm text-steel">
-                  IČO {row.ico} · {row.city ?? "—"} · {STATUS_CS[row.verificationStatus] ?? row.verificationStatus}
+                  IČO {row.ico} · {row.city ?? "neuvedeno"} · {STATUS_CS[row.verificationStatus] ?? row.verificationStatus}
                   {row.isAgency ? " · agentura" : ""}
                 </p>
               </div>
