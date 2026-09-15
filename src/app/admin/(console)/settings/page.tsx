@@ -4,18 +4,18 @@ export const dynamic = "force-dynamic";
 
 function Flag({ on, label, hint }: { on: boolean; label: string; hint: string }) {
   return (
-    <article className="border border-line bg-paper p-4">
+    <article className="border border-slate-200 bg-white p-4">
       <div className="flex items-start justify-between gap-3">
         <h2 className="font-semibold">{label}</h2>
         <span
           className={`inline-flex items-center rounded-[2px] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
-            on ? "bg-ok text-white" : "border border-line text-steel"
+            on ? "bg-green-700 text-white" : "border border-slate-200 text-slate-600"
           }`}
         >
           {on ? "nastaveno" : "nenastaveno"}
         </span>
       </div>
-      <p className="mt-2 text-sm text-steel">{hint}</p>
+      <p className="mt-2 text-sm text-slate-600">{hint}</p>
     </article>
   );
 }
@@ -24,9 +24,9 @@ export default function AdminSettingsPage() {
   const flags = integrationFlags();
   return (
     <main>
-      <p className="label">Provoz</p>
-      <h1 className="display mt-1 text-3xl font-semibold">Integrace</h1>
-      <p className="mt-2 text-sm text-steel">
+      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provoz</p>
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight">Integrace</h1>
+      <p className="mt-2 text-sm text-slate-600">
         Jen čtení z prostředí. Tajemství (klíče, connection string) se sem nevypisují.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -59,11 +59,11 @@ export default function AdminSettingsPage() {
           label="Schvalování prvního inzerátu"
           hint={flags.autoPublish ? "První inzeráty jdou rovnou ven." : "Nové inzeráty čekají ve pending_review."}
         />
-        <article className="border border-line bg-paper p-4">
+        <article className="border border-slate-200 bg-white p-4">
           <h2 className="font-semibold">Adresy správců</h2>
-          <p className="mt-2 text-sm text-steel">
+          <p className="mt-2 text-sm text-slate-600">
             {flags.adminEmailCount === 0
-              ? "Seznam je prázdný — do správy se nikdo nepřihlásí."
+              ? "Seznam je prázdný. Do správy se nikdo nepřihlásí."
               : flags.adminEmails.join(", ")}
           </p>
         </article>

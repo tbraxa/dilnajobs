@@ -42,7 +42,7 @@ export function resolveAppUrl(source: AppUrlEnv = process.env): string {
   return LOCAL_APP_URL;
 }
 
-/** Safe `new URL(path, base)` — base is never empty. */
+/** Safe `new URL(path, base)`. Base is never empty. */
 export function toAppUrl(path: string, source: AppUrlEnv = process.env): URL {
   return new URL(path, resolveAppUrl(source));
 }

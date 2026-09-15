@@ -16,13 +16,13 @@ export default async function AdminLoginPage() {
   return (
     <AdminLoginChrome>
       <main className="mx-auto max-w-md px-4 py-16">
-        <p className="label">Provozovatel</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Přihlášení správce</h1>
-        <p className="mt-3 text-sm text-steel">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provozovatel</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight">Přihlášení správce</h1>
+        <p className="mt-3 text-sm text-slate-600">
           Oddělené od firemního portálu. Odkaz posíláme jen na schválené provozní adresy. Platí 15 minut a spotřebuje se
           až po potvrzení tlačítkem.
         </p>
-        <div className="mt-6 border border-line bg-paper p-5">
+        <div className="mt-6 border border-slate-200 bg-white p-5">
           <AdminLoginForm />
         </div>
       </main>

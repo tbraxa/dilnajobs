@@ -16,11 +16,11 @@ export default function ErrorPage({
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
-      <p className="label">Chyba</p>
-      <h1 className="display mt-2 text-3xl font-semibold">Něco se pokazilo</h1>
-      <p className="mt-3 max-w-xl text-sm text-steel">
+      <p className="text-xs font-bold uppercase tracking-wider text-blue-700">Chyba</p>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight">Něco se pokazilo</h1>
+      <p className="mt-3 max-w-xl text-sm text-slate-600">
         Stránku teď nejde zobrazit. Zkuste to znovu. Pokud problém trvá, katalog se možná ještě
-        migruje — obnovte za chvíli.
+        migruje. Obnovte stránku za chvíli.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Button type="button" onClick={() => reset()}>

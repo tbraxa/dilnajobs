@@ -48,35 +48,35 @@ export default async function AdminHomePage() {
 
   return (
     <main>
-      <p className="label">Provoz</p>
+      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provoz</p>
       <div className="mt-1 flex flex-wrap items-center gap-3">
-        <h1 className="display text-3xl font-semibold">Přehled</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Přehled</h1>
         <StatusPill status={health.status} />
       </div>
-      <p className="mt-2 text-sm text-steel">
+      <p className="mt-2 text-sm text-slate-600">
         Stav systému: Postgres a přihlášení musí být v pořádku. Ostatní služby bez nastavení hlásí „nenastaveno“.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
-          <Link key={card.label} href={card.href} className="border border-line bg-paper p-4 hover:bg-paper-2">
-            <p className="label">{card.label}</p>
-            <p className="display mt-2 text-3xl font-semibold">{card.value}</p>
+          <Link key={card.label} href={card.href} className="border border-slate-200 bg-white p-4 hover:bg-slate-50">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-600">{card.label}</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight">{card.value}</p>
           </Link>
         ))}
-        <Link href="/admin/health" className="border border-line bg-paper p-4 hover:bg-paper-2">
-          <p className="label">Hloubkové zdraví</p>
-          <p className="mt-2 text-sm text-steel">{health.checks.filter((c) => c.status !== "ok").length} mimo v pořádku</p>
+        <Link href="/admin/health" className="border border-slate-200 bg-white p-4 hover:bg-slate-50">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Hloubkové zdraví</p>
+          <p className="mt-2 text-sm text-slate-600">{health.checks.filter((c) => c.status !== "ok").length} mimo v pořádku</p>
         </Link>
       </div>
-      <h2 className="display mt-10 text-xl font-semibold">Poslední audit</h2>
+      <h2 className="mt-10 text-xl font-semibold tracking-tight">Poslední audit</h2>
       <div className="mt-3 grid gap-2">
         {stats.recentAudit.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Zatím žádné události.</p>
+          <p className="border border-slate-200 p-4 text-sm">Zatím žádné události.</p>
         ) : (
           stats.recentAudit.map((row) => (
-            <div key={row.id} className="border border-line p-3 text-sm">
+            <div key={row.id} className="border border-slate-200 p-3 text-sm">
               <p className="font-medium">{row.action}</p>
-              <p className="text-xs text-steel">
+              <p className="text-xs text-slate-600">
                 {row.actorType} · {row.createdAt.toLocaleString("cs-CZ")}
               </p>
             </div>

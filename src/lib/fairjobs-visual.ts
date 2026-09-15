@@ -42,14 +42,14 @@ export function photoForProfession(profession: string) {
 
 export function cleanUiText(value: string | null | undefined): string {
   return (value ?? "")
-    .replace(/[—–]/g, " ")
+    .replace(/[\u2014\u2013]/g, " ")
     .replace(/\s{2,}/g, " ")
     .trim();
 }
 
 export function cleanUiBlock(value: string | null | undefined): string {
   return (value ?? "")
-    .replace(/[—–]/g, " ")
+    .replace(/[\u2014\u2013]/g, " ")
     .replace(/[ \t]{2,}/g, " ")
     .trim();
 }
