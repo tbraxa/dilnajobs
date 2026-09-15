@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, count, desc, eq, gte, ilike, not, or, sql as dsql } from "drizzle-orm";
+import { and, count, desc, eq, gte, ilike, or, sql as dsql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { employers, jobs } from "@/db/schema";
 import { isMissingRelationError, type CatalogResult } from "@/lib/catalog-error";
@@ -46,19 +46,9 @@ function searchFilters(query: SearchQuery) {
     filters.push(eq(jobs.employmentType, query.employmentType));
   }
 
-  const remoteText = or(
-    ilike(jobs.title, "%na dálku%"),
-    ilike(jobs.description, "%na dálku%"),
-    ilike(jobs.description, "%remote%"),
-  )!;
-  const hybridText = or(
-    ilike(jobs.title, "%hybrid%"),
-    ilike(jobs.description, "%hybrid%"),
-  )!;
-
-  if (query.workMode === "remote") filters.push(remoteText);
-  if (query.workMode === "hybrid") filters.push(hybridText);
-  if (query.workMode === "onsite") filters.push(not(or(remoteText, hybridText)!));
+  if (query.workMode) {
+    filters.push(eq(jobs.workMode, query.workMode));
+  }
 
   return filters;
 }
@@ -71,6 +61,7 @@ const jobCardSelect = {
   city: jobs.city,
   region: jobs.region,
   employmentType: jobs.employmentType,
+  workMode: jobs.workMode,
   shiftNote: jobs.shiftNote,
   salaryMin: jobs.salaryMin,
   salaryMax: jobs.salaryMax,

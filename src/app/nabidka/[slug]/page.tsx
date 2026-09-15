@@ -44,6 +44,7 @@ export default async function JobPage({ params }: Props) {
       : job.employmentType === "shift"
         ? "Směnný provoz"
         : "Hlavní pracovní poměr";
+  const workMode = job.workMode === "remote" ? "Na dálku" : job.workMode === "hybrid" ? "Hybrid" : "Na místě";
 
   return (
     <main className="fj-job-detail">
@@ -68,7 +69,7 @@ export default async function JobPage({ params }: Props) {
           <h1 className="fj-display">{cleanUiText(job.title)}</h1>
           <div className="fj-detail-tags">
             <span>{cleanUiText(job.city)}</span>
-            <span>Na místě</span>
+            <span>{workMode}</span>
             <span>{employment}</span>
           </div>
         </div>
@@ -102,7 +103,7 @@ export default async function JobPage({ params }: Props) {
         </div>
         <div>
           <span>Režim</span>
-          <strong>Na místě</strong>
+          <strong>{workMode}</strong>
         </div>
         <div>
           <span>Nástup</span>

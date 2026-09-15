@@ -64,6 +64,54 @@ function EnergoLogo({ companyName, className }: CompanyLogoProps) {
   );
 }
 
+function AccountingLogo({ companyName, className }: CompanyLogoProps) {
+  return (
+    <svg viewBox="0 0 190 64" role="img" aria-label={`Logo ${companyName}`} className={className}>
+      <circle cx="29" cy="32" r="25" fill="#d9f4e5" />
+      <path d="M17 43V24M29 43V18M41 43V29" stroke="#087a5b" strokeWidth="5" />
+      <text x="66" y="31" fill="#163c35" fontSize="15" fontWeight="900" fontFamily="Arial, sans-serif">
+        ÚČETNÍ SERVIS
+      </text>
+      <text x="67" y="46" fill="#5d756f" fontSize="8.5" fontWeight="700" letterSpacing="2" fontFamily="Arial, sans-serif">
+        PRAHA
+      </text>
+    </svg>
+  );
+}
+
+function LogiTransLogo({ companyName, className }: CompanyLogoProps) {
+  return (
+    <svg viewBox="0 0 190 64" role="img" aria-label={`Logo ${companyName}`} className={className}>
+      <rect x="4" y="9" width="51" height="46" rx="8" fill="#e1eaff" />
+      <path d="M13 37h24l-7 8M46 27H22l7-8" fill="none" stroke="#0057e7" strokeWidth="5" />
+      <circle cx="16" cy="49" r="4" fill="#ffd84d" />
+      <circle cx="43" cy="49" r="4" fill="#ffd84d" />
+      <text x="66" y="33" fill="#12335d" fontSize="18" fontWeight="900" letterSpacing="-.7" fontFamily="Arial, sans-serif">
+        LOGITRANS
+      </text>
+      <text x="67" y="47" fill="#66768b" fontSize="8" fontWeight="700" letterSpacing="2.2" fontFamily="Arial, sans-serif">
+        JIH
+      </text>
+    </svg>
+  );
+}
+
+function SoftForgeLogo({ companyName, className }: CompanyLogoProps) {
+  return (
+    <svg viewBox="0 0 190 64" role="img" aria-label={`Logo ${companyName}`} className={className}>
+      <rect x="4" y="7" width="50" height="50" rx="9" fill="#122238" />
+      <path d="m24 19-9 13 9 13M35 19l9 13-9 13" fill="none" stroke="#8fb3ff" strokeWidth="4" />
+      <circle cx="30" cy="32" r="4" fill="#ffd84d" />
+      <text x="66" y="33" fill="#14233a" fontSize="18" fontWeight="900" letterSpacing="-.8" fontFamily="Arial, sans-serif">
+        SOFTFORGE
+      </text>
+      <text x="67" y="47" fill="#66768b" fontSize="8" fontWeight="700" letterSpacing="1.7" fontFamily="Arial, sans-serif">
+        CZECH
+      </text>
+    </svg>
+  );
+}
+
 function DefaultLogo({ companyName, className }: CompanyLogoProps) {
   return (
     <svg viewBox="0 0 190 64" role="img" aria-label={`Logo ${companyName}`} className={className}>
@@ -87,5 +135,8 @@ export function CompanyLogo({ companyName, className = "" }: CompanyLogoProps) {
   if (normalized.includes("morava") || normalized.includes("konstrukce")) return <MoravaLogo {...props} />;
   if (normalized.includes("plast")) return <PlastFormLogo {...props} />;
   if (normalized.includes("energo")) return <EnergoLogo {...props} />;
+  if (normalized.includes("účetní") || normalized.includes("ucetni")) return <AccountingLogo {...props} />;
+  if (normalized.includes("logitrans")) return <LogiTransLogo {...props} />;
+  if (normalized.includes("softforge")) return <SoftForgeLogo {...props} />;
   return <DefaultLogo {...props} />;
 }

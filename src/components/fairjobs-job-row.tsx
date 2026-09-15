@@ -22,6 +22,12 @@ function employmentLabel(value: string) {
   return "Hlavní pracovní poměr";
 }
 
+function workModeLabel(value: string) {
+  if (value === "remote") return "Na dálku";
+  if (value === "hybrid") return "Hybrid";
+  return "Na místě";
+}
+
 export function JobResultRow({ job }: { job: PublicJob }) {
   const verified = job.verificationStatus === "verified";
   const directEmployer = !job.isAgency;
@@ -51,7 +57,7 @@ export function JobResultRow({ job }: { job: PublicJob }) {
           <span>{profession}</span>
           <span>{employmentLabel(job.employmentType)}</span>
           {directEmployer ? <span>Přímo od firmy</span> : null}
-          <span>Na místě</span>
+          <span>{workModeLabel(job.workMode)}</span>
         </div>
       </div>
 
@@ -86,7 +92,7 @@ export function HomeJobLine({ job }: { job: PublicJob }) {
         <h3>
           <Link href={`/nabidka/${job.slug}`}>{cleanUiText(job.title)}</Link>
         </h3>
-        <small>{cleanUiText(job.city)} · Na místě</small>
+        <small>{cleanUiText(job.city)} · {workModeLabel(job.workMode)}</small>
       </div>
       <strong>{cleanUiText(formatSalary(job.salaryMin, job.salaryMax, job.salaryNote))}</strong>
       <Link href={`/nabidka/${job.slug}`} className="fj-home-job-arrow" aria-label="Detail nabídky">

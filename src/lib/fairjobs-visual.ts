@@ -19,6 +19,10 @@ export const FAIRJOBS_PHOTOS = {
     src: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1400&h=1000&q=86",
     alt: "Obsluha při práci v kavárně",
   },
+  logistics: {
+    src: "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1600&h=1000&q=86",
+    alt: "Sklad s připraveným zbožím",
+  },
   employer: {
     src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&h=1200&q=86",
     alt: "Pracovní pohovor u stolu",
@@ -37,6 +41,7 @@ export function photoForProfession(profession: string) {
   }
   if (profession === "healthcare") return FAIRJOBS_PHOTOS.healthcare;
   if (profession === "hospitality") return FAIRJOBS_PHOTOS.service;
+  if (["driver", "logistics"].includes(profession)) return FAIRJOBS_PHOTOS.logistics;
   return FAIRJOBS_PHOTOS.workplace;
 }
 
