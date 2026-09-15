@@ -417,9 +417,9 @@ async function main() {
     },
   ]);
 
-  console.log(`Seeded ${inserted.length} published jobs + 1 draft, 6 employers (all-profession demo).`);
+  console.log(`Seeded ${inserted.length} published jobs + 1 draft, 7 employers (all-profession demo).`);
   console.log("Dev login firmy: novak@kovovyroba-novak.test (magic link v konzoli serveru)");
-  console.log("Další demo: hr@ucetni-praha.test, jobs@softforge.test, dispecink@logitrans.test");
+  console.log("Další demo: hr@ucetni-praha.test, jobs@northbyte.test, jobs@softforge.test, dispecink@logitrans.test");
   if (envFlag("DEMO_SEED")) console.log("DEMO_SEED=true");
   await sql.end({ timeout: 5 });
 }
