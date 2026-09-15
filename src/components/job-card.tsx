@@ -50,7 +50,8 @@ export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" |
   const TitleTag = heading;
   return (
     <Link className="job-card" href={`/nabidka/${job.slug}`}>
-      <div className={`job-card-media ${media}`} aria-hidden="true">
+      <div className="job-card-media" aria-hidden="true">
+        <div className={`job-card-media-inner ${media}`} />
         <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
       </div>
       <div className="job-card-body">

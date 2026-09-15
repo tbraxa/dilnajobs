@@ -34,6 +34,13 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain("--shadow-card:");
     expect(css.toLowerCase()).toContain("inter");
     expect(css).not.toContain(":global(");
+    expect(css).toMatch(/\.job-card\s*\{[^}]*overflow:\s*visible/);
+    expect(css).toContain(".job-card-media-inner");
+    expect(css).toMatch(/\.job-card-media-inner\s*\{[^}]*overflow:\s*hidden/);
+    expect(css).toContain("font-size: 1.25rem");
+    expect(css).toContain("font-weight: 700");
+    expect(css).toMatch(/\.badge-verified svg[\s\S]*overflow:\s*visible/);
+    expect(css).toMatch(/\.filter-chip \.chip-icon[\s\S]*min-width:\s*16px/);
     for (const token of FORBIDDEN) {
       expect(css).not.toContain(token);
     }
@@ -54,6 +61,17 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(jobMediaClass("it")).toBe("media-it");
     expect(jobMediaClass("logistics")).toBe("media-logi");
     expect(jobMediaClass("manufacturing")).toBe("media-mfg");
+  });
+
+  it("keeps a lean placeholder price block on /pro-firmy", () => {
+    const page = readFileSync("src/app/pro-firmy/page.tsx", "utf8");
+    const card = readFileSync("src/components/job-card.tsx", "utf8");
+    expect(page).toContain('id="cenik"');
+    expect(page).toContain("/firma/registrace");
+    expect(page).not.toContain("startCheckout");
+    expect(page).not.toContain("Stripe");
+    expect(card).toContain("job-card-media-inner");
+    expect(copy.employers.sectionPricing).toBe("Ceny");
   });
 
   it("prints pack published labels", () => {

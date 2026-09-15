@@ -45,6 +45,13 @@ export const PACKAGES = [
   },
 ] as const;
 
+/** Lean public placeholder prices on /pro-firmy#cenik. Not Stripe SKUs. */
+export const PUBLIC_PLANS = [
+  { code: "start", name: copy.employers.pricingStartName, priceCzk: 2490, blurb: copy.employers.pricingStartBody },
+  { code: "plus", name: copy.employers.pricingPlusName, priceCzk: 4990, blurb: copy.employers.pricingPlusBody },
+  { code: "pro", name: copy.employers.pricingProName, priceCzk: 8990, blurb: copy.employers.pricingProBody },
+] as const;
+
 export function formatCzk(amount: number): string {
   return `${new Intl.NumberFormat("cs-CZ").format(amount)} Kč`;
 }

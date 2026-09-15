@@ -1,7 +1,7 @@
 export function VerifiedBadge({ label }: { label: string }) {
   return (
     <span className="badge-verified">
-      <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <svg viewBox="0 0 12 12" width="12" height="12" overflow="visible" fill="none" aria-hidden="true">
         <path
           d="M2.5 6.2l2.2 2.3 4.8-5"
           stroke="currentColor"

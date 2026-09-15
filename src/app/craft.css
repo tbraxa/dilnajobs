@@ -321,7 +321,24 @@ select:focus-visible {
   white-space: nowrap;
   transition: background .12s ease, border-color .12s ease, color .12s ease, box-shadow .12s ease;
 }
-.filter-chip .chip-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.75; }
+.filter-chip .chip-icon {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  flex-shrink: 0;
+  display: block;
+  overflow: visible;
+  opacity: 0.75;
+}
+.filter-chip .chip-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  overflow: visible;
+}
 .filter-chip.is-active .chip-icon { opacity: 1; }
 .chip {
   cursor: default;
@@ -373,7 +390,15 @@ a.filter-chip { color: var(--ink-secondary); }
   font-weight: 600;
   letter-spacing: -0.01em;
 }
-.badge-verified svg { width: 12px; height: 12px; }
+.badge-verified svg {
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  min-height: 12px;
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+}
 .badge-new {
   display: inline-flex;
   align-items: center;
@@ -402,6 +427,7 @@ a.filter-chip { color: var(--ink-secondary); }
   background: var(--ink);
   text-transform: uppercase;
   box-shadow: var(--shadow-sm);
+  overflow: visible;
 }
 .co-mark-lg { width: 64px; height: 64px; font-size: 1.125rem; border-radius: 14px; }
 .co-acme { background: #0A0A0A; }
@@ -616,11 +642,13 @@ a.filter-chip { color: var(--ink-secondary); }
 /* Job cards: Airbnb listing analog */
 .job-grid { display: grid; gap: 18px; }
 .job-grid.home { grid-template-columns: repeat(3, 1fr); }
+.job-grid > .empty-panel,
+.serp-canvas .empty-panel { grid-column: 1 / -1; }
 .job-card {
   display: flex;
   flex-direction: column;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
@@ -638,11 +666,20 @@ a.filter-chip { color: var(--ink-secondary); }
 .job-card-media {
   position: relative;
   height: 148px;
+  overflow: visible;
+  z-index: 2;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background: transparent;
+}
+.job-card-media-inner {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
+  border-radius: inherit;
   background: var(--bg-muted);
 }
-.job-card-media::before,
-.job-card-media::after {
+.job-card-media-inner::before,
+.job-card-media-inner::after {
   content: "";
   position: absolute;
   pointer-events: none;
@@ -682,7 +719,8 @@ a.filter-chip { color: var(--ink-secondary); }
   position: absolute;
   left: 16px;
   bottom: -22px;
-  z-index: 2;
+  z-index: 3;
+  overflow: visible;
   border: 3px solid #fff;
   box-shadow: 0 2px 8px rgba(10, 10, 10, 0.12);
 }
@@ -692,6 +730,9 @@ a.filter-chip { color: var(--ink-secondary); }
   flex-direction: column;
   gap: 8px;
   flex: 1;
+  position: relative;
+  z-index: 1;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 .job-title {
   margin: 0;
@@ -717,6 +758,7 @@ a.filter-chip { color: var(--ink-secondary); }
   font-size: 0.875rem;
   color: var(--ink-muted);
 }
+.job-card .job-salary,
 .job-salary {
   margin-top: auto;
   padding-top: 14px;
@@ -802,7 +844,10 @@ a.filter-chip { color: var(--ink-secondary); }
 .job-row .job-salary {
   margin: 0;
   padding: 0;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--salary);
   text-align: right;
   white-space: nowrap;
 }
@@ -1162,6 +1207,46 @@ a.filter-chip { color: var(--ink-secondary); }
   line-height: 1.45;
 }
 
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.price-card {
+  padding: 22px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 196px;
+}
+.price-card .price-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink-muted);
+}
+.price-card .job-salary {
+  margin: 0;
+  padding: 0;
+}
+.price-card .price-period {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+.price-card p {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--ink-secondary);
+  line-height: 1.45;
+}
+.price-cta {
+  margin-top: 24px;
+}
+
 .hero-employer {
   padding: 56px 0 48px;
   background: var(--bg-hero);
@@ -1199,7 +1284,8 @@ a.filter-chip { color: var(--ink-secondary); }
 @media (max-width: 1020px) {
   .job-grid.home { grid-template-columns: repeat(2, 1fr); }
   .cat-rail { grid-template-columns: repeat(3, 1fr); }
-  .why-grid { grid-template-columns: 1fr; }
+  .why-grid,
+  .price-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 900px) {
   .search-shell { grid-template-columns: 1fr; padding: 12px; gap: 8px; }

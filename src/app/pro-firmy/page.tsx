@@ -4,6 +4,7 @@ import { EmployerBand } from "@/components/employer-band";
 import { HeroMosaic } from "@/components/hero-mosaic";
 import { fieldIcons } from "@/components/craft-marks";
 import { copy } from "@/lib/copy";
+import { PUBLIC_PLANS, formatCzk } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   title: { absolute: copy.employers.metaTitle },
@@ -61,6 +62,37 @@ export default function ProFirmyPage() {
           </div>
         </div>
       </section>
+
+      <section className="section" id="cenik" aria-labelledby="cenik-title">
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <h2 className="h2" id="cenik-title">
+                {copy.employers.sectionPricing}
+              </h2>
+              <p className="meta" style={{ margin: "6px 0 0" }}>
+                {copy.employers.pricingHelper}
+              </p>
+            </div>
+          </div>
+          <div className="price-grid">
+            {PUBLIC_PLANS.map((plan) => (
+              <article key={plan.code} className="price-card">
+                <div className="price-name">{plan.name}</div>
+                <div className="job-salary">{formatCzk(plan.priceCzk)}</div>
+                <div className="price-period">{copy.employers.pricingPeriod}</div>
+                <p>{plan.blurb}</p>
+              </article>
+            ))}
+          </div>
+          <div className="price-cta">
+            <Link className="btn btn-primary" href="/firma/registrace">
+              {copy.employers.ctaPrimary}
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <EmployerBand
         title={copy.employers.ctaPrimary}
         helper={copy.employers.helper}
