@@ -23,7 +23,10 @@ describe("new FairJobs visual system", () => {
   });
 
   it("locks the national destination navigation", () => {
-    const nav = read("src/components/fairjobs-navigation.tsx");
+    const nav = [
+      read("src/components/fairjobs-navigation.tsx"),
+      read("src/lib/public-navigation.ts"),
+    ].join("\n");
     for (const label of ["Nabídky", "Průvodce", "Pro firmy", "Vytvořit životopis", "Přihlášení firem"]) {
       expect(nav).toContain(label);
     }

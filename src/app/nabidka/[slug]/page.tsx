@@ -4,10 +4,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CandidateApplyForm } from "@/components/candidate-apply-form";
 import { CompanyLogo } from "@/components/company-logo";
+import { JsonLd } from "@/components/json-ld";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
 import { cleanUiBlock, cleanUiText, photoForProfession } from "@/lib/fairjobs-visual";
+import { breadcrumbsJsonLd, jobPostingJsonLd } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -18,7 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  return { title: `${cleanUiText(row.job.title)} v ${cleanUiText(row.job.city)}` };
+  return {
+    title: `${cleanUiText(row.job.title)} v ${cleanUiText(row.job.city)}`,
+    description: cleanUiText(row.job.description).slice(0, 155),
+  };
 }
 
 export default async function JobPage({ params }: Props) {
@@ -48,6 +53,18 @@ export default async function JobPage({ params }: Props) {
 
   return (
     <main className="fj-job-detail">
+      <JsonLd
+        id="fairjobs-job-posting"
+        data={jobPostingJsonLd({ job, companyName, ico })}
+      />
+      <JsonLd
+        id="fairjobs-job-breadcrumbs"
+        data={breadcrumbsJsonLd([
+          { name: "FairJobs", path: "/" },
+          { name: "Nabídky práce", path: "/nabidky" },
+          { name: cleanUiText(job.title), path: `/nabidka/${job.slug}` },
+        ])}
+      />
       <nav className="fj-breadcrumbs" aria-label="Drobečková navigace">
         <Link href="/">FairJobs</Link>
         <span>›</span>

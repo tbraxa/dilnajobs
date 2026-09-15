@@ -2,38 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { GUIDE_NAV_COLUMNS, PUBLIC_DESTINATION_HUBS } from "@/lib/public-navigation";
 import { FairJobsLockup } from "./fairjobs-brand";
-
-const guideColumns = [
-  {
-    title: "Poradna",
-    links: [
-      ["Jak hledat práci", "/poradna"],
-      ["Mzda a vyjednávání", "/poradna"],
-      ["Změna oboru", "/poradna"],
-      ["Úřad práce a doklady", "/poradna"],
-      ["Všechny články", "/poradna"],
-    ],
-  },
-  {
-    title: "Kurzy a rekvalifikace",
-    links: [
-      ["Rekvalifikace", "/kurzy"],
-      ["Online kurzy", "/kurzy"],
-      ["Kurzy podle oboru", "/kurzy"],
-      ["Jak financovat kurz", "/kurzy"],
-      ["Všechny kurzy", "/kurzy"],
-    ],
-  },
-  {
-    title: "Nástroje",
-    links: [
-      ["Čistý plat", "/nastroje/cisty-plat"],
-      ["Orientace ve mzdě", "/nastroje/mzda-obor"],
-      ["Přehled nástrojů", "/nastroje"],
-    ],
-  },
-] as const;
 
 function trapTab(event: KeyboardEvent, container: HTMLElement | null) {
   if (event.key !== "Tab" || !container) return;
@@ -145,8 +115,8 @@ export function FairJobsNavigation() {
         }}>
           <div className="fj-guide-mega" id="fj-guide-mega" ref={megaRef} role="region" aria-label="Průvodce">
             <div className="fj-mega-columns">
-              {guideColumns.map((column) => (
-                <div className="fj-mega-column" key={column.title}>
+              {GUIDE_NAV_COLUMNS.map((column) => (
+                <div className="fj-mega-column" key={column.id}>
                   <h2>{column.title}</h2>
                   {column.links.map(([label, href], index) => (
                     <Link href={href} key={label} onClick={closeAll} className={index === column.links.length - 1 ? "fj-mega-hub-link" : ""}>
@@ -191,9 +161,11 @@ export function FairJobsNavigation() {
 
             <div className="fj-mobile-sheet-group">
               <p>Průvodce</p>
-              <Link href="/poradna" onClick={closeAll}>Poradna</Link>
-              <Link href="/kurzy" onClick={closeAll}>Kurzy</Link>
-              <Link href="/nastroje" onClick={closeAll}>Nástroje</Link>
+              {PUBLIC_DESTINATION_HUBS.map((destination) => (
+                <Link href={destination.href} key={destination.id} onClick={closeAll}>
+                  {destination.label}
+                </Link>
+              ))}
             </div>
 
             <div className="fj-mobile-sheet-group">

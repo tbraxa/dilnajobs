@@ -1,13 +1,32 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/json-ld";
 import { FAIRJOBS_PHOTOS } from "@/lib/fairjobs-visual";
+import { collectionPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = { title: "Poradna" };
+const description = "Praktické články FairJobs o hledání práce, mzdě, pohovoru a změně oboru.";
+
+export const metadata: Metadata = { title: "Poradna", description };
 
 export default function AdvicePage() {
   return (
     <main className="fj-destination-page">
+      <JsonLd
+        id="fairjobs-advice-collection"
+        data={collectionPageJsonLd({
+          name: "Poradna FairJobs",
+          description,
+          path: "/poradna",
+          items: [
+            {
+              name: "Jak si říct o vyšší mzdu bez zbytečného napětí",
+              path: "/poradna/jak-si-rict-o-vyssi-mzdu",
+              type: "Article",
+            },
+          ],
+        })}
+      />
       <section className="fj-destination-hero fj-destination-hero-blue">
         <p className="fj-eyebrow fj-eyebrow-light">Poradna FairJobs</p>
         <h1 className="fj-display">Dobré rozhodnutí začíná dobrou otázkou.</h1>

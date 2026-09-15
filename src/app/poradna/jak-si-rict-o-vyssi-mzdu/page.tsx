@@ -1,14 +1,36 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/json-ld";
 import { FAIRJOBS_PHOTOS } from "@/lib/fairjobs-visual";
+import { articleJsonLd, breadcrumbsJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = { title: "Jak si říct o vyšší mzdu" };
+const description = "Praktický postup, jak připravit částku, argumenty a první větu pro rozhovor o vyšší mzdě.";
+
+export const metadata: Metadata = { title: "Jak si říct o vyšší mzdu", description };
 
 export default function SalaryConversationArticle() {
   return (
     <main className="fj-article-page">
-      <nav className="fj-breadcrumbs">
+      <JsonLd
+        id="fairjobs-advice-article"
+        data={articleJsonLd({
+          headline: "Jak si říct o vyšší mzdu bez zbytečného napětí",
+          description,
+          path: "/poradna/jak-si-rict-o-vyssi-mzdu",
+          image: FAIRJOBS_PHOTOS.employer.src,
+          published: "2026-09-15T00:00:00+02:00",
+        })}
+      />
+      <JsonLd
+        id="fairjobs-advice-breadcrumbs"
+        data={breadcrumbsJsonLd([
+          { name: "FairJobs", path: "/" },
+          { name: "Poradna", path: "/poradna" },
+          { name: "Jak si říct o vyšší mzdu", path: "/poradna/jak-si-rict-o-vyssi-mzdu" },
+        ])}
+      />
+      <nav className="fj-breadcrumbs" aria-label="Drobečková navigace">
         <Link href="/">FairJobs</Link><span>›</span><Link href="/poradna">Poradna</Link><span>›</span><span>Mzda a vyjednávání</span>
       </nav>
       <header className="fj-article-head">

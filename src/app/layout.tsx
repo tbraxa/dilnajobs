@@ -3,8 +3,10 @@ import type { ReactNode } from "react";
 import { Manrope, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
 import { FairJobsFooter, FairJobsHeader } from "@/components/fairjobs-chrome";
+import { JsonLd } from "@/components/json-ld";
 import { resolveAppUrl } from "@/lib/app-url";
 import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
+import { siteJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 import "./fairjobs.css";
 
@@ -42,6 +44,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="cs" className={`${manrope.variable} ${newsreader.variable}`}>
       <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
+        <JsonLd id="fairjobs-site-schema" data={siteJsonLd()} nonce={nonce} />
         {isAdmin ? (
           children
         ) : (

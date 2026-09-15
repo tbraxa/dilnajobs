@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/json-ld";
+import { collectionPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = { title: "Kurzy a rekvalifikace" };
+const description = "Přehled kurzů a rekvalifikací pro změnu oboru, návrat do práce a doplnění kvalifikace.";
+
+export const metadata: Metadata = { title: "Kurzy a rekvalifikace", description };
 
 const courses = [
   { area: "Digitální dovednosti", title: "Datová analytika pro začátečníky", place: "Online", length: "10 týdnů" },
@@ -13,6 +17,14 @@ const courses = [
 export default function CoursesPage() {
   return (
     <main className="fj-destination-page">
+      <JsonLd
+        id="fairjobs-courses-collection"
+        data={collectionPageJsonLd({
+          name: "Kurzy a rekvalifikace",
+          description,
+          path: "/kurzy",
+        })}
+      />
       <section className="fj-destination-hero fj-destination-hero-lilac">
         <p className="fj-eyebrow">Kurzy a rekvalifikace</p>
         <h1 className="fj-display">Dovednost, která otevře další dveře.</h1>

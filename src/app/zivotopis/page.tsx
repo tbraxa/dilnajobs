@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/json-ld";
+import { webPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = { title: "Vytvořit životopis" };
+const description = "Připravovaný editor FairJobs pro přehledný životopis bez povinného účtu.";
+
+export const metadata: Metadata = { title: "Vytvořit životopis", description };
 
 export default function CvBuilderShellPage() {
   return (
     <main className="fj-cv-page">
+      <JsonLd
+        id="fairjobs-cv-builder-page"
+        data={webPageJsonLd({
+          name: "Vytvořit životopis",
+          description,
+          path: "/zivotopis",
+        })}
+      />
       <section className="fj-cv-copy">
         <p className="fj-eyebrow">Životopis FairJobs</p>
         <h1 className="fj-display">Životopis, který se dá přečíst za minutu.</h1>

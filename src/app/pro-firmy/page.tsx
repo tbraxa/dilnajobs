@@ -3,13 +3,48 @@ import Image from "next/image";
 import Link from "next/link";
 import { EmployerDashboardPreview } from "@/components/employer-dashboard-preview";
 import { FairJobsPricing } from "@/components/fairjobs-pricing";
+import { JsonLd } from "@/components/json-ld";
 import { FAIRJOBS_PHOTOS } from "@/lib/fairjobs-visual";
+import { faqPageJsonLd, webPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = { title: "Pro firmy" };
+const description = "Firemní inzerce FairJobs s jasným ceníkem, ověřením IČO a odpověďmi uchazečů na jednom místě.";
+const employerFaq = [
+  {
+    question: "Kdy se nabídka zveřejní?",
+    answer: "První nabídku po registraci zkontrolujeme. Jakmile ověříme firmu a obsah, zveřejníme ji.",
+  },
+  {
+    question: "Kam chodí odpovědi uchazečů?",
+    answer: "Do firemního přehledu. U každé odpovědi vidíte kontakt, zprávu a případný životopis.",
+  },
+  {
+    question: "Mohou inzerovat personální agentury?",
+    answer: "Ne. FairJobs je určený přímým zaměstnavatelům, kteří nabírají do vlastních týmů.",
+  },
+];
+
+export const metadata: Metadata = { title: "Pro firmy", description };
 
 export default function ProFirmyPage() {
   return (
     <main className="fj-employer-page">
+      <JsonLd
+        id="fairjobs-employer-page"
+        data={webPageJsonLd({
+          name: "FairJobs pro firmy",
+          description,
+          path: "/pro-firmy",
+          type: "AboutPage",
+        })}
+      />
+      <JsonLd
+        id="fairjobs-employer-faq"
+        data={faqPageJsonLd({
+          name: "Nejčastější otázky zaměstnavatelů",
+          path: "/pro-firmy",
+          questions: employerFaq,
+        })}
+      />
       <section className="fj-employer-hero">
         <div className="fj-employer-hero-copy">
           <p className="fj-eyebrow">FairJobs pro zaměstnavatele</p>
@@ -99,18 +134,12 @@ export default function ProFirmyPage() {
           <h2 className="fj-display">Než začnete</h2>
         </div>
         <div className="fj-faq-list">
-          <details>
-            <summary>Kdy se nabídka zveřejní?</summary>
-            <p>První nabídku po registraci zkontrolujeme. Jakmile ověříme firmu a obsah, zveřejníme ji.</p>
-          </details>
-          <details>
-            <summary>Kam chodí odpovědi uchazečů?</summary>
-            <p>Do firemního přehledu. U každé odpovědi vidíte kontakt, zprávu a případný životopis.</p>
-          </details>
-          <details>
-            <summary>Mohou inzerovat personální agentury?</summary>
-            <p>Ne. FairJobs je určený přímým zaměstnavatelům, kteří nabírají do vlastních týmů.</p>
-          </details>
+          {employerFaq.map((item) => (
+            <details key={item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
         </div>
       </section>
     </main>

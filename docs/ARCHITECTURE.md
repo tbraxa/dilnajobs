@@ -31,7 +31,11 @@ PostgreSQL 16
 | `/nabidky` | public | search / filter / sort from DB |
 | `/nabidka/[slug]` | public | job + apply form |
 | `/pro-firmy` | public | B2B + ceník |
-| `/prace/[profese]/[mesto]` | public | SEO stub landing, same search |
+| `/poradna`, `/poradna/[slug]` | public | editorial collection + articles |
+| `/kurzy` | public | course and retraining collection shell |
+| `/nastroje`, `/nastroje/cisty-plat` | public | tool collection + calculators |
+| `/zivotopis` | public | CV builder extension shell |
+| `/prace/[profese]/[mesto]` | public | SEO landing, same search |
 | `/gdpr`, `/obchodni-podminky` | public | legal |
 | `/firma/prihlaseni` | public | magic-link request |
 | `/firma/prihlaseni/overit` | token | sets session cookie |
@@ -86,6 +90,24 @@ Passwordless. Employer types email (+ IČO on first registration). Server stores
 Operator (`ADMIN_EMAILS`): separate magic-link (`purpose = admin`) and cookie `dj_admin`. Same cookie flags. No privilege escalation from `/firma`.
 
 Candidates have no account in v1.
+
+## Public destinations and structured data
+
+The destination layer is registry-driven in `src/lib/public-navigation.ts`. Poradna, Kurzy and Nástroje are stable
+hub routes in the Průvodce mega menu and mobile sheet. Future CMS records can extend those collections without
+adding more top-level navigation siblings.
+
+Structured data builders live in `src/lib/structured-data.ts`; `src/components/json-ld.tsx` is the single nonce-aware
+renderer. The current schema graph includes:
+
+- `Organization`, `WebSite` and `SearchAction` globally
+- `CollectionPage` for jobs and destination hubs
+- `Article` and `BreadcrumbList` for editorial pages
+- `WebApplication` for calculators
+- `JobPosting` with direct apply, salary, work mode, employer IČO and location
+- `FAQPage` for employer questions that are also visible in the page
+
+Do not emit `Course`, `HowTo`, review or rating schema until the corresponding product data is real and visible.
 
 ## Files
 

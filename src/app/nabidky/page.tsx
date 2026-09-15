@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { JobResultRow } from "@/components/fairjobs-job-row";
 import { JobSearchPanel } from "@/components/job-search-panel";
+import { JsonLd } from "@/components/json-ld";
 import {
   JOBS_PAGE_SIZE,
   loadSearchJobCount,
@@ -9,8 +10,11 @@ import {
   parseSearch,
 } from "@/lib/jobs/search";
 import { jobsHref, searchHasFilters } from "@/lib/search-params";
+import { collectionPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = { title: "Nabídky práce" };
+const description = "Aktuální nabídky práce v Česku s jasnou mzdou, lokalitou a ověřenou identitou firmy.";
+
+export const metadata: Metadata = { title: "Nabídky práce", description };
 export const dynamic = "force-dynamic";
 
 export default async function NabidkyPage({
@@ -31,6 +35,14 @@ export default async function NabidkyPage({
 
   return (
     <main className="fj-serp-page">
+      <JsonLd
+        id="fairjobs-jobs-collection"
+        data={collectionPageJsonLd({
+          name: "Nabídky práce FairJobs",
+          description,
+          path: "/nabidky",
+        })}
+      />
       <section className="fj-serp-banner">
         <div>
           <p className="fj-eyebrow">Práce v celém Česku</p>
