@@ -166,6 +166,8 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
     expect(css).toMatch(/\.serp-filters\s*\{[^}]*position:\s*sticky/);
     expect(css).toMatch(/@media \(max-width: 720px\)[\s\S]*\.search-shell\s*\{\s*flex-direction:\s*column/);
+    expect(css).toContain("@media (max-width: 960px)");
+    expect(css).not.toContain("@media (max-width: 900px)");
     expect(css).not.toMatch(/\.serp-row-search \.search-shell\s*\{[^}]*grid-template-columns/);
     expect(css).toMatch(/\.job-card-media-inner\s*\{[^}]*background:\s*transparent/);
     expect(css).toContain(".filter-chrome");

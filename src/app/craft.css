@@ -1422,7 +1422,7 @@ aside.apply-panel { position: sticky; top: calc(var(--header-h) + 16px); }
   .facts-strip { grid-template-columns: repeat(3, 1fr); }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .hero-layout, .hero-employer .hero-layout, .band-employer-inner { grid-template-columns: 1fr; }
   .hero-visual { min-height: 320px; order: -1; }
   .filter-bar, .serp-row-search { flex-direction: column; align-items: stretch; }

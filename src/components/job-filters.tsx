@@ -164,7 +164,15 @@ function ChipRail({ query }: { query: SearchQuery }) {
     chips.push({ key: "q", label: `„${query.q}“`, href: nabidkyHref(query, { q: undefined, page: 1 }) });
   }
 
-  if (chips.length === 0) return null;
+  if (chips.length === 0) {
+    return (
+      <div
+        className="active-chips serp-row-chips"
+        id="activeChips"
+        aria-label={copy.nabidky.filtersActiveAria}
+      />
+    );
+  }
 
   for (const chip of chips) {
     if (chip.href === "/nabidky") chip.href = RESET_FILTERS_HREF;
