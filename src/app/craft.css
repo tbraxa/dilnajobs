@@ -1271,7 +1271,6 @@ a.filter-chip { color: var(--ink-secondary); }
 }
 
 /* Next.js Image + radio chips + legal/portal helpers */
-.hero-visual .shot :global(img),
 .hero-visual .shot img,
 .band-employer-photo img,
 .listing-photo img,

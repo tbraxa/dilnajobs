@@ -33,6 +33,7 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).toContain("--bg-employer: #0A0A0A");
     expect(css).toContain("--shadow-card:");
     expect(css.toLowerCase()).toContain("inter");
+    expect(css).not.toContain(":global(");
     for (const token of FORBIDDEN) {
       expect(css).not.toContain(token);
     }
