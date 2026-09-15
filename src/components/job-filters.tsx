@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { CONTRACT_TYPES, professionByDb } from "@/lib/catalog";
 import { copy, contractLabel } from "@/lib/copy";
 import { HOME_FIELDS, HOME_FIELDS_FEATURED } from "@/lib/craft";
@@ -15,7 +18,7 @@ const MODES = [
 const QUICK_MODES = MODES.filter((mode) => mode.value);
 const SALARY_STEPS = [20_000, 30_000, 40_000, 50_000, 60_000] as const;
 const DRAWER_CITIES = ["Praha", "Brno", "Ostrava", "Plzeň", "Liberec", "České Budějovice"] as const;
-const FILTERS_ID = "serp-filters-open";
+const RESET_FILTERS_HREF = "/nabidky?all=1";
 
 function ChipX() {
   return (
@@ -50,9 +53,8 @@ export function SearchShell({
   defaults?: SearchQuery;
   includeMode?: boolean;
 }) {
-  return (
-    <form action={action} method="get" role="search" className={includeMode ? undefined : "filter-search"}>
-      <div className="search-shell">
+  const form = (
+    <form action={action} method="get" role="search" className="search-shell">
         {!includeMode && defaults?.category ? (
           <input type="hidden" name="category" value={defaults.category} />
         ) : null}
@@ -91,7 +93,14 @@ export function SearchShell({
         <button className={includeMode ? "btn btn-primary" : "btn-search"} type="submit">
           {copy.home.ctaSearch}
         </button>
-      </div>
+    </form>
+  );
+
+  if (!includeMode) return form;
+
+  return (
+    <div className="hero-search">
+      {form}
       {includeMode ? (
         <div className="mode-row" role="group" aria-label={copy.card.workModeLabel}>
           <span className="mode-label">{copy.card.workModeLabel}</span>
@@ -102,7 +111,7 @@ export function SearchShell({
           ))}
         </div>
       ) : null}
-    </form>
+    </div>
   );
 }
 
@@ -157,8 +166,16 @@ function ChipRail({ query }: { query: SearchQuery }) {
 
   if (chips.length === 0) return null;
 
+  for (const chip of chips) {
+    if (chip.href === "/nabidky") chip.href = RESET_FILTERS_HREF;
+  }
+
   return (
-    <div className="active-chips serp-row-chips is-visible" aria-label={copy.nabidky.filtersActiveAria}>
+    <div
+      className="active-chips serp-row-chips is-visible"
+      id="activeChips"
+      aria-label={copy.nabidky.filtersActiveAria}
+    >
       {chips.map((chip) => (
         <span key={chip.key} className="filter-chip">
           {chip.label}
@@ -171,7 +188,7 @@ function ChipRail({ query }: { query: SearchQuery }) {
           </Link>
         </span>
       ))}
-      <Link href="/nabidky" className="chip-reset">
+      <Link href={RESET_FILTERS_HREF} className="chip-reset" id="chipReset">
         {copy.nabidky.emptyNoResultsCta}
       </Link>
     </div>
@@ -198,24 +215,51 @@ function OptionRow({
   );
 }
 
-function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: number }) {
+function FilterSheet({
+  query,
+  resultCount,
+  closeButtonRef,
+  onClose,
+}: {
+  query: SearchQuery;
+  resultCount: number;
+  closeButtonRef: RefObject<HTMLButtonElement | null>;
+  onClose: () => void;
+}) {
   const placeOptions = Array.from(
     new Set([query.place, ...DRAWER_CITIES].filter((city): city is string => Boolean(city))),
   );
+  const [salary, setSalary] = useState(query.salaryMin ? String(query.salaryMin) : "");
 
   return (
-    <div className="drawer-root serp-sheet" role="dialog" aria-labelledby="serp-sheet-title" aria-modal="true">
-      <label className="drawer-scrim serp-sheet-backdrop" htmlFor={FILTERS_ID}>
+    <div className="drawer-root serp-sheet is-open" id="filterDrawer">
+      <button
+        type="button"
+        className="drawer-scrim serp-sheet-backdrop"
+        aria-label={copy.nabidky.ctaFiltersClose}
+        onClick={onClose}
+      >
         <span className="visually-hidden">{copy.nabidky.ctaFiltersClose}</span>
-      </label>
-      <div className="drawer-panel serp-sheet-panel">
+      </button>
+      <div
+        className="drawer-panel serp-sheet-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="serp-sheet-title"
+      >
         <div className="drawer-header serp-sheet-head">
           <h2 className="h3" id="serp-sheet-title">
             {copy.nabidky.ctaEditFilters}
           </h2>
-          <label className="drawer-close" htmlFor={FILTERS_ID} aria-label={copy.nabidky.ctaFiltersClose}>
+          <button
+            ref={closeButtonRef}
+            type="button"
+            className="drawer-close"
+            aria-label={copy.nabidky.ctaFiltersClose}
+            onClick={onClose}
+          >
             <DrawerCloseGlyph />
-          </label>
+          </button>
         </div>
         <form className="serp-sheet-form" action="/nabidky" method="get">
           {query.q ? <input type="hidden" name="q" value={query.q} /> : null}
@@ -225,7 +269,7 @@ function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: 
           <div className="drawer-body serp-sheet-body">
             <section className="drawer-section">
               <h3>{copy.nabidky.filtersCategory}</h3>
-              <div className="option-list" role="listbox" aria-label={copy.nabidky.filtersCategory}>
+              <div className="option-list" role="radiogroup" aria-label={copy.nabidky.filtersCategory}>
                 <OptionRow
                   name="category"
                   value=""
@@ -245,7 +289,7 @@ function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: 
             </section>
             <section className="drawer-section">
               <h3>{copy.nabidky.filtersPlace}</h3>
-              <div className="option-list" role="listbox" aria-label={copy.nabidky.filtersPlace}>
+              <div className="option-list" role="radiogroup" aria-label={copy.nabidky.filtersPlace}>
                 <OptionRow
                   name="place"
                   value=""
@@ -275,7 +319,7 @@ function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: 
             </section>
             <section className="drawer-section">
               <h3>{copy.nabidky.filtersContract}</h3>
-              <div className="option-list" role="listbox" aria-label={copy.nabidky.filtersContract}>
+              <div className="option-list" role="radiogroup" aria-label={copy.nabidky.filtersContract}>
                 <OptionRow
                   name="contract"
                   value=""
@@ -297,13 +341,19 @@ function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: 
               <h3>{copy.nabidky.filtersSalary}</h3>
               <div className="salary-steps">
                 {SALARY_STEPS.map((amount) => (
-                  <Link
+                  <label
                     key={amount}
-                    href={nabidkyHref(query, { salaryMin: amount, page: 1 })}
-                    className={query.salaryMin === amount ? "is-selected" : undefined}
+                    className={salary === String(amount) ? "is-selected" : undefined}
                   >
+                    <input
+                      type="radio"
+                      name="salaryStep"
+                      value={amount}
+                      checked={salary === String(amount)}
+                      onChange={() => setSalary(String(amount))}
+                    />
                     {amount === 60_000 ? "60 000+" : new Intl.NumberFormat("cs-CZ").format(amount)}
-                  </Link>
+                  </label>
                 ))}
               </div>
               <div className="salary-input serp-field">
@@ -314,14 +364,15 @@ function FilterSheet({ query, resultCount }: { query: SearchQuery; resultCount: 
                   type="number"
                   min={0}
                   step={1000}
-                  defaultValue={query.salaryMin ?? ""}
+                  value={salary}
+                  onChange={(event) => setSalary(event.target.value)}
                   placeholder={copy.nabidky.filtersSalaryPlaceholder}
                 />
               </div>
             </section>
           </div>
           <div className="drawer-footer serp-sheet-foot">
-            <Link href="/nabidky" className="btn btn-ghost">
+            <Link href={RESET_FILTERS_HREF} className="btn btn-ghost">
               {copy.nabidky.ctaDrawerReset}
             </Link>
             <button className="btn btn-primary" type="submit">
@@ -359,23 +410,52 @@ export function JobFilters({
   resultCount?: number;
 }) {
   const facets = facetCount(defaults);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!drawerOpen) return;
+
+    document.body.classList.add("is-drawer-open");
+    closeButtonRef.current?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setDrawerOpen(false);
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("is-drawer-open");
+    };
+  }, [drawerOpen]);
+
+  function closeDrawer() {
+    setDrawerOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  }
+
   return (
-    <div className="filter-chrome serp-filters">
-      <input id={FILTERS_ID} className="serp-filters-toggle" type="checkbox" />
+    <div className="filter-chrome serp-filters" id="filterChrome">
       <div className="wrap serp-chrome">
         <div className="filter-bar serp-row-search">
           <SearchShell defaults={defaults} />
           <div className="bar-actions">
-            <label
+            <button
+              ref={triggerRef}
+              type="button"
               className={`btn-filters serp-filter-btn${facets > 0 ? " has-count" : ""}`}
-              htmlFor={FILTERS_ID}
+              aria-expanded={drawerOpen}
+              aria-controls="filterDrawer"
+              onClick={() => setDrawerOpen(true)}
             >
               <FilterGlyph />
               {copy.nabidky.ctaEditFilters}
               <span className="badge serp-filter-badge" aria-label={copy.nabidky.filtersCount(facets)}>
                 {facets}
               </span>
-            </label>
+            </button>
             <span className="results-count serp-toolbar-count">
               {/^\d/.test(resultLabel) ? (
                 <>
@@ -390,7 +470,14 @@ export function JobFilters({
         </div>
         <ChipRail query={defaults} />
       </div>
-      <FilterSheet query={defaults} resultCount={resultCount} />
+      {drawerOpen ? (
+        <FilterSheet
+          query={defaults}
+          resultCount={resultCount}
+          closeButtonRef={closeButtonRef}
+          onClose={closeDrawer}
+        />
+      ) : null}
     </div>
   );
 }

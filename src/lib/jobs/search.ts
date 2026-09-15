@@ -54,9 +54,7 @@ function filterClauses(query: SearchQuery) {
   }
 
   if (query.salaryMin != null) {
-    filters.push(
-      or(gte(jobs.salaryMin, query.salaryMin), gte(jobs.salaryMax, query.salaryMin))!,
-    );
+    filters.push(gte(jobs.salaryMin, query.salaryMin));
   }
 
   if (query.workMode) {

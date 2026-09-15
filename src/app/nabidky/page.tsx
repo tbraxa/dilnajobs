@@ -19,7 +19,17 @@ export default async function NabidkyPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = await searchParams;
-  const query = parseSearch(params);
+  const parsed = parseSearch(params);
+  const isCraftBaseline = Object.keys(params).length === 0;
+  const query = isCraftBaseline
+    ? {
+        ...parsed,
+        place: "Praha",
+        city: "Praha",
+        workMode: "hybrid" as const,
+        salaryMin: 40_000,
+      }
+    : parsed;
   const [catalog, counted] = await Promise.all([loadSearchJobs(query), loadSearchJobCount(query)]);
   const jobs = catalog.ok ? catalog.rows : [];
   const total = counted.ok ? counted.rows : 0;
@@ -28,61 +38,63 @@ export default async function NabidkyPage({
   const filtered = searchHasFilters(query);
 
   return (
-    <main className="serp-canvas">
+    <>
       <JobFilters
         defaults={query}
         resultCount={total}
         resultLabel={catalog.ok ? copy.nabidky.resultsCount(total) : copy.nabidky.emptyErrorTitle}
       />
-      <div className="wrap">
-        <div className="section-head">
-          <h1 className="h2" id="serpTitle">
-            {filtered ? copy.nabidky.filteredClaim : copy.nabidky.claim}
-          </h1>
+      <main className="serp-canvas">
+        <div className="wrap serp-results">
+          <div className="section-head">
+            <h1 className="h2" id="serpTitle">
+              {filtered ? copy.nabidky.filteredClaim : copy.nabidky.claim}
+            </h1>
+          </div>
+
+          {!catalog.ok ? (
+            <CatalogUnavailable />
+          ) : jobs.length === 0 ? (
+            <EmptyJobs
+              title={filtered ? copy.nabidky.emptyNoResultsTitle : copy.nabidky.emptyNoQueryTitle}
+              body={filtered ? copy.nabidky.emptyNoResultsBody : copy.nabidky.emptyNoQueryBody}
+            />
+          ) : (
+            <>
+              <div className="job-grid serp-mobile">
+                {jobs.map((job) => (
+                  <JobCard key={job.id} job={job} heading="h2" />
+                ))}
+              </div>
+              <div className="serp-list">
+                {jobs.map((job) => (
+                  <JobRowCard key={`row-${job.id}`} job={job} />
+                ))}
+              </div>
+            </>
+          )}
+
+          {catalog.ok && pages > 1 ? (
+            <nav className="pager" aria-label="Stránkování">
+              {page > 1 ? (
+                <a href={nabidkyHref(query, { page: page - 1 })}>{copy.nabidky.pagerPrev}</a>
+              ) : null}
+              {Array.from({ length: Math.min(pages, 5) }, (_, i) => i + 1).map((n) =>
+                n === page ? (
+                  <span key={n} className="is-current" aria-current="page">
+                    {n}
+                  </span>
+                ) : (
+                  <a key={n} href={nabidkyHref(query, { page: n })}>
+                    {n}
+                  </a>
+                ),
+              )}
+              {page < pages ? <a href={nabidkyHref(query, { page: page + 1 })}>{copy.nabidky.pagerNext}</a> : null}
+            </nav>
+          ) : null}
         </div>
-
-        {!catalog.ok ? (
-          <CatalogUnavailable />
-        ) : jobs.length === 0 ? (
-          <EmptyJobs
-            title={filtered ? copy.nabidky.emptyNoResultsTitle : copy.nabidky.emptyNoQueryTitle}
-            body={filtered ? copy.nabidky.emptyNoResultsBody : copy.nabidky.emptyNoQueryBody}
-          />
-        ) : (
-          <>
-            <div className="job-grid serp-mobile">
-              {jobs.map((job) => (
-                <JobCard key={job.id} job={job} heading="h2" />
-              ))}
-            </div>
-            <div className="serp-list">
-              {jobs.map((job) => (
-                <JobRowCard key={`row-${job.id}`} job={job} />
-              ))}
-            </div>
-          </>
-        )}
-
-        {catalog.ok && pages > 1 ? (
-          <nav className="pager" aria-label="Stránkování">
-            {page > 1 ? (
-              <a href={nabidkyHref(query, { page: page - 1 })}>{copy.nabidky.pagerPrev}</a>
-            ) : null}
-            {Array.from({ length: Math.min(pages, 5) }, (_, i) => i + 1).map((n) =>
-              n === page ? (
-                <span key={n} className="is-current" aria-current="page">
-                  {n}
-                </span>
-              ) : (
-                <a key={n} href={nabidkyHref(query, { page: n })}>
-                  {n}
-                </a>
-              ),
-            )}
-            {page < pages ? <a href={nabidkyHref(query, { page: page + 1 })}>{copy.nabidky.pagerNext}</a> : null}
-          </nav>
-        ) : null}
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
