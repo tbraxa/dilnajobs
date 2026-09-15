@@ -108,6 +108,7 @@ describe("Enterprise Clean Craft tokens", () => {
   it("keeps /nabidky filters compact instead of a sticky half-screen panel", () => {
     const page = readFileSync("src/app/nabidky/page.tsx", "utf8");
     const filters = readFileSync("src/components/job-filters.tsx", "utf8");
+    const css = readFileSync("src/app/craft.css", "utf8");
     const card = readFileSync("src/components/job-card.tsx", "utf8");
     expect(page).not.toContain("filters-sticky");
     expect(page).toContain("JobFilters");
@@ -119,6 +120,18 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(filters).toContain("ctaEditFilters");
     expect(filters).toContain("serp-field");
     expect(card).toContain("job-row-media-inner");
+
+    const searchStart = filters.indexOf('className="serp-row-search"');
+    const chipStart = filters.indexOf("<ChipRail");
+    expect(searchStart).toBeGreaterThan(-1);
+    expect(chipStart).toBeGreaterThan(searchStart);
+    expect(filters.slice(searchStart, chipStart)).not.toMatch(/ChipRail|filter-chip|serp-row-chips/);
+    expect(css).toMatch(/\.serp-chrome\s*\{[^}]*flex-direction:\s*column/);
+    expect(css).toMatch(/\.serp-chrome\s*\{[^}]*height:\s*auto/);
+    expect(css).not.toMatch(/\.serp-chrome\s*\{[^}]*height:\s*56px/);
+    expect(css).not.toMatch(/\.serp-row-search\s*\{[^}]*height:\s*56px/);
+    expect(css).not.toMatch(/\.serp-row-chips\s*\{[^}]*position:\s*absolute/);
+    expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
   });
 
   it("prints pack published labels", () => {
