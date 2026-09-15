@@ -14,7 +14,7 @@ export default async function AdminOveritPage({
   return (
     <AdminLoginChrome>
       <main className="mx-auto max-w-md px-4 py-16">
-        <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Správa</p>
+        <p className="text-sm font-semibold text-slate-600">Správa</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">Odkaz je v pořádku</h1>
         <p className="mt-3 text-sm text-slate-600">
           Prohlížeče občas odkaz přednačtou. Přihlášení proto potvrdíte tlačítkem. Odkaz se spotřebuje až teď.

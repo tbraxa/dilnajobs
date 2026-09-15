@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { formatCzk, PUBLIC_PLANS } from "@/lib/pricing";
 
 export function FairJobsPricing() {
-  const selected = PUBLIC_PLANS.find((plan) => plan.code === "standard") ?? PUBLIC_PLANS[0];
+  const [selectedCode, setSelectedCode] = useState<(typeof PUBLIC_PLANS)[number]["code"]>("standard");
+  const selected = PUBLIC_PLANS.find((plan) => plan.code === selectedCode) ?? PUBLIC_PLANS[0];
 
   return (
     <section className="fj-pricing-section" id="cenik">
@@ -24,14 +28,20 @@ export function FairJobsPricing() {
 
         <div className="fj-pricing-layout">
           <div className="fj-plan-picker">
-            <p className="fj-plan-picker-label">1. Vyberte rozsah</p>
+            <p className="fj-plan-picker-label">1. Vyberte balíček</p>
+            <div role="tablist" aria-label="Balíčky inzerce">
             {PUBLIC_PLANS.map((plan) => (
-              <div
+              <button
+                type="button"
+                role="tab"
+                aria-selected={plan.code === selectedCode}
+                aria-controls="fj-plan-summary"
                 key={plan.code}
-                className={`fj-plan-row${plan.code === "standard" ? " fj-plan-row-selected" : ""}`}
+                className={`fj-plan-row${plan.code === selectedCode ? " fj-plan-row-selected" : ""}`}
+                onClick={() => setSelectedCode(plan.code)}
               >
                 <span className="fj-plan-radio" aria-hidden="true">
-                  {plan.code === "standard" ? <span /> : null}
+                  {plan.code === selectedCode ? <span /> : null}
                 </span>
                 <div className="fj-plan-copy">
                   <div>
@@ -41,8 +51,9 @@ export function FairJobsPricing() {
                   <p>{plan.note}</p>
                 </div>
                 <strong>{formatCzk(plan.priceCzk)}</strong>
-              </div>
+              </button>
             ))}
+            </div>
 
             <div className="fj-pricing-addon">
               <span>+</span>
@@ -54,7 +65,7 @@ export function FairJobsPricing() {
             </div>
           </div>
 
-          <aside className="fj-order-summary">
+          <aside className="fj-order-summary" id="fj-plan-summary" aria-live="polite">
             <p className="fj-plan-picker-label">2. Co získáte</p>
             <div className="fj-order-plan">
               <span>Plán</span>
@@ -72,8 +83,8 @@ export function FairJobsPricing() {
               <span>Celkem bez DPH</span>
               <strong>{formatCzk(selected.priceCzk)}</strong>
             </div>
-            <Link href="/firma/registrace" className="fj-primary-button fj-primary-button-blue">
-              Začít se Standardem
+            <Link href={`/firma/registrace?plan=${selected.code}`} className="fj-primary-button fj-primary-button-blue">
+              Pokračovat s plánem {selected.name}
               <span aria-hidden="true">→</span>
             </Link>
             <p>Platbu dokončíte až po registraci a kontrole firmy.</p>

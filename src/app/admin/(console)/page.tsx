@@ -48,7 +48,7 @@ export default async function AdminHomePage() {
 
   return (
     <main>
-      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provoz</p>
+      <p className="text-sm font-semibold text-slate-600">Provoz</p>
       <div className="mt-1 flex flex-wrap items-center gap-3">
         <h1 className="text-3xl font-semibold tracking-tight">Přehled</h1>
         <StatusPill status={health.status} />
@@ -59,12 +59,12 @@ export default async function AdminHomePage() {
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
           <Link key={card.label} href={card.href} className="border border-slate-200 bg-white p-4 hover:bg-slate-50">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-600">{card.label}</p>
+            <p className="text-sm font-semibold text-slate-600">{card.label}</p>
             <p className="mt-2 text-3xl font-semibold tracking-tight">{card.value}</p>
           </Link>
         ))}
         <Link href="/admin/health" className="border border-slate-200 bg-white p-4 hover:bg-slate-50">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Hloubkové zdraví</p>
+          <p className="text-sm font-semibold text-slate-600">Hloubkové zdraví</p>
           <p className="mt-2 text-sm text-slate-600">{health.checks.filter((c) => c.status !== "ok").length} mimo v pořádku</p>
         </Link>
       </div>

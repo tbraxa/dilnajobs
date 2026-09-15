@@ -19,6 +19,7 @@ describe("new FairJobs visual system", () => {
       /workshop-grid|#f2f0ea|--paper|bg-paper|text-steel|search-shell|hero-visual|shadow-card|coral|cream|fraunces|preview-v9/i;
 
     expect(files.filter((file) => rejected.test(read(file)))).toEqual([]);
+    expect(read("src/app/fairjobs.css")).not.toMatch(/yellow|#ffd84d|text-transform:\s*uppercase/i);
   });
 
   it("locks the national destination navigation", () => {

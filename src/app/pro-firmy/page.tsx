@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { EmployerDashboardPreview } from "@/components/employer-dashboard-preview";
 import { FairJobsPricing } from "@/components/fairjobs-pricing";
 import { FAIRJOBS_PHOTOS } from "@/lib/fairjobs-visual";
 
@@ -29,48 +30,7 @@ export default function ProFirmyPage() {
           </div>
         </div>
 
-        <div className="fj-employer-product-preview" aria-label="Ukázka přehledu náboru">
-          <div className="fj-preview-topbar">
-            <span />
-            <span />
-            <span />
-            <p>Přehled náboru</p>
-          </div>
-          <div className="fj-preview-body">
-            <div className="fj-preview-sidebar">
-              <strong>FairJobs</strong>
-              <span className="fj-preview-active">Přehled</span>
-              <span>Nabídky</span>
-              <span>Odpovědi</span>
-              <span>Profil firmy</span>
-            </div>
-            <div className="fj-preview-main">
-              <div className="fj-preview-welcome">
-                <span>Dobré ráno</span>
-                <strong>Jak se daří náboru?</strong>
-              </div>
-              <div className="fj-preview-metrics">
-                <div><span>Aktivní nabídky</span><strong>3</strong></div>
-                <div><span>Nové odpovědi</span><strong>12</strong></div>
-                <div><span>Čeká na reakci</span><strong>4</strong></div>
-              </div>
-              <div className="fj-preview-job">
-                <span className="fj-preview-job-dot" />
-                <div><strong>Vedoucí zákaznické péče</strong><small>Praha · Hybrid</small></div>
-                <span>8 odpovědí</span>
-              </div>
-              <div className="fj-preview-job">
-                <span className="fj-preview-job-dot fj-preview-job-dot-yellow" />
-                <div><strong>Servisní technik</strong><small>Brno · Na místě</small></div>
-                <span>4 odpovědi</span>
-              </div>
-            </div>
-          </div>
-          <div className="fj-preview-float">
-            <span>Nová odpověď</span>
-            <strong>Lucie odpověděla před 4 min</strong>
-          </div>
-        </div>
+        <EmployerDashboardPreview />
       </section>
 
       <section className="fj-employer-proof">

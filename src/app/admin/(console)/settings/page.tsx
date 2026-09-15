@@ -8,7 +8,7 @@ function Flag({ on, label, hint }: { on: boolean; label: string; hint: string })
       <div className="flex items-start justify-between gap-3">
         <h2 className="font-semibold">{label}</h2>
         <span
-          className={`inline-flex items-center rounded-[2px] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
+          className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-semibold ${
             on ? "bg-green-700 text-white" : "border border-slate-200 text-slate-600"
           }`}
         >
@@ -24,7 +24,7 @@ export default function AdminSettingsPage() {
   const flags = integrationFlags();
   return (
     <main>
-      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provoz</p>
+      <p className="text-sm font-semibold text-slate-600">Provoz</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">Integrace</h1>
       <p className="mt-2 text-sm text-slate-600">
         Jen čtení z prostředí. Tajemství (klíče, connection string) se sem nevypisují.

@@ -16,7 +16,7 @@ const pillClass: Record<CheckStatus, string> = {
 export function StatusPill({ status }: { status: CheckStatus }) {
   return (
     <span
-      className={`inline-flex items-center rounded-[2px] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${pillClass[status]}`}
+      className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-semibold ${pillClass[status]}`}
     >
       {STATUS_LABELS[status]}
     </span>

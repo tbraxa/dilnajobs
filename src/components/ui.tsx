@@ -61,7 +61,7 @@ export function Field({
 }) {
   return (
     <label className="block space-y-1.5" htmlFor={name}>
-      <span className="text-xs font-bold uppercase tracking-wider text-slate-600">{label}</span>
+      <span className="text-sm font-semibold text-slate-700">{label}</span>
       {children}
       {hint ? <span className="block text-xs text-slate-600">{hint}</span> : null}
     </label>

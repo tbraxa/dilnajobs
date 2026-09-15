@@ -16,7 +16,7 @@ export default async function AdminLoginPage() {
   return (
     <AdminLoginChrome>
       <main className="mx-auto max-w-md px-4 py-16">
-        <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provozovatel</p>
+        <p className="text-sm font-semibold text-slate-600">Provozovatel</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">Přihlášení správce</h1>
         <p className="mt-3 text-sm text-slate-600">
           Oddělené od firemního portálu. Odkaz posíláme jen na schválené provozní adresy. Platí 15 minut a spotřebuje se

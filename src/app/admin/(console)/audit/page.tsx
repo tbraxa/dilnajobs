@@ -11,7 +11,7 @@ export default async function AdminAuditPage() {
 
   return (
     <main>
-      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Provoz</p>
+      <p className="text-sm font-semibold text-slate-600">Provoz</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">Audit</h1>
       <p className="mt-2 text-sm text-slate-600">
         Poslední události. Metadata neobsahují tokeny ani spojovací řetězce. IP je hašovaná.
@@ -19,7 +19,7 @@ export default async function AdminAuditPage() {
       <div className="mt-6 overflow-x-auto">
         <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-slate-200 text-xs uppercase tracking-wider text-slate-600">
+            <tr className="border-b border-slate-200 text-sm font-semibold text-slate-600">
               <th className="py-2 pr-3 font-semibold">Čas</th>
               <th className="py-2 pr-3 font-semibold">Kdo</th>
               <th className="py-2 pr-3 font-semibold">Akce</th>

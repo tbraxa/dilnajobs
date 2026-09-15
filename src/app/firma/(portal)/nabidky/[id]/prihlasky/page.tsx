@@ -28,7 +28,7 @@ export default async function PrihlaskyPage({ params }: { params: Promise<{ id: 
 
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6">
-      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Přihlášky</p>
+      <p className="text-sm font-semibold text-slate-600">Přihlášky</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">{data.job.title}</h1>
       <p className="mt-2 text-sm text-slate-600">Vidíte jen přihlášky k vašim inzerátům (RLS).</p>
       <div className="mt-6 grid gap-3">

@@ -32,7 +32,7 @@ export default async function AdminJobsPage() {
 
   return (
     <main>
-      <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Moderace</p>
+      <p className="text-sm font-semibold text-slate-600">Moderace</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">Inzeráty</h1>
       <p className="mt-2 text-sm text-slate-600">
         První inzeráty firem čekají ve stavu ke schválení. Zamítnutí inzerát stáhne (unpublished).

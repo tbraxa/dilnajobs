@@ -27,7 +27,7 @@ export default async function FirmaHome({
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-600">Firma</p>
+          <p className="text-sm font-semibold text-slate-600">Firma</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">{session.companyName}</h1>
           <p className="mt-1 text-sm text-slate-600">
             {session.email} · plán {session.planCode} · ověření: {session.verificationStatus}
@@ -89,7 +89,7 @@ export default async function FirmaHome({
           const action = startCheckoutAction.bind(null, pkg.code);
           return (
             <form key={pkg.code} action={action} className="flex flex-col border border-slate-200 bg-white p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-600">{pkg.name}</p>
+              <p className="text-sm font-semibold text-slate-600">{pkg.name}</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">
                 {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
               </p>
