@@ -57,6 +57,7 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | cta_filters_done | Hotovo |
 | section_results | Výsledky |
 | filters_place | Místo |
+| filters_category | Obor |
 | filters_contract | Úvazek |
 | filters_salary | Mzda od |
 | filters_salary_any | Bez minima |

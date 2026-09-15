@@ -111,6 +111,8 @@ describe("Enterprise Clean Craft tokens", () => {
     const card = readFileSync("src/components/job-card.tsx", "utf8");
     expect(page).not.toContain("filters-sticky");
     expect(page).toContain("JobFilters");
+    expect(page).toContain("copy.nabidky.helper");
+    expect(page).toContain("emptyNoResultsTitle");
     expect(filters).toContain("serp-row-search");
     expect(filters).toContain("serp-row-chips");
     expect(filters).toContain("serp-sheet");
