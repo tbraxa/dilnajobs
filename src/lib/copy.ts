@@ -155,6 +155,12 @@ export const copy = {
     pricingPlusBody: "Více nabídek najednou. Odpovědi na jednom místě.",
     pricingProName: "Pro",
     pricingProBody: "Pro firmu, která nabírá průběžně.",
+    payCard: "Zaplatit kartou",
+    payOrder: "Objednat",
+    orderReceived: "Objednávka je přijatá. Ozveme se na e-mail.",
+    orderPaid: "Platba proběhla. Balíček se připíše.",
+    orderCanceled: "Platbu jste zrušili. Můžete to zkusit znovu.",
+    orderActivated: "Zkušební balíček je aktivní.",
   },
   login: {
     metaTitle: "Přihlášení firmy · FairJobs",

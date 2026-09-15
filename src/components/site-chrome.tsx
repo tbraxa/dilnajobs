@@ -19,12 +19,18 @@ export function SiteHeader() {
         <nav className="nav-links" aria-label={copy.nav.ariaMain}>
           <Link href="/nabidky">{copy.nav.nabidky}</Link>
           <Link href="/pro-firmy">{copy.nav.proFirmy}</Link>
-          <Link className="nav-cta nav-cta-mobile" href="/firma/prihlaseni">
+          <Link className="nav-text nav-cta-mobile" href="/firma/prihlaseni">
             {copy.nav.login}
           </Link>
+          <Link className="nav-cta nav-cta-fill nav-cta-mobile" href="/firma/registrace">
+            {copy.employers.ctaPost}
+          </Link>
         </nav>
-        <Link className="nav-cta" href="/firma/prihlaseni">
+        <Link className="nav-text nav-desktop" href="/firma/prihlaseni">
           {copy.nav.login}
+        </Link>
+        <Link className="nav-cta nav-cta-fill nav-desktop" href="/firma/registrace">
+          {copy.employers.ctaPost}
         </Link>
         <label className="nav-toggle" htmlFor="nav-open">
           {copy.nav.ariaMenu}

@@ -5,6 +5,7 @@ import { jobs } from "@/db/schema";
 import { getSession } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
 import { startCheckoutAction } from "@/lib/actions/jobs";
+import { copy } from "@/lib/copy";
 import { paymentsEnabled } from "@/lib/env";
 import { PACKAGES, formatCzk } from "@/lib/pricing";
 
@@ -43,20 +44,16 @@ export default async function FirmaHome({
         </div>
       </div>
       {orderState === "stub" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Objednávka je ve stavu stub. Stripe Checkout není zapnutý. Ozveme se na e-mail.
-        </p>
+        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">{copy.employers.orderReceived}</p>
       ) : null}
       {orderState === "ok" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Platba proběhla. Balíček se připíše, jakmile Stripe potvrdí webhook (obvykle okamžitě).
-        </p>
+        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">{copy.employers.orderPaid}</p>
       ) : null}
       {orderState === "zruseno" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">Platbu jste zrušili. Můžete to zkusit znovu.</p>
+        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">{copy.employers.orderCanceled}</p>
       ) : null}
       {orderState === "aktivovano" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">Zkušební balíček je aktivní.</p>
+        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">{copy.employers.orderActivated}</p>
       ) : null}
       <h2 className="display mt-8 text-xl font-semibold">Vaše inzeráty</h2>
       <div className="mt-3 grid gap-2">
@@ -79,11 +76,7 @@ export default async function FirmaHome({
         )}
       </div>
       <h2 className="display mt-10 text-xl font-semibold">Balíčky</h2>
-      <p className="mt-1 text-sm text-steel">
-        {stripeOn
-          ? "Platba kartou přes Stripe Checkout. Ceny bez DPH."
-          : "Stripe klíče v prostředí chybí. Objednávka se uloží jako stub."}
-      </p>
+      <p className="mt-1 text-sm text-steel">{copy.employers.pricingHelper}</p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {PACKAGES.map((pkg) => {
           const action = startCheckoutAction.bind(null, pkg.code);
@@ -95,7 +88,7 @@ export default async function FirmaHome({
               </p>
               <p className="mt-2 flex-1 text-sm text-steel">{pkg.blurb}</p>
               <Button type="submit" className="mt-4">
-                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat (stub)"}
+                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? copy.employers.payCard : copy.employers.payOrder}
               </Button>
             </form>
           );

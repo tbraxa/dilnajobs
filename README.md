@@ -1,12 +1,12 @@
-# DílnaJobs (repo) · OpenJobs (public)
+# FairJobs (repo dilnajobs)
 
-Český job marketplace pro **všechny profese**. Public brand: **OpenJobs**. Domain / repo: dilnajobs.cz / tbraxa/dilnajobs.
+Český job marketplace pro **všechny profese**. Public brand: **FairJobs**. Cílová doména: fairjobs.cz (soft). Repo / infra: dilnajobs.cz / tbraxa/dilnajobs.
 
 Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem. Účet není povinný.
 
 Locked MVP spec: [docs/enterprise-mvp/MVP-SPEC.md](docs/enterprise-mvp/MVP-SPEC.md). Czech UI copy: [docs/copy/COPY-PACK.md](docs/copy/COPY-PACK.md).
 
-Public pages are **lean functional markup**, not the final look. Do not port old DílnaJobs / v9 industrial chrome. Visual restyle waits for design direction v2 in a follow-up PR.
+Public UI is **Enterprise Clean Craft v4**: Inter, CTA `#222222`, link `#0047FF`, verified `#008A05`, Unsplash section washes, Airbnb listing cards, compact `/nabidky` filters (search + Upravit filtry, chips, drawer).
 
 ## Rychlý start
 

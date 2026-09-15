@@ -81,6 +81,10 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(mosaic).not.toContain("PHOTOS.cityStreet");
     expect(mosaic).not.toContain("photo-1467260200982-5ba258642c12");
     expect(readFileSync("src/components/craft-marks.tsx", "utf8")).toContain("width={20}");
+    const card = readFileSync("src/components/job-card.tsx", "utf8");
+    expect(card).toContain("listingPhotoForCategory");
+    expect(card).toContain("has-photo");
+    expect(card).toContain("<Image");
   });
 
   it("maps company marks and category media without text-only cards", () => {
@@ -94,10 +98,18 @@ describe("Enterprise Clean Craft tokens", () => {
   it("keeps a lean placeholder price block on /pro-firmy", () => {
     const page = readFileSync("src/app/pro-firmy/page.tsx", "utf8");
     const card = readFileSync("src/components/job-card.tsx", "utf8");
+    const portal = readFileSync("src/app/firma/(portal)/page.tsx", "utf8");
+    const css = readFileSync("src/app/craft.css", "utf8");
     expect(page).toContain('id="cenik"');
     expect(page).toContain("/firma/registrace");
     expect(page).not.toContain("startCheckout");
     expect(page).not.toContain("Stripe");
+    expect(page).not.toMatch(/STRIPE_SECRET|klíče v prostředí/);
+    expect(portal).not.toContain("Stripe");
+    expect(portal).not.toMatch(/STRIPE_SECRET|klíče v prostředí|Checkout není zapnutý/);
+    expect(portal).toContain("copy.employers.pricingHelper");
+    expect(css).toContain("FairJobs");
+    expect(css).not.toContain("OpenJobs");
     expect(card).toContain("job-card-media-inner");
     expect(copy.employers.sectionPricing).toBe("Ceny");
     expect(copy.employers.pricingHelper).toBe(
@@ -132,6 +144,9 @@ describe("Enterprise Clean Craft tokens", () => {
     expect(css).not.toMatch(/\.serp-row-search\s*\{[^}]*height:\s*56px/);
     expect(css).not.toMatch(/\.serp-row-chips\s*\{[^}]*position:\s*absolute/);
     expect(css).toMatch(/\.serp-field input,\s*\.serp-field select\s*\{[^}]*height:\s*48px/);
+    expect(css).toMatch(/\.serp-filters\s*\{[^}]*position:\s*sticky/);
+    expect(css).toContain(".nav-cta-fill");
+    expect(readFileSync("src/components/site-chrome.tsx", "utf8")).toContain("ctaPost");
   });
 
   it("prints pack published labels", () => {

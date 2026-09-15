@@ -165,7 +165,13 @@ Path lock (SoT: enterprise-mvp/PATH-LOCKS.md):
 | why_3_title | Rychlé spuštění |
 | why_3_body | Účet firmy a první nabídka během pár minut. |
 | bottom_helper | Založte účet firmy a zveřejněte první nabídku. |
+| section_pricing | Ceny |
+| pricing_helper | Ceny bez DPH. Orientace pro firmy. Platbu domluvíte po registraci. |
+| pay_card | Zaplatit kartou |
+| pay_order | Objednat |
 | footer | © 2026 FairJobs · nabídky práce |
+
+Public `/pro-firmy#cenik` and employer balíčky never mention Stripe, secret keys, or stub checkout.
 
 ---
 

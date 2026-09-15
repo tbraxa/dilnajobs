@@ -1,6 +1,6 @@
-/* OpenJobs preview-v3.1 · Enterprise Clean Craft
+/* FairJobs Enterprise Craft Pass v4
    Locked: CTA #222222 · link/focus #0047FF · verified #008A05 · Inter only
-   Craft: Airbnb listing cards · section bands · logo wells · photo hero · icon wells */
+   Craft: Airbnb listing cards + Unsplash · section washes · compact SERP filters + drawer */
 :root {
   --bg: #FFFFFF;
   --bg-subtle: #F7F7F8;
@@ -152,6 +152,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .nav-links a:hover,
 .nav-links a[aria-current="page"] { color: var(--ink); }
+.nav-text {
+  color: var(--ink-secondary) !important;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.nav-text:hover { color: var(--ink) !important; }
 .nav-cta {
   display: inline-flex;
   align-items: center;
@@ -164,12 +172,23 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.875rem;
   background: transparent;
   text-decoration: none !important;
-  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease, color .12s ease;
 }
 .nav-cta:hover {
   background: var(--bg-subtle);
   border-color: #CCCCCC;
   box-shadow: var(--shadow-sm);
+}
+.nav-cta-fill {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff !important;
+}
+.nav-cta-fill:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(10, 10, 10, 0.18);
 }
 .nav-cta-mobile { display: none; }
 .nav-toggle {
@@ -691,6 +710,33 @@ a.filter-chip { color: var(--ink-secondary); }
   border-radius: inherit;
   background: var(--bg-muted);
 }
+.job-card-media-inner > span,
+.job-card-media-inner > img,
+.job-row-media-inner > span,
+.job-row-media-inner > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.job-card-media-inner img,
+.job-row-media-inner img {
+  object-fit: cover;
+}
+.job-card-media-inner.has-photo::before,
+.job-card-media-inner.has-photo::after,
+.job-row-media-inner.has-photo::before,
+.job-row-media-inner.has-photo::after {
+  opacity: 0.22;
+}
+.job-card-media-inner.has-photo::after {
+  inset: auto 0 0 0;
+  height: 48%;
+  width: auto;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.28), transparent);
+  border-radius: 0;
+  transform: none;
+}
 .job-card-media-inner::before,
 .job-card-media-inner::after {
   content: "";
@@ -909,7 +955,15 @@ a.job-row:hover,
   max-width: 46ch;
 }
 .serp-results { padding-top: 18px; }
-.serp-filters { position: relative; }
+.serp-filters {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 30;
+  background: rgba(247, 247, 248, 0.94);
+  backdrop-filter: saturate(1.2) blur(12px);
+  -webkit-backdrop-filter: saturate(1.2) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
 /* Layout lock: search and chips are stacked rows. Never a 56px bar packing both. */
 .serp-chrome {
   display: flex;
@@ -1620,6 +1674,7 @@ body:has(.serp-filters-toggle:checked) { overflow: hidden; }
     gap: 14px;
     box-shadow: var(--shadow-card);
   }
+  .nav-desktop { display: none; }
   .nav-cta { display: none; }
   .nav-cta-mobile { display: inline-flex !important; }
   .nav-toggle { display: inline-flex; align-items: center; }

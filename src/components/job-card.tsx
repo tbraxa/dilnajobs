@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { searchJobs } from "@/lib/jobs/search";
 import { displayJobSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
 import { companyInitial, companyMarkClass, isNewJob, jobMediaClass, publishedLabel } from "@/lib/craft";
+import { listingPhotoForCategory } from "@/lib/photos";
 import { contractLabel, copy, workModeLabel } from "@/lib/copy";
 import { CompanyMark, VerifiedBadge } from "./craft-marks";
 
@@ -47,11 +49,14 @@ function JobKicker({ job }: { job: JobRow }) {
 export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" | "h3" }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const media = jobMediaClass(category?.db ?? job.category, job.profession);
+  const photo = listingPhotoForCategory(category?.db ?? job.category);
   const TitleTag = heading;
   return (
     <Link className="job-card" href={`/nabidka/${job.slug}`}>
       <div className="job-card-media" aria-hidden="true">
-        <div className={`job-card-media-inner ${media}`} />
+        <div className={`job-card-media-inner has-photo ${media}`}>
+          <Image src={photo.src} alt="" fill sizes="(max-width: 720px) 100vw, 360px" />
+        </div>
         <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
       </div>
       <div className="job-card-body">
@@ -69,11 +74,14 @@ export function JobCard({ job, heading = "h3" }: { job: JobRow; heading?: "h2" |
 export function JobRowCard({ job }: { job: JobRow }) {
   const category = professionByDb(job.category) ?? professionByDb(job.profession);
   const media = jobMediaClass(category?.db ?? job.category, job.profession);
+  const photo = listingPhotoForCategory(category?.db ?? job.category);
   return (
     <Link className="job-row" href={`/nabidka/${job.slug}`}>
       <div className="job-row-inner">
         <div className="job-row-media" aria-hidden="true">
-          <div className={`job-row-media-inner ${media}`} />
+          <div className={`job-row-media-inner has-photo ${media}`}>
+            <Image src={photo.src} alt="" fill sizes="96px" />
+          </div>
           <CompanyMark name={companyInitial(job.companyName)} tone={companyMarkClass(job.companyName)} />
         </div>
         <div>
