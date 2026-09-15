@@ -73,7 +73,6 @@ select {
   z-index: 40;
   border-bottom: 1px solid rgba(20, 35, 58, 0.12);
   background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(14px);
 }
 
 .fj-header-inner {
@@ -3015,8 +3014,8 @@ select {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  color: var(--fj-muted);
-  font-size: 11px;
+  color: #516075;
+  font-size: 12px;
   font-weight: 750;
 }
 
@@ -3031,7 +3030,7 @@ select {
 
 .fj-job-main-cell h2 {
   margin: 5px 0 0;
-  font-size: 20px;
+  font-size: 21px;
   line-height: 1.2;
   letter-spacing: -0.025em;
 }
@@ -3045,8 +3044,8 @@ select {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 9px;
-  color: #68768a;
-  font-size: 11px;
+  color: #536177;
+  font-size: 12px;
 }
 
 .fj-job-small-meta span + span::before {
@@ -3087,7 +3086,7 @@ select {
 
 .fj-job-salary-cell strong {
   color: var(--fj-ink-deep);
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 900;
   line-height: 1.2;
   letter-spacing: -0.025em;
@@ -5404,9 +5403,12 @@ select {
   }
 
   .fj-filter-dialog {
-    width: 100%;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
     max-height: 100dvh;
     margin: 0;
+    inset: 0;
     border-radius: 0;
   }
 
