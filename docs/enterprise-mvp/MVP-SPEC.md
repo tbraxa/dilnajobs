@@ -91,6 +91,8 @@ Also remain out unless unlocked: payments depth beyond a simple placeholder if n
 
 Routes below are the MVP surface. Lean nav only (no mega-menu content marketing).
 
+**UI (LOCKED for this foundation slice):** Public pages use lean, temporary functional markup (search, listing, detail, apply, employer auth). That markup is **not** the final look. Do **not** port or polish old DílnaJobs / preview-v9 / industrial chrome as the product design. A new design direction v2 is being produced from job-portal research; restyle lands in a **dedicated follow-up PR** after that pack. This slice is judged on working backend, correct routes, and OpenJobs strings.
+
 ### 5.1 Public
 
 #### `/` - Home
@@ -362,6 +364,7 @@ Assume weekdays; adjust for Czech holidays if needed. Ship ASAP on existing repo
 - Seekers apply **without** mandatory account.
 - Employers are the authenticated side.
 - **No** chat, AI matching, native apps, multi-language, complex ATS sync, social feed, or mega-menu content marketing site in MVP.
+- **No** visual finality in the Week 1 foundation: do not invest in polishing or porting old DílnaJobs / v9 / industrial UI. Restyle waits for design v2 in a dedicated PR.
 - Czech UI copy; clear and precise.
 - Airbnb-quality: verified companies, structured listings, trust signals, anti-spam posture.
 

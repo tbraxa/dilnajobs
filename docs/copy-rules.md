@@ -10,3 +10,4 @@
 - Errors: say what to do. “Telefon má mít 9 číslic. Zkuste to znovu.”
 - Empty states: “Na tento filtr teď nic nemáme.” Not “Oops.”
 - Legal tone on GDPR / ToS: plain, not theatrical.
+- Visual restyle is out of copy work. Current public markup is temporary; design v2 lands in a dedicated PR.

@@ -6,6 +6,8 @@ Přímí zaměstnavatelé. Uchazeč se hlásí jménem a telefonem. Účet není
 
 Locked MVP spec: [docs/enterprise-mvp/MVP-SPEC.md](docs/enterprise-mvp/MVP-SPEC.md). Czech UI copy: [docs/copy/COPY-PACK.md](docs/copy/COPY-PACK.md).
 
+Public pages are **lean functional markup**, not the final look. Do not port old DílnaJobs / v9 industrial chrome. Visual restyle waits for design direction v2 in a follow-up PR.
+
 ## Rychlý start
 
 ```bash
