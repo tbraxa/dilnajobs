@@ -45,6 +45,18 @@ describe("new FairJobs visual system", () => {
       ["Kurzy", "/kurzy"],
       ["Nástroje", "/nastroje"],
     ]);
+    const mobileSheet = read("src/components/fairjobs-navigation.tsx").match(
+      /className="fj-mobile-sheet"([\s\S]*?)<\/div>\s*<\/div>\s*\)\s*:\s*null/,
+    )?.[1] ?? "";
+    const lockedMobileLabels = [
+      "Nabídky",
+      "Průvodce",
+      "Pro firmy",
+      "Ceník",
+      "Vytvořit životopis",
+      "Přihlášení firem",
+    ];
+    expect(lockedMobileLabels.every((label) => mobileSheet.includes(label))).toBe(true);
   });
 
   it("keeps destination modules on the homepage", () => {

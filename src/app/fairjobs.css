@@ -5033,7 +5033,7 @@ select {
   }
 
   .fj-employer-invite {
-    align-items: start;
+    align-items: baseline;
   }
 
   .fj-serp-searchbar {
@@ -5375,9 +5375,9 @@ select {
   }
 
   .fj-job-row {
-    grid-template-columns: 60px minmax(0, 1fr) 18px;
-    gap: 9px;
-    padding: 11px 10px;
+    grid-template-columns: 54px minmax(0, 1fr) 18px;
+    gap: 7px;
+    padding: 9px 10px;
   }
 
   .fj-job-logo-cell {
@@ -5385,13 +5385,15 @@ select {
   }
 
   .fj-company-logo {
-    width: 60px;
-    height: 42px;
+    width: 54px;
+    height: 38px;
   }
 
   .fj-job-salary-cell {
     grid-column: 2;
-    align-items: start;
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
     text-align: left;
   }
 
@@ -5400,13 +5402,17 @@ select {
     white-space: nowrap;
   }
 
+  .fj-job-salary-cell .fj-row-label,
+  .fj-top-badge {
+    display: none;
+  }
+
   .fj-job-company-line {
     gap: 4px;
     font-size: 10px;
   }
 
-  .fj-verified-badge,
-  .fj-top-badge {
+  .fj-verified-badge {
     min-height: 19px;
     padding: 2px 5px;
     font-size: 8px;
