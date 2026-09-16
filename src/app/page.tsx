@@ -203,7 +203,7 @@ export default async function HomePage() {
           <p className="fj-eyebrow fj-eyebrow-light">Nástroje FairJobs</p>
           <h2 className="fj-display">Kolik vám zůstane z výplaty?</h2>
           <p>Spočítejte si čistou mzdu během minuty. Bez registrace a bez ukládání osobních údajů.</p>
-          <Link href="/nastroje/cisty-plat" className="fj-tools-link">
+          <Link href="/nastroje/cisty-plat" className="fj-secondary-button fj-tools-primary">
             Otevřít kalkulačku čisté mzdy <span aria-hidden="true">→</span>
           </Link>
           <Link href="/nastroje" className="fj-tools-hub-link">Všechny nástroje</Link>

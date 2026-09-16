@@ -51,7 +51,6 @@ export async function updateApplicationStatusAction(
 export async function updateJobLifecycleAction(
   jobId: string,
   intent: "close" | "renew",
-  _formData: FormData,
 ) {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");

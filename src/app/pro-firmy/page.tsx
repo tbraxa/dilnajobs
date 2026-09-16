@@ -58,7 +58,7 @@ export default function ProFirmyPage() {
               <span aria-hidden="true">→</span>
             </Link>
             <Link href="#cenik" className="fj-secondary-button">Prohlédnout ceník</Link>
-            <Link href="/firma/demo" className="fj-employer-demo-link">Otevřít ukázkovou konzoli →</Link>
+            <Link href="/firma/demo" className="fj-tertiary-button">Otevřít ukázkovou konzoli →</Link>
           </div>
           <div className="fj-employer-hero-note">
             <span>✓</span>

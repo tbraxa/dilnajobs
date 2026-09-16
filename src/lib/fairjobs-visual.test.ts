@@ -69,7 +69,7 @@ describe("new FairJobs visual system", () => {
       read("src/components/fairjobs-navigation.tsx"),
       read("src/app/fairjobs.css"),
     ].join("\n");
-    expect(source).not.toMatch(/preview-topbar|pricing-browserbar|cover-proof|auth-photo-tag|mega-feature|Katalog připravujeme|2024/);
+    expect(source).not.toMatch(/preview-topbar|preview-float|pricing-browserbar|cover-proof|auth-photo-tag|mega-feature|Katalog připravujeme|2024/);
   });
 
   it("locks public typography to Inter", () => {
@@ -79,6 +79,15 @@ describe("new FairJobs visual system", () => {
     ].join("\n");
     expect(source).toContain("Inter");
     expect(source).not.toMatch(/Newsreader|Manrope|Georgia,\s*serif|font-serif/i);
+  });
+
+  it("uses the shared button tokens without a pastel tools primary", () => {
+    const css = read("src/app/fairjobs.css");
+    const home = read("src/app/page.tsx");
+    expect(css).toContain("--fj-button-primary");
+    expect(css).toContain("--fj-button-secondary-border");
+    expect(css).not.toContain(".fj-tools-link");
+    expect(home).toContain('className="fj-secondary-button fj-tools-primary"');
   });
 
   it("keeps long dashes out of rendered component copy", () => {
