@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Manrope, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { FairJobsFooter, FairJobsHeader } from "@/components/fairjobs-chrome";
 import { JsonLd } from "@/components/json-ld";
@@ -10,15 +10,9 @@ import { siteJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 import "./fairjobs.css";
 
-const manrope = Manrope({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-manrope",
-  display: "swap",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-newsreader",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -44,7 +38,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html
       lang="cs"
-      className={`${manrope.variable} ${newsreader.variable}`}
+      className={inter.variable}
       data-scroll-behavior="smooth"
     >
       <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>

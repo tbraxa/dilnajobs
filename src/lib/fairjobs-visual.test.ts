@@ -72,6 +72,15 @@ describe("new FairJobs visual system", () => {
     expect(source).not.toMatch(/preview-topbar|pricing-browserbar|cover-proof|auth-photo-tag|mega-feature|Katalog připravujeme|2024/);
   });
 
+  it("locks public typography to Inter", () => {
+    const source = [
+      read("src/app/layout.tsx"),
+      read("src/app/fairjobs.css"),
+    ].join("\n");
+    expect(source).toContain("Inter");
+    expect(source).not.toMatch(/Newsreader|Manrope|Georgia,\s*serif|font-serif/i);
+  });
+
   it("keeps long dashes out of rendered component copy", () => {
     const files = [
       "src/app/page.tsx",
