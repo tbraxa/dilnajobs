@@ -135,10 +135,10 @@ export function FairJobsNavigation() {
                 <Link href="/pro-firmy" onClick={closeAll}>Pro firmy</Link>
                 <Link href="/pro-firmy#cenik" onClick={closeAll}>Ceník</Link>
               </div>
-              <Link href="/poradna/jak-si-rict-o-vyssi-mzdu" className="fj-mega-feature" onClick={closeAll}>
-                <span>Z poradny</span>
-                <strong>Jak si říct o vyšší mzdu</strong>
-                <small>Čtyři věty, které vám pomohou začít.</small>
+              <Link href="/poradna" className="fj-mega-feature" onClick={closeAll}>
+                <span>Připravujeme</span>
+                <strong>Poradna pro lepší rozhodnutí</strong>
+                <small>První články doplní redakce FairJobs.</small>
               </Link>
             </aside>
           </div>

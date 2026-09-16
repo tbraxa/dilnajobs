@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
-import { FAIRJOBS_PHOTOS } from "@/lib/fairjobs-visual";
 import { collectionPageJsonLd } from "@/lib/structured-data";
 
 const description = "Praktické články FairJobs o hledání práce, mzdě, pohovoru a změně oboru.";
@@ -18,13 +16,6 @@ export default function AdvicePage() {
           name: "Poradna FairJobs",
           description,
           path: "/poradna",
-          items: [
-            {
-              name: "Jak si říct o vyšší mzdu bez zbytečného napětí",
-              path: "/poradna/jak-si-rict-o-vyssi-mzdu",
-              type: "Article",
-            },
-          ],
         })}
       />
       <section className="fj-destination-hero fj-destination-hero-blue">
@@ -40,20 +31,17 @@ export default function AdvicePage() {
             <h2 className="fj-display">Začněte tady</h2>
           </div>
         </div>
-        <div className="fj-advice-grid">
-          <article className="fj-advice-feature">
-            <div>
-              <Image src={FAIRJOBS_PHOTOS.employer.src} alt={FAIRJOBS_PHOTOS.employer.alt} fill sizes="(max-width: 800px) 100vw, 55vw" />
-            </div>
-            <span>Mzda · 6 minut čtení</span>
-            <h2 className="fj-display"><Link href="/poradna/jak-si-rict-o-vyssi-mzdu">Jak si říct o vyšší mzdu</Link></h2>
-            <p>Připravte si částku, argumenty a klidnou první větu.</p>
-          </article>
-          <div className="fj-advice-list">
-            <Link href="/poradna"><span>Pohovor</span><strong>Sedm otázek na budoucího šéfa</strong><small>5 minut</small></Link>
-            <Link href="/poradna"><span>Životopis</span><strong>Co zkrátit a co naopak vysvětlit</strong><small>7 minut</small></Link>
-            <Link href="/poradna"><span>Změna oboru</span><strong>Jak přeložit zkušenosti do nové práce</strong><small>8 minut</small></Link>
-            <Link href="/poradna"><span>Úřad práce</span><strong>Doklady a termíny na jednom místě</strong><small>6 minut</small></Link>
+        <div className="fj-topic-directory">
+          <div><span>01</span><strong>Jak hledat práci</strong><p>Životopis, pohovor a první dny v nové práci.</p></div>
+          <div><span>02</span><strong>Mzda a vyjednávání</strong><p>Orientace v odměně a příprava na rozhovor.</p></div>
+          <div><span>03</span><strong>Změna oboru</strong><p>Rekvalifikace a převod zkušeností do nové role.</p></div>
+          <div><span>04</span><strong>Úřad práce a doklady</strong><p>Praktické kroky a povinnosti na jednom místě.</p></div>
+        </div>
+        <div className="fj-content-status">
+          <span>Připravujeme</span>
+          <div>
+            <strong>První články doplní redakce FairJobs.</strong>
+            <p>Publikujeme až obsah s autorem, datem, zdroji a odpovídající strukturovanou podobou.</p>
           </div>
         </div>
       </section>

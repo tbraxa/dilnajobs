@@ -7,13 +7,6 @@ const description = "Přehled kurzů a rekvalifikací pro změnu oboru, návrat 
 
 export const metadata: Metadata = { title: "Kurzy a rekvalifikace", description };
 
-const courses = [
-  { area: "Digitální dovednosti", title: "Datová analytika pro začátečníky", place: "Online", length: "10 týdnů" },
-  { area: "Technické obory", title: "Elektrotechnická kvalifikace", place: "Praha", length: "6 týdnů" },
-  { area: "Péče a služby", title: "Pracovník v sociálních službách", place: "Brno", length: "3 měsíce" },
-  { area: "Administrativa", title: "Mzdové účetnictví v praxi", place: "Online", length: "8 týdnů" },
-];
-
 export default function CoursesPage() {
   return (
     <main className="fj-destination-page">
@@ -32,19 +25,21 @@ export default function CoursesPage() {
       </section>
       <section className="fj-course-catalog">
         <div className="fj-course-catalog-head">
-          <div><p className="fj-eyebrow">Vybrané kurzy</p><h2 className="fj-display">Co můžete začít</h2></div>
-          <p>Ověřte si vždy termín, cenu a podmínky financování přímo u pořadatele.</p>
+          <div><p className="fj-eyebrow">Katalog kurzů</p><h2 className="fj-display">Jak půjde vybírat</h2></div>
+          <p>Každý zveřejněný kurz bude mít ověřeného poskytovatele, cenu, formu, délku a jasný další krok.</p>
         </div>
-        <div>
-          {courses.map((course, index) => (
-            <article key={course.title}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div><small>{course.area}</small><h3>{course.title}</h3></div>
-              <p>{course.place}</p>
-              <p>{course.length}</p>
-              <Link href="/kurzy" aria-label={`Detail kurzu ${course.title}`}>→</Link>
-            </article>
-          ))}
+        <div className="fj-topic-directory">
+          <div><span>01</span><strong>Obor</strong><p>Kurzy podle profesní cesty a nové kvalifikace.</p></div>
+          <div><span>02</span><strong>Forma</strong><p>Prezenční, online nebo hybridní studium.</p></div>
+          <div><span>03</span><strong>Cena</strong><p>Placené, bezplatné a podporované rekvalifikace.</p></div>
+          <div><span>04</span><strong>Lokalita</strong><p>Výběr podle města, kraje nebo studia na dálku.</p></div>
+        </div>
+        <div className="fj-content-status">
+          <span>Připravujeme</span>
+          <div>
+            <strong>Katalog zatím neobsahuje zveřejněné kurzy.</strong>
+            <p>Course schema zapneme až s potvrzeným poskytovatelem a skutečnými údaji.</p>
+          </div>
         </div>
       </section>
       <section className="fj-destination-cta">

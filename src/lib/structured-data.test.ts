@@ -3,6 +3,7 @@ import {
   articleJsonLd,
   breadcrumbsJsonLd,
   collectionPageJsonLd,
+  courseJsonLd,
   jobPostingJsonLd,
   siteJsonLd,
   webApplicationJsonLd,
@@ -106,5 +107,34 @@ describe("structured data", () => {
     expect(schema.jobLocationType).toBe("TELECOMMUTE");
     expect(schema.applicantLocationRequirements).toBeTruthy();
     expect(schema.jobLocation).toBeUndefined();
+  });
+
+  it("builds Course schema only from a complete provider-backed contract", () => {
+    const schema = courseJsonLd({
+      id: "course-1",
+      slug: "ucetnictvi-v-praxi",
+      title: "Účetnictví v praxi",
+      provider: { name: "Ověřený poskytovatel", url: "https://provider.example" },
+      mode: "hybrid",
+      durationIso: "PT80H",
+      priceCzk: 12000,
+      isFree: false,
+      location: { city: "Praha", region: "Hlavní město Praha", country: "CZ" },
+      description: "Praktický kurz účetnictví.",
+      ctaUrl: "https://provider.example/course",
+      categoryTags: ["finance"],
+      professionTags: ["accounting"],
+      publishedAt: new Date("2026-09-15T08:00:00Z"),
+      updatedAt: new Date("2026-09-16T08:00:00Z"),
+    }) as Record<string, unknown>;
+
+    expect(schema["@type"]).toBe("Course");
+    expect(schema.provider).toEqual({
+      "@type": "Organization",
+      name: "Ověřený poskytovatel",
+      url: "https://provider.example",
+    });
+    expect(JSON.stringify(schema)).toContain("CourseInstance");
+    expect(JSON.stringify(schema)).toContain("12000");
   });
 });

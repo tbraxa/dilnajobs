@@ -148,7 +148,7 @@ export default async function HomePage() {
 
         <div className="fj-editorial-layout">
           <article className="fj-editorial-lead">
-            <Link href="/poradna/jak-si-rict-o-vyssi-mzdu" className="fj-editorial-image">
+            <Link href="/poradna" className="fj-editorial-image">
               <Image
                 src={FAIRJOBS_PHOTOS.healthcare.src}
                 alt={FAIRJOBS_PHOTOS.healthcare.alt}
@@ -157,11 +157,11 @@ export default async function HomePage() {
               />
             </Link>
             <div>
-              <span>Mzda · 6 minut čtení</span>
+              <span>Téma poradny</span>
               <h3 className="fj-display">
-                <Link href="/poradna/jak-si-rict-o-vyssi-mzdu">Jak si říct o vyšší mzdu bez zbytečného napětí</Link>
+                <Link href="/poradna">Mzda a vyjednávání</Link>
               </h3>
-              <p>Připravte si částku, argumenty a jednu větu, která otevře rozhovor.</p>
+              <p>Orientace v odměně a příprava na otevřený rozhovor s firmou.</p>
             </div>
           </article>
 
@@ -171,9 +171,9 @@ export default async function HomePage() {
                 <Image src={FAIRJOBS_PHOTOS.service.src} alt={FAIRJOBS_PHOTOS.service.alt} fill sizes="180px" />
               </div>
               <div>
-                <span>Hledání práce</span>
-                <h3><Link href="/poradna">Sedm otázek, které patří na každý pohovor</Link></h3>
-                <p>Co zjistit o týmu, směnách a běžném pracovním dni.</p>
+                <span>Téma poradny</span>
+                <h3><Link href="/poradna">Jak hledat práci</Link></h3>
+                <p>Životopis, pohovor a první dny v nové práci.</p>
               </div>
             </article>
             <article>
@@ -181,9 +181,9 @@ export default async function HomePage() {
                 <Image src={FAIRJOBS_PHOTOS.engineering.src} alt={FAIRJOBS_PHOTOS.engineering.alt} fill sizes="180px" />
               </div>
               <div>
-                <span>Změna oboru</span>
-                <h3><Link href="/poradna">Jak převést zkušenosti do úplně nové práce</Link></h3>
-                <p>Praktický postup pro životopis i první rozhovor.</p>
+                <span>Téma poradny</span>
+                <h3><Link href="/poradna">Změna oboru</Link></h3>
+                <p>Rekvalifikace a převod zkušeností do nové role.</p>
               </div>
             </article>
           </div>
@@ -200,20 +200,20 @@ export default async function HomePage() {
         <div className="fj-course-list">
           <Link href="/kurzy" className="fj-course-row">
             <span className="fj-course-number">01</span>
-            <div><small>Digitální dovednosti</small><strong>Datová analytika pro začátečníky</strong></div>
-            <span>Online · 10 týdnů</span>
+            <div><small>Cesta ke kvalifikaci</small><strong>Rekvalifikace</strong></div>
+            <span>Katalog připravujeme</span>
             <b aria-hidden="true">→</b>
           </Link>
           <Link href="/kurzy" className="fj-course-row">
             <span className="fj-course-number">02</span>
-            <div><small>Technické obory</small><strong>Elektrotechnická kvalifikace</strong></div>
-            <span>Praha · 6 týdnů</span>
+            <div><small>Studium odkudkoli</small><strong>Online kurzy</strong></div>
+            <span>Katalog připravujeme</span>
             <b aria-hidden="true">→</b>
           </Link>
           <Link href="/kurzy" className="fj-course-row">
             <span className="fj-course-number">03</span>
-            <div><small>Péče a služby</small><strong>Pracovník v sociálních službách</strong></div>
-            <span>Brno · 3 měsíce</span>
+            <div><small>Podle profesní cesty</small><strong>Kurzy podle oboru</strong></div>
+            <span>Katalog připravujeme</span>
             <b aria-hidden="true">→</b>
           </Link>
         </div>

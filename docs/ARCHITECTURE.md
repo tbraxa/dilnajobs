@@ -35,6 +35,7 @@ PostgreSQL 16
 | `/kurzy` | public | course and retraining collection shell |
 | `/nastroje`, `/nastroje/cisty-plat` | public | tool collection + calculators |
 | `/zivotopis` | public | CV builder extension shell |
+| `/llms.txt` | public | AI crawler orientation and citation rules |
 | `/prace/[profese]/[mesto]` | public | SEO landing, same search |
 | `/gdpr`, `/obchodni-podminky` | public | legal |
 | `/firma/prihlaseni` | public | magic-link request |
@@ -95,7 +96,8 @@ Candidates have no account in v1.
 
 The destination layer is registry-driven in `src/lib/public-navigation.ts`. Poradna, Kurzy and Nástroje are stable
 hub routes in the Průvodce mega menu and mobile sheet. Future CMS records can extend those collections without
-adding more top-level navigation siblings.
+adding more top-level navigation siblings. Storage-agnostic future entity shapes live in
+`src/lib/content-contracts.ts`; they reserve Article, Course and Tool fields without pretending a CMS exists.
 
 Structured data builders live in `src/lib/structured-data.ts`; `src/components/json-ld.tsx` is the single nonce-aware
 renderer. The current schema graph includes:
@@ -107,7 +109,9 @@ renderer. The current schema graph includes:
 - `JobPosting` with direct apply, salary, work mode, employer IČO and location
 - `FAQPage` for employer questions that are also visible in the page
 
-Do not emit `Course`, `HowTo`, review or rating schema until the corresponding product data is real and visible.
+The `Course` builder requires a provider-backed `CourseContent` record. Do not emit `Course`, `HowTo`, review or
+rating schema until the corresponding product data is real and visible. `/llms.txt` lists only public sources and
+explicitly forbids inferring missing job facts.
 
 ## Files
 

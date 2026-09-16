@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/nabidky`, changeFrequency: "hourly" },
     { url: `${base}/pro-firmy`, changeFrequency: "weekly" },
     { url: `${base}/poradna`, changeFrequency: "weekly" },
-    { url: `${base}/poradna/jak-si-rict-o-vyssi-mzdu`, changeFrequency: "monthly" },
     { url: `${base}/kurzy`, changeFrequency: "weekly" },
     { url: `${base}/nastroje`, changeFrequency: "monthly" },
     { url: `${base}/nastroje/cisty-plat`, changeFrequency: "monthly" },

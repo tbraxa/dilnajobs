@@ -603,6 +603,78 @@ select {
   gap: 25px;
 }
 
+.fj-topic-directory {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--fj-line);
+  border-radius: 13px;
+  background: white;
+  box-shadow: var(--fj-shadow-sheet);
+}
+
+.fj-topic-directory > div {
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  padding: 27px;
+}
+
+.fj-topic-directory > div + div {
+  border-left: 1px solid var(--fj-line);
+}
+
+.fj-topic-directory span {
+  color: var(--fj-blue);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.fj-topic-directory strong {
+  margin-top: auto;
+  font-family: var(--font-newsreader), Newsreader, Georgia, serif;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.fj-topic-directory p {
+  margin: 10px 0 0;
+  color: var(--fj-muted);
+  font-size: 12px;
+}
+
+.fj-content-status {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 28px;
+  border-radius: 11px;
+  background: var(--fj-mint);
+}
+
+.fj-content-status > span {
+  color: var(--fj-success);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.fj-content-status > div {
+  display: grid;
+  gap: 3px;
+}
+
+.fj-content-status strong {
+  font-size: 14px;
+}
+
+.fj-content-status p {
+  margin: 0;
+  color: #52695b;
+  font-size: 11px;
+}
+
 .fj-advice-feature {
   overflow: hidden;
   border: 1px solid var(--fj-line);
@@ -1214,6 +1286,18 @@ select {
   .fj-cv-preview {
     max-width: 720px;
   }
+
+  .fj-topic-directory {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .fj-topic-directory > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .fj-topic-directory > div:nth-child(n + 3) {
+    border-top: 1px solid var(--fj-line);
+  }
 }
 
 @media (max-width: 680px) {
@@ -1260,6 +1344,24 @@ select {
 
   .fj-advice-feature h2 {
     font-size: 35px;
+  }
+
+  .fj-topic-directory {
+    grid-template-columns: 1fr;
+  }
+
+  .fj-topic-directory > div {
+    min-height: 160px;
+  }
+
+  .fj-topic-directory > div + div {
+    border-top: 1px solid var(--fj-line);
+    border-left: 0;
+  }
+
+  .fj-content-status {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .fj-destination-cta {

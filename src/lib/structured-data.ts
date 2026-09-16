@@ -2,6 +2,7 @@ import { BRAND, BRAND_DESCRIPTION } from "@/lib/brand";
 import { resolveAppUrl } from "@/lib/app-url";
 import { professionByDb } from "@/lib/catalog";
 import { cleanUiBlock, cleanUiText } from "@/lib/fairjobs-visual";
+import type { CourseContent } from "@/lib/content-contracts";
 
 export type JsonLdData = Record<string, unknown> | Record<string, unknown>[];
 
@@ -154,6 +155,60 @@ export function articleJsonLd(input: {
     mainEntityOfPage: absoluteUrl(input.path),
     author: { "@id": absoluteUrl("/#organization") },
     publisher: { "@id": absoluteUrl("/#organization") },
+  };
+}
+
+/**
+ * Course templates call this only after a real provider-backed CourseContent
+ * record exists. The current /kurzy shell intentionally emits CollectionPage only.
+ */
+export function courseJsonLd(course: CourseContent): JsonLdData {
+  const path = `/kurzy/${course.slug}`;
+  const courseMode =
+    course.mode === "online" ? "online" : course.mode === "hybrid" ? "blended" : "onsite";
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "@id": absoluteUrl(`${path}#course`),
+    name: course.title,
+    description: course.description,
+    url: absoluteUrl(path),
+    inLanguage: "cs-CZ",
+    dateModified: course.updatedAt.toISOString(),
+    provider: {
+      "@type": "Organization",
+      name: course.provider.name,
+      url: course.provider.url,
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode,
+      courseWorkload: course.durationIso,
+      ...(course.mode !== "online"
+        ? {
+            location: {
+              "@type": "Place",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: course.location.city,
+                addressRegion: course.location.region,
+                addressCountry: course.location.country,
+              },
+            },
+          }
+        : {}),
+    },
+    ...(course.isFree || course.priceCzk != null
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: course.isFree ? 0 : course.priceCzk,
+            priceCurrency: "CZK",
+            url: course.ctaUrl,
+          },
+        }
+      : {}),
   };
 }
 
