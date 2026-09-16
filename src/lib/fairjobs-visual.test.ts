@@ -53,8 +53,23 @@ describe("new FairJobs visual system", () => {
     expect(home).toContain("Kurzy a rekvalifikace");
     expect(home).toContain("Nástroje FairJobs");
     const courseModule = home.match(/<section className="fj-courses-module">([\s\S]*?)<\/section>/)?.[1] ?? "";
-    expect(courseModule.match(/<article>/g)).toHaveLength(3);
-    expect(courseModule).toContain(">Všechny kurzy<");
+    expect(courseModule).toContain("Kurzy připravujeme");
+    expect(courseModule).not.toContain("Katalog připravujeme");
+    expect(home).toContain(">2026<");
+  });
+
+  it("contains no fake window or floating sticker chrome", () => {
+    const source = [
+      read("src/app/page.tsx"),
+      read("src/app/pro-firmy/page.tsx"),
+      read("src/app/firma/prihlaseni/page.tsx"),
+      read("src/app/firma/registrace/page.tsx"),
+      read("src/components/employer-dashboard-preview.tsx"),
+      read("src/components/fairjobs-pricing.tsx"),
+      read("src/components/fairjobs-navigation.tsx"),
+      read("src/app/fairjobs.css"),
+    ].join("\n");
+    expect(source).not.toMatch(/preview-topbar|pricing-browserbar|cover-proof|auth-photo-tag|mega-feature|Katalog připravujeme|2024/);
   });
 
   it("keeps long dashes out of rendered component copy", () => {

@@ -36,10 +36,6 @@ export default function LoginPage() {
             <p>„Všechny odpovědi a otevřené pozice vidím hned po přihlášení.“</p>
             <span>Firemní přehled FairJobs</span>
           </div>
-          <div className="fj-auth-photo-tag">
-            <span>3</span>
-            <p>aktivní nabídky</p>
-          </div>
         </div>
       </section>
     </main>

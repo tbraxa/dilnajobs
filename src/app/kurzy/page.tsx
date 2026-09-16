@@ -35,7 +35,7 @@ export default function CoursesPage() {
           <div><span>04</span><strong>Lokalita</strong><p>Výběr podle města, kraje nebo studia na dálku.</p></div>
         </div>
         <div className="fj-content-status">
-          <span>Připravujeme</span>
+          <span>Katalog zatím není otevřen</span>
           <div>
             <strong>Katalog zatím neobsahuje zveřejněné kurzy.</strong>
             <p>Course schema zapneme až s potvrzeným poskytovatelem a skutečnými údaji.</p>

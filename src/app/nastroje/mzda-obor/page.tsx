@@ -18,7 +18,7 @@ export default function SalaryByFieldPage() {
           path: "/nastroje/mzda-obor",
         })}
       />
-      <p className="fj-eyebrow">Připravujeme</p>
+      <p className="fj-eyebrow">Brzy dostupné</p>
       <h1 className="fj-display">Orientace ve mzdě podle oboru a regionu.</h1>
       <p>Pracujeme na srovnání, které ukáže reálné rozpětí bez skrývání za registraci.</p>
       <div>

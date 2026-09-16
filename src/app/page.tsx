@@ -66,13 +66,6 @@ export default async function HomePage() {
             <span>01</span>
             <p>Skutečné firmy. Skutečná pracoviště.</p>
           </div>
-          <div className="fj-cover-proof">
-            <span className="fj-cover-proof-icon">✓</span>
-            <div>
-              <strong>Podmínky na očích</strong>
-              <small>Mzda a firma před odpovědí</small>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -100,7 +93,7 @@ export default async function HomePage() {
           </div>
         ) : jobs.length === 0 ? (
           <div className="fj-catalog-message">
-            <strong>Nové nabídky právě připravujeme.</strong>
+            <strong>Teď tu nejsou nové nabídky.</strong>
             <span>Zkuste se vrátit později.</span>
           </div>
         ) : (
@@ -195,33 +188,13 @@ export default async function HomePage() {
           <p className="fj-eyebrow">Kurzy a rekvalifikace</p>
           <h2 className="fj-display">Další krok může začít kurzem.</h2>
           <p>Vybrané možnosti pro změnu oboru, doplnění kvalifikace i návrat do práce.</p>
-          <Link href="/kurzy" className="fj-secondary-button">Všechny kurzy</Link>
         </div>
-        <div className="fj-course-list">
-          <article>
-            <Link href="/kurzy" className="fj-course-row">
-              <span className="fj-course-number">01</span>
-              <div><small>Cesta ke kvalifikaci</small><strong>Rekvalifikace</strong></div>
-              <span>Katalog připravujeme</span>
-              <b aria-hidden="true">→</b>
-            </Link>
-          </article>
-          <article>
-            <Link href="/kurzy" className="fj-course-row">
-              <span className="fj-course-number">02</span>
-              <div><small>Studium odkudkoli</small><strong>Online kurzy</strong></div>
-              <span>Katalog připravujeme</span>
-              <b aria-hidden="true">→</b>
-            </Link>
-          </article>
-          <article>
-            <Link href="/kurzy" className="fj-course-row">
-              <span className="fj-course-number">03</span>
-              <div><small>Podle profesní cesty</small><strong>Kurzy podle oboru</strong></div>
-              <span>Katalog připravujeme</span>
-              <b aria-hidden="true">→</b>
-            </Link>
-          </article>
+        <div className="fj-course-empty">
+          <div>
+            <strong>Kurzy připravujeme</strong>
+            <p>Katalog otevřeme až s ověřenými poskytovateli, cenou a jasnými výsledky kurzu.</p>
+          </div>
+          <Link href="/kurzy" className="fj-secondary-button">Prohlédnout sekci kurzů</Link>
         </div>
       </section>
 

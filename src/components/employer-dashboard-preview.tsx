@@ -139,11 +139,9 @@ export function EmployerDashboardPreview() {
 
   return (
     <div className="fj-employer-product-preview" aria-label="Interaktivní ukázka firemního přehledu">
-      <div className="fj-preview-topbar">
-        <span />
-        <span />
-        <span />
-        <p>Firemní přehled FairJobs</p>
+      <div className="fj-product-frame-head">
+        <strong>Firemní přehled</strong>
+        <span>Interaktivní ukázka</span>
       </div>
       <div className="fj-preview-body">
         <div className="fj-preview-sidebar">

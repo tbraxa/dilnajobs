@@ -36,12 +36,12 @@ export default function ToolsPage() {
         </Link>
         <Link href="/nastroje/mzda-obor">
           <span>02</span>
-          <div><small>Připravujeme</small><h2 className="fj-display">Orientace ve mzdě</h2><p>Porovnání podle oboru a regionu.</p></div>
+          <div><small>Brzy dostupné</small><h2 className="fj-display">Orientace ve mzdě</h2><p>Porovnání podle oboru a regionu.</p></div>
           <b>Více →</b>
         </Link>
         <Link href="/zivotopis">
           <span>03</span>
-          <div><small>Připravujeme</small><h2 className="fj-display">Editor životopisu</h2><p>Čistý životopis pro každou profesi.</p></div>
+          <div><small>Brzy dostupné</small><h2 className="fj-display">Editor životopisu</h2><p>Čistý životopis pro každou profesi.</p></div>
           <b>Více →</b>
         </Link>
       </section>

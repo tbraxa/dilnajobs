@@ -38,7 +38,7 @@ export default function AdvicePage() {
           <div><span>04</span><strong>Úřad práce a doklady</strong><p>Praktické kroky a povinnosti na jednom místě.</p></div>
         </div>
         <div className="fj-content-status">
-          <span>Připravujeme</span>
+          <span>Zatím bez článků</span>
           <div>
             <strong>První články doplní redakce FairJobs.</strong>
             <p>Publikujeme až obsah s autorem, datem, zdroji a odpovídající strukturovanou podobou.</p>

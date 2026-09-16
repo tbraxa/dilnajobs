@@ -21,10 +21,6 @@ export default function RegistrationPage() {
             <p>Dobrá nabídka začíná jasnou mzdou a skutečným pohledem do firmy.</p>
             <span>FairJobs pro zaměstnavatele</span>
           </div>
-          <div className="fj-auth-photo-tag fj-auth-photo-tag-wide">
-            <span>✓</span>
-            <p>ověření firmy podle IČO</p>
-          </div>
         </div>
 
         <div className="fj-auth-copy">

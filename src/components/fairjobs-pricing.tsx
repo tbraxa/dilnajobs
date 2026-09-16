@@ -19,11 +19,9 @@ export function FairJobsPricing() {
       </div>
 
       <div className="fj-pricing-product">
-        <div className="fj-pricing-browserbar" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <p>Nová náborová kampaň</p>
+        <div className="fj-pricing-product-head">
+          <strong>Nová náborová kampaň</strong>
+          <span>Ceny bez DPH</span>
         </div>
 
         <div className="fj-pricing-layout">
