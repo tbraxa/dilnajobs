@@ -1,6 +1,6 @@
 # Security
 
-DílnaJobs handles candidate CVs and phone numbers (special-category-adjacent employment data) and employer accounts. Target: **OWASP ASVS L2** for v1 controls we can actually enforce in code.
+FairJobs handles candidate CVs and phone numbers (special-category-adjacent employment data) and employer accounts. Target: **OWASP ASVS L2** for v1 controls we can actually enforce in code.
 
 ## Threat model (light)
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { JobCard } from "@/components/job-card";
-import { CatalogUnavailable } from "@/components/catalog-unavailable";
+import { JobResultRow } from "@/components/fairjobs-job-row";
 import { cityBySlug, professionBySlug } from "@/lib/catalog";
 import { loadSearchJobs } from "@/lib/jobs/search";
 
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = professionBySlug(profese);
   const c = cityBySlug(mesto);
   if (!p || !c) return { title: "Práce" };
-  return { title: `${p.label} — ${c.label}` };
+  return { title: `${p.label} v ${c.label}` };
 }
 
 export default async function SeoLanding({ params }: Props) {
@@ -26,28 +26,29 @@ export default async function SeoLanding({ params }: Props) {
   const jobs = catalog.ok ? catalog.rows : [];
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">Nabídky</p>
-      <h1 className="display mt-2 text-3xl font-semibold">
-        {p.label} v městě {c.label}
-      </h1>
-      <p className="mt-2 max-w-2xl text-sm text-steel">
-        Stejný katalog jako všechny nabídky, jen předfiltrovaný podle oboru a města.
-      </p>
-      <div className="mt-6 grid gap-3">
+    <main className="fj-guide-listing-page">
+      <section className="fj-guide-listing-head">
+        <p className="fj-eyebrow">Nabídky v okolí</p>
+        <h1 className="fj-display">{p.label} v městě {c.label}</h1>
+        <p>Aktuální nabídky podle profese a města.</p>
+        <Link href="/nabidky" className="fj-text-link">Upravit hledání →</Link>
+      </section>
+      <section className="fj-job-ledger">
         {!catalog.ok ? (
-          <CatalogUnavailable />
+          <div className="fj-empty-results">
+            <strong>Nabídky se teď nepodařilo načíst.</strong>
+            <p>Zkuste stránku obnovit za chvíli.</p>
+          </div>
         ) : jobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Tady teď nic není. Zkuste{" "}
-            <a className="underline" href="/nabidky">
-              celý katalog
-            </a>
-            .
-          </p>
+          <div className="fj-empty-results">
+            <strong>Tady teď nic není.</strong>
+            <p>Zkuste celý katalog nebo jiné město.</p>
+            <Link href="/nabidky" className="fj-secondary-button">Celý katalog</Link>
+          </div>
         ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
+          jobs.map((job) => <JobResultRow key={job.id} job={job} />)
         )}
-      </div>
+      </section>
     </main>
   );
 }

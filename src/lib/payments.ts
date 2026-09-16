@@ -45,7 +45,7 @@ async function createStripeCheckout(input: {
   params.set("line_items[0][quantity]", "1");
   params.set("line_items[0][price_data][currency]", "czk");
   params.set("line_items[0][price_data][unit_amount]", String(input.amountCzkExVat * 100));
-  params.set("line_items[0][price_data][product_data][name]", `FairJobs — ${input.packageName}`);
+  params.set("line_items[0][price_data][product_data][name]", `FairJobs: ${input.packageName}`);
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

@@ -27,6 +27,15 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   output: process.env.NEXT_OUTPUT === "standalone" ? "standalone" : undefined,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/photo-*",
+      },
+    ],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "64kb",

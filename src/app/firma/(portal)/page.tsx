@@ -1,12 +1,17 @@
-import { desc, eq } from "drizzle-orm";
-import { Button, ButtonLink } from "@/components/ui";
-import { withEmployerRls } from "@/db/rls";
-import { jobs } from "@/db/schema";
+import Link from "next/link";
 import { getSession } from "@/lib/auth";
-import { logoutAction } from "@/lib/actions/auth";
-import { startCheckoutAction } from "@/lib/actions/jobs";
-import { paymentsEnabled } from "@/lib/env";
-import { PACKAGES, formatCzk } from "@/lib/pricing";
+import {
+  applicationStatusLabels,
+  jobStatusLabels,
+  loadEmployerConsoleData,
+  workModeLabel,
+} from "@/lib/employer-console";
+import { cleanUiText } from "@/lib/fairjobs-visual";
+import { formatSalary } from "@/lib/pricing";
+
+function initials(name: string) {
+  return name.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
+}
 
 export default async function FirmaHome({
   searchParams,
@@ -15,92 +20,156 @@ export default async function FirmaHome({
 }) {
   const session = await getSession();
   if (!session) return null;
-  const params = await searchParams;
+  const [params, data] = await Promise.all([
+    searchParams,
+    loadEmployerConsoleData(session.employerId),
+  ]);
   const orderState = typeof params.objednavka === "string" ? params.objednavka : "";
-  const stripeOn = paymentsEnabled();
+  const activeJobs = data.jobs.filter((job) => job.status === "published");
+  const newApplications = data.applications.filter((application) => application.status === "new");
+  const interviews = data.applications.filter((application) => application.status === "interview");
+  const openPipeline = data.applications.filter(
+    (application) => !["hired", "rejected"].includes(application.status),
+  );
+  const jobById = new Map(data.jobs.map((job) => [job.id, job]));
+  const applicationCount = new Map<string, number>();
+  for (const application of data.applications) {
+    applicationCount.set(application.jobId, (applicationCount.get(application.jobId) ?? 0) + 1);
+  }
 
-  const ownJobs = await withEmployerRls(session.employerId, async (tx) => {
-    return tx.select().from(jobs).where(eq(jobs.employerId, session.employerId)).orderBy(desc(jobs.createdAt));
-  });
+  const notice =
+    orderState === "ok"
+      ? "Platba proběhla. Nový balíček připíšeme po potvrzení platby."
+      : orderState === "zruseno"
+        ? "Platba byla zrušena. Balíček můžete vybrat znovu v nastavení."
+        : orderState === "aktivovano"
+          ? "Zkušební balíček je aktivní."
+          : orderState === "evidovano" || orderState === "stub"
+            ? "Objednávku evidujeme. Potvrzení pošleme na firemní e-mail."
+            : "";
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <main className="fj-console-page">
+      <header className="fj-console-page-head">
         <div>
-          <p className="label">Firma</p>
-          <h1 className="display mt-1 text-3xl font-semibold">{session.companyName}</h1>
-          <p className="mt-1 text-sm text-steel">
-            {session.email} · plán {session.planCode} · ověření: {session.verificationStatus}
-          </p>
+          <p>Dobrý den, {session.name.split(/\s+/)[0]}</p>
+          <h1>Přehled náboru</h1>
+          <span>Co potřebuje vaši pozornost právě teď.</span>
         </div>
-        <div className="flex gap-2">
-          <ButtonLink href="/firma/nabidky/nova">Nová nabídka</ButtonLink>
-          <form action={logoutAction}>
-            <button className="rounded-[2px] border border-line px-4 py-2.5 text-sm" type="submit">
-              Odhlásit
-            </button>
-          </form>
-        </div>
-      </div>
-      {orderState === "evidovano" || orderState === "stub" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Objednávka je evidovaná. Ozveme se na e-mail.
-        </p>
-      ) : null}
-      {orderState === "ok" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">
-          Platba proběhla. Balíček se připíše, jakmile Stripe potvrdí webhook (obvykle okamžitě).
-        </p>
-      ) : null}
-      {orderState === "zruseno" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">Platbu jste zrušili. Můžete to zkusit znovu.</p>
-      ) : null}
-      {orderState === "aktivovano" ? (
-        <p className="mt-4 border border-line bg-paper-2 p-3 text-sm">Zkušební balíček je aktivní.</p>
-      ) : null}
-      <h2 className="display mt-8 text-xl font-semibold">Vaše inzeráty</h2>
-      <div className="mt-3 grid gap-2">
-        {ownJobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Zatím žádný inzerát.</p>
-        ) : (
-          ownJobs.map((job) => (
-            <div key={job.id} className="flex flex-wrap items-center justify-between gap-2 border border-line p-4">
-              <div>
-                <p className="font-semibold">{job.title}</p>
-                <p className="text-sm text-steel">
-                  {job.city} · {job.status}
-                </p>
+        <Link href="/firma/nabidky/nova" className="fj-console-button primary">Vytvořit nabídku</Link>
+      </header>
+
+      {notice ? <div className="fj-console-notice">{notice}</div> : null}
+
+      <section className="fj-console-metrics" aria-label="Souhrn náboru">
+        <Link href="/firma/nabidky?stav=published">
+          <span>Aktivní nabídky</span>
+          <strong>{activeJobs.length}</strong>
+          <small>{activeJobs.length ? "Zveřejněné na FairJobs" : "Založte první nabídku"}</small>
+        </Link>
+        <Link href="/firma/prihlasky?stav=new">
+          <span>Nové odpovědi</span>
+          <strong>{newApplications.length}</strong>
+          <small>{newApplications.length ? "Čekají na první reakci" : "Vše je zpracované"}</small>
+        </Link>
+        <Link href="/firma/prihlasky?stav=interview">
+          <span>Pohovory</span>
+          <strong>{interviews.length}</strong>
+          <small>V aktuálním výběru</small>
+        </Link>
+        <Link href="/firma/prihlasky">
+          <span>Otevřený výběr</span>
+          <strong>{openPipeline.length}</strong>
+          <small>Aktivní kandidáti</small>
+        </Link>
+      </section>
+
+      <div className="fj-console-dashboard-grid">
+        <section className="fj-console-panel fj-console-attention">
+          <div className="fj-console-panel-head">
+            <div><h2>Odpovědi k posouzení</h2><p>Nejnovější kandidáti napříč nabídkami.</p></div>
+            <Link href="/firma/prihlasky">Celá doručená pošta →</Link>
+          </div>
+          <div className="fj-console-candidate-list">
+            {data.applications.length === 0 ? (
+              <div className="fj-console-empty">
+                <strong>Zatím žádné odpovědi</strong>
+                <p>Jakmile někdo odpoví na nabídku, objeví se tady.</p>
               </div>
-              <a className="text-sm underline" href={`/firma/nabidky/${job.id}/prihlasky`}>
-                Přihlášky
-              </a>
+            ) : (
+              data.applications.slice(0, 4).map((application) => {
+                const job = jobById.get(application.jobId);
+                return (
+                  <Link href={`/firma/prihlasky?vybrat=${application.id}`} key={application.id}>
+                    <span className="fj-console-avatar">{initials(application.fullName)}</span>
+                    <div>
+                      <strong>{cleanUiText(application.fullName)}</strong>
+                      <small>{cleanUiText(job?.title) || "Nabídka práce"}</small>
+                    </div>
+                    <span className={`fj-console-status status-${application.status}`}>
+                      {applicationStatusLabels[application.status] ?? application.status}
+                    </span>
+                    <time dateTime={application.createdAt.toISOString()}>
+                      {application.createdAt.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric" })}
+                    </time>
+                  </Link>
+                );
+              })
+            )}
+          </div>
+        </section>
+
+        <aside className="fj-console-next">
+          <h2>Další krok</h2>
+          {newApplications.length ? (
+            <>
+              <strong>Odpovězte novým kandidátům</strong>
+              <p>{newApplications.length} {newApplications.length === 1 ? "odpověď čeká" : "odpovědi čekají"} na posouzení.</p>
+              <Link href="/firma/prihlasky?stav=new">Otevřít kandidáty</Link>
+            </>
+          ) : activeJobs.length ? (
+            <>
+              <strong>Výběr je pod kontrolou</strong>
+              <p>Nemáte žádnou novou odpověď bez reakce.</p>
+              <Link href="/firma/nabidky">Zkontrolovat nabídky</Link>
+            </>
+          ) : (
+            <>
+              <strong>Publikujte první nabídku</strong>
+              <p>Vyplníte mzdu, místo, režim práce a podmínky.</p>
+              <Link href="/firma/nabidky/nova">Začít s nabídkou</Link>
+            </>
+          )}
+        </aside>
+      </div>
+
+      <section className="fj-console-panel fj-console-jobs-overview">
+        <div className="fj-console-panel-head">
+          <div><h2>Vaše nabídky</h2><p>Výkon a stav posledních náborů.</p></div>
+          <Link href="/firma/nabidky">Spravovat nabídky →</Link>
+        </div>
+        <div className="fj-console-job-table">
+          <div className="fj-console-table-head">
+            <span>Pozice</span><span>Stav</span><span>Odpovědi</span><span>Mzda</span><span />
+          </div>
+          {data.jobs.length === 0 ? (
+            <div className="fj-console-empty">
+              <strong>Nemáte žádnou nabídku</strong>
+              <p>Novou pozici vytvoříte během několika minut.</p>
             </div>
-          ))
-        )}
-      </div>
-      <h2 className="display mt-10 text-xl font-semibold">Balíčky</h2>
-      <p className="mt-1 text-sm text-steel">
-        {stripeOn
-          ? "Platba kartou. Ceny bez DPH."
-          : "Ceny bez DPH. Po objednávce se ozveme na e-mail."}
-      </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {PACKAGES.map((pkg) => {
-          const action = startCheckoutAction.bind(null, pkg.code);
-          return (
-            <form key={pkg.code} action={action} className="flex flex-col border border-line bg-paper p-4">
-              <p className="label">{pkg.name}</p>
-              <p className="display mt-1 text-2xl font-semibold">
-                {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
-              </p>
-              <p className="mt-2 flex-1 text-sm text-steel">{pkg.blurb}</p>
-              <Button type="submit" className="mt-4">
-                {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat"}
-              </Button>
-            </form>
-          );
-        })}
-      </div>
+          ) : (
+            data.jobs.slice(0, 5).map((job) => (
+              <div className="fj-console-job-row" key={job.id}>
+                <div><strong>{cleanUiText(job.title)}</strong><small>{cleanUiText(job.city)} · {workModeLabel(job.workMode)}</small></div>
+                <span className={`fj-console-status status-${job.status}`}>{jobStatusLabels[job.status] ?? job.status}</span>
+                <b>{applicationCount.get(job.id) ?? 0}</b>
+                <span>{cleanUiText(formatSalary(job.salaryMin, job.salaryMax, job.salaryNote))}</span>
+                <Link href={`/firma/nabidky/${job.id}/prihlasky`} aria-label={`Otevřít ${cleanUiText(job.title)}`}>→</Link>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
     </main>
   );
 }

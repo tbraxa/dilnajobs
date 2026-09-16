@@ -1,22 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, IBM_Plex_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { FairJobsFooter, FairJobsHeader } from "@/components/fairjobs-chrome";
+import { JsonLd } from "@/components/json-ld";
 import { resolveAppUrl } from "@/lib/app-url";
 import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
+import { siteJsonLd } from "@/lib/structured-data";
 import "./globals.css";
+import "./fairjobs.css";
+import "./employer-console.css";
 
-const archivo = Archivo({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-archivo",
-  display: "swap",
-});
-
-const ibm = IBM_Plex_Sans({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -31,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F2F0EA",
+  themeColor: "#FFFFFF",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -39,16 +36,28 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const nonce = h.get("x-nonce") ?? undefined;
   const pathname = h.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
+  const isEmployerConsole =
+    pathname === "/firma" ||
+    pathname.startsWith("/firma/nabidky") ||
+    pathname.startsWith("/firma/prihlasky") ||
+    pathname.startsWith("/firma/nastaveni") ||
+    pathname.startsWith("/firma/demo");
+  const usesApplicationChrome = isAdmin || isEmployerConsole;
   return (
-    <html lang="cs" className={`${archivo.variable} ${ibm.variable}`}>
-      <body className="workshop-grid flex min-h-screen flex-col antialiased" data-nonce={nonce}>
-        {isAdmin ? (
+    <html
+      lang="cs"
+      className={inter.variable}
+      data-scroll-behavior="smooth"
+    >
+      <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
+        <JsonLd id="fairjobs-site-schema" data={siteJsonLd()} nonce={nonce} />
+        {usesApplicationChrome ? (
           children
         ) : (
           <>
-            <SiteHeader />
+            <FairJobsHeader />
             {children}
-            <SiteFooter />
+            <FairJobsFooter />
           </>
         )}
       </body>

@@ -1,4 +1,4 @@
-# Operations — DílnaJobs
+# Operations: FairJobs
 
 How to know the service is up, what is stubbed, and how the operator signs into `/admin`.
 

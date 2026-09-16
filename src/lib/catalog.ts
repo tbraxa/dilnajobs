@@ -6,6 +6,14 @@ export const PROFESSIONS = [
   { slug: "udrzba", label: "Údržba", db: "maintenance" },
   { slug: "zamecnik", label: "Zámečník", db: "locksmith" },
   { slug: "operator", label: "Operátor výroby", db: "operator" },
+  { slug: "administrativa", label: "Administrativa", db: "administration" },
+  { slug: "ucetnictvi", label: "Účetnictví a finance", db: "accounting" },
+  { slug: "obchod", label: "Obchod a prodej", db: "sales" },
+  { slug: "it", label: "IT a vývoj", db: "it" },
+  { slug: "logistika", label: "Logistika a sklad", db: "logistics" },
+  { slug: "ridic", label: "Doprava", db: "driver" },
+  { slug: "gastronomie", label: "Gastronomie a služby", db: "hospitality" },
+  { slug: "zdravotnictvi", label: "Zdravotnictví a péče", db: "healthcare" },
 ] as const;
 
 export type ProfessionDb = (typeof PROFESSIONS)[number]["db"] | "other";
@@ -30,6 +38,12 @@ export const EMPLOYMENT_TYPES = [
   { slug: "full_time", label: "Hlavní pracovní poměr" },
   { slug: "part_time", label: "Zkrácený úvazek" },
   { slug: "shift", label: "Směnný provoz" },
+] as const;
+
+export const WORK_MODES = [
+  { value: "onsite", label: "Na místě" },
+  { value: "hybrid", label: "Hybrid" },
+  { value: "remote", label: "Na dálku" },
 ] as const;
 
 export function professionBySlug(slug: string) {

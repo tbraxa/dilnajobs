@@ -32,7 +32,7 @@ function isNextBuildPhase(): boolean {
 
 const optionalString = z.preprocess(emptyToUndefined, z.string().min(1).optional());
 
-/** Empty or invalid URLs become undefined — never throw at import / `next build`. */
+/** Empty or invalid URLs become undefined. Never throw at import or `next build`. */
 const optionalUrl = z.preprocess((value) => {
   const v = emptyToUndefined(value);
   if (typeof v !== "string") return undefined;

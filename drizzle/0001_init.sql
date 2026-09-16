@@ -1,4 +1,4 @@
--- DílnaJobs v1 schema + RLS
+-- FairJobs v1 schema + RLS
 -- App role is table owner; FORCE ROW LEVEL SECURITY so policies still apply.
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

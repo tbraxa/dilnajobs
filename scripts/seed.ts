@@ -316,6 +316,7 @@ async function main() {
       phone: "+420777111222",
       email: "tomas.dvorak@example.test",
       message: "Pět let na 3ose, chci 5osu. Mohu nastoupit od 1. v měsíci.",
+      status: "reviewing",
       consentGdpr: true,
     },
     {
@@ -325,12 +326,13 @@ async function main() {
       phone: "+420603444555",
       consentGdpr: true,
       message: "Zkouška MAG 135 platná. Konstrukce hal.",
+      status: "interview",
     },
   ]);
 
   console.log(`Seeded ${inserted.length} published jobs + 1 pending_review, 5 employers.`);
   console.log("Dev login firmy: novak@kovovyroba-novak.test (magic link v konzoli serveru)");
-  console.log("Dev admin: tomas@dilnajobs.test — npm run magic:admin");
+  console.log("Dev admin: tomas@dilnajobs.test, npm run magic:admin");
   await sql.end({ timeout: 5 });
 }
 

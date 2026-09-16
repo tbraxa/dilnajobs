@@ -17,16 +17,16 @@ const NAV = [
 export function AdminChrome({ email, children }: { email: string; children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-line bg-paper/90 backdrop-blur-sm">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <Link href="/admin" className="flex items-center gap-2 text-ink">
+          <Link href="/admin" className="flex items-center gap-2 text-slate-950">
             <LogoMark className="h-8 w-8" />
-            <span className="display text-lg font-semibold">{BRAND} · správa</span>
+            <span className="text-lg font-semibold tracking-tight">{BRAND} · správa</span>
           </Link>
           <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-steel sm:inline">{email}</span>
+            <span className="hidden text-slate-600 sm:inline">{email}</span>
             <form action={logoutAdminAction}>
-              <button className="rounded-[2px] border border-line px-3 py-1.5 text-sm" type="submit">
+              <button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm" type="submit">
                 Odhlásit
               </button>
             </form>
@@ -36,7 +36,7 @@ export function AdminChrome({ email, children }: { email: string; children: Reac
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:flex-row sm:px-6">
         <nav className="flex shrink-0 flex-wrap gap-1 sm:w-44 sm:flex-col">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-[2px] px-3 py-2 text-sm hover:bg-paper-2">
+            <Link key={item.href} href={item.href} className="rounded-md px-3 py-2 text-sm hover:bg-slate-50">
               {item.label}
             </Link>
           ))}
@@ -50,10 +50,10 @@ export function AdminChrome({ email, children }: { email: string; children: Reac
 export function AdminLoginChrome({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-line bg-paper">
+      <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-md items-center gap-2 px-4 py-3">
           <LogoMark className="h-8 w-8" />
-          <span className="display text-lg font-semibold">{BRAND} · správa</span>
+          <span className="text-lg font-semibold tracking-tight">{BRAND} · správa</span>
         </div>
       </header>
       {children}

@@ -1,4 +1,4 @@
-# Deploy — DílnaJobs
+# Deploy: FairJobs
 
 Two supported hosts. Same Next.js app. Postgres is required either way.
 

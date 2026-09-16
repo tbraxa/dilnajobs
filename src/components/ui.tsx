@@ -5,10 +5,10 @@ type Variant = "primary" | "ink" | "ghost" | "danger";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-accent text-white hover:bg-accent-hover border border-accent hover:border-accent-hover",
-  ink: "bg-ink text-paper hover:bg-black border border-ink",
-  ghost: "bg-transparent text-ink border border-line hover:bg-paper-2",
-  danger: "bg-danger text-white hover:bg-black border border-danger",
+    "border border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700",
+  ink: "border border-slate-950 bg-slate-950 text-white hover:bg-black",
+  ghost: "border border-slate-300 bg-transparent text-slate-950 hover:bg-slate-50",
+  danger: "border border-red-700 bg-red-700 text-white hover:bg-red-900",
 };
 
 export function Button({
@@ -61,12 +61,12 @@ export function Field({
 }) {
   return (
     <label className="block space-y-1.5" htmlFor={name}>
-      <span className="label">{label}</span>
+      <span className="text-sm font-semibold text-slate-700">{label}</span>
       {children}
-      {hint ? <span className="block text-xs text-steel">{hint}</span> : null}
+      {hint ? <span className="block text-xs text-slate-600">{hint}</span> : null}
     </label>
   );
 }
 
 export const inputClass =
-  "w-full rounded-[2px] border border-line bg-paper px-3 py-2.5 text-ink placeholder:text-steel-2";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-slate-950 placeholder:text-slate-400";

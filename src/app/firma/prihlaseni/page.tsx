@@ -1,29 +1,41 @@
 import type { Metadata } from "next";
-import { LoginForm, RegisterForm } from "@/components/auth-forms";
+import Image from "next/image";
+import { EmployerLoginForm } from "@/components/employer-auth-forms";
+import { FAIRJOBS_PHOTOS } from "@/lib/fairjobs-visual";
 
 export const metadata: Metadata = { title: "Přihlášení firmy" };
 
 export default function LoginPage() {
   return (
-    <main className="mx-auto grid w-full max-w-5xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2">
-      <section>
-        <p className="label">Firmy</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Přihlášení e-mailem</h1>
-        <p className="mt-3 text-sm text-steel">
-          Odkaz platí 15 minut. Heslo neposíláme — a nechceme ho znát.
-        </p>
-        <div className="mt-6 border border-line bg-paper p-5">
-          <LoginForm />
+    <main className="fj-auth-page">
+      <section className="fj-auth-card">
+        <div className="fj-auth-copy">
+          <div className="fj-auth-copy-inner">
+            <p className="fj-eyebrow">Firemní účet</p>
+            <h1 className="fj-display">Vraťte se k náboru.</h1>
+            <p className="fj-auth-lead">
+              Přihlásíte se bezpečným odkazem v e-mailu. Bez hesla a bez zbytečného čekání.
+            </p>
+            <EmployerLoginForm />
+          </div>
+          <div className="fj-auth-trust">
+            <span>✓</span>
+            <p>Odkaz je jednorázový a platí pouze 15 minut.</p>
+          </div>
         </div>
-      </section>
-      <section>
-        <p className="label">Nová firma</p>
-        <h1 className="display mt-2 text-3xl font-semibold">Registrace s IČO</h1>
-        <p className="mt-3 text-sm text-steel">
-          Jen přímí zaměstnavatelé. Agentury práce v podmínkách zakazujeme. IČO kontrolujeme.
-        </p>
-        <div className="mt-6 border border-line bg-paper p-5">
-          <RegisterForm />
+
+        <div className="fj-auth-photo">
+          <Image
+            src={FAIRJOBS_PHOTOS.auth.src}
+            alt={FAIRJOBS_PHOTOS.auth.alt}
+            fill
+            priority
+            sizes="(max-width: 820px) 100vw, 46vw"
+          />
+          <div className="fj-auth-photo-overlay">
+            <p>„Všechny odpovědi a otevřené pozice vidím hned po přihlášení.“</p>
+            <span>Firemní přehled FairJobs</span>
+          </div>
         </div>
       </section>
     </main>
