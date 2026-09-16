@@ -42,7 +42,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const pathname = h.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
   return (
-    <html lang="cs" className={`${manrope.variable} ${newsreader.variable}`}>
+    <html
+      lang="cs"
+      className={`${manrope.variable} ${newsreader.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
         <JsonLd id="fairjobs-site-schema" data={siteJsonLd()} nonce={nonce} />
         {isAdmin ? (
