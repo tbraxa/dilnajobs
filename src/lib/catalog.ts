@@ -40,6 +40,12 @@ export const EMPLOYMENT_TYPES = [
   { slug: "shift", label: "Směnný provoz" },
 ] as const;
 
+export const WORK_MODES = [
+  { value: "onsite", label: "Na místě" },
+  { value: "hybrid", label: "Hybrid" },
+  { value: "remote", label: "Na dálku" },
+] as const;
+
 export function professionBySlug(slug: string) {
   return PROFESSIONS.find((p) => p.slug === slug);
 }

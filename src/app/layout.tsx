@@ -9,6 +9,7 @@ import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/bran
 import { siteJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 import "./fairjobs.css";
+import "./employer-console.css";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -35,6 +36,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const nonce = h.get("x-nonce") ?? undefined;
   const pathname = h.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
+  const isEmployerConsole =
+    pathname === "/firma" ||
+    pathname.startsWith("/firma/nabidky") ||
+    pathname.startsWith("/firma/prihlasky") ||
+    pathname.startsWith("/firma/nastaveni") ||
+    pathname.startsWith("/firma/demo");
+  const usesApplicationChrome = isAdmin || isEmployerConsole;
   return (
     <html
       lang="cs"
@@ -43,7 +51,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     >
       <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
         <JsonLd id="fairjobs-site-schema" data={siteJsonLd()} nonce={nonce} />
-        {isAdmin ? (
+        {usesApplicationChrome ? (
           children
         ) : (
           <>

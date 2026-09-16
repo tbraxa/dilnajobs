@@ -60,6 +60,13 @@ export const registerEmployerSchema = z.object({
   city: z.string().trim().max(80).optional(),
 });
 
+export const applicationStatusSchema = z.enum(["new", "reviewing", "interview", "hired", "rejected"]);
+
+export const employerProfileSchema = z.object({
+  companyName: z.string().trim().min(2, "Doplňte název firmy.").max(160),
+  city: z.string().trim().max(80),
+});
+
 export const searchSchema = z.object({
   q: z.string().trim().max(80).optional(),
   profession: z
@@ -113,6 +120,7 @@ export const jobCreateSchema = z.object({
   city: z.string().trim().min(2).max(80),
   region: z.string().trim().min(2).max(80),
   employmentType: z.enum(["full_time", "part_time", "shift"]),
+  workMode: z.enum(["onsite", "hybrid", "remote"]),
   shiftNote: z.string().trim().max(160).optional(),
   salaryMin: z.coerce.number().int().positive().optional(),
   salaryMax: z.coerce.number().int().positive().optional(),

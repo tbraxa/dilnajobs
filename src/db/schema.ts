@@ -133,6 +133,7 @@ export const applications = pgTable(
     cvFileName: text("cv_file_name"),
     cvContentType: text("cv_content_type"),
     message: text("message"),
+    status: text("status").notNull().default("new"),
     consentGdpr: boolean("consent_gdpr").notNull(),
     ipHash: text("ip_hash"),
     createdAt: timestamps.createdAt,
