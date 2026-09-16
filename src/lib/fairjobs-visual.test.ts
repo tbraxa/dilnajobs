@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { GUIDE_NAV_COLUMNS, PUBLIC_DESTINATION_HUBS } from "./public-navigation";
 
 const read = (path: string) => readFileSync(path, "utf8");
 
@@ -33,6 +34,17 @@ describe("new FairJobs visual system", () => {
     for (const hub of ["Poradna", "Kurzy", "Nástroje"]) {
       expect(nav).toContain(hub);
     }
+    expect(GUIDE_NAV_COLUMNS.every((column) => column.links.length <= 5)).toBe(true);
+    expect(GUIDE_NAV_COLUMNS[2].links).toEqual([
+      ["Čistý plat", "/nastroje/cisty-plat"],
+      ["Orientace ve mzdě", "/nastroje/mzda-obor"],
+      ["Přehled kalkulaček", "/nastroje"],
+    ]);
+    expect(PUBLIC_DESTINATION_HUBS.map(({ label, href }) => [label, href])).toEqual([
+      ["Poradna", "/poradna"],
+      ["Kurzy", "/kurzy"],
+      ["Nástroje", "/nastroje"],
+    ]);
   });
 
   it("keeps destination modules on the homepage", () => {
@@ -40,6 +52,9 @@ describe("new FairJobs visual system", () => {
     expect(home).toContain("Z poradny");
     expect(home).toContain("Kurzy a rekvalifikace");
     expect(home).toContain("Nástroje FairJobs");
+    const courseModule = home.match(/<section className="fj-courses-module">([\s\S]*?)<\/section>/)?.[1] ?? "";
+    expect(courseModule.match(/<article>/g)).toHaveLength(3);
+    expect(courseModule).toContain(">Všechny kurzy<");
   });
 
   it("keeps long dashes out of rendered component copy", () => {

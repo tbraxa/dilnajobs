@@ -195,27 +195,33 @@ export default async function HomePage() {
           <p className="fj-eyebrow">Kurzy a rekvalifikace</p>
           <h2 className="fj-display">Další krok může začít kurzem.</h2>
           <p>Vybrané možnosti pro změnu oboru, doplnění kvalifikace i návrat do práce.</p>
-          <Link href="/kurzy" className="fj-secondary-button">Prohlédnout všechny kurzy</Link>
+          <Link href="/kurzy" className="fj-secondary-button">Všechny kurzy</Link>
         </div>
         <div className="fj-course-list">
-          <Link href="/kurzy" className="fj-course-row">
-            <span className="fj-course-number">01</span>
-            <div><small>Cesta ke kvalifikaci</small><strong>Rekvalifikace</strong></div>
-            <span>Katalog připravujeme</span>
-            <b aria-hidden="true">→</b>
-          </Link>
-          <Link href="/kurzy" className="fj-course-row">
-            <span className="fj-course-number">02</span>
-            <div><small>Studium odkudkoli</small><strong>Online kurzy</strong></div>
-            <span>Katalog připravujeme</span>
-            <b aria-hidden="true">→</b>
-          </Link>
-          <Link href="/kurzy" className="fj-course-row">
-            <span className="fj-course-number">03</span>
-            <div><small>Podle profesní cesty</small><strong>Kurzy podle oboru</strong></div>
-            <span>Katalog připravujeme</span>
-            <b aria-hidden="true">→</b>
-          </Link>
+          <article>
+            <Link href="/kurzy" className="fj-course-row">
+              <span className="fj-course-number">01</span>
+              <div><small>Cesta ke kvalifikaci</small><strong>Rekvalifikace</strong></div>
+              <span>Katalog připravujeme</span>
+              <b aria-hidden="true">→</b>
+            </Link>
+          </article>
+          <article>
+            <Link href="/kurzy" className="fj-course-row">
+              <span className="fj-course-number">02</span>
+              <div><small>Studium odkudkoli</small><strong>Online kurzy</strong></div>
+              <span>Katalog připravujeme</span>
+              <b aria-hidden="true">→</b>
+            </Link>
+          </article>
+          <article>
+            <Link href="/kurzy" className="fj-course-row">
+              <span className="fj-course-number">03</span>
+              <div><small>Podle profesní cesty</small><strong>Kurzy podle oboru</strong></div>
+              <span>Katalog připravujeme</span>
+              <b aria-hidden="true">→</b>
+            </Link>
+          </article>
         </div>
       </section>
 

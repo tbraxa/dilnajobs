@@ -43,7 +43,7 @@ export const GUIDE_NAV_COLUMNS = [
     links: [
       ["Čistý plat", "/nastroje/cisty-plat"],
       ["Orientace ve mzdě", "/nastroje/mzda-obor"],
-      ["Přehled nástrojů", "/nastroje"],
+      ["Přehled kalkulaček", "/nastroje"],
     ],
   },
 ] as const;

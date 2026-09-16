@@ -21,7 +21,7 @@ export default function CvBuilderShellPage() {
       <section className="fj-cv-copy">
         <p className="fj-eyebrow">Životopis FairJobs</p>
         <h1 className="fj-display">Životopis, který se dá přečíst za minutu.</h1>
-        <p>Čistá struktura, jasné zkušenosti a žádné zbytečné grafy. Editor právě připravujeme.</p>
+        <p>Čistá struktura, jasné zkušenosti a žádné zbytečné grafy. Editor připravujeme pro PDF i tisk.</p>
         <div>
           <Link href="/nabidky" className="fj-primary-button fj-primary-button-blue">Zatím projít nabídky</Link>
           <Link href="/poradna" className="fj-secondary-button">Rady k životopisu</Link>

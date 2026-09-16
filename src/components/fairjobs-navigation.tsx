@@ -82,7 +82,7 @@ export function FairJobsNavigation() {
             onClick={() => setMegaOpen((open) => !open)}
           >
             Průvodce
-            <span aria-hidden="true">{megaOpen ? "↑" : "↓"}</span>
+            <span aria-hidden="true">{megaOpen ? "▴" : "▾"}</span>
           </button>
           <Link href="/pro-firmy" className="fj-nav-link">Pro firmy</Link>
         </nav>

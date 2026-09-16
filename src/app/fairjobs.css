@@ -1542,7 +1542,7 @@ select {
 
 .fj-guide-mega {
   width: min(100%, var(--fj-container));
-  max-height: 340px;
+  max-height: 326px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 315px;
