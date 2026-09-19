@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ApplyForm } from "@/components/apply-form";
-import { professionIcon } from "@/components/icons";
+import { JobCard } from "@/components/job-card";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
-import { loadPublishedJobBySlug } from "@/lib/jobs/search";
+import { professionIcon } from "@/components/icons";
+import { EMPLOYMENT_TYPES, professionByDb } from "@/lib/catalog";
+import { BRAND } from "@/lib/brand";
+import { copy } from "@/lib/copy";
+import { loadFeaturedJobs, loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
-import { professionByDb } from "@/lib/catalog";
+import { companyInitials, formatSalaryShort } from "@/lib/salary-display";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -16,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  return { title: `${row.job.title} — ${row.job.city}` };
+  return { title: `${row.job.title} · ${row.companyName} · ${BRAND}` };
 }
 
 export default async function JobPage({ params }: Props) {
@@ -24,49 +29,134 @@ export default async function JobPage({ params }: Props) {
   const catalog = await loadPublishedJobBySlug(slug);
   if (!catalog.ok) {
     return (
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+      <main id="main" className="page">
         <CatalogUnavailable />
       </main>
     );
   }
   const row = catalog.rows;
   if (!row) notFound();
-  const { job, companyName } = row;
+
+  const { job, companyName, companyCity, ico } = row;
   const Icon = professionIcon(job.profession);
   const profession = professionByDb(job.profession);
+  const employment = EMPLOYMENT_TYPES.find((e) => e.slug === job.employmentType)?.label;
+  const pay = formatSalaryShort(job.salaryMin, job.salaryMax, job.salaryNote);
+  const salaryFull = formatSalary(job.salaryMin, job.salaryMax, job.salaryNote);
+
+  const relatedCatalog = await loadFeaturedJobs(4);
+  const related = relatedCatalog.ok
+    ? relatedCatalog.rows.filter((j) => j.slug !== job.slug).slice(0, 3)
+    : [];
 
   return (
-    <main className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-12">
-      <article className="lg:col-span-7">
-        <p className="label">{companyName}</p>
-        <h1 className="display mt-2 text-3xl font-semibold sm:text-4xl">{job.title}</h1>
-        <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-steel">
-          <Icon className="h-4 w-4 text-ink" />
-          {profession?.label} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
-          {job.shiftNote ? ` · ${job.shiftNote}` : null}
-        </p>
-        <section className="mt-8 space-y-6 text-[15px] leading-relaxed">
-          <div>
-            <h2 className="label mb-2">Práce</h2>
-            <p className="whitespace-pre-wrap">{job.description}</p>
+    <>
+      <main id="main" className="job-detail">
+        <div>
+          <div className="job-detail-head">
+            <p className="muted" style={{ margin: 0 }}>
+              <Link href="/nabidky">{copy.job.ctaBack}</Link>
+            </p>
+            <h1>{job.title}</h1>
+            <p className="job-detail-pay" aria-label={copy.job.labelSalary}>
+              {pay.primary}
+              <span className="unit">{pay.unit}</span>
+            </p>
+            <p className="muted" style={{ margin: "0 0 8px", fontSize: 16 }}>
+              {salaryFull}
+            </p>
+            <div className="job-detail-chips" aria-label="Parametry nabídky">
+              <span className="chip">
+                <Icon className="h-4 w-4" aria-hidden /> {profession?.label ?? "Pozice"}
+              </span>
+              <span className="chip">
+                {copy.job.labelPlace}: {job.city}
+              </span>
+              {employment ? (
+                <span className="chip">
+                  {copy.job.labelContract}: {employment}
+                </span>
+              ) : null}
+              {job.shiftNote ? <span className="chip">{job.shiftNote}</span> : null}
+              {job.isTop ? <span className="chip active">{copy.job.badgeFeatured}</span> : null}
+            </div>
           </div>
+
+          <section className="job-section" aria-labelledby="sec-about">
+            <h2 id="sec-about">{copy.job.sectionAbout}</h2>
+            {job.description ? (
+              <p className="whitespace-pre-wrap">{job.description}</p>
+            ) : (
+              <p className="muted">{copy.job.emptyAbout}</p>
+            )}
+          </section>
+
           {job.requirements ? (
-            <div>
-              <h2 className="label mb-2">Koho hledáme</h2>
+            <section className="job-section" aria-labelledby="sec-req">
+              <h2 id="sec-req">{copy.job.sectionRequirements}</h2>
               <p className="whitespace-pre-wrap">{job.requirements}</p>
-            </div>
+            </section>
           ) : null}
+
           {job.benefits ? (
-            <div>
-              <h2 className="label mb-2">Co je na stole</h2>
+            <section className="job-section" aria-labelledby="sec-offer">
+              <h2 id="sec-offer">{copy.job.sectionOffer}</h2>
               <p className="whitespace-pre-wrap">{job.benefits}</p>
-            </div>
+            </section>
           ) : null}
-        </section>
-      </article>
-      <aside className="lg:col-span-5">
-        <ApplyForm jobId={job.id} />
-      </aside>
-    </main>
+
+          <section className="job-section" aria-labelledby="sec-co">
+            <h2 id="sec-co">{copy.job.sectionCompany}</h2>
+            <div className="company-card">
+              <div className="job-logo blue" aria-hidden>
+                {companyInitials(companyName)}
+              </div>
+              <div>
+                <strong style={{ fontSize: 17 }}>{companyName}</strong>
+                <p className="muted" style={{ margin: "4px 0 0", fontSize: 15 }}>
+                  {[companyCity, ico ? `IČO ${ico}` : null].filter(Boolean).join(" · ")}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {related.length > 0 ? (
+            <section className="related-jobs" aria-labelledby="sec-related">
+              <h2 id="sec-related">{copy.job.sectionRelated}</h2>
+              <div className="jobs" role="list">
+                {related.map((j, i) => (
+                  <JobCard key={j.id} job={j} index={i} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </div>
+
+        <aside>
+          <div className="apply-panel" id="odpovedet">
+            <h2>{copy.job.applyClaim}</h2>
+            <p className="helper">{copy.job.applyHelper(companyName)}</p>
+            <p className="muted" style={{ margin: "0 0 16px", fontSize: 14 }}>
+              {copy.job.helperNoAccount}
+            </p>
+            <ApplyForm jobId={job.id} companyName={companyName} />
+            <div className="soft-save" style={{ marginTop: 20 }}>
+              <p className="label">{copy.job.softTitle}</p>
+              <p className="muted" style={{ fontSize: 14, margin: "6px 0 12px" }}>
+                {copy.job.softBody}
+              </p>
+              <Link className="btn btn-secondary btn-sm" href="/ucet/registrace">
+                {copy.job.softCta}
+              </Link>
+            </div>
+          </div>
+        </aside>
+      </main>
+      <div className="apply-bar-mobile">
+        <a className="btn btn-primary" href="#odpovedet">
+          {copy.job.ctaApply}
+        </a>
+      </div>
+    </>
   );
 }
