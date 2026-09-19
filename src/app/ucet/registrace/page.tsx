@@ -2,39 +2,43 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ConsoleTop } from "@/components/site-chrome";
 import { BRAND } from "@/lib/brand";
-import { copy } from "@/lib/copy";
 
-export const metadata: Metadata = { title: copy.authSeeker.claim };
+export const metadata: Metadata = { title: "Registrace" };
 
-export default function UcetLoginPage() {
+export default function UcetRegistracePage() {
   return (
     <>
       <ConsoleTop>
-        <Link className="btn btn-secondary btn-sm" href="/nabidky">
-          Hledat práci
+        <Link className="btn btn-secondary btn-sm" href="/ucet/prihlaseni">
+          Přihlášení
         </Link>
       </ConsoleTop>
       <main className="page" id="main" style={{ maxWidth: 480 }}>
-        <h1 className="page-title">{copy.authSeeker.claim}</h1>
+        <h1 className="page-title">Registrace</h1>
         <p className="muted" style={{ fontSize: 17 }}>
-          {copy.authSeeker.helper}
+          Založte účet odkazem z e-mailu. Oblíbené a odpovědi na jednom místě.
         </p>
         <form className="chart" style={{ padding: 20, marginTop: 20 }} action="/ucet" method="get">
+          <div className="field">
+            <label htmlFor="firstName">Jméno</label>
+            <input id="firstName" name="firstName" required />
+          </div>
+          <div className="field">
+            <label htmlFor="lastName">Příjmení</label>
+            <input id="lastName" name="lastName" required />
+          </div>
           <div className="field">
             <label htmlFor="email">E-mail</label>
             <input id="email" name="email" type="email" required placeholder="vas@email.cz" />
           </div>
           <button className="btn btn-primary" type="submit" style={{ marginTop: 12 }}>
-            {copy.authSeeker.cta}
+            Založit účet a poslat odkaz
           </button>
-          <p className="seed" style={{ marginTop: 12 }}>
-            {copy.authSeeker.after}
-          </p>
         </form>
         <p className="muted" style={{ marginTop: 24, fontSize: 13 }}>
-          <Link href="/firma/prihlaseni">{copy.authSeeker.linkEmployer}</Link>
+          <Link href="/ucet/prihlaseni">Už máte účet? Přihlaste se</Link>
           {" · "}
-          <Link href="/ucet/registrace">Registrace</Link>
+          <Link href="/firma/registrace">Jste firma? Registrace firmy</Link>
           {" · "}
           {BRAND}
         </p>
