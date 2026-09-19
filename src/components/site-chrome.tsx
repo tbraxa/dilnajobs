@@ -117,7 +117,7 @@ export function SiteHeader({ pathname = "" }: { pathname?: string }) {
             </Link>
           </div>
           <div className="rail-card">
-            <p>Uložte nabídky do účtu — sledujte odpovědi v čase.</p>
+            <p>Uložte nabídky do účtu. Sledujte odpovědi v čase.</p>
             <Link className="btn btn-primary btn-sm" href="/ucet/prihlaseni" onClick={() => setMegaOpen(false)}>
               Přihlásit se
             </Link>
