@@ -30,6 +30,7 @@ function hiddenFilters(query: SearchQuery, omit: (keyof SearchQuery)[] = []) {
   const values: [keyof SearchQuery, string | number | undefined][] = [
     ["profession", query.profession],
     ["salaryMin", query.salaryMin],
+    ["salaryMax", query.salaryMax],
     ["workMode", query.workMode],
     ["employmentType", query.employmentType],
     ["sort", query.sort === "newest" ? undefined : query.sort],
@@ -69,6 +70,13 @@ export function JobSearchPanel({
           href: jobsHref(query, { salaryMin: undefined, page: undefined }),
         }
       : null,
+    query.salaryMax
+      ? {
+          key: "salaryMax",
+          label: `Do ${new Intl.NumberFormat("cs-CZ").format(query.salaryMax)} Kč`,
+          href: jobsHref(query, { salaryMax: undefined, page: undefined }),
+        }
+      : null,
     query.workMode
       ? {
           key: "mode",
@@ -87,19 +95,49 @@ export function JobSearchPanel({
 
   return (
     <div className="fj-serp-controls">
-      <form action="/nabidky" method="get" className="fj-serp-searchbar">
-        <label className="fj-serp-search-field">
-          <span className="sr-only">Pozice nebo obor</span>
-          <SearchGlyph />
-          <input name="q" defaultValue={query.q} placeholder="Pozice, obor nebo firma" />
-        </label>
-        <label className="fj-serp-place-field">
-          <span className="sr-only">Město nebo kraj</span>
-          <input name="city" list="fj-cities" defaultValue={query.city} placeholder="Město nebo kraj" />
-        </label>
-        {hiddenFilters(query, ["city"])}
-        <button type="submit">Hledat</button>
-      </form>
+      <div className="fj-serp-controls-primary">
+        <form action="/nabidky" method="get" className="fj-serp-searchbar">
+          <label className="fj-serp-search-field">
+            <span className="sr-only">Pozice nebo obor</span>
+            <SearchGlyph />
+            <input name="q" defaultValue={query.q} placeholder="Pozice, obor nebo firma" />
+          </label>
+          <label className="fj-serp-place-field">
+            <span className="sr-only">Město nebo kraj</span>
+            <input name="city" list="fj-cities" defaultValue={query.city} placeholder="Město nebo kraj" />
+          </label>
+          {hiddenFilters(query, ["city"])}
+          <button type="submit">Hledat</button>
+        </form>
+
+        <div className="fj-serp-quick-actions">
+          <span className="fj-serp-result-count">{resultCount} nabídek</span>
+          <form action="/nabidky" method="get" className="fj-sort-form">
+            {query.q ? <input type="hidden" name="q" value={query.q} /> : null}
+            {query.city ? <input type="hidden" name="city" value={query.city} /> : null}
+            {hiddenFilters(query, ["sort"])}
+            <label>
+              <span>Řazení</span>
+              <select
+                name="sort"
+                defaultValue={query.sort ?? "newest"}
+                onChange={(event) => event.currentTarget.form?.requestSubmit()}
+              >
+                <option value="newest">Nejnovější</option>
+                <option value="salary">Nejvyšší mzda</option>
+              </select>
+            </label>
+          </form>
+          <button
+            type="button"
+            className="fj-filter-more"
+            onClick={() => dialogRef.current?.showModal()}
+          >
+            Upravit filtry
+            {active.length ? <span>{active.length}</span> : null}
+          </button>
+        </div>
+      </div>
 
       <datalist id="fj-cities">
         {CITIES.map((city) => (
@@ -133,32 +171,8 @@ export function JobSearchPanel({
               Hlavní pracovní poměr
             </Link>
           ) : null}
-          <button
-            type="button"
-            className="fj-filter-more"
-            onClick={() => dialogRef.current?.showModal()}
-          >
-            Upravit filtry
-            {active.length ? <span>{active.length}</span> : null}
-          </button>
         </div>
-
-        <form action="/nabidky" method="get" className="fj-sort-form">
-          {query.q ? <input type="hidden" name="q" value={query.q} /> : null}
-          {query.city ? <input type="hidden" name="city" value={query.city} /> : null}
-          {hiddenFilters(query, ["sort"])}
-          <label>
-            <span>Řazení</span>
-            <select
-              name="sort"
-              defaultValue={query.sort ?? "newest"}
-              onChange={(event) => event.currentTarget.form?.requestSubmit()}
-            >
-              <option value="newest">Nejnovější</option>
-              <option value="salary">Nejvyšší mzda</option>
-            </select>
-          </label>
-        </form>
+        {active.length ? <Link href="/nabidky" className="fj-filter-clear">Zrušit filtry</Link> : null}
       </div>
 
       <dialog
@@ -181,6 +195,31 @@ export function JobSearchPanel({
 
           <form action="/nabidky" method="get" className="fj-filter-dialog-form">
             {query.q ? <input type="hidden" name="q" value={query.q} /> : null}
+            <fieldset className="fj-filter-compensation">
+              <legend>Odměna za měsíc</legend>
+              <label className="fj-form-field">
+                <span>Mzda od</span>
+                <select name="salaryMin" defaultValue={query.salaryMin ?? ""}>
+                  <option value="">Bez minima</option>
+                  <option value="30000">30 000 Kč</option>
+                  <option value="40000">40 000 Kč</option>
+                  <option value="50000">50 000 Kč</option>
+                  <option value="60000">60 000 Kč</option>
+                  <option value="80000">80 000 Kč</option>
+                </select>
+              </label>
+              <label className="fj-form-field">
+                <span>Mzda do</span>
+                <select name="salaryMax" defaultValue={query.salaryMax ?? ""}>
+                  <option value="">Bez maxima</option>
+                  <option value="40000">40 000 Kč</option>
+                  <option value="50000">50 000 Kč</option>
+                  <option value="60000">60 000 Kč</option>
+                  <option value="80000">80 000 Kč</option>
+                  <option value="100000">100 000 Kč</option>
+                </select>
+              </label>
+            </fieldset>
             <label className="fj-form-field">
               <span>Profese</span>
               <select name="profession" defaultValue={query.profession ?? ""}>
@@ -197,18 +236,6 @@ export function JobSearchPanel({
             <label className="fj-form-field">
               <span>Město nebo kraj</span>
               <input name="city" list="fj-cities" defaultValue={query.city} placeholder="Celé Česko" />
-            </label>
-
-            <label className="fj-form-field">
-              <span>Minimální měsíční mzda</span>
-              <select name="salaryMin" defaultValue={query.salaryMin ?? ""}>
-                <option value="">Bez omezení</option>
-                <option value="30000">30 000 Kč</option>
-                <option value="40000">40 000 Kč</option>
-                <option value="50000">50 000 Kč</option>
-                <option value="60000">60 000 Kč</option>
-                <option value="80000">80 000 Kč</option>
-              </select>
             </label>
 
             <fieldset className="fj-filter-choice-group">

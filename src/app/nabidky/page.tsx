@@ -45,10 +45,10 @@ export default async function NabidkyPage({
       />
       <section className="fj-serp-banner">
         <div>
-          <p className="fj-eyebrow">Práce v celém Česku</p>
           <h1 className="fj-display">Nabídky práce</h1>
+          <p>Mzda, firma a podmínky přehledně před otevřením detailu.</p>
         </div>
-        <p>Porovnejte mzdu, místo a režim práce bez otevírání deseti záložek.</p>
+        <Link href="/ucet/oblibene">Vaše uložené nabídky →</Link>
       </section>
 
       <div className="fj-serp-shell">
@@ -63,7 +63,7 @@ export default async function NabidkyPage({
               <p>
                 {searchHasFilters(query)
                   ? "Výsledky podle vašich filtrů"
-                  : "Nejnovější ověřené nabídky"}
+                  : "Firma · role · lokalita · mzda"}
               </p>
             </div>
             {searchHasFilters(query) ? (

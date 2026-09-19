@@ -88,6 +88,7 @@ export function FairJobsNavigation() {
         </nav>
 
         <div className="fj-header-actions">
+          <Link href="/ucet/prihlaseni" className="fj-seeker-login">Přihlásit se</Link>
           <Link href="/zivotopis" className="fj-cv-link">Vytvořit životopis</Link>
           <Link href="/firma/prihlaseni" className="fj-header-cta">Přihlášení firem</Link>
         </div>
@@ -169,6 +170,7 @@ export function FairJobsNavigation() {
             </div>
 
             <div className="fj-mobile-sheet-group fj-mobile-sheet-actions">
+              <Link href="/ucet/prihlaseni" onClick={closeAll}>Přihlásit se</Link>
               <Link href="/zivotopis" onClick={closeAll}>Vytvořit životopis</Link>
               <Link href="/firma/prihlaseni" onClick={closeAll}>Přihlášení firem</Link>
             </div>

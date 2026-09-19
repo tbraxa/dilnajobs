@@ -28,10 +28,21 @@ function workModeLabel(value: string) {
   return "Na místě";
 }
 
+function FavoriteHeart({ href, label }: { href: string; label: string }) {
+  return (
+    <Link href={href} className="fj-favorite-button" aria-label={label}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.8 4.7a5.5 5.5 0 0 0-7.8 0L12 5.8l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.4 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
+      </svg>
+    </Link>
+  );
+}
+
 export function JobResultRow({ job }: { job: PublicJob }) {
   const verified = job.verificationStatus === "verified";
   const directEmployer = !job.isAgency;
   const profession = professionByDb(job.profession)?.label ?? cleanUiText(job.profession);
+  const returnTo = `/nabidky?ulozit=${encodeURIComponent(job.id)}`;
 
   return (
     <article className={`fj-job-row${job.isTop ? " fj-job-row-top" : ""}`}>
@@ -54,10 +65,10 @@ export function JobResultRow({ job }: { job: PublicJob }) {
           <Link href={`/nabidka/${job.slug}`}>{cleanUiText(job.title)}</Link>
         </h2>
         <div className="fj-job-small-meta">
-          <span>{profession}</span>
-          <span>{employmentLabel(job.employmentType)}</span>
-          {directEmployer ? <span>Přímo od firmy</span> : null}
-          <span>{workModeLabel(job.workMode)}</span>
+          <span className="fj-job-meta-chip">{workModeLabel(job.workMode)}</span>
+          <span className="fj-job-meta-chip">{employmentLabel(job.employmentType)}</span>
+          <span className="fj-job-meta-text">{profession}</span>
+          {directEmployer ? <span className="fj-job-meta-text">Přímo od firmy</span> : null}
         </div>
       </div>
 
@@ -68,14 +79,15 @@ export function JobResultRow({ job }: { job: PublicJob }) {
       </div>
 
       <div className="fj-job-salary-cell">
-        <span className="fj-row-label">Mzda</span>
+        <span className="fj-row-label">Měsíční mzda</span>
         <strong>{cleanUiText(formatSalary(job.salaryMin, job.salaryMax, job.salaryNote))}</strong>
-        <span>{publishedLabel(job.publishedAt)}</span>
+        <span className="fj-job-recency">{publishedLabel(job.publishedAt)}</span>
       </div>
 
-      <Link href={`/nabidka/${job.slug}`} className="fj-job-row-arrow" aria-label={`Otevřít nabídku ${cleanUiText(job.title)}`}>
-        <span aria-hidden="true">→</span>
-      </Link>
+      <FavoriteHeart
+        href={`/ucet/prihlaseni?next=${encodeURIComponent(returnTo)}`}
+        label={`Uložit nabídku ${cleanUiText(job.title)}`}
+      />
     </article>
   );
 }
