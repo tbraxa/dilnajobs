@@ -101,3 +101,27 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+/* P0-01: disabled distinct from primary (not gray-on-gray CTA) */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 1;
+}
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  background: #c5c9d1;
+  border-color: #c5c9d1;
+  color: #fff;
+}
+.btn-secondary:disabled,
+.btn-secondary[aria-disabled="true"] {
+  background: #fff;
+  border-color: #c5c9d1;
+  color: #8b8f98;
+}
+.btn-ghost:disabled,
+.btn-ghost[aria-disabled="true"] {
+  color: #8b8f98;
+  background: transparent;
+}

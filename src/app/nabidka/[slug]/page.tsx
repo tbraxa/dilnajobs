@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  // Template appends " · FairJobs" — do not include brand here (P1-C1).
+  // Template appends " · FairJobs"; do not include brand here (P1-C1).
   return { title: `${row.job.title} · ${row.companyName}` };
 }
 
