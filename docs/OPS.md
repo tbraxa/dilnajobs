@@ -117,7 +117,7 @@ Cloud Scheduler example:
 ```bash
 gcloud scheduler jobs create http dilnajobs-expiry \
   --schedule="0 * * * *" \
-  --uri="https://dilnajobs.cz/api/cron/job-expiry" \
+  --uri="https://fairjobs.cz/api/cron/job-expiry" \
   --http-method=GET \
   --headers="Authorization=Bearer $CRON_SECRET" \
   --time-zone="Europe/Prague"
