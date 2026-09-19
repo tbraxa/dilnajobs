@@ -6,13 +6,13 @@ FairJobs handles candidate CVs and phone numbers (special-category-adjacent empl
 
 | Asset | Threat | Control in v1 |
 | --- | --- | --- |
-| Session | theft / XSS | HttpOnly SameSite cookies (`dj_session`, `dj_admin`), CSP nonces, no `document.cookie` |
+| Session | theft / XSS | HttpOnly SameSite cookies (`dj_session`, `fj_seeker_session`, `dj_admin`), CSP nonces, no `document.cookie` |
 | Admin | employer session used as operator | Separate cookie + `ADMIN_EMAILS` allowlist + `purpose` on magic tokens; RLS `app.is_admin` |
 | Magic link | stuffing / replay | hashed token, 15 min, single use, rate limit per e-mail and IP |
 | Applications / CVs | IDOR, public bucket | unguessable keys, private storage, employer RLS, auth’d download |
 | Jobs | agency spam, XSS in description | IČO path, first-post review, HTML not rendered as markup (text) |
 | Apply / login | abuse | rate limits, Zod, honeypot field |
-| CSRF | forged Server Action | Next Origin check, SameSite=Lax, `allowedOrigins` |
+| CSRF | forged mutation | Middleware Origin / Fetch Metadata gate, Next Origin check, SameSite=Lax, `allowedOrigins` |
 | SQL | injection | Drizzle parameterized queries; `SET LOCAL` via bound `set_config` |
 | Secrets | leak to client | no `NEXT_PUBLIC_` secrets; `.env.example` has placeholders only |
 
@@ -38,9 +38,9 @@ Trust boundary: Next.js server is the only database client. Browsers never get a
 - Legal basis for apply: **consent** + steps prior to contract (employer may hire).
 - Data: name, phone, optional e-mail, optional CV, optional message, IP hash, timestamp, job id.
 - Retention v1: applications kept until employer deletes or 12 months after job expiry (ops job stub).
-- Candidate has no self-service account; erasure via `zdenek@dilnajobs.cz` (placeholder on `/gdpr`).
+- Candidate can manage profile and favorites in `/ucet`; erasure requests go to `soukromi@fairjobs.cz`.
 - Do not log raw IP or CV contents. IP is SHA-256 with `SESSION_SECRET` pepper.
 
 ## Reporting
 
-E-mail security issues to the operators (placeholder: `security@dilnajobs.cz`). Do not open public GitHub issues with exploit details.
+E-mail security issues to `security@fairjobs.cz`. Do not open public GitHub issues with exploit details.

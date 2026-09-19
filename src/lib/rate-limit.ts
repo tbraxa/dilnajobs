@@ -21,20 +21,26 @@ export async function enforceRateLimit(input: {
   const keyHash = hashRateKey(input.bucket, input.key);
   const since = new Date(Date.now() - input.windowMs);
 
-  const [row] = await db
-    .select({ n: dsql<number>`count(*)::int` })
-    .from(rateLimitEvents)
-    .where(
-      and(
-        dsql`${rateLimitEvents.bucket} = ${input.bucket}`,
-        dsql`${rateLimitEvents.keyHash} = ${keyHash}`,
-        gt(rateLimitEvents.createdAt, since),
-      ),
+  await db.transaction(async (tx) => {
+    // Serialize one bucket/key pair so parallel requests cannot all pass the
+    // count-before-insert window.
+    await tx.execute(
+      dsql`select pg_advisory_xact_lock(hashtextextended(${`${input.bucket}:${keyHash}`}, 0))`,
     );
+    const [row] = await tx
+      .select({ n: dsql<number>`count(*)::int` })
+      .from(rateLimitEvents)
+      .where(
+        and(
+          dsql`${rateLimitEvents.bucket} = ${input.bucket}`,
+          dsql`${rateLimitEvents.keyHash} = ${keyHash}`,
+          gt(rateLimitEvents.createdAt, since),
+        ),
+      );
 
-  if ((row?.n ?? 0) >= input.limit) {
-    throw new RateLimitError();
-  }
-
-  await db.insert(rateLimitEvents).values({ bucket: input.bucket, keyHash });
+    if ((row?.n ?? 0) >= input.limit) {
+      throw new RateLimitError();
+    }
+    await tx.insert(rateLimitEvents).values({ bucket: input.bucket, keyHash });
+  });
 }

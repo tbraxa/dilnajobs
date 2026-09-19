@@ -147,7 +147,7 @@ function loadEnv(): Env {
 export const env = loadEnv();
 
 export function paymentsEnabled(): boolean {
-  return Boolean(env.STRIPE_SECRET_KEY);
+  return Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
 }
 
 export function stripeWebhookConfigured(): boolean {

@@ -17,6 +17,11 @@ const EXPECTED_MIGRATIONS = [
   "0003_employer_user_lookup.sql",
   "0004_admin_ops.sql",
   "0005_payments_email.sql",
+  "0006_job_work_mode.sql",
+  "0007_application_pipeline.sql",
+  "0008_seeker_accounts.sql",
+  "0009_stripe_order_verification.sql",
+  "0010_job_constraint_alignment.sql",
 ];
 
 async function timed<T>(fn: () => Promise<T>, ms = 1500): Promise<{ ok: true; value: T; latencyMs: number } | { ok: false; error: string; latencyMs: number }> {
@@ -143,9 +148,9 @@ export async function runDeepHealth(): Promise<HealthReport> {
   if (paymentsEnabled() && stripeWebhookConfigured()) {
     paymentsStatus = "ok";
     paymentsDetail = "Checkout i potvrzení plateb jsou nastavené.";
-  } else if (paymentsEnabled()) {
+  } else if (env.STRIPE_SECRET_KEY || env.STRIPE_WEBHOOK_SECRET) {
     paymentsStatus = "degraded";
-    paymentsDetail = "Checkout je zapnutý, chybí potvrzení plateb (webhook).";
+    paymentsDetail = "Stripe je nastavený jen částečně. Checkout zůstává bezpečně vypnutý.";
   }
   checks.push({
     name: "payments",

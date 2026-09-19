@@ -20,6 +20,7 @@ export default async function EmployerSettingsPage({
   if (!company) return null;
   const saved = params.ulozeno === "1";
   const invalid = params.chyba === "1";
+  const paymentError = params.platba === "chyba";
   const stripeOn = paymentsEnabled();
 
   return (
@@ -34,6 +35,9 @@ export default async function EmployerSettingsPage({
 
       {saved ? <div className="fj-console-notice success">Změny jsou uložené.</div> : null}
       {invalid ? <div className="fj-console-notice error">Zkontrolujte název firmy a město.</div> : null}
+      {paymentError ? (
+        <div className="fj-console-notice error">Objednávku se nepodařilo zahájit. Zkuste to znovu později.</div>
+      ) : null}
 
       <div className="fj-console-settings-grid">
         <section className="fj-console-panel fj-console-settings-form">

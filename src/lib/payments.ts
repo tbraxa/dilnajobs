@@ -20,11 +20,21 @@ async function fulfillOrder(orderId: string, providerRef: string | null) {
   await sql`select fulfill_paid_order(${orderId}::uuid, ${providerRef})`;
 }
 
-export async function applyPaidOrder(orderId: string, providerRef: string | null): Promise<boolean> {
-  const rows = await sql<{ fulfill_paid_order: boolean | string }[]>`
-    select fulfill_paid_order(${orderId}::uuid, ${providerRef})
+export async function applyPaidOrder(input: {
+  orderId: string;
+  providerRef: string;
+  amountTotal: number;
+  currency: string;
+}): Promise<boolean> {
+  const rows = await sql<{ fulfill_stripe_order: boolean | string }[]>`
+    select fulfill_stripe_order(
+      ${input.orderId}::uuid,
+      ${input.providerRef},
+      ${input.amountTotal},
+      ${input.currency}
+    )
   `;
-  const v = rows[0]?.fulfill_paid_order;
+  const v = rows[0]?.fulfill_stripe_order;
   return v === true || v === "t";
 }
 
@@ -52,12 +62,12 @@ async function createStripeCheckout(input: {
     headers: {
       Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
       "Content-Type": "application/x-www-form-urlencoded",
+      "Idempotency-Key": `fairjobs-order-${input.orderId}`,
     },
     body: params,
   });
   if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`stripe_checkout_${res.status}:${body.slice(0, 160)}`);
+    throw new Error(`stripe_checkout_${res.status}`);
   }
   const session = (await res.json()) as { id: string; url?: string };
   if (!session.url) throw new Error("stripe_checkout_missing_url");
@@ -80,7 +90,7 @@ export async function startCheckout(input: {
     const stripeOn = paymentsEnabled();
     const free = pkg.priceCzkExVat === 0;
     const status = free ? "pending" : stripeOn ? "pending" : "stub";
-    const provider = free || stripeOn ? "stripe" : "stub";
+    const provider = stripeOn && !free ? "stripe" : "stub";
 
     const order = await withEmployerRls(input.employerId, async (tx) => {
       const [row] = await tx

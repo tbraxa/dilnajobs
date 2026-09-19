@@ -8,6 +8,7 @@ import { withEmployerRls } from "@/db/rls";
 import { audit } from "@/lib/audit";
 import { getSession } from "@/lib/auth";
 import { applicationStatusSchema, employerProfileSchema } from "@/lib/validation";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function updateApplicationStatusAction(
   applicationId: string,
@@ -16,6 +17,12 @@ export async function updateApplicationStatusAction(
 ) {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
+  await enforceRateLimit({
+    bucket: "employer-application:session",
+    key: session.sessionId,
+    limit: 120,
+    windowMs: 60 * 60 * 1000,
+  });
 
   const status = applicationStatusSchema.safeParse(formData.get("status"));
   if (!status.success) return;
@@ -54,6 +61,12 @@ export async function updateJobLifecycleAction(
 ) {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
+  await enforceRateLimit({
+    bucket: "employer-job-lifecycle:session",
+    key: session.sessionId,
+    limit: 30,
+    windowMs: 60 * 60 * 1000,
+  });
 
   const now = new Date();
   await withEmployerRls(session.employerId, async (tx) => {
@@ -94,6 +107,12 @@ export async function updateJobLifecycleAction(
 export async function updateEmployerProfileAction(formData: FormData) {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
+  await enforceRateLimit({
+    bucket: "employer-profile:session",
+    key: session.sessionId,
+    limit: 20,
+    windowMs: 60 * 60 * 1000,
+  });
 
   const parsed = employerProfileSchema.safeParse({
     companyName: formData.get("companyName"),
