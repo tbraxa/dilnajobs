@@ -7,6 +7,7 @@ export type SearchQuery = {
   profession?: string;
   city?: string;
   salaryMin?: number;
+  salaryMax?: number;
   workMode?: WorkModeFilter;
   employmentType?: "full_time" | "part_time" | "shift";
   page?: number;
@@ -25,6 +26,7 @@ export function parseSearch(input: Record<string, string | string[] | undefined>
     profession: one(input, "profession"),
     city: one(input, "city") ?? one(input, "place"),
     salaryMin: one(input, "salaryMin") ?? one(input, "mzda"),
+    salaryMax: one(input, "salaryMax"),
     workMode: one(input, "workMode") ?? one(input, "mode"),
     employmentType: one(input, "employmentType") ?? one(input, "contract"),
     page: one(input, "page"),
@@ -41,6 +43,7 @@ export function searchHasFilters(query: SearchQuery) {
       query.profession ||
       query.city ||
       query.salaryMin ||
+      query.salaryMax ||
       query.workMode ||
       query.employmentType,
   );
@@ -53,6 +56,7 @@ export function jobsHref(query: SearchQuery, patch: Partial<SearchQuery> = {}) {
   if (next.profession) params.set("profession", next.profession);
   if (next.city) params.set("city", next.city);
   if (next.salaryMin) params.set("salaryMin", String(next.salaryMin));
+  if (next.salaryMax) params.set("salaryMax", String(next.salaryMax));
   if (next.workMode) params.set("workMode", next.workMode);
   if (next.employmentType) params.set("employmentType", next.employmentType);
   if (next.sort && next.sort !== "newest") params.set("sort", next.sort);

@@ -4,14 +4,27 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CandidateApplyForm } from "@/components/candidate-apply-form";
 import { CompanyLogo } from "@/components/company-logo";
+import {
+  FavoriteCompanyButton,
+  FavoriteJobButton,
+} from "@/components/favorite-controls";
 import { JsonLd } from "@/components/json-ld";
+import { FavoriteLoginContinuation } from "@/components/favorite-login-continuation";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
 import { cleanUiBlock, cleanUiText, photoForProfession } from "@/lib/fairjobs-visual";
+import {
+  getFavoriteCompanyIds,
+  getFavoriteJobIds,
+} from "@/lib/seeker-account";
+import { getSeekerSession } from "@/lib/seeker-auth";
 import { breadcrumbsJsonLd, jobPostingJsonLd } from "@/lib/structured-data";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 export const dynamic = "force-dynamic";
 
@@ -26,8 +39,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function JobPage({ params }: Props) {
+export default async function JobPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const query = searchParams ? await searchParams : {};
+  const pendingCompanyId =
+    typeof query.ulozitFirmu === "string" && /^[0-9a-f-]{36}$/i.test(query.ulozitFirmu)
+      ? query.ulozitFirmu
+      : null;
   const catalog = await loadPublishedJobBySlug(slug);
   if (!catalog.ok) {
     return (
@@ -41,6 +59,13 @@ export default async function JobPage({ params }: Props) {
   const row = catalog.rows;
   if (!row) notFound();
   const { job, companyName, ico, verificationStatus, isAgency } = row;
+  const seeker = await getSeekerSession();
+  const [favoriteJobs, favoriteCompanies] = seeker
+    ? await Promise.all([
+        getFavoriteJobIds(seeker.userId, [job.id]),
+        getFavoriteCompanyIds(seeker.userId, [job.employerId]),
+      ])
+    : [new Set<string>(), new Set<string>()];
   const profession = professionByDb(job.profession);
   const photo = photoForProfession(job.profession);
   const employment =
@@ -53,6 +78,13 @@ export default async function JobPage({ params }: Props) {
 
   return (
     <main className="fj-job-detail">
+      {pendingCompanyId ? (
+        <FavoriteLoginContinuation
+          id={pendingCompanyId}
+          kind="company"
+          returnTo={`/nabidka/${job.slug}`}
+        />
+      ) : null}
       <JsonLd
         id="fairjobs-job-posting"
         data={jobPostingJsonLd({ job, companyName, ico })}
@@ -98,6 +130,13 @@ export default async function JobPage({ params }: Props) {
           <a href="#odpovedet" className="fj-primary-button fj-primary-button-blue">
             Odpovědět na nabídku
           </a>
+          <FavoriteJobButton
+            jobId={job.id}
+            initialSaved={favoriteJobs.has(job.id)}
+            returnTo={`/nabidka/${job.slug}`}
+            label={`nabídku ${cleanUiText(job.title)}`}
+            showText
+          />
         </div>
       </section>
 
@@ -156,6 +195,13 @@ export default async function JobPage({ params }: Props) {
           <CompanyLogo companyName={companyName} className="fj-profile-company-logo" />
           <h2>{cleanUiText(companyName)}</h2>
           <p>Firma zveřejňuje nabídku přímo a odpověď posíláte jejímu náborovému týmu.</p>
+          <FavoriteCompanyButton
+            employerId={job.employerId}
+            initialSaved={favoriteCompanies.has(job.employerId)}
+            returnTo={`/nabidka/${job.slug}`}
+            label={`firmu ${cleanUiText(companyName)}`}
+            showText
+          />
           <dl>
             <div>
               <dt>IČO</dt>
@@ -184,7 +230,18 @@ export default async function JobPage({ params }: Props) {
             <li><span>3</span> Firma se ozve vám</li>
           </ul>
         </div>
-        <CandidateApplyForm jobId={job.id} />
+        <CandidateApplyForm
+          jobId={job.id}
+          defaults={
+            seeker
+              ? {
+                  fullName: seeker.name,
+                  email: seeker.email,
+                  phone: seeker.phone ?? "",
+                }
+              : undefined
+          }
+        />
       </section>
     </main>
   );

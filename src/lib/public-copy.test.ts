@@ -20,7 +20,7 @@ describe("public FairJobs copy", () => {
   it("locks the public brand and domain", () => {
     expect(BRAND).toBe("FairJobs");
     expect(PUBLIC_DOMAIN).toBe("fairjobs.cz");
-    expect(DEFAULT_EMAIL_FROM).toBe("FairJobs <noreply@dilnajobs.cz>");
+    expect(DEFAULT_EMAIL_FROM).toBe("FairJobs <noreply@fairjobs.cz>");
   });
 
   it("keeps DílnaJobs / OpenJobs and env-var names out of UI modules", () => {

@@ -6,6 +6,7 @@ import {
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uuid,
@@ -80,6 +81,30 @@ export const sessions = pgTable("sessions", {
   ipHash: text("ip_hash"),
 });
 
+export const seekerUsers = pgTable("seeker_users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  name: text("name").notNull(),
+  phone: text("phone"),
+  city: text("city"),
+  desiredRole: text("desired_role"),
+  bio: text("bio"),
+  createdAt: timestamps.createdAt,
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const seekerSessions = pgTable("seeker_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  seekerUserId: uuid("seeker_user_id")
+    .notNull()
+    .references(() => seekerUsers.id, { onDelete: "cascade" }),
+  tokenHash: text("token_hash").notNull().unique(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamps.createdAt,
+  userAgent: text("user_agent"),
+  ipHash: text("ip_hash"),
+});
+
 export const jobs = pgTable(
   "jobs",
   {
@@ -135,10 +160,39 @@ export const applications = pgTable(
     message: text("message"),
     status: text("status").notNull().default("new"),
     consentGdpr: boolean("consent_gdpr").notNull(),
+    seekerUserId: uuid("seeker_user_id").references(() => seekerUsers.id, { onDelete: "set null" }),
     ipHash: text("ip_hash"),
     createdAt: timestamps.createdAt,
   },
   (t) => [index("applications_employer_idx").on(t.employerId, t.createdAt)],
+);
+
+export const favoriteJobs = pgTable(
+  "favorite_jobs",
+  {
+    seekerUserId: uuid("seeker_user_id")
+      .notNull()
+      .references(() => seekerUsers.id, { onDelete: "cascade" }),
+    jobId: uuid("job_id")
+      .notNull()
+      .references(() => jobs.id, { onDelete: "cascade" }),
+    createdAt: timestamps.createdAt,
+  },
+  (t) => [primaryKey({ columns: [t.seekerUserId, t.jobId] })],
+);
+
+export const favoriteCompanies = pgTable(
+  "favorite_companies",
+  {
+    seekerUserId: uuid("seeker_user_id")
+      .notNull()
+      .references(() => seekerUsers.id, { onDelete: "cascade" }),
+    employerId: uuid("employer_id")
+      .notNull()
+      .references(() => employers.id, { onDelete: "cascade" }),
+    createdAt: timestamps.createdAt,
+  },
+  (t) => [primaryKey({ columns: [t.seekerUserId, t.employerId] })],
 );
 
 export const auditEvents = pgTable("audit_events", {
@@ -202,3 +256,4 @@ export type Employer = typeof employers.$inferSelect;
 export type Application = typeof applications.$inferSelect;
 export type Package = typeof packages.$inferSelect;
 export type EmployerUser = typeof employerUsers.$inferSelect;
+export type SeekerUser = typeof seekerUsers.$inferSelect;

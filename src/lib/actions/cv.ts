@@ -6,6 +6,7 @@ import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
 import { env } from "@/lib/env";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
+import { hmac } from "@/lib/crypto";
 
 export async function presignCvAction(contentType: string) {
   const ip = await clientIp();
@@ -22,7 +23,12 @@ export async function presignCvAction(contentType: string) {
   }
   try {
     const signed = await presignUpload(contentType);
-    return { ok: true as const, ...signed, maxBytes: env.CV_MAX_BYTES };
+    return {
+      ok: true as const,
+      ...signed,
+      uploadProof: hmac(`apply-cv:${signed.objectKey}`),
+      maxBytes: env.CV_MAX_BYTES,
+    };
   } catch (err) {
     captureException(err, { event: "cv.presign.failed", requestId });
     return { ok: false as const, error: "Nahrání se teď nepodařilo připravit." };

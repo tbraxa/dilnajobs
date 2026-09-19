@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, count, desc, eq, gte, ilike, or, sql as dsql } from "drizzle-orm";
+import { and, count, desc, eq, gte, ilike, lte, or, sql as dsql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { employers, jobs } from "@/db/schema";
 import { isMissingRelationError, type CatalogResult } from "@/lib/catalog-error";
@@ -40,6 +40,9 @@ function searchFilters(query: SearchQuery) {
 
   if (query.salaryMin) {
     filters.push(or(gte(jobs.salaryMin, query.salaryMin), gte(jobs.salaryMax, query.salaryMin))!);
+  }
+  if (query.salaryMax) {
+    filters.push(or(lte(jobs.salaryMin, query.salaryMax), lte(jobs.salaryMax, query.salaryMax))!);
   }
 
   if (query.employmentType) {

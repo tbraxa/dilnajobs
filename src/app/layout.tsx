@@ -10,6 +10,7 @@ import { siteJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 import "./fairjobs.css";
 import "./employer-console.css";
+import "./seeker-account.css";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -42,7 +43,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     pathname.startsWith("/firma/prihlasky") ||
     pathname.startsWith("/firma/nastaveni") ||
     pathname.startsWith("/firma/demo");
-  const usesApplicationChrome = isAdmin || isEmployerConsole;
+  const isSeekerConsole =
+    pathname.startsWith("/ucet/prehled") ||
+    pathname.startsWith("/ucet/profil") ||
+    pathname.startsWith("/ucet/oblibene");
+  const usesApplicationChrome = isAdmin || isEmployerConsole || isSeekerConsole;
   return (
     <html
       lang="cs"

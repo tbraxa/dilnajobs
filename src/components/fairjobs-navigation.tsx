@@ -24,7 +24,7 @@ function trapTab(event: KeyboardEvent, container: HTMLElement | null) {
   }
 }
 
-export function FairJobsNavigation() {
+export function FairJobsNavigation({ seekerName }: { seekerName: string | null }) {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
@@ -88,6 +88,9 @@ export function FairJobsNavigation() {
         </nav>
 
         <div className="fj-header-actions">
+          <Link href={seekerName ? "/ucet/prehled" : "/ucet/prihlaseni"} className="fj-seeker-login">
+            {seekerName ? seekerName.split(/\s+/)[0] : "Přihlásit se"}
+          </Link>
           <Link href="/zivotopis" className="fj-cv-link">Vytvořit životopis</Link>
           <Link href="/firma/prihlaseni" className="fj-header-cta">Přihlášení firem</Link>
         </div>
@@ -169,6 +172,9 @@ export function FairJobsNavigation() {
             </div>
 
             <div className="fj-mobile-sheet-group fj-mobile-sheet-actions">
+              <Link href={seekerName ? "/ucet/prehled" : "/ucet/prihlaseni"} onClick={closeAll}>
+                {seekerName ? "Můj účet" : "Přihlásit se"}
+              </Link>
               <Link href="/zivotopis" onClick={closeAll}>Vytvořit životopis</Link>
               <Link href="/firma/prihlaseni" onClick={closeAll}>Přihlášení firem</Link>
             </div>

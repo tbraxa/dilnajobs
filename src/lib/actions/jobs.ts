@@ -2,7 +2,7 @@
 
 import { eq, sql as dsql } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
+import { clientIp, getSession } from "@/lib/auth";
 import { withEmployerRls } from "@/db/rls";
 import { employers, jobs } from "@/db/schema";
 import { jobCreateSchema } from "@/lib/validation";
@@ -12,12 +12,20 @@ import { PLAN_LIMITS } from "@/lib/pricing";
 import { env } from "@/lib/env";
 import { audit } from "@/lib/audit";
 import { cityByLabel } from "@/lib/catalog";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import type { CheckoutResult } from "@/lib/payments";
 
 export type JobFormState = { ok: false; error: string } | null;
 
 export async function createJobAction(_prev: JobFormState, formData: FormData): Promise<JobFormState> {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
+  await enforceRateLimit({
+    bucket: "employer-job-create:session",
+    key: session.sessionId,
+    limit: 20,
+    windowMs: 60 * 60 * 1000,
+  });
 
   const parsed = jobCreateSchema.safeParse({
     title: formData.get("title"),
@@ -108,13 +116,32 @@ export async function createJobAction(_prev: JobFormState, formData: FormData): 
 export async function startCheckoutAction(packageCode: string) {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
-  const { startCheckout } = await import("@/lib/payments");
-  const result = await startCheckout({
-    employerId: session.employerId,
-    email: session.email,
-    packageCode,
-  });
+  let result: CheckoutResult;
+  try {
+    await Promise.all([
+      enforceRateLimit({
+        bucket: "checkout:session",
+        key: session.sessionId,
+        limit: 8,
+        windowMs: 60 * 60 * 1000,
+      }),
+      enforceRateLimit({
+        bucket: "checkout:ip",
+        key: await clientIp(),
+        limit: 20,
+        windowMs: 60 * 60 * 1000,
+      }),
+    ]);
+    const { startCheckout } = await import("@/lib/payments");
+    result = await startCheckout({
+      employerId: session.employerId,
+      email: session.email,
+      packageCode,
+    });
+  } catch {
+    redirect("/firma/nastaveni?platba=chyba");
+  }
   if (result.kind === "redirect") redirect(result.url);
   if (result.kind === "activated") redirect("/firma?objednavka=aktivovano");
-  redirect("/firma?objednavka=evidovano");
+  redirect("/firma/nastaveni?platba=nedostupna");
 }

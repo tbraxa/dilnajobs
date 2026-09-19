@@ -77,9 +77,20 @@ export async function createAdminSessionFromToken(token: string): Promise<{
   const ua = (await headers()).get("user-agent")?.slice(0, 240);
   const requestId = await getRequestId();
 
+  try {
+    await enforceRateLimit({
+      bucket: "admin-magic-consume:ip",
+      key: ip,
+      limit: 20,
+      windowMs: 60 * 60 * 1000,
+    });
+  } catch {
+    return null;
+  }
+
   const [row] = await db
-    .select()
-    .from(magicTokens)
+    .update(magicTokens)
+    .set({ consumedAt: new Date() })
     .where(
       and(
         eq(magicTokens.tokenHash, tokenHash),
@@ -88,14 +99,12 @@ export async function createAdminSessionFromToken(token: string): Promise<{
         gt(magicTokens.expiresAt, new Date()),
       ),
     )
-    .limit(1);
+    .returning({ email: magicTokens.email });
 
   if (!row || !isAdminEmail(row.email)) {
     log("warn", "admin.magic.invalid", { requestId });
     return null;
   }
-
-  await db.update(magicTokens).set({ consumedAt: new Date() }).where(eq(magicTokens.id, row.id));
 
   const sessionToken = randomToken(32);
   const expiresAt = new Date(Date.now() + env.SESSION_DAYS * 86400000);

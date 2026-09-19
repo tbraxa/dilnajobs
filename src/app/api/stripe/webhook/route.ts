@@ -46,17 +46,28 @@ export async function POST(request: Request) {
     (typeof obj.client_reference_id === "string" ? obj.client_reference_id : "");
   const providerRef = typeof obj.id === "string" ? obj.id : null;
   const paymentStatus = obj.payment_status;
+  const amountTotal = typeof obj.amount_total === "number" ? obj.amount_total : null;
+  const currency = typeof obj.currency === "string" ? obj.currency : "";
 
-  if (!orderId || !/^[0-9a-f-]{36}$/i.test(orderId)) {
+  if (!orderId || !/^[0-9a-f-]{36}$/i.test(orderId) || !providerRef) {
     log("warn", "stripe.webhook.missing_order", { requestId });
     return NextResponse.json({ received: true });
   }
-  if (paymentStatus && paymentStatus !== "paid" && paymentStatus !== "no_payment_required") {
+  if (
+    (paymentStatus !== "paid" && paymentStatus !== "no_payment_required") ||
+    amountTotal === null ||
+    !currency
+  ) {
     return NextResponse.json({ received: true });
   }
 
   try {
-    const newlyPaid = await applyPaidOrder(orderId, providerRef);
+    const newlyPaid = await applyPaidOrder({
+      orderId,
+      providerRef,
+      amountTotal,
+      currency,
+    });
     if (newlyPaid) {
       await audit({
         actorType: "system",
