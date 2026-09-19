@@ -12,12 +12,26 @@ import { PLAN_LIMITS } from "@/lib/pricing";
 import { env } from "@/lib/env";
 import { audit } from "@/lib/audit";
 import { cityByLabel } from "@/lib/catalog";
+import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
 
 export type JobFormState = { ok: false; error: string } | null;
 
 export async function createJobAction(_prev: JobFormState, formData: FormData): Promise<JobFormState> {
   const session = await getSession();
   if (!session) redirect("/firma/prihlaseni");
+  try {
+    await enforceRateLimit({
+      bucket: "employer-job-create:session",
+      key: session.sessionId,
+      limit: 20,
+      windowMs: 60 * 60 * 1000,
+    });
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { ok: false, error: "Příliš mnoho změn. Zkuste to za chvíli." };
+    }
+    throw error;
+  }
 
   const parsed = jobCreateSchema.safeParse({
     title: formData.get("title"),
