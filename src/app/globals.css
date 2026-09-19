@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./sot.css";
+@import "./polish-p0.css";
 
 :root {
   /* SoT tokens (also in sot.css) — keep Tailwind theme aliases */
