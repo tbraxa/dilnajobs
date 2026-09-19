@@ -49,6 +49,12 @@ export function ActivityLineChart({
         </span>
       </div>
       <svg className="line-chart" viewBox="0 0 560 180" role="img" aria-label={ariaLabel}>
+        <defs>
+          <linearGradient id="activityFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0047ff" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#0047ff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
         <g className="grid" aria-hidden="true">
           <line x1="0" y1="20" x2="560" y2="20" />
           <line x1="0" y1="60" x2="560" y2="60" />
@@ -57,6 +63,7 @@ export function ActivityLineChart({
         </g>
         <path
           className="area"
+          fill="url(#activityFill)"
           d="M0,120 L40,112 L80,108 L120,95 L160,100 L200,88 L240,82 L280,70 L320,74 L360,58 L400,52 L440,48 L480,40 L520,36 L560,28 L560,160 L0,160 Z"
         />
         <path
@@ -111,16 +118,33 @@ export function HiringFunnel() {
         ))}
       </div>
       <p className="seed" style={{ marginTop: 16 }}>
-        Horizontální funnel — žádné sloupcové grafy.
+        Horizontální funnel. Žádné sloupcové grafy.
       </p>
     </section>
   );
 }
 
-export function Sparkline({ d }: { d: string }) {
+/** SoT sparkline — viewBox 280×48 (never 120×40 with x>120 paths). */
+export function Sparkline({
+  d = "M0,30 L40,28 L80,32 L120,26 L160,24 L200,20 L240,18 L280,14",
+}: {
+  d?: string;
+}) {
   return (
-    <svg className="sparkline" viewBox="0 0 120 40" aria-hidden="true">
-      <path className="area" d={`${d} L120,40 L0,40 Z`} />
+    <svg
+      className="sparkline"
+      viewBox="0 0 280 48"
+      role="img"
+      aria-label="Sparkline"
+      style={{ height: 48 }}
+    >
+      <defs>
+        <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0047ff" stopOpacity="0.16" />
+          <stop offset="100%" stopColor="#0047ff" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path className="area" fill="url(#sparkFill)" d={`${d} L280,48 L0,48 Z`} />
       <path className="line" d={d} />
     </svg>
   );

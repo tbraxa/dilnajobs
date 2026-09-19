@@ -23,10 +23,13 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
     const next = new URLSearchParams(params.toString());
     const payFrom = String(formData.get("payFrom") ?? "").trim();
     const profession = String(formData.get("profession") ?? "").trim();
+    const mode = String(formData.get("mode") ?? "").trim();
     if (payFrom) next.set("payFrom", payFrom);
     else next.delete("payFrom");
     if (profession) next.set("profession", profession);
     else next.delete("profession");
+    if (mode) next.set("mode", mode);
+    else next.delete("mode");
     setOpen(false);
     router.push(`/nabidky?${next.toString()}`);
   }
@@ -94,6 +97,29 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
                 ))}
               </select>
             </div>
+
+            <div className="field">
+              <span id="mode-label">Režim práce</span>
+              <div className="mode-chips" role="group" aria-labelledby="mode-label">
+                {[
+                  { v: "", label: "Vše" },
+                  { v: "onsite", label: "Na místě" },
+                  { v: "hybrid", label: "Hybrid" },
+                  { v: "remote", label: "Na dálku" },
+                ].map((m) => (
+                  <label key={m.v || "all"} className="chip">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value={m.v}
+                      defaultChecked={(params.get("mode") ?? "") === m.v}
+                      style={{ marginRight: 6 }}
+                    />
+                    {m.label}
+                  </label>
+                ))}
+              </div>
+            </div>
             <div className="drawer-foot">
               <button type="button" className="btn btn-ghost" onClick={() => setOpen(false)}>
                 Zrušit
@@ -117,8 +143,14 @@ export function ActiveFilterChips() {
   const profession = params.get("profession");
   const q = params.get("q");
   const loc = params.get("loc") ?? params.get("city");
+  const mode = params.get("mode");
   if (q) chips.push({ key: "q", label: q });
   if (loc) chips.push({ key: "loc", label: loc });
+  if (mode) {
+    const modeLabel =
+      mode === "onsite" ? "Na místě" : mode === "hybrid" ? "Hybrid" : mode === "remote" ? "Na dálku" : mode;
+    chips.push({ key: "mode", label: modeLabel });
+  }
   if (payFrom) {
     chips.push({
       key: "payFrom",
