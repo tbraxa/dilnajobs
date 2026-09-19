@@ -15,6 +15,9 @@ export function SiteHeader({ compact = false }: { compact?: boolean }) {
           <Link href="/nabidky" className="px-2 py-1 text-sm text-ink hover:underline">
             Nabídky
           </Link>
+          <Link href="/ucet" className="px-2 py-1 text-sm text-ink hover:underline">
+            Účet
+          </Link>
           <Link href="/pro-firmy" className="hidden px-2 py-1 text-sm text-ink hover:underline sm:inline">
             Pro firmy
           </Link>
@@ -45,6 +48,11 @@ export function SiteFooter() {
             <li>
               <a href="/nabidky" className="hover:underline">
                 Nabídky práce
+              </a>
+            </li>
+            <li>
+              <a href="/ucet" className="hover:underline">
+                Účet uchazeče
               </a>
             </li>
             <li>

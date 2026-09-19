@@ -164,6 +164,7 @@ export async function consumeMagicLink(token: string): Promise<boolean> {
     sameSite: "lax",
     path: "/",
     expires: created.expiresAt,
+    priority: "high",
   });
   return true;
 }
@@ -177,29 +178,30 @@ export async function createSessionFromMagicToken(token: string): Promise<{
   const ip = await clientIp();
   const ua = (await headers()).get("user-agent")?.slice(0, 240);
 
-  const [row] = await db
-    .select()
-    .from(magicTokens)
-    .where(and(eq(magicTokens.tokenHash, tokenHash), isNull(magicTokens.consumedAt), gt(magicTokens.expiresAt, new Date())))
-    .limit(1);
-
-  if (!row) return null;
-  if (row.purpose !== "employer") {
-    const requestId = await getRequestId();
-    log("warn", "magic.wrong_purpose", { requestId });
-    await audit({
-      actorType: "system",
-      action: "auth.magic.wrong_purpose",
-      metadata: { requestId, purpose: row.purpose },
-      ipHash: hashIp(ip),
+  try {
+    await enforceRateLimit({
+      bucket: "magic-consume:ip",
+      key: ip,
+      limit: 30,
+      windowMs: 60 * 60 * 1000,
     });
+  } catch {
     return null;
   }
 
-  await db
+  const [row] = await db
     .update(magicTokens)
     .set({ consumedAt: new Date() })
-    .where(eq(magicTokens.id, row.id));
+    .where(
+      and(
+        eq(magicTokens.tokenHash, tokenHash),
+        eq(magicTokens.purpose, "employer"),
+        isNull(magicTokens.consumedAt),
+        gt(magicTokens.expiresAt, new Date()),
+      ),
+    )
+    .returning({ email: magicTokens.email });
+  if (!row) return null;
 
   const users = await sql<
     { id: string; employer_id: string; email: string; name: string; role: string }[]
@@ -235,6 +237,7 @@ export function sessionCookieOptions(expiresAt: Date) {
     sameSite: "lax" as const,
     path: "/",
     expires: expiresAt,
+    priority: "high" as const,
   };
 }
 

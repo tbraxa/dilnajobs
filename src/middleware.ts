@@ -1,6 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { isCsrfSafeRequest } from "@/lib/csrf";
 
 export function middleware(request: NextRequest) {
+  const csrfSafe = isCsrfSafeRequest({
+    method: request.method,
+    pathname: request.nextUrl.pathname,
+    origin: request.headers.get("origin"),
+    host: request.headers.get("host"),
+    forwardedHost: request.headers.get("x-forwarded-host"),
+    secFetchSite: request.headers.get("sec-fetch-site"),
+  });
+  if (!csrfSafe) {
+    return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  }
+
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const requestId = request.headers.get("x-request-id") ?? crypto.randomUUID();
   const isDev = process.env.NODE_ENV !== "production";
