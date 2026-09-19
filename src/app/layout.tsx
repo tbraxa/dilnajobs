@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { PublicChrome } from "@/components/public-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
 import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
 import "./globals.css";
@@ -43,15 +43,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <a className="skip-link" href="#main">
           Přeskočit na obsah
         </a>
-        {isAdmin || isConsole ? (
-          children
-        ) : (
-          <>
-            <SiteHeader pathname={pathname} />
-            {children}
-            <SiteFooter />
-          </>
-        )}
+        <PublicChrome>{children}</PublicChrome>
       </body>
     </html>
   );
