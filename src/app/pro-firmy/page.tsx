@@ -1,39 +1,52 @@
 import type { Metadata } from "next";
-import { ButtonLink } from "@/components/ui";
+import Link from "next/link";
 import { PACKAGES, formatCzk } from "@/lib/pricing";
+import { BRAND, BRAND_CLAIM } from "@/lib/brand";
 
 export const metadata: Metadata = { title: "Pro firmy" };
 
 export default function ProFirmyPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">Zaměstnavatelé</p>
-      <h1 className="display mt-2 max-w-3xl text-3xl font-semibold sm:text-5xl">
-        Najdete lidi z dílny. Ne z agentury.
+    <main className="page" id="main">
+      <p className="eyebrow">Zaměstnavatelé</p>
+      <h1 className="page-title" style={{ fontSize: "clamp(28px, 4vw, 40px)" }}>
+        Najímejte s funnel metrikami, ne s dohady
       </h1>
-      <p className="mt-4 max-w-2xl text-steel">
-        Inzerujete vy — výrobní firma s IČO. Ceny jsou bez DPH. První inzerát kontrolujeme. Heslo nechceme: přihlášení
-        jde odkazem na e-mail.
+      <p className="muted" style={{ maxWidth: 560, fontSize: 16 }}>
+        {BRAND_CLAIM} Inzerujete jako ověřená firma. Uchazeči vidí mzdu. Konzole ve stylu Vercel —
+        line/area grafy a horizontální funnel.
       </p>
-      <div className="mt-6">
-        <ButtonLink href="/firma/prihlaseni">Přihlásit firmu</ButtonLink>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 20 }}>
+        <Link className="btn btn-primary" href="/firma/prihlaseni">
+          Přihlásit firmu
+        </Link>
+        <Link className="btn btn-secondary" href="/nabidky">
+          Prohlédnout nabídky
+        </Link>
       </div>
 
-      <h2 className="display mt-12 text-2xl font-semibold">Ceník</h2>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="section-head" style={{ marginTop: 48 }}>
+        <h2>Ceník</h2>
+      </div>
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))" }}>
         {PACKAGES.map((pkg) => (
-          <article key={pkg.code} className="flex flex-col border border-line bg-paper p-5">
-            <p className="label">{pkg.name}</p>
-            <p className="display mt-2 text-3xl font-semibold">
+          <article key={pkg.code} className="kpi" style={{ display: "flex", flexDirection: "column" }}>
+            <div className="label">{pkg.name}</div>
+            <b style={{ fontSize: 24 }}>
               {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
+            </b>
+            <p className="muted" style={{ fontSize: 12, margin: "4px 0 0" }}>
+              bez DPH
             </p>
-            <p className="text-xs text-steel">bez DPH</p>
-            <p className="mt-3 flex-1 text-sm">{pkg.blurb}</p>
+            <p className="muted" style={{ fontSize: 13, flex: 1, marginTop: 8 }}>
+              {pkg.blurb}
+            </p>
           </article>
         ))}
       </div>
-      <p className="mt-6 text-sm text-steel">
-        Ceny bez DPH. Orientace pro firmy. Platbu na FairJobs domluvíte po registraci.
+      <p className="muted" style={{ marginTop: 24, fontSize: 13 }}>
+        Ceny bez DPH. Orientace pro firmy. Platbu na {BRAND} domluvíte po registraci. Live Stripe zůstává
+        vypnutý, dokud Product neřekne jinak.
       </p>
     </main>
   );
