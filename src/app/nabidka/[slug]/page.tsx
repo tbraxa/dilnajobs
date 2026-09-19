@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ApplyForm } from "@/components/apply-form";
+import {
+  FavoriteCompanyButton,
+  FavoriteJobButton,
+} from "@/components/favorite-controls";
 import { professionIcon } from "@/components/icons";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
+import {
+  getFavoriteCompanyIds,
+  getFavoriteJobIds,
+} from "@/lib/seeker-account";
+import { getSeekerSession } from "@/lib/seeker-auth";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -34,6 +43,13 @@ export default async function JobPage({ params }: Props) {
   const { job, companyName } = row;
   const Icon = professionIcon(job.profession);
   const profession = professionByDb(job.profession);
+  const seeker = await getSeekerSession();
+  const [favoriteJobs, favoriteCompanies] = seeker
+    ? await Promise.all([
+        getFavoriteJobIds(seeker.userId, [job.id]),
+        getFavoriteCompanyIds(seeker.userId, [job.employerId]),
+      ])
+    : [new Set<string>(), new Set<string>()];
 
   return (
     <main className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-12">
@@ -45,6 +61,22 @@ export default async function JobPage({ params }: Props) {
           {profession?.label} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
           {job.shiftNote ? ` · ${job.shiftNote}` : null}
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <FavoriteJobButton
+            jobId={job.id}
+            initialSaved={favoriteJobs.has(job.id)}
+            returnTo={`/nabidka/${job.slug}`}
+            label={`nabídku ${job.title}`}
+            showText
+          />
+          <FavoriteCompanyButton
+            employerId={job.employerId}
+            initialSaved={favoriteCompanies.has(job.employerId)}
+            returnTo={`/nabidka/${job.slug}`}
+            label={`firmu ${companyName}`}
+            showText
+          />
+        </div>
         <section className="mt-8 space-y-6 text-[15px] leading-relaxed">
           <div>
             <h2 className="label mb-2">Práce</h2>
@@ -65,7 +97,18 @@ export default async function JobPage({ params }: Props) {
         </section>
       </article>
       <aside className="lg:col-span-5">
-        <ApplyForm jobId={job.id} />
+        <ApplyForm
+          jobId={job.id}
+          defaults={
+            seeker
+              ? {
+                  fullName: seeker.name,
+                  email: seeker.email,
+                  phone: seeker.phone ?? "",
+                }
+              : undefined
+          }
+        />
       </aside>
     </main>
   );

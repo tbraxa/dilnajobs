@@ -6,6 +6,7 @@ import {
   requestSeekerLinkAction,
   type SeekerAuthState,
 } from "@/lib/actions/seeker-auth";
+import { Button, Field, inputClass } from "@/components/ui";
 
 export function SeekerLoginForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState(
@@ -13,33 +14,30 @@ export function SeekerLoginForm({ next }: { next: string }) {
     null as SeekerAuthState | null,
   );
   return (
-    <form action={action} className="fj-auth-form">
+    <form action={action} className="mt-6 space-y-4">
       <input type="hidden" name="intent" value="login" />
       <input type="hidden" name="next" value={next} />
-      <label className="fj-form-field">
-        <span>E-mail</span>
+      <Field label="E-mail" name="email" hint="Pošleme jednorázový odkaz platný 15 minut.">
         <input
+          id="email"
           name="email"
           type="email"
           required
           autoComplete="email"
           placeholder="vy@priklad.cz"
+          className={inputClass}
         />
-      </label>
-      <p className="fj-field-help">Pošleme vám jednorázový odkaz platný 15 minut.</p>
-      {state?.ok ? <p className="fj-form-success">{state.message}</p> : null}
-      {state && !state.ok ? <p className="fj-form-error">{state.error}</p> : null}
-      <button
-        type="submit"
-        className="fj-primary-button fj-primary-button-blue fj-auth-submit"
-        disabled={pending}
-      >
-        {pending ? "Odesílám..." : "Poslat přihlašovací odkaz"}
-        <span aria-hidden="true">→</span>
-      </button>
-      <p className="fj-auth-switch">
+      </Field>
+      {state?.ok ? <p className="text-sm text-ok" role="status">{state.message}</p> : null}
+      {state && !state.ok ? <p className="text-sm text-danger" role="alert">{state.error}</p> : null}
+      <Button type="submit" disabled={pending} className="w-full">
+        {pending ? "Odesílám…" : "Poslat přihlašovací odkaz"}
+      </Button>
+      <p className="text-sm text-steel">
         Ještě účet nemáte?{" "}
-        <Link href={`/ucet/registrace?next=${encodeURIComponent(next)}`}>Zaregistrovat se</Link>
+        <Link className="text-ink underline" href={`/ucet/registrace?next=${encodeURIComponent(next)}`}>
+          Zaregistrovat se
+        </Link>
       </p>
     </form>
   );
@@ -51,43 +49,47 @@ export function SeekerRegisterForm({ next }: { next: string }) {
     null as SeekerAuthState | null,
   );
   return (
-    <form action={action} className="fj-auth-form">
+    <form action={action} className="mt-6 space-y-4">
       <input type="hidden" name="intent" value="register" />
       <input type="hidden" name="next" value={next} />
-      <label className="fj-form-field">
-        <span>Jméno a příjmení</span>
-        <input name="name" required autoComplete="name" placeholder="Jana Nováková" />
-      </label>
-      <label className="fj-form-field">
-        <span>E-mail</span>
+      <Field label="Jméno a příjmení" name="name">
         <input
+          id="name"
+          name="name"
+          required
+          autoComplete="name"
+          placeholder="Jana Nováková"
+          className={inputClass}
+        />
+      </Field>
+      <Field label="E-mail" name="email">
+        <input
+          id="email"
           name="email"
           type="email"
           required
           autoComplete="email"
           placeholder="jana@priklad.cz"
+          className={inputClass}
         />
-      </label>
-      <label className="fj-consent-field">
-        <input type="checkbox" name="consentGdpr" required />
+      </Field>
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" name="consentGdpr" required className="mt-1" />
         <span>
           Souhlasím se zpracováním údajů pro vedení účtu. Více v{" "}
-          <Link href="/gdpr">zásadách ochrany údajů</Link>.
+          <Link className="underline" href="/gdpr">zásadách ochrany údajů</Link>.
         </span>
       </label>
-      {state?.ok ? <p className="fj-form-success">{state.message}</p> : null}
-      {state && !state.ok ? <p className="fj-form-error">{state.error}</p> : null}
-      <button
-        type="submit"
-        className="fj-primary-button fj-primary-button-blue fj-auth-submit"
-        disabled={pending}
-      >
-        {pending ? "Zakládám účet..." : "Založit účet"}
-        <span aria-hidden="true">→</span>
-      </button>
-      <p className="fj-auth-switch">
+      {state?.ok ? <p className="text-sm text-ok" role="status">{state.message}</p> : null}
+      {state && !state.ok ? <p className="text-sm text-danger" role="alert">{state.error}</p> : null}
+      <Button type="submit" disabled={pending} className="w-full">
+        {pending ? "Zakládám účet…" : "Založit účet"}
+      </Button>
+      <p className="text-sm text-steel">
         Už účet máte?{" "}
-        <Link href={`/ucet/prihlaseni?next=${encodeURIComponent(next)}`}>Přihlásit se</Link>
+        <Link className="text-ink underline" href={`/ucet/prihlaseni?next=${encodeURIComponent(next)}`}>
+          Přihlásit se
+        </Link>
       </p>
     </form>
   );

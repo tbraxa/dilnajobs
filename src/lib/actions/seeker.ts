@@ -13,6 +13,9 @@ export type FavoriteActionResult =
   | { ok: true; saved: boolean }
   | { ok: false; loginUrl?: string; error?: string };
 
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 async function favoriteRateLimit(sessionId: string) {
   await enforceRateLimit({
     bucket: "seeker-favorite:session",
@@ -26,6 +29,9 @@ export async function toggleFavoriteJobAction(
   jobId: string,
   returnTo: string,
 ): Promise<FavoriteActionResult> {
+  if (!UUID_PATTERN.test(jobId)) {
+    return { ok: false, error: "Neplatná nabídka." };
+  }
   const session = await getSeekerSession();
   if (!session) {
     const next = safeAccountNext(returnTo, "/nabidky");
@@ -86,6 +92,9 @@ export async function toggleFavoriteCompanyAction(
   employerId: string,
   returnTo: string,
 ): Promise<FavoriteActionResult> {
+  if (!UUID_PATTERN.test(employerId)) {
+    return { ok: false, error: "Neplatná firma." };
+  }
   const session = await getSeekerSession();
   if (!session) {
     const next = safeAccountNext(returnTo, "/nabidky");

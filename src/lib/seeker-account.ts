@@ -3,6 +3,7 @@ import "server-only";
 import { and, desc, eq, inArray, sql as dsql } from "drizzle-orm";
 import { withSeekerRls } from "@/db/rls";
 import {
+  applications,
   employers,
   favoriteCompanies,
   favoriteJobs,
@@ -44,7 +45,7 @@ export async function getFavoriteCompanyIds(seekerId: string, employerIds: strin
 
 export async function loadSeekerAccountData(seekerId: string) {
   return withSeekerRls(seekerId, async (tx) => {
-    const [profileRows, savedJobs, savedCompanies] = await Promise.all([
+    const [profileRows, savedJobs, savedCompanies, applicationHistory] = await Promise.all([
       tx
         .select()
         .from(seekerUsers)
@@ -57,7 +58,6 @@ export async function loadSeekerAccountData(seekerId: string) {
           title: jobs.title,
           city: jobs.city,
           region: jobs.region,
-          workMode: jobs.workMode,
           employmentType: jobs.employmentType,
           salaryMin: jobs.salaryMin,
           salaryMax: jobs.salaryMax,
@@ -90,12 +90,30 @@ export async function loadSeekerAccountData(seekerId: string) {
         .innerJoin(employers, eq(employers.id, favoriteCompanies.employerId))
         .where(eq(favoriteCompanies.seekerUserId, seekerId))
         .orderBy(desc(favoriteCompanies.createdAt)),
+      tx
+        .select({
+          id: applications.id,
+          createdAt: applications.createdAt,
+          jobId: jobs.id,
+          slug: jobs.slug,
+          title: jobs.title,
+          city: jobs.city,
+          status: jobs.status,
+          expiresAt: jobs.expiresAt,
+          companyName: employers.companyName,
+        })
+        .from(applications)
+        .innerJoin(jobs, eq(jobs.id, applications.jobId))
+        .innerJoin(employers, eq(employers.id, jobs.employerId))
+        .where(eq(applications.seekerUserId, seekerId))
+        .orderBy(desc(applications.createdAt)),
     ]);
 
     return {
       profile: profileRows[0] ?? null,
       savedJobs,
       savedCompanies,
+      applicationHistory,
     };
   });
 }

@@ -3,6 +3,8 @@ import { JobCard } from "@/components/job-card";
 import { JobFilters } from "@/components/job-filters";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { parseSearch, loadSearchJobs } from "@/lib/jobs/search";
+import { getFavoriteJobIds } from "@/lib/seeker-account";
+import { getSeekerSession } from "@/lib/seeker-auth";
 
 export const metadata: Metadata = { title: "Nabídky práce" };
 export const dynamic = "force-dynamic";
@@ -14,8 +16,21 @@ export default async function NabidkyPage({
 }) {
   const params = await searchParams;
   const query = parseSearch(params);
-  const catalog = await loadSearchJobs(query);
+  const [catalog, seeker] = await Promise.all([
+    loadSearchJobs(query),
+    getSeekerSession(),
+  ]);
   const jobs = catalog.ok ? catalog.rows : [];
+  const favoriteIds = seeker
+    ? await getFavoriteJobIds(seeker.userId, jobs.map((job) => job.id))
+    : new Set<string>();
+  const returnParams = new URLSearchParams();
+  if (query.q) returnParams.set("q", query.q);
+  if (query.profession) returnParams.set("profession", query.profession);
+  if (query.city) returnParams.set("city", query.city);
+  if (query.sort && query.sort !== "newest") returnParams.set("sort", query.sort);
+  const serializedReturnParams = returnParams.toString();
+  const returnTo = serializedReturnParams ? `/nabidky?${serializedReturnParams}` : "/nabidky";
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
@@ -38,7 +53,14 @@ export default async function NabidkyPage({
         ) : jobs.length === 0 ? (
           <p className="border border-line p-4 text-sm">Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici.</p>
         ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
+          jobs.map((job) => (
+            <JobCard
+              key={job.id}
+              job={job}
+              isFavorite={favoriteIds.has(job.id)}
+              returnTo={returnTo}
+            />
+          ))
         )}
       </div>
     </main>

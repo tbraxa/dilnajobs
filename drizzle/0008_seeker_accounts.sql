@@ -96,6 +96,30 @@ CREATE POLICY favorite_companies_self ON favorite_companies
   USING (seeker_user_id = current_seeker_id())
   WITH CHECK (seeker_user_id = current_seeker_id());
 
+-- Saved and previously applied-to vacancies stay visible to their owner after
+-- they are unpublished or expire.
+CREATE POLICY jobs_seeker_favorite_read ON jobs
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM favorite_jobs fj
+      WHERE fj.job_id = jobs.id
+        AND fj.seeker_user_id = current_seeker_id()
+    )
+  );
+
+CREATE POLICY jobs_seeker_application_read ON jobs
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM applications a
+      WHERE a.job_id = jobs.id
+        AND a.seeker_user_id = current_seeker_id()
+    )
+  );
+
 -- Keep a saved company visible to its owner even when it has no live vacancy.
 CREATE POLICY employers_seeker_favorite_read ON employers
   FOR SELECT
@@ -107,6 +131,38 @@ CREATE POLICY employers_seeker_favorite_read ON employers
         AND fc.seeker_user_id = current_seeker_id()
     )
   );
+
+CREATE POLICY employers_seeker_application_read ON employers
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM jobs j
+      JOIN applications a ON a.job_id = j.id
+      WHERE j.employer_id = employers.id
+        AND a.seeker_user_id = current_seeker_id()
+    )
+  );
+
+-- A public application cannot claim another seeker. Signed-in applications
+-- run with app.seeker_id set inside the same transaction.
+DROP POLICY IF EXISTS applications_public_insert ON applications;
+CREATE POLICY applications_public_insert ON applications
+  FOR INSERT
+  WITH CHECK (
+    consent_gdpr = true
+    AND (seeker_user_id IS NULL OR seeker_user_id = current_seeker_id())
+    AND EXISTS (
+      SELECT 1 FROM jobs j
+      WHERE j.id = job_id
+        AND j.status = 'published'
+        AND (j.expires_at IS NULL OR j.expires_at > now())
+    )
+  );
+
+CREATE POLICY applications_seeker_select ON applications
+  FOR SELECT
+  USING (seeker_user_id = current_seeker_id());
 
 CREATE OR REPLACE FUNCTION seeker_user_by_email(p_email text)
 RETURNS TABLE (

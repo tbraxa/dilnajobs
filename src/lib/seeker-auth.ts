@@ -131,6 +131,17 @@ export async function consumeSeekerMagicLink(token: string): Promise<boolean> {
   const ip = await clientIp();
   const ua = (await headers()).get("user-agent")?.slice(0, 240);
 
+  try {
+    await enforceRateLimit({
+      bucket: "seeker-magic-consume:ip",
+      key: ip,
+      limit: 30,
+      windowMs: 60 * 60 * 1000,
+    });
+  } catch {
+    return false;
+  }
+
   const [magic] = await db
     .update(magicTokens)
     .set({ consumedAt: new Date() })

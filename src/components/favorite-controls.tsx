@@ -6,9 +6,14 @@ import {
   toggleFavoriteJobAction,
 } from "@/lib/actions/seeker";
 
-function HeartIcon() {
+function HeartIcon({ saved }: { saved: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={`h-4 w-4 stroke-current ${saved ? "fill-current" : "fill-none"}`}
+      strokeWidth="1.7"
+    >
       <path d="M20.8 4.7a5.5 5.5 0 0 0-7.8 0L12 5.8l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.4 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
     </svg>
   );
@@ -57,19 +62,23 @@ function FavoriteControl({
   }
 
   return (
-    <span className={`fj-favorite-control${showText ? " fj-favorite-control-text" : ""}`}>
+    <span className="inline-flex flex-col items-start gap-1">
       <button
         type="button"
-        className={`fj-favorite-button${saved ? " is-saved" : ""}`}
+        className={`inline-flex items-center justify-center gap-2 rounded-[2px] border px-3 py-2 text-sm disabled:opacity-50 ${
+          saved
+            ? "border-accent bg-accent text-white"
+            : "border-line bg-transparent text-ink hover:bg-paper-2"
+        }`}
         aria-label={`${saved ? "Odebrat" : "Uložit"} ${label}`}
         aria-pressed={saved}
         disabled={pending}
         onClick={toggle}
       >
-        <HeartIcon />
+        <HeartIcon saved={saved} />
         {showText ? <span>{saved ? "Uloženo" : "Uložit"}</span> : null}
       </button>
-      {message ? <small role="status">{message}</small> : null}
+      {message ? <small className="text-danger" role="status">{message}</small> : null}
     </span>
   );
 }

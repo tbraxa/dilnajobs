@@ -93,17 +93,24 @@ export const seekerUsers = pgTable("seeker_users", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
-export const seekerSessions = pgTable("seeker_sessions", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  seekerUserId: uuid("seeker_user_id")
-    .notNull()
-    .references(() => seekerUsers.id, { onDelete: "cascade" }),
-  tokenHash: text("token_hash").notNull().unique(),
-  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-  createdAt: timestamps.createdAt,
-  userAgent: text("user_agent"),
-  ipHash: text("ip_hash"),
-});
+export const seekerSessions = pgTable(
+  "seeker_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    seekerUserId: uuid("seeker_user_id")
+      .notNull()
+      .references(() => seekerUsers.id, { onDelete: "cascade" }),
+    tokenHash: text("token_hash").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: timestamps.createdAt,
+    userAgent: text("user_agent"),
+    ipHash: text("ip_hash"),
+  },
+  (t) => [
+    index("seeker_sessions_user_idx").on(t.seekerUserId),
+    index("seeker_sessions_expiry_idx").on(t.expiresAt),
+  ],
+);
 
 export const jobs = pgTable(
   "jobs",
@@ -162,7 +169,10 @@ export const applications = pgTable(
     ipHash: text("ip_hash"),
     createdAt: timestamps.createdAt,
   },
-  (t) => [index("applications_employer_idx").on(t.employerId, t.createdAt)],
+  (t) => [
+    index("applications_employer_idx").on(t.employerId, t.createdAt),
+    index("applications_seeker_idx").on(t.seekerUserId, t.createdAt),
+  ],
 );
 
 export const favoriteJobs = pgTable(
@@ -176,7 +186,10 @@ export const favoriteJobs = pgTable(
       .references(() => jobs.id, { onDelete: "cascade" }),
     createdAt: timestamps.createdAt,
   },
-  (t) => [primaryKey({ columns: [t.seekerUserId, t.jobId] })],
+  (t) => [
+    primaryKey({ columns: [t.seekerUserId, t.jobId] }),
+    index("favorite_jobs_created_idx").on(t.seekerUserId, t.createdAt),
+  ],
 );
 
 export const favoriteCompanies = pgTable(
@@ -190,7 +203,10 @@ export const favoriteCompanies = pgTable(
       .references(() => employers.id, { onDelete: "cascade" }),
     createdAt: timestamps.createdAt,
   },
-  (t) => [primaryKey({ columns: [t.seekerUserId, t.employerId] })],
+  (t) => [
+    primaryKey({ columns: [t.seekerUserId, t.employerId] }),
+    index("favorite_companies_created_idx").on(t.seekerUserId, t.createdAt),
+  ],
 );
 
 export const auditEvents = pgTable("audit_events", {

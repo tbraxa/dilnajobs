@@ -21,7 +21,7 @@ export async function requestSeekerLinkAction(
     email: formData.get("email"),
     name: intent === "register" ? formData.get("name") : undefined,
     intent,
-    next: formData.get("next"),
+    next: formData.get("next") ?? undefined,
   });
   if (!parsed.success) {
     return {

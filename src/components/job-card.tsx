@@ -2,11 +2,20 @@ import Link from "next/link";
 import type { searchJobs } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
 import { professionByDb } from "@/lib/catalog";
+import { FavoriteJobButton } from "./favorite-controls";
 import { professionIcon } from "./icons";
 
 type JobRow = Awaited<ReturnType<typeof searchJobs>>[number];
 
-export function JobCard({ job }: { job: JobRow }) {
+export function JobCard({
+  job,
+  isFavorite = false,
+  returnTo = "/nabidky",
+}: {
+  job: JobRow;
+  isFavorite?: boolean;
+  returnTo?: string;
+}) {
   const Icon = professionIcon(job.profession);
   const profession = professionByDb(job.profession);
   return (
@@ -31,6 +40,12 @@ export function JobCard({ job }: { job: JobRow }) {
             {profession?.label ?? job.profession} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
           </p>
         </div>
+        <FavoriteJobButton
+          jobId={job.id}
+          initialSaved={isFavorite}
+          returnTo={returnTo}
+          label={`nabídku ${job.title}`}
+        />
       </div>
     </article>
   );

@@ -7,7 +7,13 @@ import { Button, Field, inputClass } from "./ui";
 
 const initial: ActionState | null = null;
 
-export function ApplyForm({ jobId }: { jobId: string }) {
+export function ApplyForm({
+  jobId,
+  defaults,
+}: {
+  jobId: string;
+  defaults?: { fullName: string; email: string; phone: string };
+}) {
   const [state, action, pending] = useActionState(async (_prev: ActionState | null, formData: FormData) => {
     return applyToJob(formData);
   }, initial);
@@ -55,15 +61,39 @@ export function ApplyForm({ jobId }: { jobId: string }) {
       <input type="hidden" name="cvObjectKey" />
       <input type="hidden" name="cvFileName" />
       <input type="hidden" name="cvContentType" />
-      <p className="label">Přihláška — účet nepotřebujete</p>
+      <p className="label">
+        {defaults ? "Přihláška — kontakt z profilu" : "Přihláška — účet nepotřebujete"}
+      </p>
       <Field label="Jméno a příjmení" name="fullName">
-        <input id="fullName" name="fullName" required className={inputClass} autoComplete="name" />
+        <input
+          id="fullName"
+          name="fullName"
+          required
+          className={inputClass}
+          autoComplete="name"
+          defaultValue={defaults?.fullName}
+        />
       </Field>
       <Field label="Telefon" name="phone" hint="Devět číslic, klidně s +420.">
-        <input id="phone" name="phone" required className={inputClass} autoComplete="tel" inputMode="tel" />
+        <input
+          id="phone"
+          name="phone"
+          required
+          className={inputClass}
+          autoComplete="tel"
+          inputMode="tel"
+          defaultValue={defaults?.phone}
+        />
       </Field>
       <Field label="E-mail (volitelně)" name="email">
-        <input id="email" name="email" type="email" className={inputClass} autoComplete="email" />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          className={inputClass}
+          autoComplete="email"
+          defaultValue={defaults?.email}
+        />
       </Field>
       <Field label="Životopis PDF / DOC (volitelně)" name="cv">
         <input

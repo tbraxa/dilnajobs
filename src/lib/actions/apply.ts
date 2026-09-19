@@ -5,6 +5,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { db, sql } from "@/db/client";
+import { withSeekerRls } from "@/db/rls";
 import { applications, jobs } from "@/db/schema";
 import { audit } from "@/lib/audit";
 import { clientIp } from "@/lib/auth";
@@ -15,6 +16,7 @@ import { resolveAppUrl } from "@/lib/app-url";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
 import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
+import { getSeekerSession } from "@/lib/seeker-auth";
 import { applySchema } from "@/lib/validation";
 
 export type ActionState = { ok: true } | { ok: false; error: string };
@@ -44,6 +46,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
 
   const ip = await clientIp();
   const requestId = await getRequestId();
+  const seeker = await getSeekerSession();
   try {
     await enforceRateLimit({ bucket: "apply:ip", key: ip, limit: 8, windowMs: 60 * 60 * 1000 });
     await enforceRateLimit({
@@ -52,6 +55,14 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
       limit: 2,
       windowMs: 24 * 60 * 60 * 1000,
     });
+    if (seeker) {
+      await enforceRateLimit({
+        bucket: "apply:seeker",
+        key: seeker.sessionId,
+        limit: 20,
+        windowMs: 24 * 60 * 60 * 1000,
+      });
+    }
   } catch (err) {
     if (err instanceof RateLimitError) {
       return { ok: false, error: "Z této sítě už přišlo moc přihlášek. Zkuste to později." };
@@ -71,21 +82,29 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
   }
 
   const applicationId = randomUUID();
+  const values = {
+    id: applicationId,
+    jobId: job.id,
+    employerId: job.employerId,
+    fullName: parsed.data.fullName,
+    phone: parsed.data.phone,
+    email: parsed.data.email,
+    message: parsed.data.message,
+    consentGdpr: true,
+    seekerUserId: seeker?.userId,
+    cvObjectKey: parsed.data.cvObjectKey,
+    cvFileName: parsed.data.cvFileName,
+    cvContentType: parsed.data.cvContentType,
+    ipHash: hashIp(ip),
+  };
   try {
-    await db.insert(applications).values({
-      id: applicationId,
-      jobId: job.id,
-      employerId: job.employerId,
-      fullName: parsed.data.fullName,
-      phone: parsed.data.phone,
-      email: parsed.data.email,
-      message: parsed.data.message,
-      consentGdpr: true,
-      cvObjectKey: parsed.data.cvObjectKey,
-      cvFileName: parsed.data.cvFileName,
-      cvContentType: parsed.data.cvContentType,
-      ipHash: hashIp(ip),
-    });
+    if (seeker) {
+      await withSeekerRls(seeker.userId, async (tx) => {
+        await tx.insert(applications).values(values);
+      });
+    } else {
+      await db.insert(applications).values(values);
+    }
   } catch (err) {
     const requestId = await getRequestId();
     log("error", "application.insert_failed", { jobId: job.id, requestId });
@@ -103,7 +122,8 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
   }
 
   await audit({
-    actorType: "candidate",
+    actorType: seeker ? "seeker" : "candidate",
+    actorId: seeker?.userId,
     employerId: job.employerId,
     action: "application.created",
     resourceType: "application",
