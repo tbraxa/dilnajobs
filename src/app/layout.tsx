@@ -6,6 +6,7 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
 import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
 import "./globals.css";
+import "./sot.css";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
