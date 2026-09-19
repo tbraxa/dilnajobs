@@ -7,12 +7,12 @@ export const metadata: Metadata = { title: copy.authSeeker.claim };
 
 export default function UcetLoginPage() {
   return (
-    <main className="page" id="main" style={{ maxWidth: 480 }}>
+    <main className="auth-shell" id="main">
       <h1 className="page-title">{copy.authSeeker.claim}</h1>
       <p className="muted" style={{ fontSize: 17 }}>
         {copy.authSeeker.helper}
       </p>
-      <form className="chart" style={{ padding: 20, marginTop: 20 }} action="/ucet" method="get">
+      <form className="auth-card" action="/ucet" method="get">
         <div className="field">
           <label htmlFor="email">E-mail</label>
           <input id="email" name="email" type="email" required placeholder="vas@email.cz" />

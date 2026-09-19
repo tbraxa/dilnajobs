@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: copy.authFirma.regClaim };
 
 export default function FirmaRegistracePage() {
   return (
-    <main className="page" id="main" style={{ maxWidth: 520 }}>
+    <main className="auth-shell" id="main">
       <h1 className="page-title">{copy.authFirma.regClaim}</h1>
       <p className="muted" style={{ fontSize: 17 }}>
         {copy.authFirma.regHelper}
@@ -15,7 +15,7 @@ export default function FirmaRegistracePage() {
       <p className="muted" style={{ fontSize: 15 }}>
         {copy.authFirma.regHelperAres}
       </p>
-      <div className="chart" style={{ padding: 20, marginTop: 20 }}>
+      <div className="auth-card">
         <RegisterForm />
       </div>
       <p className="muted" style={{ marginTop: 24, fontSize: 14 }}>

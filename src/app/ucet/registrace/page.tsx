@@ -6,12 +6,12 @@ export const metadata: Metadata = { title: "Registrace" };
 
 export default function UcetRegistracePage() {
   return (
-    <main className="page" id="main" style={{ maxWidth: 480 }}>
+    <main className="auth-shell" id="main">
       <h1 className="page-title">Registrace</h1>
       <p className="muted" style={{ fontSize: 17 }}>
         Založte účet odkazem z e-mailu. Oblíbené a odpovědi na jednom místě.
       </p>
-      <form className="chart" style={{ padding: 20, marginTop: 20 }} action="/ucet" method="get">
+      <form className="auth-card" action="/ucet" method="get">
         <div className="field">
           <label htmlFor="firstName">Jméno</label>
           <input id="firstName" name="firstName" required />

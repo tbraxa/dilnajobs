@@ -7,12 +7,12 @@ export const metadata: Metadata = { title: copy.authFirma.loginClaim };
 
 export default function FirmaLoginPage() {
   return (
-    <main className="page" id="main" style={{ maxWidth: 480 }}>
+    <main className="auth-shell" id="main">
       <h1 className="page-title">{copy.authFirma.loginClaim}</h1>
       <p className="muted" style={{ fontSize: 17 }}>
         {copy.authFirma.loginHelper}
       </p>
-      <div className="chart" style={{ padding: 20, marginTop: 20 }}>
+      <div className="auth-card">
         <LoginForm />
       </div>
       <p className="muted" style={{ marginTop: 24, fontSize: 14 }}>
