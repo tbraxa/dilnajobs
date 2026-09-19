@@ -86,7 +86,7 @@ export default function UcetOverviewPage() {
         <div className="kpi">
           <div className="label">Pohovory</div>
           <b>1</b>
-          <div className="delta flat">—</div>
+          <div className="delta flat"> · </div>
         </div>
       </div>
 
@@ -100,7 +100,7 @@ export default function UcetOverviewPage() {
           <div className="chart-head">
             <div>
               <h2 className="chart-title" id="pulse-title">
-                Trh — pulse
+                Trh  ·  pulse
               </h2>
               <p className="seed" style={{ marginTop: 4 }}>
                 Ukázková data · PM · Praha
@@ -141,27 +141,27 @@ export default function UcetOverviewPage() {
             <div className="title">Senior Product Manager</div>
             <div className="meta">Twisto · Praha · Hybrid</div>
           </div>
-          <div className="pay">110–140 tis.</div>
+          <div className="pay">110-140 tis.</div>
         </Link>
         <Link className="saved-item" href="/nabidky">
           <div>
             <div className="title">Backend Engineer (Go)</div>
-            <div className="meta">Gen Digital · Remote CZ</div>
+            <div className="meta">Gen Digital · Na dálku (CZ)</div>
           </div>
-          <div className="pay">120–160 tis.</div>
+          <div className="pay">120-160 tis.</div>
         </Link>
         <Link className="saved-item" href="/nabidky">
           <div>
-            <div className="title">Product Manager — Growth</div>
+            <div className="title">Product Manager  ·  Growth</div>
             <div className="meta">Seznam.cz · Praha</div>
           </div>
-          <div className="pay">90–120 tis.</div>
+          <div className="pay">90-120 tis.</div>
         </Link>
       </div>
 
       <div className="empty-soft" style={{ marginTop: 16 }}>
         <strong>Životopis ještě není hotový</strong>
-        Doplňte zkušenosti — firmy uvidí silnější profil při odpovědi.
+        Doplňte zkušenosti  ·  firmy uvidí silnější profil při odpovědi.
         <div style={{ marginTop: 12 }}>
           <Link className="btn btn-primary btn-sm" href="/ucet/zivotopis">
             Pokračovat v životopisu
