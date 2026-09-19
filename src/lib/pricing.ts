@@ -5,7 +5,7 @@ export const PACKAGES = [
     priceCzkExVat: 0,
     period: "year" as const,
     adLimit: 10,
-    blurb: "10 inzerátů za rok. Ověříte, že sem chodí lidé z dílny — ne z agentury.",
+    blurb: "10 inzerátů za rok. Ověříte si kanál dřív, než škálujete.",
   },
   {
     code: "single",
@@ -22,7 +22,7 @@ export const PACKAGES = [
     priceCzkExVat: 8900,
     period: "year" as const,
     adLimit: 40,
-    blurb: "40 inzerátů za rok. Pro závod, který nabírá průběžně.",
+    blurb: "40 inzerátů za rok. Pro firmu, která nabírá průběžně.",
   },
   {
     code: "standard",
