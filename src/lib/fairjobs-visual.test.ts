@@ -113,26 +113,9 @@ describe("new FairJobs visual system", () => {
       "src/components/fairjobs-chrome.tsx",
       "src/components/fairjobs-navigation.tsx",
       "src/components/fairjobs-job-row.tsx",
+      "src/components/job-search-panel.tsx",
     ];
 
     expect(files.filter((file) => /[\u2013\u2014]/.test(read(file)))).toEqual([]);
-  });
-
-  it("uses the ground-up split SERP instead of the rejected ledger", () => {
-    const page = read("src/app/nabidky/page.tsx");
-    const split = read("src/components/jobs-split-view.tsx");
-    const filters = read("src/components/jobs-filter-tray.tsx");
-    const css = read("src/app/jobs-groundup.css");
-
-    expect(page).toContain("JobsSplitView");
-    expect(page).toContain("JobsFilterTray");
-    expect(page).not.toMatch(/JobResultRow|JobSearchPanel|fj-job-ledger/);
-    expect(split).toContain("gx-salary-spine");
-    expect(split).toContain("gx-preview-pane");
-    expect(split).toContain("gx-mobile-preview");
-    expect(filters).toContain("gx-filter-tray");
-    expect(filters).toContain("gx-filter-drawer");
-    expect(css).toContain("grid-template-columns: minmax(430px, 0.42fr) minmax(0, 1fr)");
-    expect(css).toContain("--gx-cta: #0047ff");
   });
 });

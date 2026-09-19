@@ -13,17 +13,6 @@ export type FavoriteActionResult =
   | { ok: true; saved: boolean }
   | { ok: false; loginUrl?: string; error?: string };
 
-function pendingFavoritePath(
-  returnTo: string,
-  key: "ulozit" | "ulozitFirmu",
-  id: string,
-) {
-  const safe = safeAccountNext(returnTo, "/nabidky");
-  const url = new URL(safe, "https://fairjobs.local");
-  url.searchParams.set(key, id);
-  return `${url.pathname}${url.search}${url.hash}`;
-}
-
 async function favoriteRateLimit(sessionId: string) {
   await enforceRateLimit({
     bucket: "seeker-favorite:session",
@@ -36,11 +25,10 @@ async function favoriteRateLimit(sessionId: string) {
 export async function toggleFavoriteJobAction(
   jobId: string,
   returnTo: string,
-  ensureSaved = false,
 ): Promise<FavoriteActionResult> {
   const session = await getSeekerSession();
   if (!session) {
-    const next = pendingFavoritePath(returnTo, "ulozit", jobId);
+    const next = safeAccountNext(returnTo, "/nabidky");
     return { ok: false, loginUrl: `/ucet/prihlaseni?next=${encodeURIComponent(next)}` };
   }
   try {
@@ -66,7 +54,6 @@ export async function toggleFavoriteJobAction(
       )
       .limit(1);
     if (existing) {
-      if (ensureSaved) return true;
       await tx
         .delete(favoriteJobs)
         .where(
@@ -98,11 +85,10 @@ export async function toggleFavoriteJobAction(
 export async function toggleFavoriteCompanyAction(
   employerId: string,
   returnTo: string,
-  ensureSaved = false,
 ): Promise<FavoriteActionResult> {
   const session = await getSeekerSession();
   if (!session) {
-    const next = pendingFavoritePath(returnTo, "ulozitFirmu", employerId);
+    const next = safeAccountNext(returnTo, "/nabidky");
     return { ok: false, loginUrl: `/ucet/prihlaseni?next=${encodeURIComponent(next)}` };
   }
   try {
@@ -132,7 +118,6 @@ export async function toggleFavoriteCompanyAction(
       )
       .limit(1);
     if (existing) {
-      if (ensureSaved) return true;
       await tx
         .delete(favoriteCompanies)
         .where(

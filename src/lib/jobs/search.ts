@@ -58,7 +58,6 @@ function searchFilters(query: SearchQuery) {
 
 const jobCardSelect = {
   id: jobs.id,
-  employerId: jobs.employerId,
   slug: jobs.slug,
   title: jobs.title,
   profession: jobs.profession,
@@ -70,9 +69,6 @@ const jobCardSelect = {
   salaryMin: jobs.salaryMin,
   salaryMax: jobs.salaryMax,
   salaryNote: jobs.salaryNote,
-  description: jobs.description,
-  requirements: jobs.requirements,
-  benefits: jobs.benefits,
   isTop: jobs.isTop,
   publishedAt: jobs.publishedAt,
   expiresAt: jobs.expiresAt,
@@ -99,8 +95,6 @@ export async function searchJobs(query: SearchQuery) {
     .limit(JOBS_PAGE_SIZE)
     .offset((page - 1) * JOBS_PAGE_SIZE);
 }
-
-export type SearchJob = Awaited<ReturnType<typeof searchJobs>>[number];
 
 export async function countSearchJobs(query: SearchQuery) {
   const [row] = await db
