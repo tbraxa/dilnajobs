@@ -3,6 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PROFESSIONS } from "@/lib/catalog";
+import { copy } from "@/lib/copy";
 
 export function FilterBar({ sort = "newest" }: { sort?: string }) {
   const [open, setOpen] = useState(false);
@@ -54,7 +55,7 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
           <option value="relevance">Relevance</option>
         </select>
         <button type="button" className="btn btn-secondary btn-sm" onClick={() => setOpen(true)}>
-          Upravit filtry
+          {copy.listings.ctaShowFilters}
         </button>
       </div>
 
@@ -69,13 +70,13 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
         }}
       >
         <div className="drawer">
-          <h2 id={titleId}>Upravit filtry</h2>
+          <h2 id={titleId}>{copy.listings.drawerTitle}</h2>
           <p className="muted" style={{ margin: "0 0 8px", fontSize: 13 }}>
-            Kompaktní drawer — ne polovina stránky.
+            {copy.listings.drawerHelper}
           </p>
           <form action={apply}>
             <div className="field">
-              <label htmlFor="pay-from">Mzda od (Kč / měsíc)</label>
+              <label htmlFor="pay-from">{copy.listings.filtersSalary}</label>
               <input
                 id="pay-from"
                 name="payFrom"
@@ -86,7 +87,7 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
               />
             </div>
             <div className="field">
-              <label htmlFor="obor">Obor</label>
+              <label htmlFor="obor">{copy.listings.filtersProfession}</label>
               <select id="obor" name="profession" defaultValue={params.get("profession") ?? ""}>
                 <option value="">Všechny</option>
                 {PROFESSIONS.map((p) => (
@@ -101,7 +102,7 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
                 Zrušit
               </button>
               <button type="submit" className="btn btn-primary">
-                Použít filtry
+                {copy.listings.ctaApplyFilters}
               </button>
             </div>
           </form>
@@ -156,7 +157,7 @@ export function ActiveFilterChips() {
         style={{ marginLeft: 4 }}
         onClick={() => router.push("/nabidky")}
       >
-        Zrušit filtry
+        {copy.listings.ctaClearFilters}
       </button>
     </div>
   );
