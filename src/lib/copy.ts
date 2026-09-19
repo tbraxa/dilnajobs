@@ -45,7 +45,7 @@ export const copy = {
     ctaApplyFilters: pc.filters.cta_apply_filters,
     ctaClearFilters: pc.filters.cta_clear_filters,
     drawerTitle: pc.filters.drawer_title,
-    drawerHelper: "Nejdřív výpis. Drawer jen na filtry, které potřebujete.",
+    drawerHelper: "",
     filtersSalary: pc.filters.filters_salary,
     filtersProfession: "Obor",
     filtersMode: pc.filters.filters_mode,
@@ -150,7 +150,7 @@ export const copy = {
     cta: pc.ucetLogin.cta_primary,
     after: pc.ucetLogin.helper_after_send,
     linkEmployer: pc.ucetLogin.link_employer_login,
-    softHint: "Účet je volitelný. Na nabídku můžete odpovědět i bez něj.",
+    softHint: "",
   },
 } as const;
 
