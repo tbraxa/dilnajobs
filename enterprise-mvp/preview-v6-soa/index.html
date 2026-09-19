@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FairJobs — Najděte férovou práci</title>
+  <meta name="description" content="FairJobs: národní pracovní portál. Transparentní mzdy, ověřené firmy, Jobs.cz hustota s Vercel klidem." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Přeskočit na obsah</a>
+
+  <div class="top-wrap">
+    <header class="top" role="banner">
+      <a class="brand" href="index.html" aria-label="FairJobs domů">
+        <span class="brand-mark" aria-hidden="true">F</span>
+        FairJobs
+      </a>
+      <nav class="nav" aria-label="Hlavní">
+        <a href="nabidky.html">Nabídky</a>
+        <button type="button" id="megaBtn" aria-expanded="false" aria-controls="mega">Průvodce</button>
+        <a href="#pro-firmy">Pro firmy</a>
+        <a href="#" class="btn-ghost" style="padding:8px 12px">Vytvořit životopis</a>
+      </nav>
+      <div class="top-actions">
+        <a class="btn btn-secondary btn-sm" href="ucet.html">Přihlásit se</a>
+        <a class="btn btn-primary btn-sm" href="firma.html">Přihlášení firem</a>
+      </div>
+    </header>
+
+    <div class="mega" id="mega" hidden>
+      <div class="mega-inner">
+        <div>
+          <h3>Poradna</h3>
+          <a href="#">Jak hledat práci</a>
+          <a href="#">Mzda a vyjednávání</a>
+          <a href="#">Změna oboru</a>
+          <a href="#">Úřad práce a doklady</a>
+          <a href="#">Všechny články →</a>
+        </div>
+        <div>
+          <h3>Kurzy a rekvalifikace</h3>
+          <a href="#">Rekvalifikace</a>
+          <a href="#">Online kurzy</a>
+          <a href="#">Kurzy podle oboru</a>
+          <a href="#">Jak financovat kurz</a>
+          <a href="#">Všechny kurzy →</a>
+        </div>
+        <div>
+          <h3>Nástroje</h3>
+          <a href="#">Kalkulačka čisté mzdy</a>
+          <a href="#">Srovnání platů</a>
+          <a href="#">Checklist pohovoru</a>
+          <a href="#">Všechny nástroje →</a>
+        </div>
+        <div class="rail-card">
+          <p class="kicker" style="margin-top:0">Tip</p>
+          <p>Transparentní mzda na každé nabídce. Hledejte podle odměny, ne podle marketingu.</p>
+          <a class="btn btn-primary btn-sm" href="nabidky.html">Procházet nabídky</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- Jobs.cz-DOMINANT search hero -->
+    <section class="search-hero" aria-labelledby="hero-title">
+      <div class="search-hero-inner">
+        <p class="eyebrow">Národní pracovní portál</p>
+        <h1 id="hero-title">Najděte férovou práci</h1>
+        <p class="lead">Transparentní mzdy. Ověřené firmy. Jedno hledání — přesně jako na Jobs.cz, bez šumu.</p>
+
+        <form class="search-box" action="nabidky.html" method="get" role="search" aria-label="Hledání nabídek">
+          <div class="search-field">
+            <label for="q">Pozice nebo klíčové slovo</label>
+            <input id="q" name="q" type="search" placeholder="např. produktový manažer, účetní, řidič" autocomplete="off" />
+          </div>
+          <div class="search-field">
+            <label for="loc">Lokalita</label>
+            <input id="loc" name="loc" type="text" placeholder="Praha, Brno, remote…" autocomplete="off" />
+          </div>
+          <button class="btn btn-primary btn-search" type="submit">Hledat</button>
+        </form>
+
+        <div class="search-hints">
+          <span class="hint-label">Často hledané:</span>
+          <a class="chip" href="nabidky.html?q=IT">IT</a>
+          <a class="chip" href="nabidky.html?q=obchod">Obchod</a>
+          <a class="chip" href="nabidky.html?q=zdravotnictvi">Zdravotnictví</a>
+          <a class="chip" href="nabidky.html?q=remote">Remote</a>
+          <a class="chip" href="nabidky.html?q=brigada">Brigáda</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="page">
+      <div class="facts" aria-label="Proč FairJobs">
+        <div class="fact">
+          <b>Mzda na první pohled</b>
+          <span>Každá nabídka ukazuje odměnu nebo upřímné „Neuvedeno“ — žádné skryté platy.</span>
+        </div>
+        <div class="fact">
+          <b>Ověřené firmy</b>
+          <span>Verified značka u firem s potvrzenou identitou a aktivními nabídkami.</span>
+        </div>
+        <div class="fact">
+          <b>Jedno hledání</b>
+          <span>Klíčové slovo + lokalita. Filtry v draweru — ne polovina obrazovky.</span>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:40px">
+        <h2>Vybrané nabídky</h2>
+        <a href="nabidky.html">Všechny nabídky →</a>
+      </div>
+
+      <div class="jobs" role="list">
+        <article class="job" role="listitem" tabindex="0" onclick="location.href='nabidky.html'">
+          <div class="job-logo blue" aria-hidden="true">KS</div>
+          <div class="job-body">
+            <h3 class="job-title">Senior Product Designer</h3>
+            <p class="job-co">Klarna Studio · <span class="verified">✓ Ověřeno</span></p>
+            <div class="job-meta">
+              <span>Praha / hybrid</span>
+              <span>Full-time</span>
+              <span class="recency">Dnes</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Design</span>
+              <span class="tag">B2B SaaS</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">85–110 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku" onclick="event.stopPropagation()">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0" onclick="location.href='nabidky.html'">
+          <div class="job-logo green" aria-hidden="true">RH</div>
+          <div class="job-body">
+            <h3 class="job-title">Účetní — junior / medior</h3>
+            <p class="job-co">Rohlik.cz · <span class="verified">✓ Ověřeno</span></p>
+            <div class="job-meta">
+              <span>Praha</span>
+              <span>Full-time</span>
+              <span class="recency">Včera</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Finance</span>
+              <span class="tag">On-site</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">42–55 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku" onclick="event.stopPropagation()">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0" onclick="location.href='nabidky.html'">
+          <div class="job-logo ink" aria-hidden="true">AV</div>
+          <div class="job-body">
+            <h3 class="job-title">Backend Engineer (Go)</h3>
+            <p class="job-co">Avast / Gen Digital</p>
+            <div class="job-meta">
+              <span>Remote CZ</span>
+              <span>Full-time</span>
+              <span class="recency">2 dny</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">IT</span>
+              <span class="tag">Remote</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">120–160 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart on" type="button" aria-label="Odebrat z uložených" aria-pressed="true" onclick="event.stopPropagation()">♥</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="band" style="margin-top:40px" id="destinations">
+        <div class="grid-3">
+          <div class="cell">
+            <p class="kicker">Poradna</p>
+            <h2 class="h2">Rady, které sedí na realitu</h2>
+            <p>Jak vyjednat mzdu, změnit obor, nebo se připravit na pohovor — bez clickbaitů.</p>
+            <a href="#">Otevřít poradnu →</a>
+          </div>
+          <div class="cell">
+            <p class="kicker">Kurzy</p>
+            <h2 class="h2">Rekvalifikace a skill upgrade</h2>
+            <p>Kurzy podle oboru, online i prezenční. Transparentní cesty k financování.</p>
+            <a href="#">Procházet kurzy →</a>
+          </div>
+          <div class="cell">
+            <p class="kicker">Nástroje</p>
+            <h2 class="h2">Kalkulačky a checklisty</h2>
+            <p>Čistá mzda, srovnání platů, checklist pohovoru — rychlé nástroje bez účtu.</p>
+            <a href="#">Všechny nástroje →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="band band-pad" style="margin-top:16px" id="pro-firmy">
+        <div class="employer-cta">
+          <div>
+            <p class="kicker" style="margin:0 0 8px">Pro firmy</p>
+            <h2 class="h2" style="font-size:20px;margin-bottom:6px">Najímejte s funnel metriky, ne s dohady</h2>
+            <p class="muted" style="margin:0;max-width:480px;font-size:14px">Přehled, kandidáti, line/area grafy. CTA #0047FF. Konzole ve stylu Vercel — bez pastelového šumu.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn btn-primary" href="firma.html">Vyzkoušet demo</a>
+            <a class="btn btn-secondary" href="#">Ceník</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="note">Design SoT · preview-v6-soa · <a href="README.md">Thesis</a> · <a href="nabidky.html">Nabídky</a> · <a href="firma.html">Firma</a> · <a href="ucet.html">Účet</a></p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="brand-mini">FairJobs</div>
+        <p style="margin:6px 0 0">Férové nabídky práce v Česku.</p>
+      </div>
+      <nav aria-label="Patička">
+        <a href="nabidky.html">Nabídky</a>
+        <a href="#">Poradna</a>
+        <a href="#">Kurzy</a>
+        <a href="#">Pro firmy</a>
+        <a href="ucet.html">Účet</a>
+        <a href="#">Ochrana soukromí</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('megaBtn');
+      var mega = document.getElementById('mega');
+      if (!btn || !mega) return;
+      function close() {
+        mega.classList.remove('open');
+        mega.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      function open() {
+        mega.hidden = false;
+        mega.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      btn.addEventListener('click', function () {
+        if (mega.classList.contains('open')) close(); else open();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+      document.addEventListener('click', function (e) {
+        if (!mega.classList.contains('open')) return;
+        if (!mega.contains(e.target) && e.target !== btn) close();
+      });
+    })();
+  </script>
+</body>
+</html>

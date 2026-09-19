@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nabídky práce — FairJobs</title>
+  <meta name="description" content="Procházejte nabídky s transparentní mzdou. Search-first SERP — Wellfound clarity, Jobs.cz density." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Přeskočit na obsah</a>
+
+  <div class="top-wrap">
+    <header class="top" role="banner">
+      <a class="brand" href="index.html" aria-label="FairJobs domů">
+        <span class="brand-mark" aria-hidden="true">F</span>
+        FairJobs
+      </a>
+      <nav class="nav" aria-label="Hlavní">
+        <a href="nabidky.html" class="active" aria-current="page">Nabídky</a>
+        <button type="button" id="megaBtn" aria-expanded="false" aria-controls="mega">Průvodce</button>
+        <a href="index.html#pro-firmy">Pro firmy</a>
+        <a href="#">Vytvořit životopis</a>
+      </nav>
+      <div class="top-actions">
+        <a class="btn btn-secondary btn-sm" href="ucet.html">Přihlásit se</a>
+        <a class="btn btn-primary btn-sm" href="firma.html">Přihlášení firem</a>
+      </div>
+    </header>
+    <div class="mega" id="mega" hidden>
+      <div class="mega-inner">
+        <div>
+          <h3>Poradna</h3>
+          <a href="#">Jak hledat práci</a>
+          <a href="#">Mzda a vyjednávání</a>
+          <a href="#">Všechny články →</a>
+        </div>
+        <div>
+          <h3>Kurzy</h3>
+          <a href="#">Rekvalifikace</a>
+          <a href="#">Online kurzy</a>
+          <a href="#">Všechny kurzy →</a>
+        </div>
+        <div>
+          <h3>Nástroje</h3>
+          <a href="#">Kalkulačka čisté mzdy</a>
+          <a href="#">Srovnání platů</a>
+        </div>
+        <div class="rail-card">
+          <p>Uložte nabídky do účtu — sledujte odpovědi v čase.</p>
+          <a class="btn btn-primary btn-sm" href="ucet.html">Přihlásit se</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- Same dominant Jobs.cz-scale search -->
+    <section class="search-hero compact" aria-labelledby="serp-title">
+      <div class="search-hero-inner">
+        <h1 id="serp-title" style="font-size:clamp(24px,2.6vw,32px)">Nabídky práce</h1>
+        <p class="lead" style="margin-bottom:20px">Hledejte podle pozice a místa. Mzda vždy viditelná.</p>
+
+        <form class="search-box" action="nabidky.html" method="get" role="search" aria-label="Hledání nabídek">
+          <div class="search-field">
+            <label for="q">Pozice nebo klíčové slovo</label>
+            <input id="q" name="q" type="search" value="produktový manažer" autocomplete="off" />
+          </div>
+          <div class="search-field">
+            <label for="loc">Lokalita</label>
+            <input id="loc" name="loc" type="text" value="Praha" autocomplete="off" />
+          </div>
+          <button class="btn btn-primary btn-search" type="submit">Hledat</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="page">
+      <div class="results-meta">
+        <p class="count"><b>128</b> nabídek · <span class="mono">Praha · produktový manažer</span></p>
+        <div class="results-tools">
+          <label class="visually-hidden" for="sort" style="position:absolute;width:1px;height:1px;overflow:hidden">Řazení</label>
+          <select class="sort" id="sort" aria-label="Řazení">
+            <option>Nejnovější</option>
+            <option>Nejvyšší mzda</option>
+            <option>Relevance</option>
+          </select>
+          <button type="button" class="btn btn-secondary btn-sm" id="openFilters">Upravit filtry</button>
+        </div>
+      </div>
+
+      <div class="filter-row" aria-label="Aktivní filtry">
+        <span class="chip active">Mzda od 50 tis. <button type="button" aria-label="Odebrat filtr mzdy">×</button></span>
+        <span class="chip active">Hybrid / remote <button type="button" aria-label="Odebrat filtr režimu">×</button></span>
+        <span class="chip active">Full-time <button type="button" aria-label="Odebrat filtr úvazku">×</button></span>
+        <button type="button" class="chip">+ Obor</button>
+        <button type="button" class="btn btn-ghost btn-sm" style="margin-left:4px">Zrušit filtry</button>
+      </div>
+
+      <!-- Elegant compensation-first cards — NOT ledger, NOT split spine -->
+      <div class="jobs" role="list">
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo blue" aria-hidden="true">SK</div>
+          <div class="job-body">
+            <h2 class="job-title">Product Manager — Growth</h2>
+            <p class="job-co">Seznam.cz · <span class="verified">✓ Ověřeno</span></p>
+            <div class="job-meta">
+              <span>Praha · Karlín</span>
+              <span>Hybrid 3 dny</span>
+              <span class="recency">Dnes</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Product</span>
+              <span class="tag">Growth</span>
+              <span class="tag">B2C</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">90–120 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo green" aria-hidden="true">TW</div>
+          <div class="job-body">
+            <h2 class="job-title">Senior Product Manager</h2>
+            <p class="job-co">Twisto · <span class="verified">✓ Ověřeno</span></p>
+            <div class="job-meta">
+              <span>Praha</span>
+              <span>Hybrid</span>
+              <span class="recency">Dnes</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Fintech</span>
+              <span class="tag">Senior</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">110–140 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart on" type="button" aria-label="Odebrat z uložených" aria-pressed="true">♥</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo" aria-hidden="true">KI</div>
+          <div class="job-body">
+            <h2 class="job-title">Product Owner — Marketplace</h2>
+            <p class="job-co">Kiwi.com</p>
+            <div class="job-meta">
+              <span>Brno / remote CZ</span>
+              <span>Full-time</span>
+              <span class="recency">Včera</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Travel</span>
+              <span class="tag">Remote</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">95–125 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo ink" aria-hidden="true">RF</div>
+          <div class="job-body">
+            <h2 class="job-title">Associate Product Manager</h2>
+            <p class="job-co">Rohlik Group · <span class="verified">✓ Ověřeno</span></p>
+            <div class="job-meta">
+              <span>Praha</span>
+              <span>On-site</span>
+              <span class="recency">2 dny</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">E-commerce</span>
+              <span class="tag">Junior+</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">55–70 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo blue" aria-hidden="true">SL</div>
+          <div class="job-body">
+            <h2 class="job-title">Product Manager — B2B Platform</h2>
+            <p class="job-co">Solidpixels</p>
+            <div class="job-meta">
+              <span>Praha / remote</span>
+              <span>Hybrid</span>
+              <span class="recency">3 dny</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">SaaS</span>
+              <span class="tag">B2B</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">80–100 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo" aria-hidden="true">FT</div>
+          <div class="job-body">
+            <h2 class="job-title">Technical Product Manager</h2>
+            <p class="job-co">Fantázia Tech (ukázka)</p>
+            <div class="job-meta">
+              <span>Ostrava</span>
+              <span>Hybrid</span>
+              <span class="recency">5 dní</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Tech</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">Mzda dohodou<span class="unit">uvedeno firmou</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku">♡</button>
+          </div>
+        </article>
+
+        <article class="job" role="listitem" tabindex="0">
+          <div class="job-logo green" aria-hidden="true">CV</div>
+          <div class="job-body">
+            <h2 class="job-title">Product Manager — Mobility</h2>
+            <p class="job-co">Liftago · <span class="verified">✓ Ověřeno</span></p>
+            <div class="job-meta">
+              <span>Praha</span>
+              <span>Hybrid</span>
+              <span class="recency">1 týden</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag">Mobility</span>
+              <span class="tag">Marketplace</span>
+            </div>
+          </div>
+          <div class="job-side">
+            <div class="job-pay">85–110 tis.<span class="unit">Kč / měsíc</span></div>
+            <button class="heart" type="button" aria-label="Uložit nabídku">♡</button>
+          </div>
+        </article>
+      </div>
+
+      <p class="note">SERP SoT: dominantní search + compensation-first karty. <strong>Ne</strong> 3-col ledger · <strong>ne</strong> split salary-spine + preview. · <a href="index.html">HP</a></p>
+    </div>
+  </main>
+
+  <!-- Filter drawer -->
+  <div class="drawer-backdrop" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+    <div class="drawer">
+      <h2 id="drawer-title">Upravit filtry</h2>
+      <p class="muted" style="margin:0 0 8px;font-size:13px">Kompaktní drawer — ne polovina stránky.</p>
+
+      <div class="field">
+        <label for="pay-from">Mzda od (Kč / měsíc)</label>
+        <input id="pay-from" type="number" value="50000" min="0" step="5000" />
+      </div>
+      <div class="field">
+        <label for="pay-to">Mzda do</label>
+        <input id="pay-to" type="number" placeholder="Bez limitu" min="0" step="5000" />
+      </div>
+      <div class="field">
+        <label>Režim práce</label>
+        <div class="seg" role="group">
+          <label><input type="checkbox" checked /> Hybrid</label>
+          <label><input type="checkbox" checked /> Remote</label>
+          <label><input type="checkbox" /> On-site</label>
+          <label><input type="checkbox" /> Brigáda</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="obor">Obor</label>
+        <select id="obor">
+          <option>Produkt / management</option>
+          <option>IT</option>
+          <option>Obchod</option>
+          <option>Finance</option>
+          <option>Zdravotnictví</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="uvazek">Typ úvazku</label>
+        <select id="uvazek">
+          <option>Full-time</option>
+          <option>Part-time</option>
+          <option>IČO / kontrakt</option>
+        </select>
+      </div>
+
+      <div class="drawer-foot">
+        <button type="button" class="btn btn-ghost" id="resetFilters">Reset</button>
+        <button type="button" class="btn btn-primary" id="applyFilters">Použít filtry</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('megaBtn');
+      var mega = document.getElementById('mega');
+      function closeMega() {
+        mega.classList.remove('open');
+        mega.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      btn.addEventListener('click', function () {
+        if (mega.classList.contains('open')) closeMega();
+        else { mega.hidden = false; mega.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+      });
+
+      var drawer = document.getElementById('drawer');
+      var openBtn = document.getElementById('openFilters');
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        drawer.hidden = true;
+      }
+      function openDrawer() {
+        drawer.hidden = false;
+        drawer.classList.add('open');
+        document.getElementById('pay-from').focus();
+      }
+      openBtn.addEventListener('click', openDrawer);
+      document.getElementById('applyFilters').addEventListener('click', closeDrawer);
+      document.getElementById('resetFilters').addEventListener('click', function () {
+        document.getElementById('pay-from').value = '';
+        document.getElementById('pay-to').value = '';
+      });
+      drawer.addEventListener('click', function (e) {
+        if (e.target === drawer) closeDrawer();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeMega(); closeDrawer(); }
+      });
+    })();
+  </script>
+</body>
+</html>

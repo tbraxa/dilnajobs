@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { JobCard } from "@/components/job-card";
-import { JobFilters } from "@/components/job-filters";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
+import { SearchHero } from "@/components/search-hero";
+import { ActiveFilterChips, FilterBar } from "@/components/filter-drawer";
 import { parseSearch, loadSearchJobs } from "@/lib/jobs/search";
 
 export const metadata: Metadata = { title: "Nabídky práce" };
@@ -16,30 +18,53 @@ export default async function NabidkyPage({
   const query = parseSearch(params);
   const catalog = await loadSearchJobs(query);
   const jobs = catalog.ok ? catalog.rows : [];
+  const filterBits = [query.city, query.q].filter(Boolean).join(" · ");
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">Katalog</p>
-      <h1 className="display mt-2 text-3xl font-semibold sm:text-4xl">Nabídky práce</h1>
-      <p className="mt-2 max-w-2xl text-sm text-steel">
-        Řazení a filtry berou data z databáze. Agenturní inzeráty tady nejsou — a nebudou.
-      </p>
-      <div className="mt-6">
-        <JobFilters defaults={query} />
-      </div>
-      <p className="mt-4 text-sm text-steel">
-        {catalog.ok
-          ? `${jobs.length} ${jobs.length === 1 ? "nabídka" : jobs.length < 5 ? "nabídky" : "nabídek"}`
-          : "Katalog je dočasně nedostupný."}
-      </p>
-      <div className="mt-3 grid gap-3">
-        {!catalog.ok ? (
-          <CatalogUnavailable />
-        ) : jobs.length === 0 ? (
-          <p className="border border-line p-4 text-sm">Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici.</p>
-        ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
-        )}
+    <main id="main">
+      <SearchHero
+        compact
+        title="Nabídky práce"
+        lead="Hledejte podle pozice a místa. Mzda vždy viditelná."
+        defaults={{ q: query.q, city: query.city }}
+      />
+
+      <div className="page">
+        <div className="results-meta">
+          <p className="count">
+            {catalog.ok ? (
+              <>
+                <b>{jobs.length}</b>{" "}
+                {jobs.length === 1 ? "nabídka" : jobs.length < 5 ? "nabídky" : "nabídek"}
+                {filterBits ? (
+                  <>
+                    {" · "}
+                    <span className="mono">{filterBits}</span>
+                  </>
+                ) : null}
+              </>
+            ) : (
+              "Katalog je dočasně nedostupný."
+            )}
+          </p>
+          <Suspense fallback={null}>
+            <FilterBar sort={query.sort} />
+          </Suspense>
+        </div>
+
+        <Suspense fallback={null}>
+          <ActiveFilterChips />
+        </Suspense>
+
+        <div className="jobs" role="list">
+          {!catalog.ok ? (
+            <CatalogUnavailable />
+          ) : jobs.length === 0 ? (
+            <p className="empty-soft">Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici.</p>
+          ) : (
+            jobs.map((job, i) => <JobCard key={job.id} job={job} index={i} />)
+          )}
+        </div>
       </div>
     </main>
   );

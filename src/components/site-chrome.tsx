@@ -1,83 +1,167 @@
-import Link from "next/link";
-import { BRAND, PUBLIC_DOMAIN } from "@/lib/brand";
-import { ButtonLink } from "./ui";
-import { LogoMark } from "./icons";
+"use client";
 
-export function SiteHeader({ compact = false }: { compact?: boolean }) {
+import Link from "next/link";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { BRAND, BRAND_CLAIM, PUBLIC_DOMAIN } from "@/lib/brand";
+
+function BrandMark() {
   return (
-    <header className="border-b border-line bg-paper/90 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 text-ink">
-          <LogoMark className="h-8 w-8" />
-          <span className="display text-lg font-semibold sm:text-xl">{BRAND}</span>
-        </Link>
-        <nav className="flex items-center gap-1 sm:gap-3">
-          <Link href="/nabidky" className="px-2 py-1 text-sm text-ink hover:underline">
+    <Link href="/" className="brand" aria-label={`${BRAND} domů`}>
+      <span className="brand-mark" aria-hidden="true">
+        F
+      </span>
+      {BRAND}
+    </Link>
+  );
+}
+
+export function SiteHeader({ pathname = "" }: { pathname?: string }) {
+  const [megaOpen, setMegaOpen] = useState(false);
+  const megaId = useId();
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const megaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMegaOpen(false);
+    }
+    function onClick(e: MouseEvent) {
+      const t = e.target as Node;
+      if (
+        megaOpen &&
+        megaRef.current &&
+        !megaRef.current.contains(t) &&
+        btnRef.current &&
+        !btnRef.current.contains(t)
+      ) {
+        setMegaOpen(false);
+      }
+    }
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("click", onClick);
+    };
+  }, [megaOpen]);
+
+  const nabidkyActive = pathname.startsWith("/nabidky") || pathname.startsWith("/nabidka");
+
+  return (
+    <div className="top-wrap">
+      <header className="top" role="banner">
+        <BrandMark />
+        <nav className="nav" aria-label="Hlavní">
+          <Link
+            href="/nabidky"
+            className={nabidkyActive ? "active" : undefined}
+            aria-current={nabidkyActive ? "page" : undefined}
+          >
             Nabídky
           </Link>
-          <Link href="/pro-firmy" className="hidden px-2 py-1 text-sm text-ink hover:underline sm:inline">
-            Pro firmy
-          </Link>
-          {!compact ? (
-            <ButtonLink href="/firma/prihlaseni" className="px-3 py-2 text-xs sm:text-sm">
-              Přidat nabídku
-            </ButtonLink>
-          ) : null}
+          <button
+            ref={btnRef}
+            type="button"
+            aria-expanded={megaOpen}
+            aria-controls={megaId}
+            onClick={() => setMegaOpen((v) => !v)}
+          >
+            Průvodce
+          </button>
+          <Link href="/pro-firmy">Pro firmy</Link>
+          <Link href="/ucet">Vytvořit životopis</Link>
         </nav>
+        <div className="top-actions">
+          <Link className="btn btn-secondary btn-sm" href="/ucet/prihlaseni">
+            Přihlásit se
+          </Link>
+          <Link className="btn btn-primary btn-sm" href="/firma/prihlaseni">
+            Přihlášení firem
+          </Link>
+        </div>
+      </header>
+
+      <div ref={megaRef} className={`mega${megaOpen ? " open" : ""}`} id={megaId} hidden={!megaOpen}>
+        <div className="mega-inner">
+          <div>
+            <h3>Poradna</h3>
+            <Link href="/#poradna" onClick={() => setMegaOpen(false)}>
+              Jak hledat práci
+            </Link>
+            <Link href="/#poradna" onClick={() => setMegaOpen(false)}>
+              Mzda a vyjednávání
+            </Link>
+            <Link href="/#poradna" onClick={() => setMegaOpen(false)}>
+              Všechny články →
+            </Link>
+          </div>
+          <div>
+            <h3>Kurzy</h3>
+            <Link href="/#kurzy" onClick={() => setMegaOpen(false)}>
+              Rekvalifikace
+            </Link>
+            <Link href="/#kurzy" onClick={() => setMegaOpen(false)}>
+              Online kurzy
+            </Link>
+            <Link href="/#kurzy" onClick={() => setMegaOpen(false)}>
+              Všechny kurzy →
+            </Link>
+          </div>
+          <div>
+            <h3>Nástroje</h3>
+            <Link href="/#nastroje" onClick={() => setMegaOpen(false)}>
+              Kalkulačka čisté mzdy
+            </Link>
+            <Link href="/#nastroje" onClick={() => setMegaOpen(false)}>
+              Srovnání platů
+            </Link>
+          </div>
+          <div className="rail-card">
+            <p>Uložte nabídky do účtu — sledujte odpovědi v čase.</p>
+            <Link className="btn btn-primary btn-sm" href="/ucet/prihlaseni" onClick={() => setMegaOpen(false)}>
+              Přihlásit se
+            </Link>
+          </div>
+        </div>
       </div>
-    </header>
+    </div>
   );
 }
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-line">
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:grid-cols-3 sm:px-6">
+    <footer className="footer">
+      <div className="footer-inner">
         <div>
-          <p className="display text-lg font-semibold">{BRAND}</p>
-          <p className="mt-2 max-w-xs text-sm text-steel">
-            Práce ve výrobě, napřímo od firem. Agentury neregistrujeme. {PUBLIC_DOMAIN}
+          <div className="brand-mini">{BRAND}</div>
+          <p style={{ margin: "6px 0 0" }}>{BRAND_CLAIM}</p>
+          <p className="muted" style={{ margin: "4px 0 0", fontSize: 12 }}>
+            {PUBLIC_DOMAIN}
           </p>
         </div>
-        <div className="text-sm">
-          <p className="label mb-2">Uchazeči</p>
-          <ul className="space-y-1">
-            <li>
-              <a href="/nabidky" className="hover:underline">
-                Nabídky práce
-              </a>
-            </li>
-            <li>
-              <a href="/gdpr" className="hover:underline">
-                Osobní údaje
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="text-sm">
-          <p className="label mb-2">Firmy</p>
-          <ul className="space-y-1">
-            <li>
-              <a href="/pro-firmy" className="hover:underline">
-                Ceník
-              </a>
-            </li>
-            <li>
-              <a href="/obchodni-podminky" className="hover:underline">
-                Obchodní podmínky
-              </a>
-            </li>
-            <li>
-              <a href="/firma/prihlaseni" className="hover:underline">
-                Přihlášení
-              </a>
-            </li>
-          </ul>
-        </div>
+        <nav aria-label="Patička">
+          <Link href="/nabidky">Nabídky</Link>
+          <Link href="/#poradna">Poradna</Link>
+          <Link href="/#kurzy">Kurzy</Link>
+          <Link href="/pro-firmy">Pro firmy</Link>
+          <Link href="/ucet">Účet</Link>
+          <Link href="/gdpr">Ochrana soukromí</Link>
+          <Link href="/obchodni-podminky">Obchodní podmínky</Link>
+        </nav>
       </div>
-      <p className="border-t border-line px-4 py-3 text-center text-xs text-steel">
-        © {new Date().getFullYear()} {BRAND}. Provozovatel bude doplněn před spuštěním.
-      </p>
     </footer>
+  );
+}
+
+export function ConsoleTop({ children }: { children?: ReactNode }) {
+  return (
+    <header className="top" role="banner">
+      <BrandMark />
+      <nav className="nav" aria-label="Veřejná">
+        <Link href="/nabidky">Nabídky</Link>
+        <Link href="/pro-firmy">Pro firmy</Link>
+      </nav>
+      <div className="top-actions">{children}</div>
+    </header>
   );
 }
