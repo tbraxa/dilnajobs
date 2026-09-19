@@ -233,13 +233,13 @@ export default async function FirmaHome({
               >
                 <div className="label">{pkg.name}</div>
                 <b style={{ fontSize: 22 }}>
-                  {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
+                  {formatCzk(pkg.priceCzkExVat)}
                 </b>
                 <p className="muted" style={{ fontSize: 13, flex: 1 }}>
                   {pkg.blurb}
                 </p>
                 <button type="submit" className="btn btn-primary btn-sm" style={{ marginTop: 12 }}>
-                  {pkg.priceCzkExVat === 0 ? "Aktivovat" : stripeOn ? "Zaplatit kartou" : "Objednat"}
+                  {stripeOn ? "Zaplatit kartou" : "Objednat"}
                 </button>
               </form>
             );
