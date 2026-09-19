@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { requestLinkAction, type AuthState } from "@/lib/actions/auth";
+import { copy } from "@/lib/copy";
 import { Button, Field, inputClass } from "./ui";
 
 export function LoginForm() {
@@ -9,13 +10,21 @@ export function LoginForm() {
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="intent" value="login" />
-      <Field label="Firemní e-mail" name="email">
-        <input id="email" name="email" type="email" required className={inputClass} autoComplete="email" />
+      <Field label={copy.authFirma.loginLabelEmail} name="email">
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          className={inputClass}
+          autoComplete="email"
+          placeholder={copy.authFirma.loginPlaceholder}
+        />
       </Field>
       {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
       {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
       <Button type="submit" disabled={pending}>
-        {pending ? "Posílám odkaz…" : "Poslat přihlašovací odkaz"}
+        {pending ? "Posílám odkaz…" : copy.authFirma.loginCta}
       </Button>
     </form>
   );
@@ -26,19 +35,22 @@ export function RegisterForm() {
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="intent" value="register" />
-      <Field label="Vaše jméno" name="name">
+      <Field label={copy.authFirma.regLabelName} name="name">
         <input id="name" name="name" required className={inputClass} autoComplete="name" />
       </Field>
-      <Field label="Název firmy" name="companyName">
+      <Field label="Příjmení" name="lastName">
+        <input id="lastName" name="lastName" required className={inputClass} autoComplete="family-name" />
+      </Field>
+      <Field label={copy.authFirma.regLabelCompany} name="companyName">
         <input id="companyName" name="companyName" required className={inputClass} />
       </Field>
-      <Field label="IČO" name="ico" hint="Osm číslic. Agentury neregistrujeme.">
-        <input id="ico" name="ico" required inputMode="numeric" className={inputClass} />
+      <Field label={copy.authFirma.regLabelIco} name="ico" hint={copy.authFirma.regHelperAres}>
+        <input id="ico" name="ico" required inputMode="numeric" className={inputClass} placeholder="12345678" />
       </Field>
-      <Field label="Sídlo / provoz (město)" name="city">
+      <Field label={copy.authFirma.regLabelCity} name="city">
         <input id="city" name="city" className={inputClass} />
       </Field>
-      <Field label="Firemní e-mail" name="email">
+      <Field label={copy.authFirma.regLabelEmail} name="email">
         <input id="reg-email" name="email" type="email" required className={inputClass} autoComplete="email" />
       </Field>
       <label className="flex items-start gap-2 text-sm">
@@ -54,7 +66,7 @@ export function RegisterForm() {
       {state?.ok ? <p className="text-sm text-ok">{state.message}</p> : null}
       {state && !state.ok ? <p className="text-sm text-danger">{state.error}</p> : null}
       <Button type="submit" disabled={pending}>
-        {pending ? "Zakládám…" : "Založit účet a poslat odkaz"}
+        {pending ? "Zakládám…" : copy.authFirma.regCta}
       </Button>
     </form>
   );
