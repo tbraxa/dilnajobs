@@ -53,7 +53,7 @@ export function formatSalary(min?: number | null, max?: number | null, note?: st
     if (min === max) return `${formatCzk(min)} / měsíc`;
     const minFmt = new Intl.NumberFormat("cs-CZ").format(min);
     const maxFmt = new Intl.NumberFormat("cs-CZ").format(max);
-    return `${minFmt}–${maxFmt} Kč / měsíc`;
+    return `${minFmt} až ${maxFmt} Kč / měsíc`;
   }
   if (min) return `od ${formatCzk(min)} / měsíc`;
   if (max) return `do ${formatCzk(max)} / měsíc`;
