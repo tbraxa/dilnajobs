@@ -504,6 +504,392 @@ select {
   }
 }
 
+/* `/nabidky` v6 is a new workbench, not the former banner/card composition. */
+
+.fj-jobs-explorer {
+  min-height: 100vh;
+  background: var(--fj-white);
+}
+
+.fj-jobs-workbench,
+.fj-jobs-results,
+.fj-jobs-footer-note {
+  width: min(calc(100% - 40px), 1320px);
+  margin-inline: auto;
+}
+
+.fj-jobs-workbench {
+  border-right: 1px solid var(--fj-line);
+  border-left: 1px solid var(--fj-line);
+}
+
+.fj-jobs-workbench-head {
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(320px, 1fr) auto;
+  align-items: center;
+  gap: 28px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--fj-line);
+}
+
+.fj-jobs-workbench-head > div {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.fj-jobs-workbench-head span,
+.fj-jobs-results-head p,
+.fj-jobs-feed-head,
+.fj-v6-job-company time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.fj-jobs-workbench-head span {
+  color: var(--fj-muted);
+  font-size: 9px;
+}
+
+.fj-jobs-workbench-head h1 {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.fj-jobs-workbench-head > p {
+  margin: 0;
+  color: var(--fj-muted);
+  font-size: 12px;
+}
+
+.fj-jobs-workbench-head > a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: var(--fj-radius-sm);
+  color: var(--fj-blue);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fj-jobs-workbench-head > a:hover {
+  background: var(--fj-hover);
+  color: var(--fj-ink);
+}
+
+.fj-jobs-workbench .fj-serp-controls {
+  border: 0;
+}
+
+.fj-jobs-results {
+  padding-top: 14px;
+}
+
+.fj-jobs-results-head {
+  min-height: 48px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 2px;
+}
+
+.fj-jobs-results-head h2,
+.fj-jobs-results-head p {
+  margin: 0;
+}
+
+.fj-jobs-results-head h2 {
+  font-size: 18px;
+  letter-spacing: -0.025em;
+}
+
+.fj-jobs-results-head p {
+  margin-top: 3px;
+  color: var(--fj-muted);
+  font-size: 9px;
+}
+
+.fj-jobs-feed {
+  border: 1px solid var(--fj-line);
+  background: var(--fj-white);
+}
+
+.fj-jobs-feed-head {
+  min-height: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 156px 238px 42px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 12px 0 80px;
+  border-bottom: 1px solid var(--fj-line);
+  background: var(--fj-canvas);
+  color: var(--fj-muted);
+  font-size: 9px;
+}
+
+.fj-v6-job-row {
+  position: relative;
+  min-height: 94px;
+  display: grid;
+  grid-template-columns: 52px minmax(300px, 1fr) 156px 238px 42px;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px 8px 14px;
+  background: var(--fj-white);
+  transition: background 120ms ease;
+}
+
+.fj-v6-job-row + .fj-v6-job-row {
+  border-top: 1px solid var(--fj-line);
+}
+
+.fj-v6-job-row:hover {
+  background: var(--fj-hover);
+}
+
+.fj-v6-job-row:focus-within {
+  box-shadow: inset 3px 0 var(--fj-blue);
+}
+
+.fj-v6-job-row.is-promoted::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--fj-blue);
+}
+
+.fj-v6-job-mark {
+  display: grid;
+  place-items: center;
+}
+
+.fj-v6-company-logo {
+  width: 44px;
+  height: 44px;
+}
+
+.fj-v6-job-identity {
+  min-width: 0;
+}
+
+.fj-v6-job-company {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--fj-muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.fj-v6-job-company time {
+  margin-left: auto;
+  color: #737373;
+  font-size: 8px;
+}
+
+.fj-v6-job-identity h2 {
+  margin: 3px 0 0;
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.fj-v6-job-identity h2 a:hover {
+  color: var(--fj-blue);
+}
+
+.fj-v6-job-facets {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+}
+
+.fj-v6-job-place,
+.fj-v6-job-compensation {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.fj-v6-job-place > span,
+.fj-v6-job-compensation > span {
+  color: #737373;
+  font-size: 9px;
+}
+
+.fj-v6-job-place strong {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fj-v6-job-place small,
+.fj-v6-job-compensation small {
+  overflow: hidden;
+  color: var(--fj-muted);
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fj-v6-job-compensation {
+  align-self: stretch;
+  align-content: center;
+  padding-left: 16px;
+  border-left: 1px solid var(--fj-line);
+  background: #fafafa;
+}
+
+.fj-v6-job-row:hover .fj-v6-job-compensation {
+  background: transparent;
+}
+
+.fj-v6-job-compensation strong {
+  color: var(--fj-ink);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.fj-jobs-footer-note {
+  padding: 16px 0 80px;
+}
+
+@media (max-width: 1050px) {
+  .fj-jobs-workbench-head {
+    grid-template-columns: 1fr auto;
+  }
+
+  .fj-jobs-workbench-head > p {
+    display: none;
+  }
+
+  .fj-v6-job-row {
+    grid-template-columns: 52px minmax(240px, 1fr) 128px 205px 42px;
+  }
+
+  .fj-jobs-feed-head {
+    grid-template-columns: minmax(0, 1fr) 128px 205px 42px;
+  }
+}
+
+@media (max-width: 850px) {
+  .fj-jobs-feed-head {
+    display: none;
+  }
+
+  .fj-v6-job-row {
+    grid-template-columns: 52px minmax(0, 1fr) 190px 42px;
+  }
+
+  .fj-v6-job-place {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .fj-jobs-workbench,
+  .fj-jobs-results,
+  .fj-jobs-footer-note {
+    width: 100%;
+  }
+
+  .fj-jobs-workbench {
+    border: 0;
+  }
+
+  .fj-jobs-workbench-head {
+    min-height: 92px;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 15px;
+  }
+
+  .fj-jobs-workbench-head > a {
+    display: none;
+  }
+
+  .fj-jobs-results {
+    padding-top: 12px;
+  }
+
+  .fj-jobs-results-head {
+    padding-inline: 12px;
+  }
+
+  .fj-jobs-feed {
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .fj-v6-job-row {
+    min-height: 132px;
+    grid-template-columns: 44px minmax(0, 1fr) 40px;
+    grid-template-rows: auto auto;
+    align-items: start;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .fj-v6-company-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .fj-v6-job-company {
+    flex-wrap: wrap;
+  }
+
+  .fj-v6-job-company time {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .fj-v6-job-identity h2 {
+    font-size: 17px;
+  }
+
+  .fj-v6-job-facets .fj-job-meta-text {
+    display: none;
+  }
+
+  .fj-v6-job-compensation {
+    grid-column: 2;
+    align-self: auto;
+    padding: 8px 0 0;
+    border-top: 1px solid var(--fj-line);
+    border-left: 0;
+    background: transparent;
+  }
+
+  .fj-v6-job-compensation strong {
+    font-size: 15px;
+    white-space: normal;
+  }
+
+  .fj-v6-job-row > .fj-favorite-control {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .fj-jobs-footer-note {
+    padding-inline: 12px;
+  }
+}
+
 /* Destination and support pages */
 
 .fj-legal-page {

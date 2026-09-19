@@ -4,6 +4,7 @@ import { professionByDb } from "@/lib/catalog";
 import { formatSalary } from "@/lib/pricing";
 import { cleanUiText } from "@/lib/fairjobs-visual";
 import { CompanyLogo } from "./company-logo";
+import { FavoriteJobButton } from "./favorite-controls";
 
 export type PublicJob = Awaited<ReturnType<typeof searchJobs>>[number];
 
@@ -28,30 +29,27 @@ function workModeLabel(value: string) {
   return "Na místě";
 }
 
-function FavoriteHeart({ href, label }: { href: string; label: string }) {
-  return (
-    <Link href={href} className="fj-favorite-button" aria-label={label}>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20.8 4.7a5.5 5.5 0 0 0-7.8 0L12 5.8l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.4 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
-      </svg>
-    </Link>
-  );
-}
-
-export function JobResultRow({ job }: { job: PublicJob }) {
+export function JobResultRow({
+  job,
+  isFavorite = false,
+  returnTo = "/nabidky",
+}: {
+  job: PublicJob;
+  isFavorite?: boolean;
+  returnTo?: string;
+}) {
   const verified = job.verificationStatus === "verified";
   const directEmployer = !job.isAgency;
   const profession = professionByDb(job.profession)?.label ?? cleanUiText(job.profession);
-  const returnTo = `/nabidky?ulozit=${encodeURIComponent(job.id)}`;
 
   return (
-    <article className={`fj-job-row${job.isTop ? " fj-job-row-top" : ""}`}>
-      <div className="fj-job-logo-cell">
-        <CompanyLogo companyName={job.companyName} className="fj-company-logo" />
+    <article className={`fj-v6-job-row${job.isTop ? " is-promoted" : ""}`}>
+      <div className="fj-v6-job-mark">
+        <CompanyLogo companyName={job.companyName} className="fj-v6-company-logo" />
       </div>
 
-      <div className="fj-job-main-cell">
-        <div className="fj-job-company-line">
+      <div className="fj-v6-job-identity">
+        <div className="fj-v6-job-company">
           <span>{cleanUiText(job.companyName)}</span>
           {verified ? (
             <span className="fj-verified-badge">
@@ -60,11 +58,12 @@ export function JobResultRow({ job }: { job: PublicJob }) {
             </span>
           ) : null}
           {job.isTop ? <span className="fj-top-badge">Doporučujeme</span> : null}
+          <time dateTime={job.publishedAt?.toISOString()}>{publishedLabel(job.publishedAt)}</time>
         </div>
         <h2>
           <Link href={`/nabidka/${job.slug}`}>{cleanUiText(job.title)}</Link>
         </h2>
-        <div className="fj-job-small-meta">
+        <div className="fj-v6-job-facets">
           <span className="fj-job-meta-chip">{workModeLabel(job.workMode)}</span>
           <span className="fj-job-meta-chip">{employmentLabel(job.employmentType)}</span>
           <span className="fj-job-meta-text">{profession}</span>
@@ -72,21 +71,23 @@ export function JobResultRow({ job }: { job: PublicJob }) {
         </div>
       </div>
 
-      <div className="fj-job-place-cell">
-        <span className="fj-row-label">Lokalita</span>
+      <div className="fj-v6-job-place">
+        <span>Lokalita</span>
         <strong>{cleanUiText(job.city)}</strong>
-        <span>{cleanUiText(job.region)}</span>
+        <small>{cleanUiText(job.region)}</small>
       </div>
 
-      <div className="fj-job-salary-cell">
-        <span className="fj-row-label">Měsíční mzda</span>
+      <div className="fj-v6-job-compensation">
+        <span>Měsíční mzda</span>
         <strong>{cleanUiText(formatSalary(job.salaryMin, job.salaryMax, job.salaryNote))}</strong>
-        <span className="fj-job-recency">{publishedLabel(job.publishedAt)}</span>
+        <small>hrubá · před zdaněním</small>
       </div>
 
-      <FavoriteHeart
-        href={`/ucet/prihlaseni?next=${encodeURIComponent(returnTo)}`}
-        label={`Uložit nabídku ${cleanUiText(job.title)}`}
+      <FavoriteJobButton
+        jobId={job.id}
+        initialSaved={isFavorite}
+        returnTo={returnTo}
+        label={`nabídku ${cleanUiText(job.title)}`}
       />
     </article>
   );
