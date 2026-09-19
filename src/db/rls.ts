@@ -27,6 +27,17 @@ export async function withEmployerRls<T>(
   });
 }
 
+/** Run seeker-owned profile and favorite queries inside one RLS-scoped transaction. */
+export async function withSeekerRls<T>(
+  seekerId: string,
+  fn: (tx: EmployerTx) => Promise<T>,
+): Promise<T> {
+  return db.transaction(async (tx) => {
+    await tx.execute(dsql`select set_config('app.seeker_id', ${seekerId}, true)`);
+    return fn(tx);
+  });
+}
+
 /** Cross-tenant operator reads/updates. SET LOCAL app.is_admin = true for this transaction only. */
 export async function withAdminRls<T>(fn: (tx: EmployerTx) => Promise<T>): Promise<T> {
   return db.transaction(async (tx) => {

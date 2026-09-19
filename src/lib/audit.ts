@@ -4,7 +4,7 @@ import { auditEvents } from "@/db/schema";
 import { db } from "@/db/client";
 
 export async function audit(input: {
-  actorType: "system" | "employer_user" | "candidate" | "admin";
+  actorType: "system" | "employer_user" | "candidate" | "seeker" | "admin";
   actorId?: string;
   employerId?: string;
   action: string;

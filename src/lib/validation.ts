@@ -60,6 +60,27 @@ export const registerEmployerSchema = z.object({
   city: z.string().trim().max(80).optional(),
 });
 
+export const seekerMagicLinkSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Zadejte platný e-mail."),
+  name: z.string().trim().min(2, "Doplňte své jméno.").max(120).optional(),
+  intent: z.enum(["login", "register"]).default("login"),
+  next: z.string().trim().max(240).optional(),
+});
+
+export const seekerProfileSchema = z.object({
+  name: z.string().trim().min(2, "Doplňte své jméno.").max(120),
+  phone: z
+    .string()
+    .trim()
+    .max(30)
+    .optional()
+    .transform((value) => value || undefined)
+    .refine((value) => !value || /^(\+420)?[1-9][0-9]{8}$/.test(normalizePhone(value)), "Telefon nevypadá správně."),
+  city: z.string().trim().max(80).optional().transform((value) => value || undefined),
+  desiredRole: z.string().trim().max(120).optional().transform((value) => value || undefined),
+  bio: z.string().trim().max(1200, "O vás může mít nejvýš 1200 znaků.").optional().transform((value) => value || undefined),
+});
+
 export const applicationStatusSchema = z.enum(["new", "reviewing", "interview", "hired", "rejected"]);
 
 export const employerProfileSchema = z.object({
