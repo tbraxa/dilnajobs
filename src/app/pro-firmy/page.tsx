@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function ProFirmyPage() {
-  const plans = PACKAGES.filter((pkg) => pkg.code !== "top").slice(0, 3);
+  const plans = PACKAGES;
 
   return (
     <main className="page" id="main">
@@ -70,7 +70,7 @@ export default function ProFirmyPage() {
           <article key={pkg.code} className={`pricing-card${i === 1 ? " featured" : ""}`}>
             <div className="label">{pkg.name}</div>
             <div className="price">
-              {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
+              {formatCzk(pkg.priceCzkExVat)}
             </div>
             <p className="muted" style={{ margin: 0, fontSize: 13 }}>
               bez DPH

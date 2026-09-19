@@ -31,11 +31,6 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const h = await headers();
   const nonce = h.get("x-nonce") ?? undefined;
-  const pathname = h.get("x-pathname") ?? "";
-  const isAdmin = pathname.startsWith("/admin");
-  const isConsole =
-    (pathname.startsWith("/firma") && !pathname.startsWith("/firma/prihlaseni")) ||
-    pathname.startsWith("/ucet");
 
   return (
     <html lang="cs" className={inter.variable}>
