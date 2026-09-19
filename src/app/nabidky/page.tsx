@@ -1,3 +1,4 @@
+import { copy } from "@/lib/copy";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { JobCard } from "@/components/job-card";
@@ -24,8 +25,8 @@ export default async function NabidkyPage({
     <main id="main">
       <SearchHero
         compact
-        title="Nabídky práce"
-        lead="Hledejte podle pozice a místa. Mzda vždy viditelná."
+        title={copy.listings.claim}
+        lead={copy.listings.helper}
         defaults={{ q: query.q, city: query.city }}
       />
 
@@ -60,7 +61,7 @@ export default async function NabidkyPage({
           {!catalog.ok ? (
             <CatalogUnavailable />
           ) : jobs.length === 0 ? (
-            <p className="empty-soft">Na tento filtr teď nic nemáme. Zkuste jiné město nebo pozici.</p>
+            <p className="empty-soft">{copy.listings.emptyBody}</p>
           ) : (
             jobs.map((job, i) => <JobCard key={job.id} job={job} index={i} />)
           )}
