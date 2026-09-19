@@ -1,5 +1,7 @@
 /* P0 polish overrides (type/spacing/detail/auth/filtration) — complements SoT embed */
-html, body { font-size: 17px; line-height: 1.55; }
+/* Win over later SoT body{font-size:15px} in bundled CSS order */
+html body { font-size: 17px; line-height: 1.55; }
+html { font-size: 17px; }
 .page { padding: 36px 24px 80px; }
 .jobs { gap: 14px; }
 .job { padding: 22px 24px; border-radius: 12px; }
