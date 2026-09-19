@@ -6,7 +6,7 @@ import path from "node:path";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env, s3Enabled } from "@/lib/env";
-import { hmac, randomToken } from "@/lib/crypto";
+import { hmac, randomToken, safeEqual } from "@/lib/crypto";
 
 export const CV_ALLOWLIST: Record<string, string> = {
   "application/pdf": "pdf",
@@ -111,9 +111,7 @@ export function verifyUploadTicket(ticket: string, contentType: string): string 
   if (Number(exp) < Date.now()) return null;
   if (!objectKey.startsWith("cv/")) return null;
   const expected = hmac(`${objectKey}:${exp}:${contentType}`);
-  if (expected.length !== sig.length) return null;
-  // length-checked compare via hmac helper string equality is not ideal; hmac is hex
-  if (expected !== sig) return null;
+  if (!safeEqual(expected, sig)) return null;
   return objectKey;
 }
 

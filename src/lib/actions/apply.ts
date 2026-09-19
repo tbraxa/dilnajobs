@@ -8,13 +8,14 @@ import { db, sql } from "@/db/client";
 import { applications, jobs } from "@/db/schema";
 import { audit } from "@/lib/audit";
 import { clientIp } from "@/lib/auth";
-import { hashIp } from "@/lib/crypto";
+import { hashIp, hmac, safeEqual } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
 import { log } from "@/lib/logging";
 import { resolveAppUrl } from "@/lib/app-url";
 import { captureException } from "@/lib/observability";
 import { getRequestId } from "@/lib/request-id";
 import { enforceRateLimit, RateLimitError } from "@/lib/rate-limit";
+import { getSeekerSession } from "@/lib/seeker-auth";
 import { applySchema } from "@/lib/validation";
 
 export type ActionState = { ok: true } | { ok: false; error: string };
@@ -29,6 +30,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
     consentGdpr: formData.get("consentGdpr") === "on" || formData.get("consentGdpr") === "true" ? true : undefined,
     website: String(formData.get("website") ?? ""),
     cvObjectKey: String(formData.get("cvObjectKey") ?? "") || undefined,
+    cvUploadProof: String(formData.get("cvUploadProof") ?? "") || undefined,
     cvFileName: String(formData.get("cvFileName") ?? "") || undefined,
     cvContentType: String(formData.get("cvContentType") ?? "") || undefined,
   };
@@ -41,9 +43,20 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
   if (!parsed.success) {
     return { ok: false, error: parsed.error.issues[0]?.message ?? "Zkontrolujte formulář." };
   }
+  if (
+    parsed.data.cvObjectKey &&
+    (!parsed.data.cvUploadProof ||
+      !safeEqual(
+        parsed.data.cvUploadProof,
+        hmac(`apply-cv:${parsed.data.cvObjectKey}`),
+      ))
+  ) {
+    return { ok: false, error: "Životopis nahrajte znovu." };
+  }
 
   const ip = await clientIp();
   const requestId = await getRequestId();
+  const seeker = await getSeekerSession();
   try {
     await enforceRateLimit({ bucket: "apply:ip", key: ip, limit: 8, windowMs: 60 * 60 * 1000 });
     await enforceRateLimit({
@@ -81,6 +94,7 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
       email: parsed.data.email,
       message: parsed.data.message,
       consentGdpr: true,
+      seekerUserId: seeker?.userId,
       cvObjectKey: parsed.data.cvObjectKey,
       cvFileName: parsed.data.cvFileName,
       cvContentType: parsed.data.cvContentType,
@@ -103,7 +117,8 @@ export async function applyToJob(formData: FormData): Promise<ActionState> {
   }
 
   await audit({
-    actorType: "candidate",
+    actorType: seeker ? "seeker" : "candidate",
+    actorId: seeker?.userId,
     employerId: job.employerId,
     action: "application.created",
     resourceType: "application",

@@ -1,11 +1,13 @@
 import Link from "next/link";
+import { getSeekerSession } from "@/lib/seeker-auth";
 import { FairJobsLockup } from "./fairjobs-brand";
 import { FairJobsNavigation } from "./fairjobs-navigation";
 
-export function FairJobsHeader() {
+export async function FairJobsHeader() {
+  const seeker = await getSeekerSession();
   return (
     <header className="fj-header">
-      <FairJobsNavigation />
+      <FairJobsNavigation seekerName={seeker?.name ?? null} />
     </header>
   );
 }
@@ -39,6 +41,7 @@ export function FairJobsFooter() {
           <Link href="/poradna">Poradna</Link>
           <Link href="/kurzy">Kurzy</Link>
           <Link href="/nastroje">Nástroje</Link>
+          <Link href="/ucet/prihlaseni">Přihlásit se</Link>
         </div>
 
         <div>

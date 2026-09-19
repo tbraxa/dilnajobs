@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FavoriteLoginContinuation } from "@/components/favorite-login-continuation";
 import { JobResultRow } from "@/components/fairjobs-job-row";
 import { JobSearchPanel } from "@/components/job-search-panel";
 import { JsonLd } from "@/components/json-ld";
@@ -25,6 +26,10 @@ export default async function NabidkyPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = await searchParams;
+  const pendingJobId =
+    typeof params.ulozit === "string" && /^[0-9a-f-]{36}$/i.test(params.ulozit)
+      ? params.ulozit
+      : null;
   const query = parseSearch(params);
   const [catalog, countCatalog, seeker] = await Promise.all([
     loadSearchJobs(query),
@@ -41,6 +46,13 @@ export default async function NabidkyPage({
 
   return (
     <main className="fj-jobs-explorer">
+      {pendingJobId ? (
+        <FavoriteLoginContinuation
+          id={pendingJobId}
+          kind="job"
+          returnTo={jobsHref(query)}
+        />
+      ) : null}
       <JsonLd
         id="fairjobs-jobs-collection"
         data={collectionPageJsonLd({

@@ -6,7 +6,13 @@ import { presignCvAction } from "@/lib/actions/cv";
 
 const initial: ActionState | null = null;
 
-export function CandidateApplyForm({ jobId }: { jobId: string }) {
+export function CandidateApplyForm({
+  jobId,
+  defaults,
+}: {
+  jobId: string;
+  defaults?: { fullName: string; email: string; phone: string };
+}) {
   const [state, action, pending] = useActionState(
     async (_previous: ActionState | null, formData: FormData) => applyToJob(formData),
     initial,
@@ -18,6 +24,10 @@ export function CandidateApplyForm({ jobId }: { jobId: string }) {
     setCvError(null);
     if (!file) {
       setCvName(null);
+      (form.elements.namedItem("cvObjectKey") as HTMLInputElement).value = "";
+      (form.elements.namedItem("cvUploadProof") as HTMLInputElement).value = "";
+      (form.elements.namedItem("cvFileName") as HTMLInputElement).value = "";
+      (form.elements.namedItem("cvContentType") as HTMLInputElement).value = "";
       return;
     }
 
@@ -42,6 +52,7 @@ export function CandidateApplyForm({ jobId }: { jobId: string }) {
     }
 
     (form.elements.namedItem("cvObjectKey") as HTMLInputElement).value = signed.objectKey;
+    (form.elements.namedItem("cvUploadProof") as HTMLInputElement).value = signed.uploadProof;
     (form.elements.namedItem("cvFileName") as HTMLInputElement).value = file.name;
     (form.elements.namedItem("cvContentType") as HTMLInputElement).value = file.type;
     setCvName(file.name);
@@ -63,29 +74,53 @@ export function CandidateApplyForm({ jobId }: { jobId: string }) {
     <form action={action} className="fj-apply-form" id="odpovedet">
       <input type="hidden" name="jobId" value={jobId} />
       <input type="hidden" name="cvObjectKey" />
+      <input type="hidden" name="cvUploadProof" />
       <input type="hidden" name="cvFileName" />
       <input type="hidden" name="cvContentType" />
 
       <div className="fj-apply-form-head">
         <p className="fj-eyebrow">Rychlá odpověď</p>
         <h2 className="fj-display">Máte zájem?</h2>
-        <p>Účet nepotřebujete. Stačí kontakt a pár slov o vás.</p>
+        <p>
+          {defaults
+            ? "Kontakt jsme předvyplnili z profilu. Před odesláním ho můžete upravit."
+            : "Účet nepotřebujete. Stačí kontakt a pár slov o vás."}
+        </p>
       </div>
 
       <div className="fj-form-two-columns">
         <label className="fj-form-field">
           <span>Jméno a příjmení</span>
-          <input name="fullName" required autoComplete="name" placeholder="Jan Novák" />
+          <input
+            name="fullName"
+            required
+            autoComplete="name"
+            placeholder="Jan Novák"
+            defaultValue={defaults?.fullName}
+          />
         </label>
         <label className="fj-form-field">
           <span>Telefon</span>
-          <input name="phone" required autoComplete="tel" inputMode="tel" placeholder="+420 777 000 000" />
+          <input
+            name="phone"
+            required
+            autoComplete="tel"
+            inputMode="tel"
+            placeholder="+420 777 000 000"
+            defaultValue={defaults?.phone}
+          />
         </label>
       </div>
 
       <label className="fj-form-field">
         <span>E-mail <small>volitelné</small></span>
-        <input name="email" type="email" autoComplete="email" placeholder="jan@priklad.cz" />
+        <input
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="jan@priklad.cz"
+          defaultValue={defaults?.email}
+        />
       </label>
 
       <label className="fj-form-field">

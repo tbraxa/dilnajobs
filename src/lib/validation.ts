@@ -35,6 +35,7 @@ export const applySchema = z.object({
   }),
   website: z.string().max(0).optional(), // honeypot
   cvObjectKey: z.string().max(240).optional(),
+  cvUploadProof: z.string().length(64).optional(),
   cvFileName: z.string().max(180).optional(),
   cvContentType: z.string().max(80).optional(),
 });
