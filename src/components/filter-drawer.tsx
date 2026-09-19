@@ -71,9 +71,6 @@ export function FilterBar({ sort = "newest" }: { sort?: string }) {
       >
         <div className="drawer">
           <h2 id={titleId}>{copy.listings.drawerTitle}</h2>
-          <p className="muted" style={{ margin: "0 0 8px", fontSize: 13 }}>
-            {copy.listings.drawerHelper}
-          </p>
           <form action={apply}>
             <div className="field">
               <label htmlFor="pay-from">{copy.listings.filtersSalary}</label>
