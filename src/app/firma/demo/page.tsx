@@ -7,7 +7,7 @@ import {
   Sparkline,
 } from "@/components/console/seed-charts";
 
-/** Ungated SoT firma dashboard for design audit — outside (portal) auth layout. */
+/** Ungated SoT firma dashboard for design audit  ·  outside (portal) auth layout. */
 export default function FirmaDemoPage() {
   const sampleJobs = [
     {
@@ -86,7 +86,7 @@ export default function FirmaDemoPage() {
             Náborový funnel a aktivita nabídek · posledních 30 dní
           </p>
           <p className="muted" style={{ margin: "6px 0 0", fontSize: 13 }}>
-            Design SoT demo — produkční /firma zůstává za autentizací
+            Design SoT demo  ·  produkční /firma zůstává za autentizací
           </p>
         </div>
         <SeedBadge />
@@ -118,7 +118,7 @@ export default function FirmaDemoPage() {
       <div className="charts">
         <ActivityLineChart
           title="Aktivita nabídek"
-          subtitle="Ukázková data · views / applies"
+          subtitle="Ukázková data · zobrazení / odpovědi"
           ariaLabel="Čárový graf: zobrazení a přihlášky za 30 dní"
         />
         <HiringFunnel />
