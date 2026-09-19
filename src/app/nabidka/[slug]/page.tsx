@@ -116,6 +116,12 @@ export default async function JobPage({ params }: Props) {
                 <p className="muted" style={{ margin: "4px 0 0", fontSize: 15 }}>
                   {[companyCity, ico ? `IČO ${ico}` : null].filter(Boolean).join(" · ")}
                 </p>
+                {ico ? (
+                  <p className="trust">
+                    <span className="verified">Ověřeno</span>
+                    <span className="muted"> · IČO v ARES</span>
+                  </p>
+                ) : null}
               </div>
             </div>
           </section>
