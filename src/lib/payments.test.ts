@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { verifyStripeSignature } from "@/lib/stripe";
 import { resolveMailerProvider } from "@/lib/mailer-config";
 import { POST as stripeWebhook } from "@/app/api/stripe/webhook/route";
+import { resolveCheckoutMode } from "@/lib/payments";
 
 function sign(payload: string, secret: string, t: number) {
   const v1 = createHmac("sha256", secret).update(`${t}.${payload}`, "utf8").digest("hex");
@@ -61,6 +62,20 @@ describe("verifyStripeSignature", () => {
         nowMs: (t + 301) * 1000,
       }),
     ).toEqual({ ok: false, error: "timestamp" });
+  });
+});
+
+describe("employer checkout availability", () => {
+  it("fails closed for paid packages without complete Stripe configuration", () => {
+    expect(resolveCheckoutMode(8_900, false)).toBe("unavailable");
+  });
+
+  it("uses real Stripe for paid packages only when ready", () => {
+    expect(resolveCheckoutMode(8_900, true)).toBe("stripe");
+  });
+
+  it("keeps the free package internal", () => {
+    expect(resolveCheckoutMode(0, false)).toBe("free");
   });
 });
 

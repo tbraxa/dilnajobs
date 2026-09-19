@@ -2,6 +2,17 @@ import type { NextConfig } from "next";
 import { resolveAppHost } from "./src/lib/app-url";
 
 const isProd = process.env.NODE_ENV === "production";
+const actionOrigins = Array.from(
+  new Set(
+    [
+      resolveAppHost(),
+      "fairjobs.cz",
+      "www.fairjobs.cz",
+      process.env.VERCEL_URL,
+      process.env.VERCEL_BRANCH_URL,
+    ].filter((value): value is string => Boolean(value)),
+  ),
+);
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -39,7 +50,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "64kb",
-      allowedOrigins: [resolveAppHost()],
+      allowedOrigins: actionOrigins,
     },
   },
   async headers() {

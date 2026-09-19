@@ -57,7 +57,7 @@ Rozhodnutí: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), ADR [001](docs/adr/00
 
 Hotové v1: veřejné stránky z DB, hledání/filtry/řazení, přihláška (Zod + rate limit), magic-link v dev, firma vidí jen svoje přihlášky (RLS), bezpečnostní hlavičky, audit log, liveness/readiness, admin konzole `/admin` (allowlist `ADMIN_EMAILS`).
 
-Stuby (jasně označené v kódu i v [docs/STUBS.md](docs/STUBS.md)): e-mail bez Resend/SMTP, S3 pokud chybí klíče, Stripe Checkout pokud chybí některý ze Stripe klíčů, ARES ověření IČO, Sentry pokud chybí `SENTRY_DSN`.
+Stuby a fail-closed integrace (viz [docs/STUBS.md](docs/STUBS.md)): e-mail bez Resend/SMTP, S3 pokud chybí klíče, Stripe Checkout je bez obou Stripe tajemství vypnutý, ARES ověření IČO a Sentry bez `SENTRY_DSN`.
 
 ## Phase 2: go-live checklist
 

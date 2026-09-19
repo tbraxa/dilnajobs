@@ -145,7 +145,7 @@ export async function runDeepHealth(): Promise<HealthReport> {
   });
 
   let paymentsStatus: CheckStatus = "unconfigured";
-  let paymentsDetail = "Checkout není zapnutý. Objednávky evidujeme a ozveme se firmě.";
+  let paymentsDetail = "Checkout není zapnutý. Placené balíčky jsou bezpečně vypnuté.";
   if (paymentsEnabled() && stripeWebhookConfigured()) {
     paymentsStatus = "ok";
     paymentsDetail = "Checkout i potvrzení plateb jsou nastavené.";

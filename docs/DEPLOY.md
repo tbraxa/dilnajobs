@@ -20,8 +20,8 @@ Recommended:
 | --- | --- |
 | `RESEND_API_KEY` | magic-link + apply notices |
 | `EMAIL_FROM` | verified domain in Resend |
-| `STRIPE_SECRET_KEY` | `sk_test_…` until go-live |
-| `STRIPE_WEBHOOK_SECRET` | `whsec_…` for `/api/stripe/webhook` |
+| `STRIPE_SECRET_KEY` | Live `sk_live_…` for production; paid checkout stays disabled when missing |
+| `STRIPE_WEBHOOK_SECRET` | Live `whsec_…` for `https://fairjobs.cz/api/stripe/webhook`; required together with the secret key |
 | `CRON_SECRET` | Bearer token for `/api/cron/job-expiry` |
 | `SENTRY_DSN` | optional |
 | `S3_*` | optional; else local disk (not for Cloud Run) |
@@ -41,7 +41,7 @@ Blank Vercel dashboard fields are stored as `""`, not unset. Empty strings are t
 3. First Vercel deploy can succeed with only `DATABASE_URL` + `SESSION_SECRET` (≥32 chars). Optional `SEED_ON_DEPLOY=true` is only for `npm run db:seed` (skips if employers already exist). For the live site, set `APP_URL=https://fairjobs.cz` (no trailing slash) and redeploy.
 4. Redeploy **latest `main`**. Do not retry an old failed SHA. Empty catalog (no ads) is a valid empty state.
 5. Set remaining env vars above. `vercel.json` schedules `GET /api/cron/job-expiry` once daily at **04:00 UTC** (`0 4 * * *`). Hobby plans only allow at most one cron run per day; Vercel Pro is required for hourly. Set `CRON_SECRET` — Vercel sends `Authorization: Bearer $CRON_SECRET`. The catalog already hides `expires_at < now()`, so a daily sweep is enough on Hobby.
-6. Stripe webhook URL: `https://<prod>/api/stripe/webhook` (raw body, signature verified).
+6. Stripe webhook URL: `https://fairjobs.cz/api/stripe/webhook` (raw body, signature verified; event `checkout.session.completed`).
 7. `/api/health` and `/api/ready` are serverless: liveness has no DB; ready is `SELECT 1` with a 1.5s timeout. The web process does **not** run the expiry worker.
 
 ## Cloud Run

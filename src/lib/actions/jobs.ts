@@ -143,5 +143,5 @@ export async function startCheckoutAction(packageCode: string) {
   }
   if (result.kind === "redirect") redirect(result.url);
   if (result.kind === "activated") redirect("/firma?objednavka=aktivovano");
-  redirect("/firma?objednavka=evidovano");
+  redirect("/firma/nastaveni?platba=nedostupna");
 }

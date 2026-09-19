@@ -13,8 +13,16 @@ import { getRequestId } from "@/lib/request-id";
 
 export type CheckoutResult =
   | { kind: "redirect"; url: string }
-  | { kind: "stub"; orderId: string }
+  | { kind: "unavailable" }
   | { kind: "activated"; orderId: string };
+
+export function resolveCheckoutMode(
+  amountCzkExVat: number,
+  stripeReady: boolean,
+): "free" | "stripe" | "unavailable" {
+  if (amountCzkExVat === 0) return "free";
+  return stripeReady ? "stripe" : "unavailable";
+}
 
 async function fulfillOrder(orderId: string, providerRef: string | null) {
   await sql`select fulfill_paid_order(${orderId}::uuid, ${providerRef})`;
@@ -47,8 +55,12 @@ async function createStripeCheckout(input: {
   const params = new URLSearchParams();
   params.set("mode", "payment");
   const origin = resolveAppUrl();
-  params.set("success_url", `${origin}/firma?objednavka=ok`);
+  params.set("success_url", `${origin}/firma?objednavka=ok&session_id={CHECKOUT_SESSION_ID}`);
   params.set("cancel_url", `${origin}/firma?objednavka=zruseno`);
+  params.set("locale", "cs");
+  params.set("billing_address_collection", "required");
+  params.set("tax_id_collection[enabled]", "true");
+  params.set("submit_type", "pay");
   params.set("client_reference_id", input.orderId);
   params.set("customer_email", input.email);
   params.set("metadata[orderId]", input.orderId);
@@ -87,10 +99,20 @@ export async function startCheckout(input: {
     });
     if (!pkg) throw new Error("Neznámý balíček.");
 
-    const stripeOn = paymentsEnabled();
-    const free = pkg.priceCzkExVat === 0;
-    const status = free ? "pending" : stripeOn ? "pending" : "stub";
-    const provider = stripeOn && !free ? "stripe" : "stub";
+    const mode = resolveCheckoutMode(pkg.priceCzkExVat, paymentsEnabled());
+    const free = mode === "free";
+    if (mode === "unavailable") {
+      await audit({
+        actorType: "employer_user",
+        employerId: input.employerId,
+        action: "payments.checkout.unavailable",
+        metadata: { packageCode: pkg.code, requestId },
+      });
+      log("warn", "payments.checkout.unavailable", { packageCode: pkg.code, requestId });
+      return { kind: "unavailable" };
+    }
+
+    const provider = free ? "stub" : "stripe";
 
     const order = await withEmployerRls(input.employerId, async (tx) => {
       const [row] = await tx
@@ -98,7 +120,7 @@ export async function startCheckout(input: {
         .values({
           employerId: input.employerId,
           packageCode: pkg.code,
-          status,
+          status: "pending",
           provider,
           amountCzkExVat: pkg.priceCzkExVat,
           paidAt: null,
@@ -113,7 +135,7 @@ export async function startCheckout(input: {
       action: "order.created",
       resourceType: "order",
       resourceId: order.id,
-      metadata: { packageCode: pkg.code, stub: !stripeOn && !free, free, requestId },
+      metadata: { packageCode: pkg.code, provider, free, requestId },
     });
 
     if (free) {
@@ -122,23 +144,26 @@ export async function startCheckout(input: {
       return { kind: "activated", orderId: order.id };
     }
 
-    if (!stripeOn) {
-      log("info", "payments.checkout", { stub: true, packageCode: pkg.code, requestId });
-      return { kind: "stub", orderId: order.id };
+    let session: Awaited<ReturnType<typeof createStripeCheckout>>;
+    try {
+      session = await createStripeCheckout({
+        orderId: order.id,
+        packageName: pkg.name,
+        amountCzkExVat: pkg.priceCzkExVat,
+        email: input.email,
+      });
+    } catch (error) {
+      await withEmployerRls(input.employerId, async (tx) => {
+        await tx.update(orders).set({ status: "failed" }).where(eq(orders.id, order.id));
+      });
+      throw error;
     }
-
-    const session = await createStripeCheckout({
-      orderId: order.id,
-      packageName: pkg.name,
-      amountCzkExVat: pkg.priceCzkExVat,
-      email: input.email,
-    });
 
     await withEmployerRls(input.employerId, async (tx) => {
       await tx.update(orders).set({ providerRef: session.id }).where(eq(orders.id, order.id));
     });
 
-    log("info", "payments.checkout", { stub: false, packageCode: pkg.code, requestId });
+    log("info", "payments.checkout", { provider: "stripe", packageCode: pkg.code, requestId });
     return { kind: "redirect", url: session.url };
   } catch (err) {
     captureException(err, {

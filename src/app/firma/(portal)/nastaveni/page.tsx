@@ -21,6 +21,7 @@ export default async function EmployerSettingsPage({
   const saved = params.ulozeno === "1";
   const invalid = params.chyba === "1";
   const paymentError = params.platba === "chyba";
+  const paymentUnavailable = params.platba === "nedostupna";
   const stripeOn = paymentsEnabled();
 
   return (
@@ -37,6 +38,9 @@ export default async function EmployerSettingsPage({
       {invalid ? <div className="fj-console-notice error">Zkontrolujte název firmy a město.</div> : null}
       {paymentError ? (
         <div className="fj-console-notice error">Objednávku se nepodařilo zahájit. Zkuste to znovu později.</div>
+      ) : null}
+      {paymentUnavailable ? (
+        <div className="fj-console-notice error">Online platba je dočasně nedostupná. Nebyla vytvořena žádná objednávka.</div>
       ) : null}
 
       <div className="fj-console-settings-grid">
@@ -76,13 +80,20 @@ export default async function EmployerSettingsPage({
           {PACKAGES.filter((item) => item.code !== "top").map((item) => {
             const action = startCheckoutAction.bind(null, item.code);
             const current = item.code === session.planCode;
+            const unavailable = item.priceCzkExVat > 0 && !stripeOn;
             return (
               <form action={action} className={current ? "current" : ""} key={item.code}>
                 <div><strong>{item.name}</strong>{current ? <span>Aktivní</span> : null}</div>
                 <p>{item.blurb}</p>
                 <b>{item.priceCzkExVat ? formatCzk(item.priceCzkExVat) : "Zdarma"}</b>
-                <button type="submit" disabled={current}>
-                  {current ? "Váš plán" : item.priceCzkExVat && stripeOn ? "Vybrat a zaplatit" : "Vybrat plán"}
+                <button type="submit" disabled={current || unavailable}>
+                  {current
+                    ? "Váš plán"
+                    : unavailable
+                      ? "Platba dočasně nedostupná"
+                      : item.priceCzkExVat
+                        ? "Vybrat a zaplatit"
+                        : "Vybrat plán"}
                 </button>
               </form>
             );
