@@ -22,6 +22,7 @@ const EXPECTED_MIGRATIONS = [
   "0008_seeker_accounts.sql",
   "0009_stripe_order_verification.sql",
   "0010_job_constraint_alignment.sql",
+  "0011_seeker_application_history.sql",
 ];
 
 async function timed<T>(fn: () => Promise<T>, ms = 1500): Promise<{ ok: true; value: T; latencyMs: number } | { ok: false; error: string; latencyMs: number }> {

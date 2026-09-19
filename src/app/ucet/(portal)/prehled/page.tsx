@@ -5,6 +5,14 @@ import { loadSeekerAccountData } from "@/lib/seeker-account";
 import { getSeekerSession } from "@/lib/seeker-auth";
 import { formatSalary } from "@/lib/pricing";
 
+const applicationStatusLabels: Record<string, string> = {
+  new: "Odesláno",
+  reviewing: "Firma prohlíží",
+  interview: "Pohovor",
+  hired: "Přijato",
+  rejected: "Uzavřeno",
+};
+
 export default async function SeekerOverviewPage() {
   const session = await getSeekerSession();
   if (!session) redirect("/ucet/prihlaseni?next=/ucet/prehled");
@@ -33,6 +41,11 @@ export default async function SeekerOverviewPage() {
       </header>
 
       <section className="fj-seeker-metrics" aria-label="Souhrn účtu">
+        <a href="#odpovedi">
+          <span>Odeslané odpovědi</span>
+          <strong>{data.applicationHistory.length}</strong>
+          <small>Historie odpovědí z vašeho účtu</small>
+        </a>
         <Link href="/ucet/oblibene">
           <span>Uložené nabídky</span>
           <strong>{data.savedJobs.length}</strong>
@@ -92,6 +105,49 @@ export default async function SeekerOverviewPage() {
           <Link href="/ucet/profil">{completeness < 100 ? "Doplnit profil" : "Zkontrolovat profil"} →</Link>
         </aside>
       </div>
+
+      <section className="fj-seeker-panel fj-seeker-application-history" id="odpovedi">
+        <header>
+          <div>
+            <h2>Moje odpovědi</h2>
+            <p>Historie přihlášek odeslaných z přihlášeného účtu.</p>
+          </div>
+        </header>
+        {data.applicationHistory.length ? (
+          <div className="fj-seeker-application-list">
+            {data.applicationHistory.map((application) => (
+              <article key={application.id}>
+                <div>
+                  <span>{application.companyName} · {application.city}</span>
+                  <h3>
+                    {application.jobStatus === "published" ? (
+                      <Link href={`/nabidka/${application.slug}`}>{application.title}</Link>
+                    ) : (
+                      application.title
+                    )}
+                  </h3>
+                </div>
+                <time dateTime={application.createdAt.toISOString()}>
+                  {application.createdAt.toLocaleDateString("cs-CZ", {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                  })}
+                </time>
+                <span className={`fj-seeker-application-status status-${application.status}`}>
+                  {applicationStatusLabels[application.status] ?? application.status}
+                </span>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="fj-seeker-empty">
+            <strong>Z účtu jste zatím neodpověděli.</strong>
+            <p>Odpovědi bez přihlášení zůstávají záměrně oddělené.</p>
+            <Link href="/nabidky">Najít nabídku →</Link>
+          </div>
+        )}
+      </section>
     </main>
   );
 }

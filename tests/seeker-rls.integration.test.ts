@@ -6,6 +6,7 @@ const url = process.env.DATABASE_URL;
 const adminUrl = process.env.DATABASE_ADMIN_URL;
 const seekerA = randomUUID();
 const seekerB = randomUUID();
+const applicationId = randomUUID();
 let jobId = "";
 let employerId = "";
 
@@ -36,6 +37,12 @@ describe.skipIf(!url || !adminUrl)("seeker favorites RLS", () => {
       "insert into favorite_companies (seeker_user_id, employer_id) values ($1, $2)",
       [seekerB, employerId],
     );
+    await admin.query(
+      `insert into applications (
+        id, job_id, employer_id, full_name, phone, consent_gdpr, seeker_user_id
+      ) values ($1, $2, $3, 'Seeker A', '777123456', true, $4)`,
+      [applicationId, jobId, employerId, seekerA],
+    );
     await admin.end();
   });
 
@@ -43,6 +50,7 @@ describe.skipIf(!url || !adminUrl)("seeker favorites RLS", () => {
     if (!adminUrl) return;
     const admin = new Client({ connectionString: adminUrl });
     await admin.connect();
+    await admin.query("delete from applications where id = $1", [applicationId]);
     await admin.query("delete from seeker_users where id = any($1::uuid[])", [
       [seekerA, seekerB],
     ]);
@@ -54,8 +62,10 @@ describe.skipIf(!url || !adminUrl)("seeker favorites RLS", () => {
     await app.connect();
     const jobs = await app.query("select * from favorite_jobs");
     const companies = await app.query("select * from favorite_companies");
+    const applications = await app.query("select * from applications where seeker_user_id is not null");
     expect(jobs.rowCount).toBe(0);
     expect(companies.rowCount).toBe(0);
+    expect(applications.rowCount).toBe(0);
     await app.end();
   });
 
@@ -67,12 +77,14 @@ describe.skipIf(!url || !adminUrl)("seeker favorites RLS", () => {
     await app.query("select set_config('app.seeker_id', $1, true)", [seekerA]);
     expect((await app.query("select * from favorite_jobs")).rowCount).toBe(1);
     expect((await app.query("select * from favorite_companies")).rowCount).toBe(0);
+    expect((await app.query("select * from applications")).rowCount).toBe(1);
     await app.query("rollback");
 
     await app.query("begin");
     await app.query("select set_config('app.seeker_id', $1, true)", [seekerB]);
     expect((await app.query("select * from favorite_jobs")).rowCount).toBe(0);
     expect((await app.query("select * from favorite_companies")).rowCount).toBe(1);
+    expect((await app.query("select * from applications")).rowCount).toBe(0);
     await app.query("rollback");
 
     await app.end();

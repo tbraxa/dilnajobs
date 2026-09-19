@@ -7,6 +7,7 @@ export type SeekerSection = "overview" | "favorites" | "profile";
 
 const navigation = [
   { id: "overview", label: "Přehled", href: "/ucet/prehled" },
+  { id: "applications", label: "Moje odpovědi", href: "/ucet/prehled#odpovedi" },
   { id: "favorites", label: "Uložené nabídky", href: "/ucet/oblibene" },
   { id: "companies", label: "Oblíbené firmy", href: "/ucet/oblibene#firmy" },
   { id: "cv", label: "Životopis", href: "/zivotopis" },
@@ -14,6 +15,9 @@ const navigation = [
 ] as const;
 
 function RailIcon({ id }: { id: string }) {
+  if (id === "applications") {
+    return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14v10H3zM3.5 5.5 10 11l6.5-5.5" /></svg>;
+  }
   if (id === "favorites") {
     return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.8 3.8a4 4 0 0 0-5.7 0L10 4l-.2-.2a4 4 0 1 0-5.6 5.7L10 15l5.8-5.5a4 4 0 0 0 0-5.7Z" /></svg>;
   }
