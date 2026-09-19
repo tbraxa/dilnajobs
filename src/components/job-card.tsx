@@ -1,37 +1,58 @@
 import Link from "next/link";
 import type { searchJobs } from "@/lib/jobs/search";
-import { formatSalary } from "@/lib/pricing";
-import { professionByDb } from "@/lib/catalog";
-import { professionIcon } from "./icons";
+import { companyInitials, formatSalaryShort, relativeDayLabel } from "@/lib/salary-display";
+import { EMPLOYMENT_TYPES, professionByDb } from "@/lib/catalog";
 
 type JobRow = Awaited<ReturnType<typeof searchJobs>>[number];
 
-export function JobCard({ job }: { job: JobRow }) {
-  const Icon = professionIcon(job.profession);
+const LOGO_TONES = ["blue", "green", "ink", ""] as const;
+
+export function JobCard({ job, index = 0 }: { job: JobRow; index?: number }) {
+  const pay = formatSalaryShort(job.salaryMin, job.salaryMax, job.salaryNote);
   const profession = professionByDb(job.profession);
+  const tone = LOGO_TONES[index % LOGO_TONES.length];
+  const recency = relativeDayLabel(job.publishedAt);
+  const employment = EMPLOYMENT_TYPES.find((e) => e.slug === job.employmentType)?.label;
+
   return (
-    <article className="border border-line bg-paper p-4 sm:p-5">
-      <div className="flex items-start gap-3">
-        <Icon className="mt-0.5 h-7 w-7 shrink-0 text-ink" />
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs text-steel">{job.companyName}</p>
-            {job.isTop ? (
-              <span className="rounded-[2px] bg-accent px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-white">
-                TOP
-              </span>
-            ) : null}
-          </div>
-          <h2 className="display mt-1 text-xl font-semibold leading-tight">
-            <Link href={`/nabidka/${job.slug}`} className="hover:underline">
-              {job.title}
-            </Link>
-          </h2>
-          <p className="mt-2 text-sm text-steel">
-            {profession?.label ?? job.profession} · {job.city} · {formatSalary(job.salaryMin, job.salaryMax, job.salaryNote)}
-          </p>
+    <article className="job" role="listitem">
+      <Link
+        href={`/nabidka/${job.slug}`}
+        style={{ display: "contents", color: "inherit", textDecoration: "none" }}
+      >
+        <div className={`job-logo${tone ? ` ${tone}` : ""}`} aria-hidden="true">
+          {companyInitials(job.companyName)}
         </div>
-      </div>
+        <div className="job-body">
+          <h2 className="job-title">{job.title}</h2>
+          <p className="job-co">
+            {job.companyName}
+            {job.isTop ? (
+              <>
+                {" · "}
+                <span className="verified">✓ Ověřeno</span>
+              </>
+            ) : null}
+          </p>
+          <div className="job-meta">
+            <span>{job.city}</span>
+            {employment ? <span>{employment}</span> : null}
+            {profession ? <span>{profession.label}</span> : null}
+            {recency ? <span className="recency">{recency}</span> : null}
+          </div>
+          {job.shiftNote ? (
+            <div className="job-tags">
+              <span className="tag">{job.shiftNote}</span>
+            </div>
+          ) : null}
+        </div>
+        <div className="job-side">
+          <div className="job-pay">
+            {pay.primary}
+            <span className="unit">{pay.unit}</span>
+          </div>
+        </div>
+      </Link>
     </article>
   );
 }
