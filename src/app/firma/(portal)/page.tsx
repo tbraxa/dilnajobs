@@ -146,7 +146,7 @@ export default async function FirmaHome({
       <div className="charts">
         <ActivityLineChart
           title="Aktivita nabídek"
-          subtitle="Ukázková data · views / applies"
+          subtitle="Ukázková data · zobrazení / odpovědi"
           ariaLabel="Čárový graf: zobrazení a přihlášky za 30 dní"
         />
         <HiringFunnel />
@@ -191,7 +191,7 @@ export default async function FirmaHome({
                     <span className="tag">{job.status}</span>
                   </td>
                   <td style={{ width: 120 }}>
-                    <Sparkline d="M0,28 L20,26 L40,22 L60,18 L80,14 L100,12 L120,8" />
+                    <Sparkline d="M0,30 L40,28 L80,24 L120,20 L160,16 L200,14 L240,10 L280,8" />
                   </td>
                   <td>
                     <Link className="btn btn-ghost btn-sm" href={`/firma/nabidky/${job.id}/prihlasky`}>
