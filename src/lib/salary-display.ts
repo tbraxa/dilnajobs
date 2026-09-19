@@ -13,7 +13,7 @@ export function formatSalaryShort(
       return { primary: `${Math.round(min / 1000)} tis.`, unit: "Kč / měsíc" };
     }
     return {
-      primary: `${Math.round(min / 1000)}–${Math.round(max / 1000)} tis.`,
+      primary: `${Math.round(min / 1000)} až ${Math.round(max / 1000)} tis.`,
       unit: "Kč / měsíc",
     };
   }
