@@ -6,7 +6,6 @@ import { JobCard } from "@/components/job-card";
 import { CatalogUnavailable } from "@/components/catalog-unavailable";
 import { professionIcon } from "@/components/icons";
 import { EMPLOYMENT_TYPES, professionByDb } from "@/lib/catalog";
-import { BRAND } from "@/lib/brand";
 import { copy } from "@/lib/copy";
 import { loadFeaturedJobs, loadPublishedJobBySlug } from "@/lib/jobs/search";
 import { formatSalary } from "@/lib/pricing";
@@ -21,7 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catalog = await loadPublishedJobBySlug(slug);
   const row = catalog.ok ? catalog.rows : null;
   if (!row) return { title: "Nabídka" };
-  return { title: `${row.job.title} · ${row.companyName} · ${BRAND}` };
+  // Template appends " · FairJobs" — do not include brand here (P1-C1).
+  return { title: `${row.job.title} · ${row.companyName}` };
 }
 
 export default async function JobPage({ params }: Props) {
@@ -136,18 +136,20 @@ export default async function JobPage({ params }: Props) {
           <div className="apply-panel" id="odpovedet">
             <h2>{copy.job.applyClaim}</h2>
             <p className="helper">{copy.job.applyHelper(companyName)}</p>
-            <p className="muted" style={{ margin: "0 0 16px", fontSize: 14 }}>
-              {copy.job.helperNoAccount}
-            </p>
             <ApplyForm jobId={job.id} companyName={companyName} />
             <div className="soft-save" style={{ marginTop: 20 }}>
               <p className="label">{copy.job.softTitle}</p>
               <p className="muted" style={{ fontSize: 14, margin: "6px 0 12px" }}>
                 {copy.job.softBody}
               </p>
-              <Link className="btn btn-secondary btn-sm" href="/ucet/registrace">
-                {copy.job.softCta}
-              </Link>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                <Link className="btn btn-secondary btn-sm" href="/ucet/registrace">
+                  {copy.job.softCta}
+                </Link>
+                <span className="muted" style={{ fontSize: 13 }}>
+                  {copy.job.softDismiss}
+                </span>
+              </div>
             </div>
           </div>
         </aside>

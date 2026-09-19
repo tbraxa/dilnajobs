@@ -155,13 +155,16 @@ export function SiteFooter() {
 
 export function ConsoleTop({ children }: { children?: ReactNode }) {
   return (
-    <header className="top" role="banner">
-      <BrandMark />
-      <nav className="nav" aria-label="Veřejná">
-        <Link href="/nabidky">Nabídky</Link>
-        <Link href="/pro-firmy">Pro firmy</Link>
-      </nav>
-      <div className="top-actions">{children}</div>
-    </header>
+    <div className="top-wrap">
+      <header className="top" role="banner" style={{ minHeight: 56 }}>
+        <BrandMark />
+        <nav className="nav" aria-label="Veřejná">
+          <Link href="/nabidky">Nabídky</Link>
+          <Link href="/pro-firmy">Pro firmy</Link>
+          <Link href="/ucet">Vytvořit životopis</Link>
+        </nav>
+        <div className="top-actions">{children}</div>
+      </header>
+    </div>
   );
 }
