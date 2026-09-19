@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { JobResultRow } from "@/components/fairjobs-job-row";
-import { JobSearchPanel } from "@/components/job-search-panel";
+import { JobsFilterTray } from "@/components/jobs-filter-tray";
+import { JobsSplitView } from "@/components/jobs-split-view";
 import { JsonLd } from "@/components/json-ld";
+import { PendingFavorite } from "@/components/pending-favorite";
 import {
-  JOBS_PAGE_SIZE,
   loadSearchJobCount,
   loadSearchJobs,
   parseSearch,
 } from "@/lib/jobs/search";
 import { getFavoriteJobIds } from "@/lib/seeker-account";
 import { getSeekerSession } from "@/lib/seeker-auth";
-import { jobsHref, searchHasFilters } from "@/lib/search-params";
+import { jobsHref } from "@/lib/search-params";
 import { collectionPageJsonLd } from "@/lib/structured-data";
 
 const description = "Aktuální nabídky práce v Česku s jasnou mzdou, lokalitou a ověřenou identitou firmy.";
@@ -25,6 +24,10 @@ export default async function NabidkyPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = await searchParams;
+  const pendingJobId =
+    typeof params.ulozit === "string" && /^[0-9a-f-]{36}$/i.test(params.ulozit)
+      ? params.ulozit
+      : null;
   const query = parseSearch(params);
   const [catalog, countCatalog, seeker] = await Promise.all([
     loadSearchJobs(query),
@@ -36,11 +39,13 @@ export default async function NabidkyPage({
     ? await getFavoriteJobIds(seeker.userId, jobs.map((job) => job.id))
     : new Set<string>();
   const count = countCatalog.ok ? countCatalog.rows : jobs.length;
-  const currentPage = query.page ?? 1;
-  const pageCount = Math.max(1, Math.ceil(count / JOBS_PAGE_SIZE));
+  const returnTo = jobsHref(query);
 
   return (
-    <main className="fj-jobs-explorer">
+    <main className="gx-serp-page">
+      {pendingJobId ? (
+        <PendingFavorite id={pendingJobId} kind="job" returnTo={returnTo} />
+      ) : null}
       <JsonLd
         id="fairjobs-jobs-collection"
         data={collectionPageJsonLd({
@@ -49,89 +54,27 @@ export default async function NabidkyPage({
           path: "/nabidky",
         })}
       />
-      <section className="fj-jobs-workbench">
-        <header className="fj-jobs-workbench-head">
-          <div>
-            <span>FairJobs / Nabídky</span>
-            <h1>Nabídky práce</h1>
-          </div>
-          <p>Mzda, firma a podmínky přehledně před otevřením detailu.</p>
-          <Link href="/ucet/oblibene">Uložené nabídky →</Link>
-        </header>
-        <JobSearchPanel query={query} resultCount={count} />
-      </section>
-
-      <section className="fj-jobs-results" aria-labelledby="results-title">
-        <header className="fj-jobs-results-head">
-          <div>
-            <h2 id="results-title">
-              {catalog.ok ? `${count} ${count === 1 ? "nabídka" : count < 5 ? "nabídky" : "nabídek"}` : "Nabídky"}
-            </h2>
-            <p>
-              {searchHasFilters(query)
-                ? "Výsledky podle vašich filtrů"
-                : "Firma · role · lokalita · měsíční mzda"}
-            </p>
-          </div>
-          {searchHasFilters(query) ? (
-            <Link href="/nabidky" className="fj-clear-results">
-              Zrušit filtry
-            </Link>
-          ) : null}
-        </header>
-
-        <div className="fj-jobs-feed">
-          <div className="fj-jobs-feed-head" aria-hidden="true">
-            <span>Firma / pozice</span>
-            <span>Místo</span>
-            <span>Kompenzace</span>
-            <span />
-          </div>
-
-          {!catalog.ok ? (
-            <div className="fj-empty-results">
-              <strong>Katalog se teď nepodařilo načíst.</strong>
-              <p>Zkuste stránku obnovit za chvíli.</p>
-            </div>
-          ) : jobs.length === 0 ? (
-            <div className="fj-empty-results">
-              <strong>Na tento výběr teď nic nemáme.</strong>
-              <p>Zkuste jiné město, nižší mzdu nebo širší název pozice.</p>
-              <Link href="/nabidky" className="fj-secondary-button">Zobrazit všechny nabídky</Link>
-            </div>
-          ) : (
-            jobs.map((job) => (
-              <JobResultRow
-                key={job.id}
-                job={job}
-                isFavorite={favoriteIds.has(job.id)}
-                returnTo={jobsHref(query)}
-              />
-            ))
-          )}
-        </div>
-
-        {catalog.ok && pageCount > 1 ? (
-          <nav className="fj-pagination" aria-label="Stránkování nabídek">
-            {currentPage > 1 ? (
-              <Link href={jobsHref(query, { page: currentPage - 1 })}>← Předchozí</Link>
-            ) : <span />}
-            <p>Strana {currentPage} z {pageCount}</p>
-            {currentPage < pageCount ? (
-              <Link href={jobsHref(query, { page: currentPage + 1 })}>Další →</Link>
-            ) : <span />}
-          </nav>
-        ) : null}
-      </section>
-
-      <div className="fj-jobs-footer-note">
-        <aside className="fj-serp-note">
-          <div>
-            <span aria-hidden="true">✓</span>
-            <p><strong>Ověřená firma</strong> znamená, že jsme zkontrolovali její IČO a identitu.</p>
-          </div>
-          <Link href="/pro-firmy">Jste zaměstnavatel? Vložit nabídku →</Link>
-        </aside>
+      <h1 className="sr-only">Nabídky práce</h1>
+      <div className="gx-serp-shell">
+        <JobsFilterTray query={query} resultCount={count} />
+        {!catalog.ok ? (
+          <section className="gx-serp-state">
+            <strong>Katalog se teď nepodařilo načíst.</strong>
+            <p>Zkuste stránku obnovit za chvíli.</p>
+          </section>
+        ) : jobs.length === 0 ? (
+          <section className="gx-serp-state">
+            <strong>Na tento výběr teď nic nemáme.</strong>
+            <p>Zkuste jiné město, nižší mzdu nebo širší název pozice.</p>
+            <a href="/nabidky">Zobrazit všechny nabídky</a>
+          </section>
+        ) : (
+          <JobsSplitView
+            jobs={jobs}
+            favoriteIds={[...favoriteIds]}
+            returnTo={returnTo}
+          />
+        )}
       </div>
     </main>
   );
