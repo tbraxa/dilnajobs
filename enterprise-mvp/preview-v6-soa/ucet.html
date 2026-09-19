@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Můj účet — FairJobs</title>
+  <meta name="description" content="Účet uchazeče FairJobs: přehled, uložené nabídky, sparkline aktivity." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Přeskočit na obsah</a>
+
+  <header class="top" role="banner">
+    <a class="brand" href="index.html" aria-label="FairJobs domů">
+      <span class="brand-mark" aria-hidden="true">F</span>
+      FairJobs
+    </a>
+    <nav class="nav" aria-label="Veřejná">
+      <a href="nabidky.html">Nabídky</a>
+      <a href="index.html#pro-firmy">Pro firmy</a>
+    </nav>
+    <div class="top-actions">
+      <a class="btn btn-secondary btn-sm" href="nabidky.html">Hledat práci</a>
+      <a class="btn btn-ghost btn-sm" href="#" aria-label="Profil">TB</a>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="rail" aria-label="Účet navigace">
+      <p class="label">Můj účet</p>
+      <a href="ucet.html" class="active" aria-current="page">Přehled</a>
+      <a href="#ulozene">Uložené</a>
+      <a href="#">Firmy</a>
+      <a href="#">Životopis</a>
+      <a href="#">Nastavení</a>
+      <div class="rail-foot">
+        <p class="mono" style="margin:0 0 4px">tomáš@example.cz</p>
+        <a href="index.html" style="font-size:13px;color:var(--ink-muted)">Odhlásit</a>
+      </div>
+    </aside>
+
+    <main class="main" id="main">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div>
+          <h1 class="page-title">Přehled</h1>
+          <p class="muted" style="margin:0;font-size:14px">Uložené nabídky, odpovědi a aktivita hledání</p>
+        </div>
+        <span class="badge-seed">Ukázková data</span>
+      </div>
+
+      <div class="profile-card" style="margin-top:20px">
+        <div class="avatar" aria-hidden="true">TB</div>
+        <div style="flex:1;min-width:0">
+          <strong style="letter-spacing:-0.02em">Tomáš Braxatoris</strong>
+          <div class="muted" style="font-size:13px;margin-top:2px">Produktový manažer · Praha / hybrid</div>
+        </div>
+        <a class="btn btn-secondary btn-sm" href="#">Upravit profil</a>
+      </div>
+
+      <div class="kpi-row" aria-label="KPI uchazeče">
+        <div class="kpi">
+          <div class="label">Uložené</div>
+          <b>14</b>
+          <div class="delta up">+3 · 7d</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Odeslané</div>
+          <b>7</b>
+          <div class="delta flat">0 · 7d</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Odpovědi</div>
+          <b>3</b>
+          <div class="delta up">+1 · 7d</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Pohovory</div>
+          <b>1</b>
+          <div class="delta flat">—</div>
+        </div>
+      </div>
+
+      <div class="charts">
+        <!-- Line / area: activity over time -->
+        <section class="chart" aria-labelledby="act-title">
+          <div class="chart-head">
+            <div>
+              <h2 class="chart-title" id="act-title">Aktivita hledání</h2>
+              <p class="seed" style="margin-top:4px">Ukázková data · uložené + odpovědi</p>
+            </div>
+            <div class="tabs" role="tablist" aria-label="Období">
+              <button type="button" role="tab">7d</button>
+              <button type="button" role="tab" class="on" aria-selected="true">30d</button>
+              <button type="button" role="tab">90d</button>
+            </div>
+          </div>
+          <div class="legend" aria-hidden="true">
+            <span><i></i> Uložené</span>
+            <span><i class="sec"></i> Odpovědi</span>
+          </div>
+          <svg class="line-chart" viewBox="0 0 560 180" role="img" aria-label="Čárový graf aktivity za 30 dní">
+            <g class="grid" aria-hidden="true">
+              <line x1="0" y1="20" x2="560" y2="20" />
+              <line x1="0" y1="60" x2="560" y2="60" />
+              <line x1="0" y1="100" x2="560" y2="100" />
+              <line x1="0" y1="140" x2="560" y2="140" />
+            </g>
+            <path class="area" d="M0,130 L56,128 L112,120 L168,118 L224,100 L280,95 L336,88 L392,70 L448,65 L504,50 L560,42 L560,160 L0,160 Z" />
+            <path class="line" d="M0,130 L56,128 L112,120 L168,118 L224,100 L280,95 L336,88 L392,70 L448,65 L504,50 L560,42" />
+            <path class="line secondary" d="M0,150 L112,148 L224,146 L336,142 L448,138 L560,130" />
+            <circle class="dot" cx="392" cy="70" r="4" tabindex="0" role="img">
+              <title>Den 21: 4 uložené</title>
+            </circle>
+            <circle class="dot" cx="560" cy="42" r="4" tabindex="0" role="img">
+              <title>Dnes: 6 uložených v týdnu</title>
+            </circle>
+          </svg>
+          <div class="axis-labels">
+            <span>1. 8.</span>
+            <span>8. 8.</span>
+            <span>15. 8.</span>
+            <span>22. 8.</span>
+            <span>dnes</span>
+          </div>
+        </section>
+
+        <!-- Sparkline summary panel — line only -->
+        <section class="chart" aria-labelledby="pulse-title">
+          <div class="chart-head">
+            <div>
+              <h2 class="chart-title" id="pulse-title">Trh — pulse</h2>
+              <p class="seed" style="margin-top:4px">Ukázková data · PM · Praha</p>
+            </div>
+          </div>
+          <p style="margin:0 0 4px;font-size:13px;color:var(--ink-muted)">Medián inzerované mzdy (role × lokalita)</p>
+          <p style="margin:0 0 12px;font-family:var(--mono);font-size:28px;font-weight:700;letter-spacing:-0.03em">92 tis. Kč</p>
+          <svg class="sparkline" viewBox="0 0 280 48" role="img" aria-label="Sparkline mediánu mzdy" style="height:48px">
+            <path class="area" d="M0,30 L40,28 L80,32 L120,26 L160,24 L200,20 L240,18 L280,14 L280,48 L0,48 Z" />
+            <path class="line" d="M0,30 L40,28 L80,32 L120,26 L160,24 L200,20 L240,18 L280,14" />
+          </svg>
+          <p class="seed" style="margin-top:12px">N=128 nabídek · metodika: medián horní hranice pásma</p>
+          <a href="nabidky.html" class="btn btn-secondary btn-sm" style="margin-top:14px">Otevřít nabídky v Praze</a>
+        </section>
+      </div>
+
+      <div class="section-head" id="ulozene" style="margin-top:28px">
+        <h2>Uložené nabídky</h2>
+        <a href="#">Všechny →</a>
+      </div>
+
+      <div class="saved-list">
+        <a class="saved-item" href="nabidky.html">
+          <div>
+            <div class="title">Senior Product Manager</div>
+            <div class="meta">Twisto · Praha · Hybrid</div>
+          </div>
+          <div class="pay">110–140 tis.</div>
+        </a>
+        <a class="saved-item" href="nabidky.html">
+          <div>
+            <div class="title">Backend Engineer (Go)</div>
+            <div class="meta">Gen Digital · Remote CZ</div>
+          </div>
+          <div class="pay">120–160 tis.</div>
+        </a>
+        <a class="saved-item" href="nabidky.html">
+          <div>
+            <div class="title">Product Manager — Growth</div>
+            <div class="meta">Seznam.cz · Praha</div>
+          </div>
+          <div class="pay">90–120 tis.</div>
+        </a>
+      </div>
+
+      <div class="empty-soft" style="margin-top:16px">
+        <strong>Životopis ještě není hotový</strong>
+        Doplňte zkušenosti — firmy uvidí silnější profil při odpovědi.
+        <div style="margin-top:12px">
+          <a class="btn btn-primary btn-sm" href="#">Pokračovat v životopisu</a>
+        </div>
+      </div>
+
+      <p class="note">Charts: sparkline / line / area only — žádné sloupce. · <a href="firma.html">Firma konzole</a> · <a href="index.html">HP</a></p>
+    </main>
+  </div>
+</body>
+</html>
