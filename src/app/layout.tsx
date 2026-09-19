@@ -1,22 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, IBM_Plex_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { PublicChrome } from "@/components/public-chrome";
 import { resolveAppUrl } from "@/lib/app-url";
 import { BRAND_DESCRIPTION, BRAND_TITLE, BRAND_TITLE_TEMPLATE } from "@/lib/brand";
 import "./globals.css";
+import "./sot.css";
 
-const archivo = Archivo({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-archivo",
-  display: "swap",
-});
-
-const ibm = IBM_Plex_Sans({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -31,26 +25,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F2F0EA",
+  themeColor: "#0047FF",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const h = await headers();
   const nonce = h.get("x-nonce") ?? undefined;
-  const pathname = h.get("x-pathname") ?? "";
-  const isAdmin = pathname.startsWith("/admin");
+
   return (
-    <html lang="cs" className={`${archivo.variable} ${ibm.variable}`}>
-      <body className="workshop-grid flex min-h-screen flex-col antialiased" data-nonce={nonce}>
-        {isAdmin ? (
-          children
-        ) : (
-          <>
-            <SiteHeader />
-            {children}
-            <SiteFooter />
-          </>
-        )}
+    <html lang="cs" className={inter.variable}>
+      <body className="flex min-h-screen flex-col antialiased" data-nonce={nonce}>
+        <a className="skip-link" href="#main">
+          Přeskočit na obsah
+        </a>
+        <PublicChrome>{children}</PublicChrome>
       </body>
     </html>
   );

@@ -22,6 +22,9 @@ export async function searchJobs(query: SearchQuery) {
   if (query.city) {
     filters.push(ilike(jobs.city, query.city));
   }
+  if (query.payFrom) {
+    filters.push(gte(jobs.salaryMin, query.payFrom));
+  }
   if (query.q) {
     const like = `%${query.q}%`;
     filters.push(

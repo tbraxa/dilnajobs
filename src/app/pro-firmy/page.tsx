@@ -1,40 +1,113 @@
 import type { Metadata } from "next";
-import { ButtonLink } from "@/components/ui";
+import Link from "next/link";
 import { PACKAGES, formatCzk } from "@/lib/pricing";
+import { BRAND, BRAND_CLAIM } from "@/lib/brand";
+import { copy } from "@/lib/copy";
 
-export const metadata: Metadata = { title: "Pro firmy" };
+export const metadata: Metadata = {
+  title: "Pro firmy",
+  description: copy.employers.metaDescription,
+};
 
 export default function ProFirmyPage() {
+  const plans = PACKAGES;
+
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <p className="label">Zaměstnavatelé</p>
-      <h1 className="display mt-2 max-w-3xl text-3xl font-semibold sm:text-5xl">
-        Najdete lidi z dílny. Ne z agentury.
-      </h1>
-      <p className="mt-4 max-w-2xl text-steel">
-        Inzerujete vy — výrobní firma s IČO. Ceny jsou bez DPH. První inzerát kontrolujeme. Heslo nechceme: přihlášení
-        jde odkazem na e-mail.
-      </p>
-      <div className="mt-6">
-        <ButtonLink href="/firma/prihlaseni">Přihlásit firmu</ButtonLink>
+    <main className="page" id="main">
+      <div className="employer-hero">
+        <div>
+          <h1 className="page-title" style={{ fontSize: "clamp(30px, 4vw, 42px)", marginTop: 0 }}>
+            {copy.employers.claim}
+          </h1>
+          <p className="muted" style={{ maxWidth: 560, fontSize: 18, lineHeight: 1.55 }}>
+            {copy.employers.helper}
+          </p>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 24 }}>
+            <Link className="btn btn-primary" href="/firma/prihlaseni">
+              {copy.employers.ctaPrimary}
+            </Link>
+            <Link className="btn btn-secondary" href="/cenik">
+              {copy.employers.linkCenik}
+            </Link>
+          </div>
+        </div>
+        <div className="wash" aria-hidden="true" />
       </div>
 
-      <h2 className="display mt-12 text-2xl font-semibold">Ceník</h2>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {PACKAGES.map((pkg) => (
-          <article key={pkg.code} className="flex flex-col border border-line bg-paper p-5">
-            <p className="label">{pkg.name}</p>
-            <p className="display mt-2 text-3xl font-semibold">
-              {pkg.priceCzkExVat === 0 ? "0 Kč" : formatCzk(pkg.priceCzkExVat)}
+      <div className="section-head" style={{ marginTop: 56 }}>
+        <h2>{copy.employers.sectionWhy}</h2>
+      </div>
+      <div className="facts" aria-label={copy.employers.sectionWhy}>
+        <div className="fact">
+          <b>{copy.employers.why1Title}</b>
+          <span>{copy.employers.why1Body}</span>
+        </div>
+        <div className="fact">
+          <b>{copy.employers.why2Title}</b>
+          <span>{copy.employers.why2Body}</span>
+        </div>
+        <div className="fact">
+          <b>{copy.employers.why3Title}</b>
+          <span>{copy.employers.why3Body}</span>
+        </div>
+      </div>
+
+      <div className="band band-pad" style={{ marginTop: 40 }}>
+        <h2 className="h2" style={{ fontSize: 20, margin: "0 0 8px" }}>
+          {copy.employers.sectionHow}
+        </h2>
+        <ol style={{ margin: 0, paddingLeft: 20, fontSize: 17, lineHeight: 1.7 }}>
+          <li>{copy.employers.how1}</li>
+          <li>{copy.employers.how2}</li>
+          <li>{copy.employers.how3}</li>
+        </ol>
+      </div>
+
+      <div className="section-head" style={{ marginTop: 56 }}>
+        <h2>{copy.employers.pricingSection}</h2>
+        <Link href="/cenik">{copy.employers.linkCenik} →</Link>
+      </div>
+      <p className="muted" style={{ marginTop: 0, fontSize: 16 }}>
+        {copy.employers.pricingHelper}
+      </p>
+      <div className="pricing-grid">
+        {plans.map((pkg, i) => (
+          <article key={pkg.code} className={`pricing-card${i === 1 ? " featured" : ""}`}>
+            <div className="label">{pkg.name}</div>
+            <div className="price">
+              {formatCzk(pkg.priceCzkExVat)}
+            </div>
+            <p className="muted" style={{ margin: 0, fontSize: 13 }}>
+              bez DPH
             </p>
-            <p className="text-xs text-steel">bez DPH</p>
-            <p className="mt-3 flex-1 text-sm">{pkg.blurb}</p>
+            <ul>
+              <li>{pkg.blurb}</li>
+            </ul>
+            <Link className="btn btn-primary" href="/firma/prihlaseni">
+              {copy.employers.pricingCta}
+            </Link>
           </article>
         ))}
       </div>
-      <p className="mt-6 text-sm text-steel">
-        Ceny bez DPH. Orientace pro firmy. Platbu na FairJobs domluvíte po registraci.
+      <p className="muted" style={{ marginTop: 28, fontSize: 14 }}>
+        {copy.employers.pricingNote} Ceny bez DPH. FairJobs.
       </p>
+
+      <div className="band band-pad" style={{ marginTop: 40 }}>
+        <div className="employer-cta">
+          <div>
+            <h2 className="h2" style={{ fontSize: 22, marginBottom: 6 }}>
+              {copy.employers.bottomHelper}
+            </h2>
+            <p className="muted" style={{ margin: 0 }}>
+              {BRAND_CLAIM} · {BRAND}
+            </p>
+          </div>
+          <Link className="btn btn-primary" href="/firma/prihlaseni">
+            {copy.employers.ctaPost}
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,45 +1,30 @@
 export const PACKAGES = [
   {
-    code: "trial",
-    name: "Zkušební",
-    priceCzkExVat: 0,
-    period: "year" as const,
-    adLimit: 10,
-    blurb: "10 inzerátů za rok. Ověříte, že sem chodí lidé z dílny — ne z agentury.",
-  },
-  {
-    code: "single",
-    name: "Jednorázový",
-    priceCzkExVat: 2990,
+    code: "start",
+    name: "Start",
+    priceCzkExVat: 2490,
     period: "days" as const,
     days: 30,
     adLimit: 1,
-    blurb: "Jeden inzerát, 30 dní. Když potřebujete jednoho člověka, ne balíček.",
-  },
-  {
-    code: "basic",
-    name: "Basic",
-    priceCzkExVat: 8900,
-    period: "year" as const,
-    adLimit: 40,
-    blurb: "40 inzerátů za rok. Pro závod, který nabírá průběžně.",
+    blurb: "1 aktivní nabídka. Schránka odpovědí. Ověření firmy přes IČO.",
   },
   {
     code: "standard",
     name: "Standard",
-    priceCzkExVat: 19900,
-    period: "year" as const,
-    adLimit: null,
-    blurb: "Neomezený počet inzerátů na rok. Bez počítání kusů.",
+    priceCzkExVat: 4990,
+    period: "days" as const,
+    days: 30,
+    adLimit: 5,
+    blurb: "Až 5 aktivních nabídek. Zvýraznění ve výsledcích. Schránka a životopisy.",
   },
   {
-    code: "top",
-    name: "Top 7 dní",
-    priceCzkExVat: 1350,
+    code: "plus",
+    name: "Plus",
+    priceCzkExVat: 8990,
     period: "days" as const,
-    days: 7,
-    adLimit: null,
-    blurb: "Zvýraznění existujícího inzerátu na 7 dní v seznamu nabídek.",
+    days: 30,
+    adLimit: 15,
+    blurb: "Až 15 aktivních nabídek. Priorita ve výpisu a logo firmy. Prioritní podpora.",
   },
 ] as const;
 
@@ -53,11 +38,11 @@ export function formatSalary(min?: number | null, max?: number | null, note?: st
     if (min === max) return `${formatCzk(min)} / měsíc`;
     const minFmt = new Intl.NumberFormat("cs-CZ").format(min);
     const maxFmt = new Intl.NumberFormat("cs-CZ").format(max);
-    return `${minFmt}–${maxFmt} Kč / měsíc`;
+    return `${minFmt} až ${maxFmt} Kč / měsíc`;
   }
   if (min) return `od ${formatCzk(min)} / měsíc`;
   if (max) return `do ${formatCzk(max)} / měsíc`;
-  return "Mzda dohodou";
+  return "mzda dohodou";
 }
 
 export function formatDate(d: Date | string): string {
@@ -66,8 +51,7 @@ export function formatDate(d: Date | string): string {
 }
 
 export const PLAN_LIMITS: Record<string, number | null> = {
-  trial: 10,
-  single: 1,
-  basic: 40,
-  standard: null,
+  start: 1,
+  standard: 5,
+  plus: 15,
 };
