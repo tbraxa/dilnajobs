@@ -154,6 +154,7 @@ export function SiteFooter() {
 }
 
 export function ConsoleTop({ children }: { children?: ReactNode }) {
+  // P0-02: one sticky system via .top-wrap; .top itself is not sticky (see styles-b).
   return (
     <div className="top-wrap">
       <header className="top" role="banner" style={{ minHeight: 56 }}>
@@ -161,7 +162,6 @@ export function ConsoleTop({ children }: { children?: ReactNode }) {
         <nav className="nav" aria-label="Veřejná">
           <Link href="/nabidky">Nabídky</Link>
           <Link href="/pro-firmy">Pro firmy</Link>
-          <Link href="/ucet">Vytvořit životopis</Link>
         </nav>
         <div className="top-actions">{children}</div>
       </header>

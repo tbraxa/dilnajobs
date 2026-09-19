@@ -4,7 +4,7 @@ const HINTS = [
   { q: "IT", label: "IT" },
   { q: "obchod", label: "Obchod" },
   { q: "zdravotnictvi", label: "Zdravotnictví" },
-  { q: "remote", label: "Na dálku" },
+  { q: "na dálku", label: "Na dálku" },
   { q: "brigada", label: "Brigáda" },
 ] as const;
 
@@ -27,7 +27,7 @@ export function SearchHero({
       aria-labelledby="search-hero-title"
     >
       <div className="search-hero-inner">
-        {!compact ? <p className="eyebrow">Národní pracovní portál</p> : null}
+        
         <h1 id="search-hero-title">{title}</h1>
         {lead ? <p className="lead">{lead}</p> : null}
 
@@ -55,7 +55,7 @@ export function SearchHero({
               id="search-loc"
               name="loc"
               type="text"
-              placeholder="Praha, Brno, na dálku…"
+              placeholder="Praha, Brno, na dálku"
               defaultValue={defaults?.city}
               autoComplete="off"
             />
