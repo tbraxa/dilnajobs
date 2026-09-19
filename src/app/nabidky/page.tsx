@@ -53,6 +53,22 @@ export default async function NabidkyPage({
           </Suspense>
         </div>
 
+
+        <div className="mode-chips" aria-label="Režim práce">
+          <a className={"chip" + (!query.mode ? " active" : "")} href="/nabidky">
+            Vše
+          </a>
+          <a className={"chip" + (query.mode === "onsite" ? " active" : "")} href="/nabidky?mode=onsite">
+            Na místě
+          </a>
+          <a className={"chip" + (query.mode === "hybrid" ? " active" : "")} href="/nabidky?mode=hybrid">
+            Hybrid
+          </a>
+          <a className={"chip" + (query.mode === "remote" ? " active" : "")} href="/nabidky?mode=remote">
+            Na dálku
+          </a>
+        </div>
+
         <Suspense fallback={null}>
           <ActiveFilterChips />
         </Suspense>

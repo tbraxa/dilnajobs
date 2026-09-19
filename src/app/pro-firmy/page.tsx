@@ -14,19 +14,24 @@ export default function ProFirmyPage() {
 
   return (
     <main className="page" id="main">
-      <h1 className="page-title" style={{ fontSize: "clamp(30px, 4vw, 42px)" }}>
-        {copy.employers.claim}
-      </h1>
-      <p className="muted" style={{ maxWidth: 560, fontSize: 18, lineHeight: 1.55 }}>
-        {copy.employers.helper}
-      </p>
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 24 }}>
-        <Link className="btn btn-primary" href="/firma/prihlaseni">
-          {copy.employers.ctaPrimary}
-        </Link>
-        <Link className="btn btn-secondary" href="/firma/prihlaseni">
-          {copy.employers.ctaSecondary}
-        </Link>
+      <div className="employer-hero">
+        <div>
+          <h1 className="page-title" style={{ fontSize: "clamp(30px, 4vw, 42px)", marginTop: 0 }}>
+            {copy.employers.claim}
+          </h1>
+          <p className="muted" style={{ maxWidth: 560, fontSize: 18, lineHeight: 1.55 }}>
+            {copy.employers.helper}
+          </p>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 24 }}>
+            <Link className="btn btn-primary" href="/firma/prihlaseni">
+              {copy.employers.ctaPrimary}
+            </Link>
+            <Link className="btn btn-secondary" href="/cenik">
+              {copy.employers.linkCenik}
+            </Link>
+          </div>
+        </div>
+        <div className="wash" aria-hidden="true" />
       </div>
 
       <div className="section-head" style={{ marginTop: 56 }}>
